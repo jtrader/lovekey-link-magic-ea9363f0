@@ -1,10 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 import {
   Activity, Battery, MapPin, HandHeart, Users, MessageCircle, Phone, Calendar,
-  Check, Clock, Sparkles, Bell, Settings, ChevronRight, Home, Briefcase, Car,
+  Check, Clock, Sparkles, Bell, Settings, ChevronRight, Home, Briefcase, Car, LogOut,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/app")({

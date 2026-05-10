@@ -134,26 +134,37 @@ function AppView() {
             <a href="#events" className="hover:text-foreground">Participation</a>
           </nav>
           <div className="flex items-center gap-2">
+            <span className="hidden text-xs text-muted-foreground md:inline">{ctx.family.name}</span>
             <button aria-label="Notifications" className="rounded-full p-2 text-muted-foreground hover:bg-accent hover:text-foreground">
               <Bell className="h-4 w-4" />
             </button>
             <button aria-label="Settings" className="rounded-full p-2 text-muted-foreground hover:bg-accent hover:text-foreground">
               <Settings className="h-4 w-4" />
             </button>
-            <div className="ml-1 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-primary text-xs font-medium text-primary-foreground">
-              JL
-            </div>
+            <button
+              aria-label="Sign out"
+              onClick={async () => { await signOut(); navigate({ to: "/" }); }}
+              className="rounded-full p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+            {ctx.profile.avatar_url ? (
+              <img src={ctx.profile.avatar_url} alt={ctx.profile.full_name} className="ml-1 h-8 w-8 rounded-full object-cover ring-1 ring-border" />
+            ) : (
+              <div className="ml-1 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-primary text-xs font-medium text-primary-foreground">
+                {initials}
+              </div>
+            )}
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-6xl px-6 py-8">
-        {/* Greeting + Nucleus */}
         <section className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
           <div className="animate-fade-up">
-            <p className="text-sm text-muted-foreground">Sunday afternoon</p>
+            <p className="text-sm text-muted-foreground">{ctx.family.name}</p>
             <h1 className="mt-1 text-3xl font-semibold tracking-tight md:text-4xl">
-              Good afternoon, Jamie.
+              Welcome, {firstName}.
             </h1>
             <p className="mt-3 max-w-md text-muted-foreground">
               Your link is calm. Five people in your circle have appeared today. Nothing requires you right now.

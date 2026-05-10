@@ -61,10 +61,37 @@ const reminders = [
 ];
 
 function AppView() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [time, setTime] = useState<Time>("Available");
   const [energy, setEnergy] = useState<Energy>("Blue");
   const [loc, setLoc] = useState<Loc>("Home");
   const [will, setWill] = useState<Will>("Open");
+
+  // Pull profile + first family. Redirect to onboarding if either missing.
+  const { data: ctx, isLoading } = useQuery({
+    queryKey: ["app-context", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const [{ data: profile }, { data: members }] = await Promise.all([
+        supabase.from("profiles").select("*").eq("id", user!.id).maybeSingle(),
+        supabase
+          .from("family_members")
+          .select("family_id, families(id, name)")
+          .eq("user_id", user!.id)
+          .limit(1),
+      ]);
+      const family = (members?.[0] as any)?.families ?? null;
+      return { profile, family };
+    },
+  });
+
+  useEffect(() => {
+    if (!ctx) return;
+    if (!ctx.profile?.full_name || !ctx.family) {
+      navigate({ to: "/onboarding" });
+    }
+  }, [ctx, navigate]);
 
   const healthLabel = useMemo(() => {
     if (energy === "Yellow" || time === "Unavailable") return { t: "Reduced", c: "bg-health-yellow" };
@@ -72,6 +99,23 @@ function AppView() {
     if (energy === "Green" && time === "Available") return { t: "Healthy", c: "bg-health-green" };
     return { t: "Stable", c: "bg-health-blue" };
   }, [time, energy, will]);
+
+  if (isLoading || !ctx?.profile?.full_name || !ctx?.family) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="text-sm text-muted-foreground">Loading your link…</div>
+      </div>
+    );
+  }
+
+  const firstName = ctx.profile.full_name.split(" ")[0];
+  const initials = ctx.profile.full_name
+    .split(" ")
+    .map((s: string) => s[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 
   return (
     <div className="min-h-screen bg-background text-foreground">

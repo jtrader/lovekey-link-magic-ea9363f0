@@ -69,10 +69,10 @@ function Index() {
             <a href="#privacy" className="hover:text-foreground">Privacy</a>
           </nav>
           <a
-            href="#early"
+            href="/login"
             className="inline-flex items-center rounded-full bg-gradient-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-soft transition hover:opacity-95 ease-calm"
           >
-            Request access
+            Sign in
           </a>
         </div>
       </header>
@@ -95,8 +95,8 @@ function Index() {
               addictive engagement.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#early" className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition hover:opacity-95 ease-calm">
-                <Heart className="h-4 w-4" /> Request early access
+              <a href="/login" className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition hover:opacity-95 ease-calm">
+                <Heart className="h-4 w-4" /> Get started
               </a>
               <a href="#how" className="inline-flex items-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium hover:bg-secondary ease-calm">
                 See how it works

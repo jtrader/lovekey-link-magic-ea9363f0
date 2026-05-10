@@ -22,7 +22,14 @@ function LoginPage() {
   const [busy, setBusy] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: "/app" });
+    if (!loading && user) {
+      const pending = typeof window !== "undefined" ? sessionStorage.getItem("pending_invite") : null;
+      if (pending) {
+        navigate({ to: "/invite/$token", params: { token: pending } });
+      } else {
+        navigate({ to: "/app" });
+      }
+    }
   }, [user, loading, navigate]);
 
   const signIn = async (provider: "google" | "apple") => {

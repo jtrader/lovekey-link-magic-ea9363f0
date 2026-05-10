@@ -62,26 +62,52 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --radius: 0.875rem;
+  --background: oklch(0.995 0.003 20);
+  --foreground: oklch(0.18 0.02 20);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
+  --card-foreground: oklch(0.18 0.02 20);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --popover-foreground: oklch(0.18 0.02 20);
+  --primary: oklch(0.6 0.22 25);
+  --primary-foreground: oklch(0.99 0 0);
+  --primary-glow: oklch(0.7 0.2 22);
+  --secondary: oklch(0.97 0.008 20);
+  --secondary-foreground: oklch(0.22 0.02 20);
+  --muted: oklch(0.965 0.006 20);
+  --muted-foreground: oklch(0.5 0.02 20);
+  --accent: oklch(0.96 0.012 20);
+  --accent-foreground: oklch(0.22 0.02 20);
+  --destructive: oklch(0.6 0.245 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.92 0.008 20);
+  --input: oklch(0.92 0.008 20);
+  --ring: oklch(0.6 0.22 25);
+
+  /* Node health states */
+  --health-green: oklch(0.7 0.16 152);
+  --health-blue: oklch(0.65 0.15 235);
+  --health-yellow: oklch(0.85 0.14 95);
+  --health-orange: oklch(0.72 0.17 55);
+  --health-red: oklch(0.62 0.22 25);
+  --health-purple: oklch(0.6 0.16 305);
+
+  /* Surfaces & atmosphere */
+  --surface-warm: oklch(0.985 0.006 25);
+  --surface-soft: oklch(0.97 0.01 20);
+
+  /* Gradients */
+  --gradient-hero: radial-gradient(ellipse at top, oklch(0.97 0.04 25) 0%, oklch(0.995 0.003 20) 60%);
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
+  --gradient-nucleus: radial-gradient(circle at 35% 30%, var(--health-green), var(--health-blue) 60%, oklch(0.5 0.18 270) 100%);
+
+  /* Shadows */
+  --shadow-soft: 0 1px 2px oklch(0.18 0.02 20 / 0.04), 0 8px 24px oklch(0.18 0.02 20 / 0.06);
+  --shadow-glow: 0 0 60px oklch(0.6 0.22 25 / 0.18);
+  --shadow-nucleus: 0 0 80px oklch(0.65 0.18 200 / 0.35);
+
+  /* Motion */
+  --ease-calm: cubic-bezier(0.22, 1, 0.36, 1);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -132,6 +158,18 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+@theme inline {
+  --color-primary-glow: var(--primary-glow);
+  --color-health-green: var(--health-green);
+  --color-health-blue: var(--health-blue);
+  --color-health-yellow: var(--health-yellow);
+  --color-health-orange: var(--health-orange);
+  --color-health-red: var(--health-red);
+  --color-health-purple: var(--health-purple);
+  --color-surface-warm: var(--surface-warm);
+  --color-surface-soft: var(--surface-soft);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -140,5 +178,38 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
   }
 }
+
+@layer utilities {
+  .bg-gradient-primary { background-image: var(--gradient-primary); }
+  .bg-gradient-hero { background-image: var(--gradient-hero); }
+  .bg-gradient-nucleus { background-image: var(--gradient-nucleus); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+  .shadow-nucleus { box-shadow: var(--shadow-nucleus); }
+  .ease-calm { transition-timing-function: var(--ease-calm); }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(6px, -8px); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-breathe { animation: breathe 6s ease-in-out infinite; }
+.animate-drift { animation: drift 9s ease-in-out infinite; }
+.animate-fade-up { animation: fade-up 0.8s var(--ease-calm) both; }

@@ -69,10 +69,10 @@ function Index() {
             <a href="#privacy" className="hover:text-foreground">Privacy</a>
           </nav>
           <a
-            href="#early"
+            href="/login"
             className="inline-flex items-center rounded-full bg-gradient-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-soft transition hover:opacity-95 ease-calm"
           >
-            Request access
+            Sign in
           </a>
         </div>
       </header>

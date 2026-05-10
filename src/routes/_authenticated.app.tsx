@@ -7,7 +7,7 @@ import {
   Check, Clock, Sparkles, Bell, Settings, ChevronRight, Home, Briefcase, Car,
 } from "lucide-react";
 
-export const Route = createFileRoute("/app")({
+export const Route = createFileRoute("/_authenticated/app")({
   component: AppView,
   head: () => ({
     meta: [

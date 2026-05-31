@@ -6,7 +6,7 @@ import {
   ShieldCheck, CircleDot, AlertTriangle, Boxes, Rocket, RefreshCw, Hash,
 } from "lucide-react";
 import {
-  DEFAULT_KUBO_BASE_URL, MANIFEST_FILENAME, buildFinalMetadata, extractBundle,
+  DEFAULT_KUBO_BASE_URL, buildFinalMetadata, extractBundle,
   findEntry, uploadToKubo, type KuboManifest, type RequiredFile,
 } from "@/lib/kubo";
 import type JSZip from "jszip";

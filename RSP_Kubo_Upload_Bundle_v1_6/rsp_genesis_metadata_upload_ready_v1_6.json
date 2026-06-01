@@ -1,0 +1,95 @@
+{
+  "name": "Respectful Synchronised Protocol \u2014 Genesis NFT",
+  "description": "A genesis provenance NFT for RSP, documenting Identifiable Source Burn, weighted signal fields, NFT tiers, credits, developer library architecture, and integration verticals including LMS and AI model congregations.",
+  "external_url": "https://example.com/rsp",
+  "image": "ipfs://REPLACE_WITH_ARTWORK_CID",
+  "attributes": [
+    {
+      "trait_type": "Protocol",
+      "value": "Respectful Synchronised Protocol"
+    },
+    {
+      "trait_type": "Abbreviation",
+      "value": "RSP"
+    },
+    {
+      "trait_type": "Edition",
+      "value": "Genesis"
+    },
+    {
+      "trait_type": "Version",
+      "value": "1.6"
+    },
+    {
+      "trait_type": "Tier",
+      "value": "Tier 0 \u2014 Genesis"
+    },
+    {
+      "trait_type": "Utility Type",
+      "value": "Provenance"
+    },
+    {
+      "trait_type": "Creator",
+      "value": "Jack Oswald"
+    },
+    {
+      "trait_type": "Handle",
+      "value": "@johnoswald69"
+    },
+    {
+      "trait_type": "Privacy Principle",
+      "value": "Identifiable Source Burn"
+    },
+    {
+      "trait_type": "Core Phrase",
+      "value": "Synchronisation without coercion"
+    },
+    {
+      "trait_type": "Signal Model",
+      "value": "Weighted interaction signals"
+    },
+    {
+      "trait_type": "Primary Verticals",
+      "value": "AI model congregations, LMS, UX, support operations"
+    },
+    {
+      "trait_type": "Future Currency Layer",
+      "value": "RSP Coordination Credits"
+    }
+  ],
+  "properties": {
+    "protocol_document": "ipfs://REPLACE_WITH_PROTOCOL_DOCUMENT_CID",
+    "key_clause_document": "ipfs://REPLACE_WITH_KEY_CLAUSE_DOCUMENT_CID",
+    "manifest_document": "ipfs://REPLACE_WITH_MANIFEST_DOCUMENT_CID",
+    "tier_structure_document": "ipfs://REPLACE_WITH_TIER_STRUCTURE_DOCUMENT_CID",
+    "tier_structure_json": "ipfs://REPLACE_WITH_TIER_STRUCTURE_JSON_CID",
+    "ecosystem_overview": "ipfs://REPLACE_WITH_ECOSYSTEM_OVERVIEW_CID",
+    "developer_library_architecture": "ipfs://REPLACE_WITH_DEVELOPER_LIBRARY_CID",
+    "integration_verticals": "ipfs://REPLACE_WITH_VERTICALS_CID",
+    "signal_model_json": "ipfs://REPLACE_WITH_SIGNAL_MODEL_CID",
+    "service_price_matrix": "ipfs://REPLACE_WITH_PRICE_MATRIX_DOCUMENT_CID",
+    "service_price_matrix_json": "ipfs://REPLACE_WITH_PRICE_MATRIX_JSON_CID",
+    "kubo_deployment_guide": "ipfs://REPLACE_WITH_KUBO_GUIDE_CID",
+    "file_hashes_sha256": {
+      "KUBO_DEPLOYMENT_GUIDE_v1_6.md": "65e33321f6a1076452aca0a94da58bf72eec8ac789fbfa90a3179f28b9a23cc9",
+      "RSP_Developer_Library_Architecture_v1_6.md": "8168bea5ea2089262322eb6048babe672045262a02fa062d509513531bc001c6",
+      "RSP_Ecosystem_Overview_v1_6.md": "39f8a23e58d6f42175acca81fed7034d25b684a8214f26f5abf31130a25f754e",
+      "RSP_Genesis_NFT_Artwork.png": "95c2efc801955fe0d619400f443e6cf7d0920ae9baee9e4d1a53750707f3f4e4",
+      "RSP_Genesis_NFT_Manifest.md": "c40d7be5553f80f74036e20f5db5018aa753366f1e9c1f553db49f6d5eecd6b5",
+      "RSP_Genesis_Protocol.md": "495a15a060dfc836d7ab57351cb543b6deee6f70fe73fdecebbab0386d2738e8",
+      "RSP_Integration_Verticals_v1_6.md": "afe38230f9acd2116d72b6e229f05228163f750b152fd9999bad7646ca98a936",
+      "RSP_Key_Clause_Identifiable_Source_Burn.md": "7f126c844900f63734ad61be744809cca21364d68a4077bcfdf10aa740178b97",
+      "RSP_NFT_Tier_Structure.md": "bc7d0361dc1d1a127c9fa9c8dd9a9aee3c33f720e7e8778b25b74274f6fae2cc",
+      "RSP_Service_Price_Matrix_and_Credits_v1_6.md": "d74f7c4d7bcfd886ecced7de7237c9dab793a7b506915cde7f242e6f24814854",
+      "rsp_service_price_matrix_v1_6.json": "19b96a181c828c6cc4456b61d6213535daf77991880f43fbb7c3fd5db2726b35",
+      "rsp_signal_model_v1_6.json": "70e0a6576232af1401654e42f058d102315be303273746a52b7a27d0661f5862",
+      "rsp_tiers.json": "d529c4e14acd61e9314d68217a7d879bed811f53c4bb29a302043b63a81cd346",
+      "rsp_kubo_upload_manifest_v1_6.json": "16713ba20323e83305acc23b2dfee64c0588d64eba03c14a98abc74f6c10b579"
+    },
+    "rights_notice": "Copyright \u00a9 2026 Jack Oswald. All rights reserved unless otherwise licensed in writing.",
+    "utility_disclaimer": "RSP NFTs are utility, provenance, access, participation, and certification tokens. They are not investment products.",
+    "credit_disclaimer": "RSP Credits are prepaid service credits redeemable for RSP services and ecosystem access. They are not cash, not fiat-redeemable, not investments, and not designed for speculation.",
+    "legal_note": "This NFT is a public timestamp and symbolic provenance record. It does not by itself create trademark, copyright registration, patent, official standardisation, or exclusive legal rights.",
+    "privacy_note": "Identifiable behavioural source data should be deleted, anonymised, cryptographically erased, or irreversibly decoupled once translated into the minimal synchronisation signal, except where retention is required by law, explicit consent, safety, or legitimate accountability."
+  }
+}

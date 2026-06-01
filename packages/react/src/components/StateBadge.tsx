@@ -1,6 +1,5 @@
 import React from 'react'
-import type { RSPVisualState } from '@rsp/core'
-import { getStateDisplay } from '@rsp/core'
+import { getStateDisplay, type RSPVisualState } from '@rsp/core'
 
 // ── StateBadge ────────────────────────────────────────────────────────────────
 // Compact inline badge showing an RSP visual state.

@@ -21,5 +21,8 @@ export {
   toMoodRing,
   toPresenceRecord,
   toFamilyHealth,
+  toHubHealth,
+  getFamilyStatusLine,
+  getHubStatusLine,
   shouldNotifySupport,
 } from "./presence/mapping";

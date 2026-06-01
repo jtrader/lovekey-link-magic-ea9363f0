@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RspRouteImport } from './routes/rsp'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -16,6 +17,11 @@ import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
 
+const RspRoute = RspRouteImport.update({
+  id: '/rsp',
+  path: '/rsp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -49,6 +55,7 @@ const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/rsp': typeof RspRoute
   '/app': typeof AuthenticatedAppRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -56,6 +63,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/rsp': typeof RspRoute
   '/app': typeof AuthenticatedAppRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -65,20 +73,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/rsp': typeof RspRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/app' | '/onboarding' | '/invite/$token'
+  fullPaths: '/' | '/login' | '/rsp' | '/app' | '/onboarding' | '/invite/$token'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/app' | '/onboarding' | '/invite/$token'
+  to: '/' | '/login' | '/rsp' | '/app' | '/onboarding' | '/invite/$token'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/login'
+    | '/rsp'
     | '/_authenticated/app'
     | '/_authenticated/onboarding'
     | '/invite/$token'
@@ -88,11 +98,19 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  RspRoute: typeof RspRoute
   InviteTokenRoute: typeof InviteTokenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/rsp': {
+      id: '/rsp'
+      path: '/rsp'
+      fullPath: '/rsp'
+      preLoaderRoute: typeof RspRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -156,6 +174,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
+  RspRoute: RspRoute,
   InviteTokenRoute: InviteTokenRoute,
 }
 export const routeTree = rootRouteImport

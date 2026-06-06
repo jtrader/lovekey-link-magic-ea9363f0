@@ -67,7 +67,7 @@ const css = `
     text-decoration: none; color: var(--rsp-text);
   }
   .rsp-nav-logo-mark {
-    width: 40px; height: 40px;
+    width: 80px; height: 80px;
     display: flex; align-items: center; justify-content: center;
   }
   .rsp-nav-logo-mark img { width: 40px; height: 40px; object-fit: contain; }

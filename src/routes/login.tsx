@@ -10,8 +10,8 @@ export const Route = createFileRoute("/login")({
   component: LoginPage,
   head: () => ({
     meta: [
-      { title: "Sign in — LoveKey Link" },
-      { name: "description", content: "Sign in to LoveKey Link with Google or Apple." },
+      { title: "Sign in — Love Key Link" },
+      { name: "description", content: "Sign in to Love Key Link with Google or Apple." },
     ],
   }),
 });
@@ -58,9 +58,9 @@ function LoginPage() {
       </div>
       <div className="relative w-full max-w-md rounded-3xl bg-card p-8 shadow-soft ring-1 ring-border">
         <div className="flex items-center gap-2">
-          <img src={lovekeyMark} alt="LoveKey" className="h-8 w-8" width={32} height={32} />
+          <img src={lovekeyMark} alt="Love Key" className="h-8 w-8" width={32} height={32} />
           <span className="text-lg font-semibold tracking-tight">
-            LoveKey <span className="text-primary">Link</span>
+            Love Key <span className="text-primary">Link</span>
           </span>
         </div>
         <h1 className="mt-6 text-2xl font-semibold tracking-tight">Sign in</h1>
@@ -88,7 +88,7 @@ function LoginPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          By continuing, you agree that LoveKey Link will store your name, photo and email to identify you within your circle.
+          By continuing, you agree that Love Key Link will store your name, photo and email to identify you within your circle.
         </p>
       </div>
     </div>

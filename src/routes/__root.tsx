@@ -53,10 +53,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "LoveKey Link" },
+      { title: "Love Key Link" },
       { name: "description", content: "A calm, private coordination layer for families." },
-      { property: "og:title", content: "LoveKey Link" },
-      { name: "twitter:title", content: "LoveKey Link" },
+      { property: "og:title", content: "Love Key Link" },
+      { name: "twitter:title", content: "Love Key Link" },
       { property: "og:description", content: "A calm, private coordination layer for families." },
       { name: "twitter:description", content: "A calm, private coordination layer for families." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/f23e9b86-02f2-49c9-a4e5-016dadf4cbbf" },

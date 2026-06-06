@@ -10,7 +10,7 @@ import { Camera, Users, Check, Copy, Plus, Sparkles, ArrowRight } from "lucide-r
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
   component: Onboarding,
-  head: () => ({ meta: [{ title: "Welcome — LoveKey Link" }] }),
+  head: () => ({ meta: [{ title: "Welcome — Love Key Link" }] }),
 });
 
 const profileSchema = z.object({
@@ -68,9 +68,9 @@ function Onboarding() {
     <div className="min-h-screen bg-gradient-hero">
       <div className="mx-auto max-w-xl px-6 py-10">
         <div className="mb-8 flex items-center gap-2">
-          <img src={lovekeyMark} alt="LoveKey" className="h-7 w-7" />
+          <img src={lovekeyMark} alt="Love Key" className="h-7 w-7" />
           <span className="font-semibold tracking-tight">
-            LoveKey <span className="text-primary">Link</span>
+            Love Key <span className="text-primary">Link</span>
           </span>
         </div>
 

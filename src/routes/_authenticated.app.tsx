@@ -14,9 +14,9 @@ export const Route = createFileRoute("/_authenticated/app")({
   component: AppView,
   head: () => ({
     meta: [
-      { title: "Your Link — LoveKey Link" },
+      { title: "Your Link — Love Key Link" },
       { name: "description", content: "A calm, private coordination layer for your circle. Status, participation, and node health at a glance." },
-      { property: "og:title", content: "Your Link — LoveKey Link" },
+      { property: "og:title", content: "Your Link — Love Key Link" },
       { property: "og:description", content: "Coordination, not surveillance. View your node, set your five-dimension status, and tend your circle." },
     ],
   }),
@@ -123,9 +123,9 @@ function AppView() {
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
           <Link to="/" className="flex items-center gap-2">
-            <img src={lovekeyMark} alt="LoveKey" className="h-7 w-7" width={28} height={28} />
+            <img src={lovekeyMark} alt="Love Key" className="h-7 w-7" width={28} height={28} />
             <span className="font-semibold tracking-tight">
-              LoveKey <span className="text-primary">Link</span>
+              Love Key <span className="text-primary">Link</span>
             </span>
           </Link>
           <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">

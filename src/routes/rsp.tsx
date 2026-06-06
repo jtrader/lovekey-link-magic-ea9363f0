@@ -470,9 +470,7 @@ function RSPPage() {
         <div className="rsp-nav-inner">
           <Link to="/" className="rsp-nav-logo">
             <span className="rsp-nav-logo-mark">
-              <svg viewBox="0 0 24 24">
-                <path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3 1 4 2.5 1-1.5 2-2.5 4-2.5 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21Z" />
-              </svg>
+              <img src={lovekeyMark} alt="Love Key Link" />
             </span>
             <span>
               <span className="rsp-nav-logo-name">Love Key Link</span>

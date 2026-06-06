@@ -70,7 +70,7 @@ const css = `
     width: 80px; height: 80px;
     display: flex; align-items: center; justify-content: center;
   }
-  .rsp-nav-logo-mark img { width: 40px; height: 40px; object-fit: contain; }
+  .rsp-nav-logo-mark img { width: 80px; height: 80px; object-fit: contain; }
   .rsp-nav-logo-name { font-size: .92rem; font-weight: 500; letter-spacing: -.01em; }
   .rsp-nav-logo-sub { font-size: .78rem; color: var(--rsp-text-muted); margin-left: 2px; }
   .rsp-nav-links { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; }

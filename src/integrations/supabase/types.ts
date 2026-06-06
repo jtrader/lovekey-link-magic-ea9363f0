@@ -108,6 +108,88 @@ export type Database = {
           },
         ]
       }
+      family_presence: {
+        Row: {
+          active_member_count: number
+          family_id: string
+          health: string
+          id: string
+          status_line: string
+          support_needed_count: number
+          updated_at: string
+        }
+        Insert: {
+          active_member_count?: number
+          family_id: string
+          health: string
+          id?: string
+          status_line: string
+          support_needed_count?: number
+          updated_at?: string
+        }
+        Update: {
+          active_member_count?: number
+          family_id?: string
+          health?: string
+          id?: string
+          status_line?: string
+          support_needed_count?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_presence_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: true
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      presence_states: {
+        Row: {
+          family_id: string
+          id: string
+          label: string
+          mood_ring: string
+          needs_support: boolean
+          node_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          family_id: string
+          id?: string
+          label: string
+          mood_ring: string
+          needs_support?: boolean
+          node_id: string
+          status: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          family_id?: string
+          id?: string
+          label?: string
+          mood_ring?: string
+          needs_support?: boolean
+          node_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "presence_states_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null

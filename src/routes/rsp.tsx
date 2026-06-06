@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import lovekeyMark from "@/assets/lovekey-mark.png"
 
 export const Route = createFileRoute('/rsp')({
   head: () => ({
@@ -66,11 +67,10 @@ const css = `
     text-decoration: none; color: var(--rsp-text);
   }
   .rsp-nav-logo-mark {
-    width: 28px; height: 28px; border-radius: 7px;
-    background: var(--rsp-primary);
+    width: 40px; height: 40px;
     display: flex; align-items: center; justify-content: center;
   }
-  .rsp-nav-logo-mark svg { width: 16px; height: 16px; fill: white; }
+  .rsp-nav-logo-mark img { width: 40px; height: 40px; object-fit: contain; }
   .rsp-nav-logo-name { font-size: .92rem; font-weight: 500; letter-spacing: -.01em; }
   .rsp-nav-logo-sub { font-size: .78rem; color: var(--rsp-text-muted); margin-left: 2px; }
   .rsp-nav-links { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; }
@@ -470,9 +470,7 @@ function RSPPage() {
         <div className="rsp-nav-inner">
           <Link to="/" className="rsp-nav-logo">
             <span className="rsp-nav-logo-mark">
-              <svg viewBox="0 0 24 24">
-                <path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3 1 4 2.5 1-1.5 2-2.5 4-2.5 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21Z" />
-              </svg>
+              <img src={lovekeyMark} alt="Love Key Link" />
             </span>
             <span>
               <span className="rsp-nav-logo-name">Love Key Link</span>
@@ -757,6 +755,7 @@ function RSPPage() {
       {/* FOOTER */}
       <footer className="rsp-footer">
         <div className="rsp-footer-inner">
+          <img src={lovekeyMark} alt="Love Key Link" style={{ width: 48, height: 48, objectFit: 'contain' }} />
           <div className="rsp-footer-left">
             <strong>Love Key Link / RSP</strong> · Respectful Synchronised Protocol v1.6 ·
             Copyright © 2026 Jack Oswald. All rights reserved unless otherwise licensed in writing.

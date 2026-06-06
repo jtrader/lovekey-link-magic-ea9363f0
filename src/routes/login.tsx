@@ -58,7 +58,7 @@ function LoginPage() {
       </div>
       <div className="relative w-full max-w-md rounded-3xl bg-card p-8 shadow-soft ring-1 ring-border">
         <div className="flex items-center gap-2">
-          <img src={lovekeyMark} alt="Love Key" className="h-8 w-8" width={32} height={32} />
+          <img src={lovekeyMark} alt="Love Key" className="h-16 w-16" width={64} height={64} />
           <span className="text-lg font-semibold tracking-tight">
             Love Key <span className="text-primary">Link</span>
           </span>

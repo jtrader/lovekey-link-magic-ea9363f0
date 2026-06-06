@@ -123,7 +123,7 @@ function AppView() {
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
           <Link to="/" className="flex items-center gap-2">
-            <img src={lovekeyMark} alt="Love Key" className="h-7 w-7" width={28} height={28} />
+            <img src={lovekeyMark} alt="Love Key" className="h-14 w-14" width={56} height={56} />
             <span className="font-semibold tracking-tight">
               Love Key <span className="text-primary">Link</span>
             </span>

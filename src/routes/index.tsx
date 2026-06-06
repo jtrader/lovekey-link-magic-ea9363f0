@@ -58,7 +58,7 @@ function Index() {
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <a href="/" className="flex items-center gap-2">
-            <img src={lovekeyMark} alt="Love Key" className="h-7 w-7" width={28} height={28} />
+            <img src={lovekeyMark} alt="Love Key" className="h-14 w-14" width={56} height={56} />
             <span className="font-semibold tracking-tight">
               Love Key <span className="text-primary">Link</span>
             </span>
@@ -269,7 +269,7 @@ function Index() {
       <footer className="border-t border-border bg-background">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row">
           <div className="flex items-center gap-2">
-            <img src={lovekeyMark} alt="" className="h-5 w-5" width={20} height={20} />
+            <img src={lovekeyMark} alt="" className="h-10 w-10" width={40} height={40} />
             <span>© {new Date().getFullYear()} Love Key Link · Part of the Love Key family</span>
           </div>
           <div className="flex gap-5">

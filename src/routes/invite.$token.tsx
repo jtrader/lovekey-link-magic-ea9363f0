@@ -60,7 +60,7 @@ function InvitePage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-hero px-6">
       <div className="w-full max-w-md rounded-3xl bg-card p-8 shadow-soft ring-1 ring-border">
         <div className="flex items-center gap-2">
-          <img src={lovekeyMark} alt="Love Key" className="h-7 w-7" />
+          <img src={lovekeyMark} alt="Love Key" className="h-14 w-14" />
           <span className="font-semibold tracking-tight">
             Love Key <span className="text-primary">Link</span>
           </span>

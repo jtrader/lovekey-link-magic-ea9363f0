@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import lovekeyMark from "@/assets/lovekey-mark.png"
 
 export const Route = createFileRoute('/rsp')({
   head: () => ({

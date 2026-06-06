@@ -67,10 +67,10 @@ const css = `
     text-decoration: none; color: var(--rsp-text);
   }
   .rsp-nav-logo-mark {
-    width: 40px; height: 40px;
+    width: 80px; height: 80px;
     display: flex; align-items: center; justify-content: center;
   }
-  .rsp-nav-logo-mark img { width: 40px; height: 40px; object-fit: contain; }
+  .rsp-nav-logo-mark img { width: 80px; height: 80px; object-fit: contain; }
   .rsp-nav-logo-name { font-size: .92rem; font-weight: 500; letter-spacing: -.01em; }
   .rsp-nav-logo-sub { font-size: .78rem; color: var(--rsp-text-muted); margin-left: 2px; }
   .rsp-nav-links { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; }
@@ -755,7 +755,7 @@ function RSPPage() {
       {/* FOOTER */}
       <footer className="rsp-footer">
         <div className="rsp-footer-inner">
-          <img src={lovekeyMark} alt="Love Key Link" style={{ width: 48, height: 48, objectFit: 'contain' }} />
+          <img src={lovekeyMark} alt="Love Key Link" style={{ width: 96, height: 96, objectFit: 'contain' }} />
           <div className="rsp-footer-left">
             <strong>Love Key Link / RSP</strong> · Respectful Synchronised Protocol v1.6 ·
             Copyright © 2026 Jack Oswald. All rights reserved unless otherwise licensed in writing.

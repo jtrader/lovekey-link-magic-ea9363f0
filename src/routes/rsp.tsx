@@ -3,11 +3,11 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 export const Route = createFileRoute('/rsp')({
   head: () => ({
     meta: [
-      { title: 'RSP — Respectful Synchronised Protocol · LoveKeyLink' },
+      { title: 'RSP — Respectful Synchronised Protocol · Love Key Link' },
       {
         name: 'description',
         content:
-          'RSP is a privacy-first coordination framework built into LoveKeyLink. Translate behaviour into weighted signals, synchronise the state, burn the identifiable source.',
+          'RSP is a privacy-first coordination framework built into Love Key Link. Translate behaviour into weighted signals, synchronise the state, burn the identifiable source.',
       },
       { property: 'og:title', content: 'RSP — Respectful Synchronised Protocol' },
       {
@@ -475,7 +475,7 @@ function RSPPage() {
               </svg>
             </span>
             <span>
-              <span className="rsp-nav-logo-name">LoveKeyLink</span>
+              <span className="rsp-nav-logo-name">Love Key Link</span>
               <span className="rsp-nav-logo-sub">/ RSP</span>
             </span>
           </Link>
@@ -503,13 +503,13 @@ function RSPPage() {
             <em>without coercion.</em>
           </h1>
           <p className="rsp-hero-sub">
-            RSP is a privacy-first coordination framework built into the core of LoveKeyLink.
+            RSP is a privacy-first coordination framework built into the core of Love Key Link.
             Translate behaviour into weighted signals. Synchronise the state. Burn the
             identifiable source.
           </p>
           <div className="rsp-hero-actions">
             <a href="#protocol" className="rsp-btn-primary">Explore the protocol →</a>
-            <Link to="/app" className="rsp-btn-outline">Open LoveKeyLink</Link>
+            <Link to="/app" className="rsp-btn-outline">Open Love Key Link</Link>
           </div>
         </div>
         <div className="rsp-hero-visual">
@@ -561,7 +561,7 @@ function RSPPage() {
           <div className="rsp-eyebrow">Core principles</div>
           <h2 className="rsp-h2">Built on respectful coordination</h2>
           <p className="rsp-lead">
-            RSP defines how LoveKeyLink observes, interprets, and forgets — without surveilling,
+            RSP defines how Love Key Link observes, interprets, and forgets — without surveilling,
             profiling, or coercing anyone.
           </p>
         </div>

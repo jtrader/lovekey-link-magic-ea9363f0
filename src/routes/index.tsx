@@ -9,13 +9,13 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "LoveKey Link — Regenerative Synchronization Protocol" },
+      { title: "Love Key Link — Regenerative Synchronization Protocol" },
       {
         name: "description",
         content:
-          "LoveKey Link is a calm, private coordination layer for families and small communities. Coordination, not surveillance.",
+          "Love Key Link is a calm, private coordination layer for families and small communities. Coordination, not surveillance.",
       },
-      { property: "og:title", content: "LoveKey Link — Coordination, not surveillance" },
+      { property: "og:title", content: "Love Key Link — Coordination, not surveillance" },
       {
         property: "og:description",
         content:
@@ -58,9 +58,9 @@ function Index() {
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <a href="/" className="flex items-center gap-2">
-            <img src={lovekeyMark} alt="LoveKey" className="h-7 w-7" width={28} height={28} />
+            <img src={lovekeyMark} alt="Love Key" className="h-14 w-14" width={56} height={56} />
             <span className="font-semibold tracking-tight">
-              LoveKey <span className="text-primary">Link</span>
+              Love Key <span className="text-primary">Link</span>
             </span>
           </a>
           <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
@@ -90,7 +90,7 @@ function Index() {
               <span className="bg-gradient-primary bg-clip-text text-transparent">not surveillance.</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted-foreground">
-              LoveKey Link is a quiet coordination layer for the people who matter most.
+              Love Key Link is a quiet coordination layer for the people who matter most.
               It strengthens family and community resilience — without rankings, scores, or
               addictive engagement.
             </p>
@@ -119,7 +119,7 @@ function Index() {
           <p className="text-sm font-medium uppercase tracking-widest text-primary">Participation, not performance</p>
           <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Three kinds of meaningful contact.</h2>
           <p className="mt-4 text-muted-foreground">
-            LoveKey Link recognises real human coordination — messages of care, voice calls,
+            Love Key Link recognises real human coordination — messages of care, voice calls,
             and time spent together. Each contributes to the node, never to a public score.
           </p>
         </div>
@@ -158,7 +158,7 @@ function Index() {
           <div className="max-w-2xl">
             <h2 className="text-3xl font-semibold sm:text-4xl">Designed to feel like care.</h2>
             <p className="mt-4 text-muted-foreground">
-              Every choice in LoveKey Link is shaped by one principle: protect the person, strengthen the node.
+              Every choice in Love Key Link is shaped by one principle: protect the person, strengthen the node.
             </p>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -220,7 +220,7 @@ function Index() {
           <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">Private by architecture.</h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
             No raw GPS. No message content. No emotional inference. No social scores.
-            LoveKey Link interprets context on-device and shares only what coordination requires.
+            Love Key Link interprets context on-device and shares only what coordination requires.
           </p>
           <div className="mt-10 grid gap-4 text-left sm:grid-cols-2">
             {[
@@ -245,7 +245,7 @@ function Index() {
           <span className="bg-gradient-primary bg-clip-text text-transparent">Yours could be next.</span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          LoveKey Link is in private development. Join the early circle to help shape a calmer way
+          Love Key Link is in private development. Join the early circle to help shape a calmer way
           to stay in sync with the people who matter.
         </p>
         <form
@@ -262,15 +262,15 @@ function Index() {
             Request access
           </button>
         </form>
-        <p className="mt-3 text-xs text-muted-foreground">We only contact you about LoveKey Link. No tracking.</p>
+        <p className="mt-3 text-xs text-muted-foreground">We only contact you about Love Key Link. No tracking.</p>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-border bg-background">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row">
           <div className="flex items-center gap-2">
-            <img src={lovekeyMark} alt="" className="h-5 w-5" width={20} height={20} />
-            <span>© {new Date().getFullYear()} LoveKey Link · Part of the LoveKey family</span>
+            <img src={lovekeyMark} alt="" className="h-10 w-10" width={40} height={40} />
+            <span>© {new Date().getFullYear()} Love Key Link · Part of the Love Key family</span>
           </div>
           <div className="flex gap-5">
             <a href="https://lovekey.com.au" className="hover:text-foreground">lovekey.com.au</a>

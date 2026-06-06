@@ -755,6 +755,7 @@ function RSPPage() {
       {/* FOOTER */}
       <footer className="rsp-footer">
         <div className="rsp-footer-inner">
+          <img src={lovekeyMark} alt="Love Key Link" style={{ width: 48, height: 48, objectFit: 'contain' }} />
           <div className="rsp-footer-left">
             <strong>Love Key Link / RSP</strong> · Respectful Synchronised Protocol v1.6 ·
             Copyright © 2026 Jack Oswald. All rights reserved unless otherwise licensed in writing.

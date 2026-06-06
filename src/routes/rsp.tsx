@@ -758,7 +758,7 @@ function RSPPage() {
       <footer className="rsp-footer">
         <div className="rsp-footer-inner">
           <div className="rsp-footer-left">
-            <strong>LoveKeyLink / RSP</strong> · Respectful Synchronised Protocol v1.6 ·
+            <strong>Love Key Link / RSP</strong> · Respectful Synchronised Protocol v1.6 ·
             Copyright © 2026 Jack Oswald. All rights reserved unless otherwise licensed in writing.
           </div>
           <div className="rsp-footer-right">

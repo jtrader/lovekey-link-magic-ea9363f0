@@ -502,6 +502,13 @@ function PrincipleCard({
 // ─── Page ──────────────────────────────────────────────────────────────────
 
 function RSPPage() {
+  const STRIPE_LINKS = {
+    starter: 'https://buy.stripe.com/REPLACE_STARTER',
+    builder: 'https://buy.stripe.com/REPLACE_BUILDER',
+    pro:     'https://buy.stripe.com/REPLACE_PRO',
+    partner: 'https://buy.stripe.com/REPLACE_PARTNER',
+  }
+
   return (
     <div className="rsp-root">
       <style dangerouslySetInnerHTML={{ __html: css }} />
@@ -803,19 +810,31 @@ npm install @rsp-protocol/react`}
           </div>
           <div className="rsp-credits-grid">
             {[
-              { name: 'Starter', price: '£25',    credits: '25 credits',    note: '1:1 value'   },
-              { name: 'Builder', price: '£100',   credits: '110 credits',   note: '10% bonus'   },
-              { name: 'Pro',     price: '£250',   credits: '285 credits',   note: '14% bonus'   },
-              { name: 'Partner', price: '£1,000', credits: '1,200 credits', note: '20% bonus'   },
+              { key: 'starter', name: 'Starter', price: '£25',    credits: '25 credits',    note: '1:1 value'   },
+              { key: 'builder', name: 'Builder', price: '£100',   credits: '110 credits',   note: '10% bonus'   },
+              { key: 'pro',     name: 'Pro',     price: '£250',   credits: '285 credits',   note: '14% bonus'   },
+              { key: 'partner', name: 'Partner', price: '£1,000', credits: '1,200 credits', note: '20% bonus'   },
             ].map((c) => (
               <div className="rsp-credit-card" key={c.name}>
                 <div className="rsp-credit-name">{c.name}</div>
                 <div className="rsp-credit-price">{c.price}</div>
                 <div className="rsp-credit-credits">{c.credits}</div>
                 <div className="rsp-credit-note">{c.note}</div>
+                <a
+                  href={STRIPE_LINKS[c.key as keyof typeof STRIPE_LINKS]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rsp-btn-primary"
+                  style={{ marginTop: 16, fontSize: '.8rem', padding: '8px 18px', display: 'inline-flex' }}
+                >
+                  Buy →
+                </a>
               </div>
             ))}
           </div>
+          <p style={{ textAlign: 'center', fontSize: '.78rem', color: 'var(--rsp-text-muted)', marginTop: 16 }}>
+            Credits are fulfilled automatically after payment. A confirmation email is sent once your credits are active.
+          </p>
         </div>
       </section>
 

@@ -62,6 +62,7 @@ Deno.serve(async (req) => {
           ? session.customer
           : session.customer?.id ?? null;
       const amountTotal = session.amount_total ?? 0;
+      const userId = session.metadata?.user_id ?? null;
 
       if (!email) {
         console.error("No customer email on session", session.id);
@@ -84,6 +85,7 @@ Deno.serve(async (req) => {
           {
             email,
             name,
+            ...(userId ? { user_id: userId } : {}),
             ...(stripeCustomerId ? { stripe_customer_id: stripeCustomerId } : {}),
           },
           { onConflict: "email" },

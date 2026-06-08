@@ -14,6 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
+      credit_transactions: {
+        Row: {
+          created_at: string
+          credits: number
+          customer_id: string
+          description: string | null
+          id: string
+          stripe_payment_id: string | null
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          credits: number
+          customer_id: string
+          description?: string | null
+          id?: string
+          stripe_payment_id?: string | null
+          type: string
+        }
+        Update: {
+          created_at?: string
+          credits?: number
+          customer_id?: string
+          description?: string | null
+          id?: string
+          stripe_payment_id?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_transactions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customer_balances"
+            referencedColumns: ["customer_id"]
+          },
+          {
+            foreignKeyName: "credit_transactions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string | null
+          stripe_customer_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          name?: string | null
+          stripe_customer_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string | null
+          stripe_customer_id?: string | null
+        }
+        Relationships: []
+      }
       families: {
         Row: {
           created_at: string
@@ -223,9 +292,65 @@ export type Database = {
         }
         Relationships: []
       }
+      redemptions: {
+        Row: {
+          created_at: string
+          credits_deducted: number
+          customer_id: string
+          fulfilled_at: string | null
+          id: string
+          notes: string | null
+          service: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          credits_deducted: number
+          customer_id: string
+          fulfilled_at?: string | null
+          id?: string
+          notes?: string | null
+          service: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          credits_deducted?: number
+          customer_id?: string
+          fulfilled_at?: string | null
+          id?: string
+          notes?: string | null
+          service?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "redemptions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customer_balances"
+            referencedColumns: ["customer_id"]
+          },
+          {
+            foreignKeyName: "redemptions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
-      [_ in never]: never
+      customer_balances: {
+        Row: {
+          customer_id: string | null
+          email: string | null
+          name: string | null
+          total_credits: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       accept_family_invite: { Args: { _token: string }; Returns: string }

@@ -950,16 +950,35 @@ npm install @rsp-protocol/react`}
           </div>
           <div className="rsp-credits-grid">
             {[
-              { key: 'starter', name: 'Starter', price: '£25',    credits: '25 credits',    note: '1:1 value'   },
-              { key: 'builder', name: 'Builder', price: '£100',   credits: '110 credits',   note: '10% bonus'   },
-              { key: 'pro',     name: 'Pro',     price: '£250',   credits: '285 credits',   note: '14% bonus'   },
-              { key: 'partner', name: 'Partner', price: '£1,000', credits: '1,200 credits', note: '20% bonus'   },
+              {
+                key: 'builder',
+                name: 'RSP Certification (standard)',
+                credits: '100 credits',
+                desc: 'A structured review of your system, product, or organisation against the RSP framework. Covers the five core principles: privacy by destruction, weighted signals, non-coercive synchronisation, consent architecture, and burn clause compliance. Results in a written assessment and recommendations.',
+              },
+              {
+                key: 'pro',
+                name: 'RSP Certification (full + badge issuance)',
+                credits: '250 credits',
+                desc: 'Everything in the standard review, plus formal issuance of an RSP Certification Badge — a verifiable on-chain credential (NFT Tier 3) confirming RSP alignment. Suitable for products, platforms, and organisations that want to demonstrate privacy-first coordination publicly.',
+              },
+              {
+                key: 'partner',
+                name: 'RSP Partner Certification',
+                credits: '1,000 credits',
+                desc: 'Full certification for organisations building on RSP at scale — covering enterprise systems, multi-agent architectures, or commercial integrations. Includes a Partner Licence marker (NFT Tier 4), co-authorship credit in the RSP registry, and ongoing alignment support as the protocol evolves.',
+              },
+              {
+                key: 'partner',
+                name: 'RSP Certifier Licence',
+                credits: '1,000 credits (£1,000)',
+                desc: "At 125 credits per badge issuance, the licence pays for itself after 8 certifications. A busy certifier doing one a month recovers the cost in under a year, then it's pure margin. That feels like the right balance — serious commitment, clear ROI.",
+              },
             ].map((c) => (
               <div className="rsp-credit-card" key={c.name}>
                 <div className="rsp-credit-name">{c.name}</div>
-                <div className="rsp-credit-price">{c.price}</div>
                 <div className="rsp-credit-credits">{c.credits}</div>
-                <div className="rsp-credit-note">{c.note}</div>
+                <div className="rsp-credit-note">{c.desc}</div>
                 <button
                   type="button"
                   onClick={() => handleBuy(c.key)}

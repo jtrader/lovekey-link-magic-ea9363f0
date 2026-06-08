@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import lovekeyMark from "@/assets/lovekey-mark.png"
 import { supabase } from "@/integrations/supabase/client"
+import { useAuth } from "@/hooks/use-auth"
+import { lovable } from "@/integrations/lovable/index"
 
 export const Route = createFileRoute('/rsp')({
   head: () => ({
@@ -504,22 +506,19 @@ function PrincipleCard({
 // ─── Page ──────────────────────────────────────────────────────────────────
 
 function RSPPage() {
+  const { user, loading } = useAuth()
   const [loadingTier, setLoadingTier] = useState<string | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const [balance, setBalance] = useState<number | null>(null)
   const [balanceLoading, setBalanceLoading] = useState(false)
   const [balanceError, setBalanceError] = useState<string | null>(null)
+  const [showSignIn, setShowSignIn] = useState(false)
+  const [signingIn, setSigningIn] = useState<string | null>(null)
 
-  async function handleBuy(tier: string) {
+  async function startCheckout(tier: string) {
     setCheckoutError(null)
     setLoadingTier(tier)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        setCheckoutError('Please sign in to purchase credits.')
-        setLoadingTier(null)
-        return
-      }
       const { data, error } = await supabase.functions.invoke('create-checkout-session', {
         body: {
           tier,
@@ -539,16 +538,55 @@ function RSPPage() {
     }
   }
 
-  async function handleCheckBalance() {
-    setBalanceError(null)
-    setBalanceLoading(true)
+  // Resume a pending purchase after the user signs in and returns to /rsp
+  useEffect(() => {
+    if (loading || !user) return
+    const pending = sessionStorage.getItem('pending_rsp_tier')
+    if (pending) {
+      sessionStorage.removeItem('pending_rsp_tier')
+      setShowSignIn(false)
+      void startCheckout(pending)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, loading])
+
+  async function handleBuy(tier: string) {
+    setCheckoutError(null)
+    if (!user) {
+      // Remember the tier so we can resume after sign-in, then show inline panel
+      sessionStorage.setItem('pending_rsp_tier', tier)
+      setShowSignIn(true)
+      return
+    }
+    await startCheckout(tier)
+  }
+
+  async function handleSignIn(provider: 'google' | 'apple') {
+    setSigningIn(provider)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        setBalanceError('Please sign in to view your balance.')
-        setBalanceLoading(false)
+      const result = await lovable.auth.signInWithOAuth(provider, {
+        redirect_uri: window.location.origin + '/rsp',
+      })
+      if (result.error) {
+        setCheckoutError('Sign-in failed. Please try again.')
+        setSigningIn(null)
         return
       }
+      // On success the page redirects; the useEffect resumes checkout on return.
+    } catch {
+      setCheckoutError('Sign-in failed. Please try again.')
+      setSigningIn(null)
+    }
+  }
+
+  async function handleCheckBalance() {
+    setBalanceError(null)
+    if (!user) {
+      setShowSignIn(true)
+      return
+    }
+    setBalanceLoading(true)
+    try {
       const { data, error } = await supabase.functions.invoke('get-balance')
       if (error || !data) {
         setBalanceError('Could not load your balance. Please try again.')
@@ -890,6 +928,61 @@ npm install @rsp-protocol/react`}
             <p style={{ textAlign: 'center', fontSize: '.8rem', color: 'var(--rsp-primary)', marginTop: 16 }}>
               {checkoutError}
             </p>
+          )}
+
+          {showSignIn && !user && (
+            <div
+              style={{
+                maxWidth: 420,
+                margin: '24px auto 0',
+                padding: '24px',
+                borderRadius: 'var(--rsp-radius)',
+                border: '1px solid var(--rsp-border-strong)',
+                background: 'var(--rsp-surface)',
+                textAlign: 'center',
+              }}
+            >
+              <div style={{ fontWeight: 600, fontSize: '.95rem', marginBottom: 6 }}>
+                Sign in to buy credits
+              </div>
+              <p style={{ fontSize: '.8rem', color: 'var(--rsp-text-muted)', marginBottom: 16 }}>
+                Use the account you already trust. We&apos;ll bring you right back to complete your purchase.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <button
+                  type="button"
+                  onClick={() => handleSignIn('google')}
+                  disabled={signingIn !== null}
+                  className="rsp-btn-outline"
+                  style={{ justifyContent: 'center', cursor: signingIn ? 'wait' : 'pointer' }}
+                >
+                  {signingIn === 'google' ? 'Connecting…' : 'Continue with Google'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSignIn('apple')}
+                  disabled={signingIn !== null}
+                  className="rsp-btn-outline"
+                  style={{ justifyContent: 'center', cursor: signingIn ? 'wait' : 'pointer' }}
+                >
+                  {signingIn === 'apple' ? 'Connecting…' : 'Continue with Apple'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowSignIn(false)}
+                  style={{
+                    marginTop: 4,
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--rsp-text-soft)',
+                    fontSize: '.75rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           )}
           <p style={{ textAlign: 'center', fontSize: '.78rem', color: 'var(--rsp-text-muted)', marginTop: 16 }}>
             Credits are fulfilled automatically after payment. A confirmation email is sent once your credits are active.

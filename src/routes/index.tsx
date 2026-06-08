@@ -53,6 +53,7 @@ const states = [
 ];
 
 function Index() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
@@ -72,11 +73,37 @@ function Index() {
           </nav>
           <a
             href="/login"
-            className="inline-flex items-center rounded-full bg-gradient-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-soft transition hover:opacity-95 ease-calm"
+            className="hidden md:inline-flex items-center rounded-full bg-gradient-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-soft transition hover:opacity-95 ease-calm"
           >
             Sign in
           </a>
+          <button
+            type="button"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
+            className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-foreground md:hidden"
+          >
+            {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
+        {menuOpen && (
+          <nav className="border-t border-border/60 bg-background/95 px-6 py-4 md:hidden">
+            <div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm text-muted-foreground">
+              <a href="#how" onClick={() => setMenuOpen(false)} className="hover:text-foreground">How it works</a>
+              <a href="#status" onClick={() => setMenuOpen(false)} className="hover:text-foreground">Status model</a>
+              <a href="#privacy" onClick={() => setMenuOpen(false)} className="hover:text-foreground">Privacy</a>
+              <a href="/rsp" onClick={() => setMenuOpen(false)} className="hover:text-foreground">RSP</a>
+              <a
+                href="/login"
+                onClick={() => setMenuOpen(false)}
+                className="inline-flex w-fit items-center rounded-full bg-gradient-primary px-4 py-2 font-medium text-primary-foreground shadow-soft transition hover:opacity-95 ease-calm"
+              >
+                Sign in
+              </a>
+            </div>
+          </nav>
+        )}
       </header>
 
       {/* Hero */}

@@ -90,6 +90,30 @@ const css = `
     padding: 6px 16px; text-decoration: none; white-space: nowrap; transition: all .2s;
   }
   .rsp-nav-cta:hover { background: oklch(93% .016 25); }
+  .rsp-nav-burger {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 40px; height: 40px; padding: 8px;
+    background: none; border: none; cursor: pointer; margin-left: auto;
+  }
+  .rsp-burger-bar {
+    display: block; width: 22px; height: 2px; border-radius: 2px;
+    background: var(--rsp-text); transition: transform .25s var(--rsp-ease), opacity .2s var(--rsp-ease);
+  }
+  .rsp-burger-bar.open-1 { transform: translateY(7px) rotate(45deg); }
+  .rsp-burger-bar.open-2 { opacity: 0; }
+  .rsp-burger-bar.open-3 { transform: translateY(-7px) rotate(-45deg); }
+  .rsp-nav-mobile {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 12px 0 16px; border-top: 1px solid var(--rsp-border);
+  }
+  .rsp-nav-mobile a {
+    font-size: .92rem; color: var(--rsp-text-muted);
+    text-decoration: none; padding: 10px 4px; transition: color .2s;
+  }
+  .rsp-nav-mobile a:hover { color: var(--rsp-text); }
+  .rsp-nav-mobile .rsp-nav-cta {
+    align-self: flex-start; margin-top: 8px; color: var(--rsp-primary);
+  }
 
   /* HERO */
   .rsp-hero {
@@ -391,10 +415,12 @@ const css = `
     .rsp-hero-visual { display: none; }
     .rsp-principle-grid, .rsp-credits-grid { grid-template-columns: 1fr 1fr; }
     .rsp-signal-weights { grid-template-columns: 1fr; }
+    .rsp-nav-links { display: none; }
+    .rsp-nav-inner > .rsp-nav-cta { display: none; }
+    .rsp-nav-burger { display: flex; }
   }
   @media (max-width: 600px) {
     .rsp-principle-grid, .rsp-credits-grid, .rsp-tier-grid { grid-template-columns: 1fr; }
-    .rsp-nav-links { display: none; }
     .rsp-nav { padding: 0 1.2rem; }
     .rsp-section { padding: 56px 1.2rem; }
   }
@@ -514,6 +540,7 @@ function RSPPage() {
   const [balanceError, setBalanceError] = useState<string | null>(null)
   const [showSignIn, setShowSignIn] = useState(false)
   const [signingIn, setSigningIn] = useState<string | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   async function startCheckout(tier: string) {
     setCheckoutError(null)
@@ -625,7 +652,28 @@ function RSPPage() {
             <li><a href="#credits">Credits</a></li>
           </ul>
           <a href="#tiers" className="rsp-nav-cta">Genesis NFT →</a>
+          <button
+            type="button"
+            className="rsp-nav-burger"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span className={`rsp-burger-bar${menuOpen ? ' open-1' : ''}`} />
+            <span className={`rsp-burger-bar${menuOpen ? ' open-2' : ''}`} />
+            <span className={`rsp-burger-bar${menuOpen ? ' open-3' : ''}`} />
+          </button>
         </div>
+        {menuOpen && (
+          <div className="rsp-nav-mobile">
+            <a href="#protocol" onClick={() => setMenuOpen(false)}>Protocol</a>
+            <a href="#burn" onClick={() => setMenuOpen(false)}>Burn Clause</a>
+            <a href="#verticals" onClick={() => setMenuOpen(false)}>Verticals</a>
+            <a href="#tiers" onClick={() => setMenuOpen(false)}>NFT Tiers</a>
+            <a href="#credits" onClick={() => setMenuOpen(false)}>Credits</a>
+            <a href="#tiers" className="rsp-nav-cta" onClick={() => setMenuOpen(false)}>Genesis NFT →</a>
+          </div>
+        )}
       </nav>
 
       {/* HERO */}

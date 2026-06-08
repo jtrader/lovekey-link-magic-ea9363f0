@@ -415,10 +415,12 @@ const css = `
     .rsp-hero-visual { display: none; }
     .rsp-principle-grid, .rsp-credits-grid { grid-template-columns: 1fr 1fr; }
     .rsp-signal-weights { grid-template-columns: 1fr; }
+    .rsp-nav-links { display: none; }
+    .rsp-nav-inner > .rsp-nav-cta { display: none; }
+    .rsp-nav-burger { display: flex; }
   }
   @media (max-width: 600px) {
     .rsp-principle-grid, .rsp-credits-grid, .rsp-tier-grid { grid-template-columns: 1fr; }
-    .rsp-nav-links { display: none; }
     .rsp-nav { padding: 0 1.2rem; }
     .rsp-section { padding: 56px 1.2rem; }
   }

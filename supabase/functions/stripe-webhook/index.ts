@@ -14,12 +14,19 @@ const supabase = createClient(
   { auth: { persistSession: false } },
 );
 
-// amount (in pence) -> { purchased, bonus }
+// amount (in pence) -> { purchased, bonus } — fallback when metadata is absent
 const CREDIT_TIERS: Record<number, { purchased: number; bonus: number }> = {
-  2500: { purchased: 25, bonus: 0 },
-  10000: { purchased: 100, bonus: 10 },
-  25000: { purchased: 250, bonus: 35 },
-  100000: { purchased: 1000, bonus: 200 },
+  10000: { purchased: 100, bonus: 0 },
+  25000: { purchased: 250, bonus: 0 },
+  100000: { purchased: 1000, bonus: 0 },
+};
+
+// tier key -> human label for transaction descriptions
+const TIER_LABELS: Record<string, string> = {
+  standard: "RSP Certification (Standard)",
+  full: "RSP Certification (Full + Badge Issuance)",
+  partner: "RSP Partner Certification",
+  certifier: "RSP Certifier Licence",
 };
 
 Deno.serve(async (req) => {
@@ -63,20 +70,29 @@ Deno.serve(async (req) => {
           : session.customer?.id ?? null;
       const amountTotal = session.amount_total ?? 0;
       const userId = session.metadata?.user_id ?? null;
+      const tierKey = session.metadata?.tier ?? null;
 
       if (!email) {
         console.error("No customer email on session", session.id);
         return new Response("Missing customer email", { status: 500 });
       }
 
-      const tier = CREDIT_TIERS[amountTotal];
+      // Prefer metadata (authoritative per tier), fall back to amount lookup.
+      const metaCredits = Number(session.metadata?.credits ?? NaN);
+      const metaBonus = Number(session.metadata?.bonus ?? NaN);
+      const tier = Number.isFinite(metaCredits)
+        ? { purchased: metaCredits, bonus: Number.isFinite(metaBonus) ? metaBonus : 0 }
+        : CREDIT_TIERS[amountTotal];
+
       if (!tier) {
-        console.warn(`Unrecognized amount_total: ${amountTotal}. Skipping credit grant.`);
+        console.warn(`Unrecognized purchase (amount=${amountTotal}, tier=${tierKey}). Skipping credit grant.`);
         return new Response(JSON.stringify({ received: true, skipped: true }), {
           status: 200,
           headers: { "Content-Type": "application/json" },
         });
       }
+
+      const tierLabel = (tierKey && TIER_LABELS[tierKey]) || `${tier.purchased} credits`;
 
       // a. Upsert customer by email
       const { data: customer, error: customerError } = await supabase
@@ -105,7 +121,7 @@ Deno.serve(async (req) => {
           customer_id: customer.id,
           type: "purchase",
           credits: tier.purchased,
-          description: `Purchase of ${tier.purchased} credits`,
+          description: `${tierLabel} — ${tier.purchased} credits`,
           stripe_payment_id: paymentIntentId,
         });
 

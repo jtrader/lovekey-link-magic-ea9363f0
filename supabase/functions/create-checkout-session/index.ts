@@ -12,11 +12,11 @@ const supabase = createClient(
   { auth: { persistSession: false } },
 );
 
-const TIERS: Record<string, { name: string; amount: number; credits: number; bonus: number }> = {
-  starter: { name: "RSP Starter",  amount: 2500,   credits: 25,   bonus: 0   },
-  builder: { name: "RSP Builder",  amount: 10000,  credits: 100,  bonus: 10  },
-  pro:     { name: "RSP Pro",      amount: 25000,  credits: 250,  bonus: 35  },
-  partner: { name: "RSP Partner",  amount: 100000, credits: 1000, bonus: 200 },
+const TIERS: Record<string, { name: string; description: string; amount: number; credits: number; bonus: number }> = {
+  standard:  { name: "RSP Certification (Standard)",              description: "Structured RSP framework review with written assessment and recommendations.", amount: 10000,  credits: 100,  bonus: 0 },
+  full:      { name: "RSP Certification (Full + Badge Issuance)", description: "Full review plus RSP Certification Badge — verifiable on-chain credential (NFT Tier 3).", amount: 25000,  credits: 250,  bonus: 0 },
+  partner:   { name: "RSP Partner Certification",                 description: "Enterprise-scale certification with Partner Licence marker (NFT Tier 4) and registry co-authorship.", amount: 100000, credits: 1000, bonus: 0 },
+  certifier: { name: "RSP Certifier Licence",                     description: "Licence to issue RSP Certification Badges, at 125 credits per issuance.", amount: 100000, credits: 1000, bonus: 0 },
 };
 
 Deno.serve(async (req) => {
@@ -71,7 +71,7 @@ Deno.serve(async (req) => {
             unit_amount: selectedTier.amount,
             product_data: {
               name: selectedTier.name,
-              description: `${selectedTier.credits + selectedTier.bonus} RSP Coordination Credits`,
+              description: selectedTier.description,
             },
           },
         },

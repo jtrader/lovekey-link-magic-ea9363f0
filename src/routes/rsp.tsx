@@ -900,7 +900,7 @@ npm install @rsp-protocol/react`}
               type="button"
               onClick={handleCheckBalance}
               disabled={balanceLoading}
-              className="rsp-btn-secondary"
+              className="rsp-btn-outline"
               style={{ fontSize: '.8rem', padding: '8px 18px', cursor: balanceLoading ? 'wait' : 'pointer' }}
             >
               {balanceLoading ? 'Checking…' : 'Check my credit balance'}

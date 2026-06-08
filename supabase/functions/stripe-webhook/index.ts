@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
           customer_id: customer.id,
           type: "purchase",
           credits: tier.purchased,
-          description: `Purchase of ${tier.purchased} credits`,
+          description: `${tierLabel} — ${tier.purchased} credits`,
           stripe_payment_id: paymentIntentId,
         });
 

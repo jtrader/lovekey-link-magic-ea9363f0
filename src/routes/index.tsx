@@ -9,7 +9,7 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Love Key Link — Regenerative Synchronization Protocol" },
+      { title: "Love Key Link — Respectful Synchronisation Protocol" },
       {
         name: "description",
         content:
@@ -67,6 +67,7 @@ function Index() {
             <a href="#how" className="hover:text-foreground">How it works</a>
             <a href="#status" className="hover:text-foreground">Status model</a>
             <a href="#privacy" className="hover:text-foreground">Privacy</a>
+            <a href="/rsp" className="hover:text-foreground">RSP</a>
           </nav>
           <a
             href="/login"
@@ -81,10 +82,10 @@ function Index() {
       <section className="relative overflow-hidden bg-gradient-hero">
         <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-2 md:items-center md:py-28">
           <div className="animate-fade-up">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+            <a href="/rsp" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground transition hover:text-foreground">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              Regenerative Synchronization Protocol
-            </span>
+              Respectful Synchronisation Protocol
+            </a>
             <h1 className="mt-5 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
               Coordination,<br />
               <span className="bg-gradient-primary bg-clip-text text-transparent">not surveillance.</span>

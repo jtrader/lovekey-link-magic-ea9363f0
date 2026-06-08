@@ -71,7 +71,7 @@ Deno.serve(async (req) => {
             unit_amount: selectedTier.amount,
             product_data: {
               name: selectedTier.name,
-              description: `${selectedTier.credits + selectedTier.bonus} RSP Coordination Credits`,
+              description: selectedTier.description,
             },
           },
         },

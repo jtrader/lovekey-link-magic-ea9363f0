@@ -625,7 +625,28 @@ function RSPPage() {
             <li><a href="#credits">Credits</a></li>
           </ul>
           <a href="#tiers" className="rsp-nav-cta">Genesis NFT →</a>
+          <button
+            type="button"
+            className="rsp-nav-burger"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span className={`rsp-burger-bar${menuOpen ? ' open-1' : ''}`} />
+            <span className={`rsp-burger-bar${menuOpen ? ' open-2' : ''}`} />
+            <span className={`rsp-burger-bar${menuOpen ? ' open-3' : ''}`} />
+          </button>
         </div>
+        {menuOpen && (
+          <div className="rsp-nav-mobile">
+            <a href="#protocol" onClick={() => setMenuOpen(false)}>Protocol</a>
+            <a href="#burn" onClick={() => setMenuOpen(false)}>Burn Clause</a>
+            <a href="#verticals" onClick={() => setMenuOpen(false)}>Verticals</a>
+            <a href="#tiers" onClick={() => setMenuOpen(false)}>NFT Tiers</a>
+            <a href="#credits" onClick={() => setMenuOpen(false)}>Credits</a>
+            <a href="#tiers" className="rsp-nav-cta" onClick={() => setMenuOpen(false)}>Genesis NFT →</a>
+          </div>
+        )}
       </nav>
 
       {/* HERO */}

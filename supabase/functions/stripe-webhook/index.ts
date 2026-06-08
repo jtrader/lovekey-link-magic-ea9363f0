@@ -70,20 +70,29 @@ Deno.serve(async (req) => {
           : session.customer?.id ?? null;
       const amountTotal = session.amount_total ?? 0;
       const userId = session.metadata?.user_id ?? null;
+      const tierKey = session.metadata?.tier ?? null;
 
       if (!email) {
         console.error("No customer email on session", session.id);
         return new Response("Missing customer email", { status: 500 });
       }
 
-      const tier = CREDIT_TIERS[amountTotal];
+      // Prefer metadata (authoritative per tier), fall back to amount lookup.
+      const metaCredits = Number(session.metadata?.credits ?? NaN);
+      const metaBonus = Number(session.metadata?.bonus ?? NaN);
+      const tier = Number.isFinite(metaCredits)
+        ? { purchased: metaCredits, bonus: Number.isFinite(metaBonus) ? metaBonus : 0 }
+        : CREDIT_TIERS[amountTotal];
+
       if (!tier) {
-        console.warn(`Unrecognized amount_total: ${amountTotal}. Skipping credit grant.`);
+        console.warn(`Unrecognized purchase (amount=${amountTotal}, tier=${tierKey}). Skipping credit grant.`);
         return new Response(JSON.stringify({ received: true, skipped: true }), {
           status: 200,
           headers: { "Content-Type": "application/json" },
         });
       }
+
+      const tierLabel = (tierKey && TIER_LABELS[tierKey]) || `${tier.purchased} credits`;
 
       // a. Upsert customer by email
       const { data: customer, error: customerError } = await supabase

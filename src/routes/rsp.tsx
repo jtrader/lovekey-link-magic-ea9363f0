@@ -239,6 +239,47 @@ const css = `
   .rsp-burn-step-title { font-size: .88rem; font-weight: 500; color: var(--rsp-text); margin-bottom: 3px; }
   .rsp-burn-step-desc  { font-size: .8rem; color: var(--rsp-text-muted); }
 
+  /* INSTALL */
+  .rsp-install-section {
+    background: var(--rsp-bg-warm);
+    border-top: 1px solid var(--rsp-border); border-bottom: 1px solid var(--rsp-border);
+  }
+  .rsp-install-inner {
+    max-width: 820px; margin: 0 auto; padding: 80px 2rem;
+    text-align: left;
+  }
+  .rsp-install-header { text-align: center; margin-bottom: 56px; }
+  .rsp-install-eyebrow {
+    font-size: .75rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--rsp-primary); margin-bottom: 12px;
+  }
+  .rsp-install-h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.9rem, 3vw, 2.6rem);
+    letter-spacing: -.03em; line-height: 1.1; color: var(--rsp-text); margin-bottom: 14px;
+  }
+  .rsp-install-lead {
+    font-size: 1rem; color: var(--rsp-text-muted);
+    line-height: 1.7; margin-bottom: 36px;
+  }
+  .rsp-install-commands {
+    background: var(--rsp-surface); border: 1px solid var(--rsp-border);
+    padding: 14px; border-radius: 8px; overflow-x: auto; margin-bottom: 12px;
+  }
+  .rsp-install-packages {
+    margin-top: 0; font-size: 0.92rem; color: var(--rsp-text-muted);
+  }
+  .rsp-install-packages a {
+    color: var(--rsp-primary); text-decoration: none; transition: color .2s;
+  }
+  .rsp-install-packages a:hover {
+    text-decoration: underline;
+  }
+  .rsp-install-example {
+    background: var(--rsp-surface); border: 1px solid var(--rsp-border);
+    padding: 14px; border-radius: 8px; overflow-x: auto; margin-top: 12px;
+  }
+
   /* VERTICALS */
   .rsp-vertical-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
   .rsp-vertical-card {
@@ -584,6 +625,32 @@ function RSPPage() {
             title="Portable across systems"
             body="The same protocol applies to humans, AI agents, and hybrid systems wherever coordination meets privacy."
           />
+        </div>
+      </section>
+
+      {/* INSTALL */}
+      <section className="rsp-section" id="install">
+        <div className="rsp-section-header">
+          <div className="rsp-eyebrow">Install</div>
+          <h2 className="rsp-h2">Get started</h2>
+          <p className="rsp-lead">Minimal install and links to packages and repository.</p>
+        </div>
+        <div style={{ maxWidth: 820, margin: '0 auto', textAlign: 'left' }}>
+          <pre style={{ background: 'var(--rsp-surface)', border: '1px solid var(--rsp-border)', padding: 14, borderRadius: 8, overflowX: 'auto', marginBottom: 12 }}>
+{`npm install @rsp-protocol/core
+npm install @rsp-protocol/react`}
+          </pre>
+
+          <p style={{ marginTop: 0, fontSize: '0.92rem', color: 'var(--rsp-text-muted)' }}>
+            Packages: <a href="https://www.npmjs.com/package/@rsp-protocol/core" target="_blank" rel="noopener noreferrer">@rsp-protocol/core</a>,{' '}
+            <a href="https://www.npmjs.com/package/@rsp-protocol/react" target="_blank" rel="noopener noreferrer">@rsp-protocol/react</a>. Source: {' '}
+            <a href="https://github.com/rsp" target="_blank" rel="noopener noreferrer">https://github.com/rsp</a>.
+          </p>
+
+          <pre style={{ background: 'var(--rsp-surface)', border: '1px solid var(--rsp-border)', padding: 14, borderRadius: 8, overflowX: 'auto', marginTop: 12 }}>
+{`import { createConsent, hasConsent, translate, aggregate, 
+         toNodeSignal, markBurned, generateBurnReceipt } from '@rsp-protocol/core'`}
+          </pre>
         </div>
       </section>
 

@@ -514,6 +514,7 @@ function RSPPage() {
   const [balanceError, setBalanceError] = useState<string | null>(null)
   const [showSignIn, setShowSignIn] = useState(false)
   const [signingIn, setSigningIn] = useState<string | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   async function startCheckout(tier: string) {
     setCheckoutError(null)

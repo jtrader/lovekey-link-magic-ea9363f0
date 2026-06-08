@@ -504,11 +504,63 @@ function PrincipleCard({
 // ─── Page ──────────────────────────────────────────────────────────────────
 
 function RSPPage() {
-  const STRIPE_LINKS = {
-    starter: 'https://buy.stripe.com/REPLACE_STARTER',
-    builder: 'https://buy.stripe.com/REPLACE_BUILDER',
-    pro:     'https://buy.stripe.com/REPLACE_PRO',
-    partner: 'https://buy.stripe.com/REPLACE_PARTNER',
+  const [loadingTier, setLoadingTier] = useState<string | null>(null)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  const [balance, setBalance] = useState<number | null>(null)
+  const [balanceLoading, setBalanceLoading] = useState(false)
+  const [balanceError, setBalanceError] = useState<string | null>(null)
+
+  async function handleBuy(tier: string) {
+    setCheckoutError(null)
+    setLoadingTier(tier)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setCheckoutError('Please sign in to purchase credits.')
+        setLoadingTier(null)
+        return
+      }
+      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+        body: {
+          tier,
+          successUrl: `${window.location.origin}/rsp?purchase=success`,
+          cancelUrl: `${window.location.origin}/rsp?purchase=cancelled`,
+        },
+      })
+      if (error || !data?.url) {
+        setCheckoutError('Could not start checkout. Please try again.')
+        setLoadingTier(null)
+        return
+      }
+      window.location.href = data.url
+    } catch {
+      setCheckoutError('Could not start checkout. Please try again.')
+      setLoadingTier(null)
+    }
+  }
+
+  async function handleCheckBalance() {
+    setBalanceError(null)
+    setBalanceLoading(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setBalanceError('Please sign in to view your balance.')
+        setBalanceLoading(false)
+        return
+      }
+      const { data, error } = await supabase.functions.invoke('get-balance')
+      if (error || !data) {
+        setBalanceError('Could not load your balance. Please try again.')
+        setBalanceLoading(false)
+        return
+      }
+      setBalance(data.balance ?? 0)
+    } catch {
+      setBalanceError('Could not load your balance. Please try again.')
+    } finally {
+      setBalanceLoading(false)
+    }
   }
 
   return (

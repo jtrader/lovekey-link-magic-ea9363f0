@@ -929,6 +929,61 @@ npm install @rsp-protocol/react`}
               {checkoutError}
             </p>
           )}
+
+          {showSignIn && !user && (
+            <div
+              style={{
+                maxWidth: 420,
+                margin: '24px auto 0',
+                padding: '24px',
+                borderRadius: 'var(--rsp-radius)',
+                border: '1px solid var(--rsp-border-strong)',
+                background: 'var(--rsp-surface)',
+                textAlign: 'center',
+              }}
+            >
+              <div style={{ fontWeight: 600, fontSize: '.95rem', marginBottom: 6 }}>
+                Sign in to buy credits
+              </div>
+              <p style={{ fontSize: '.8rem', color: 'var(--rsp-text-muted)', marginBottom: 16 }}>
+                Use the account you already trust. We&apos;ll bring you right back to complete your purchase.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <button
+                  type="button"
+                  onClick={() => handleSignIn('google')}
+                  disabled={signingIn !== null}
+                  className="rsp-btn-outline"
+                  style={{ justifyContent: 'center', cursor: signingIn ? 'wait' : 'pointer' }}
+                >
+                  {signingIn === 'google' ? 'Connecting…' : 'Continue with Google'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSignIn('apple')}
+                  disabled={signingIn !== null}
+                  className="rsp-btn-outline"
+                  style={{ justifyContent: 'center', cursor: signingIn ? 'wait' : 'pointer' }}
+                >
+                  {signingIn === 'apple' ? 'Connecting…' : 'Continue with Apple'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowSignIn(false)}
+                  style={{
+                    marginTop: 4,
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--rsp-text-soft)',
+                    fontSize: '.75rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
           <p style={{ textAlign: 'center', fontSize: '.78rem', color: 'var(--rsp-text-muted)', marginTop: 16 }}>
             Credits are fulfilled automatically after payment. A confirmation email is sent once your credits are active.
           </p>

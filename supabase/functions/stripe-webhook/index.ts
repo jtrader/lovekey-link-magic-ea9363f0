@@ -14,12 +14,19 @@ const supabase = createClient(
   { auth: { persistSession: false } },
 );
 
-// amount (in pence) -> { purchased, bonus }
+// amount (in pence) -> { purchased, bonus } — fallback when metadata is absent
 const CREDIT_TIERS: Record<number, { purchased: number; bonus: number }> = {
-  2500: { purchased: 25, bonus: 0 },
-  10000: { purchased: 100, bonus: 10 },
-  25000: { purchased: 250, bonus: 35 },
-  100000: { purchased: 1000, bonus: 200 },
+  10000: { purchased: 100, bonus: 0 },
+  25000: { purchased: 250, bonus: 0 },
+  100000: { purchased: 1000, bonus: 0 },
+};
+
+// tier key -> human label for transaction descriptions
+const TIER_LABELS: Record<string, string> = {
+  standard: "RSP Certification (Standard)",
+  full: "RSP Certification (Full + Badge Issuance)",
+  partner: "RSP Partner Certification",
+  certifier: "RSP Certifier Licence",
 };
 
 Deno.serve(async (req) => {

@@ -67,6 +67,7 @@ function Index() {
             <a href="#how" className="hover:text-foreground">How it works</a>
             <a href="#status" className="hover:text-foreground">Status model</a>
             <a href="#privacy" className="hover:text-foreground">Privacy</a>
+            <a href="/rsp" className="hover:text-foreground">RSP</a>
           </nav>
           <a
             href="/login"

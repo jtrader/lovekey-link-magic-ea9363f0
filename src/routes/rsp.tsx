@@ -506,22 +506,19 @@ function PrincipleCard({
 // ─── Page ──────────────────────────────────────────────────────────────────
 
 function RSPPage() {
+  const { user, loading } = useAuth()
   const [loadingTier, setLoadingTier] = useState<string | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const [balance, setBalance] = useState<number | null>(null)
   const [balanceLoading, setBalanceLoading] = useState(false)
   const [balanceError, setBalanceError] = useState<string | null>(null)
+  const [showSignIn, setShowSignIn] = useState(false)
+  const [signingIn, setSigningIn] = useState<string | null>(null)
 
-  async function handleBuy(tier: string) {
+  async function startCheckout(tier: string) {
     setCheckoutError(null)
     setLoadingTier(tier)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        setCheckoutError('Please sign in to purchase credits.')
-        setLoadingTier(null)
-        return
-      }
       const { data, error } = await supabase.functions.invoke('create-checkout-session', {
         body: {
           tier,
@@ -541,16 +538,55 @@ function RSPPage() {
     }
   }
 
-  async function handleCheckBalance() {
-    setBalanceError(null)
-    setBalanceLoading(true)
+  // Resume a pending purchase after the user signs in and returns to /rsp
+  useEffect(() => {
+    if (loading || !user) return
+    const pending = sessionStorage.getItem('pending_rsp_tier')
+    if (pending) {
+      sessionStorage.removeItem('pending_rsp_tier')
+      setShowSignIn(false)
+      void startCheckout(pending)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, loading])
+
+  async function handleBuy(tier: string) {
+    setCheckoutError(null)
+    if (!user) {
+      // Remember the tier so we can resume after sign-in, then show inline panel
+      sessionStorage.setItem('pending_rsp_tier', tier)
+      setShowSignIn(true)
+      return
+    }
+    await startCheckout(tier)
+  }
+
+  async function handleSignIn(provider: 'google' | 'apple') {
+    setSigningIn(provider)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        setBalanceError('Please sign in to view your balance.')
-        setBalanceLoading(false)
+      const result = await lovable.auth.signInWithOAuth(provider, {
+        redirect_uri: window.location.origin + '/rsp',
+      })
+      if (result.error) {
+        setCheckoutError('Sign-in failed. Please try again.')
+        setSigningIn(null)
         return
       }
+      // On success the page redirects; the useEffect resumes checkout on return.
+    } catch {
+      setCheckoutError('Sign-in failed. Please try again.')
+      setSigningIn(null)
+    }
+  }
+
+  async function handleCheckBalance() {
+    setBalanceError(null)
+    if (!user) {
+      setShowSignIn(true)
+      return
+    }
+    setBalanceLoading(true)
+    try {
       const { data, error } = await supabase.functions.invoke('get-balance')
       if (error || !data) {
         setBalanceError('Could not load your balance. Please try again.')

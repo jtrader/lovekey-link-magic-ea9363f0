@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useState } from 'react'
 import lovekeyMark from "@/assets/lovekey-mark.png"
+import { supabase } from "@/integrations/supabase/client"
 
 export const Route = createFileRoute('/rsp')({
   head: () => ({

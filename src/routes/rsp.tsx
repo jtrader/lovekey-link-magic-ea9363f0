@@ -90,6 +90,30 @@ const css = `
     padding: 6px 16px; text-decoration: none; white-space: nowrap; transition: all .2s;
   }
   .rsp-nav-cta:hover { background: oklch(93% .016 25); }
+  .rsp-nav-burger {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 40px; height: 40px; padding: 8px;
+    background: none; border: none; cursor: pointer; margin-left: auto;
+  }
+  .rsp-burger-bar {
+    display: block; width: 22px; height: 2px; border-radius: 2px;
+    background: var(--rsp-text); transition: transform .25s var(--rsp-ease), opacity .2s var(--rsp-ease);
+  }
+  .rsp-burger-bar.open-1 { transform: translateY(7px) rotate(45deg); }
+  .rsp-burger-bar.open-2 { opacity: 0; }
+  .rsp-burger-bar.open-3 { transform: translateY(-7px) rotate(-45deg); }
+  .rsp-nav-mobile {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 12px 0 16px; border-top: 1px solid var(--rsp-border);
+  }
+  .rsp-nav-mobile a {
+    font-size: .92rem; color: var(--rsp-text-muted);
+    text-decoration: none; padding: 10px 4px; transition: color .2s;
+  }
+  .rsp-nav-mobile a:hover { color: var(--rsp-text); }
+  .rsp-nav-mobile .rsp-nav-cta {
+    align-self: flex-start; margin-top: 8px; color: var(--rsp-primary);
+  }
 
   /* HERO */
   .rsp-hero {

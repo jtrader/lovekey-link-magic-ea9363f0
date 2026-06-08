@@ -502,6 +502,13 @@ function PrincipleCard({
 // ─── Page ──────────────────────────────────────────────────────────────────
 
 function RSPPage() {
+  const STRIPE_LINKS = {
+    starter: 'https://buy.stripe.com/REPLACE_STARTER',
+    builder: 'https://buy.stripe.com/REPLACE_BUILDER',
+    pro:     'https://buy.stripe.com/REPLACE_PRO',
+    partner: 'https://buy.stripe.com/REPLACE_PARTNER',
+  }
+
   return (
     <div className="rsp-root">
       <style dangerouslySetInnerHTML={{ __html: css }} />

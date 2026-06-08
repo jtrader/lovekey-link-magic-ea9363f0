@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useState } from 'react'
 import lovekeyMark from "@/assets/lovekey-mark.png"
+import { supabase } from "@/integrations/supabase/client"
 
 export const Route = createFileRoute('/rsp')({
   head: () => ({
@@ -502,11 +504,63 @@ function PrincipleCard({
 // ─── Page ──────────────────────────────────────────────────────────────────
 
 function RSPPage() {
-  const STRIPE_LINKS = {
-    starter: 'https://buy.stripe.com/REPLACE_STARTER',
-    builder: 'https://buy.stripe.com/REPLACE_BUILDER',
-    pro:     'https://buy.stripe.com/REPLACE_PRO',
-    partner: 'https://buy.stripe.com/REPLACE_PARTNER',
+  const [loadingTier, setLoadingTier] = useState<string | null>(null)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  const [balance, setBalance] = useState<number | null>(null)
+  const [balanceLoading, setBalanceLoading] = useState(false)
+  const [balanceError, setBalanceError] = useState<string | null>(null)
+
+  async function handleBuy(tier: string) {
+    setCheckoutError(null)
+    setLoadingTier(tier)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setCheckoutError('Please sign in to purchase credits.')
+        setLoadingTier(null)
+        return
+      }
+      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+        body: {
+          tier,
+          successUrl: `${window.location.origin}/rsp?purchase=success`,
+          cancelUrl: `${window.location.origin}/rsp?purchase=cancelled`,
+        },
+      })
+      if (error || !data?.url) {
+        setCheckoutError('Could not start checkout. Please try again.')
+        setLoadingTier(null)
+        return
+      }
+      window.location.href = data.url
+    } catch {
+      setCheckoutError('Could not start checkout. Please try again.')
+      setLoadingTier(null)
+    }
+  }
+
+  async function handleCheckBalance() {
+    setBalanceError(null)
+    setBalanceLoading(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setBalanceError('Please sign in to view your balance.')
+        setBalanceLoading(false)
+        return
+      }
+      const { data, error } = await supabase.functions.invoke('get-balance')
+      if (error || !data) {
+        setBalanceError('Could not load your balance. Please try again.')
+        setBalanceLoading(false)
+        return
+      }
+      setBalance(data.balance ?? 0)
+    } catch {
+      setBalanceError('Could not load your balance. Please try again.')
+    } finally {
+      setBalanceLoading(false)
+    }
   }
 
   return (
@@ -820,21 +874,48 @@ npm install @rsp-protocol/react`}
                 <div className="rsp-credit-price">{c.price}</div>
                 <div className="rsp-credit-credits">{c.credits}</div>
                 <div className="rsp-credit-note">{c.note}</div>
-                <a
-                  href={STRIPE_LINKS[c.key as keyof typeof STRIPE_LINKS]}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
+                  onClick={() => handleBuy(c.key)}
+                  disabled={loadingTier !== null}
                   className="rsp-btn-primary"
-                  style={{ marginTop: 16, fontSize: '.8rem', padding: '8px 18px', display: 'inline-flex' }}
+                  style={{ marginTop: 16, fontSize: '.8rem', padding: '8px 18px', display: 'inline-flex', cursor: loadingTier ? 'wait' : 'pointer', opacity: loadingTier && loadingTier !== c.key ? 0.6 : 1 }}
                 >
-                  Buy →
-                </a>
+                  {loadingTier === c.key ? 'Redirecting…' : 'Buy →'}
+                </button>
               </div>
             ))}
           </div>
+          {checkoutError && (
+            <p style={{ textAlign: 'center', fontSize: '.8rem', color: 'var(--rsp-primary)', marginTop: 16 }}>
+              {checkoutError}
+            </p>
+          )}
           <p style={{ textAlign: 'center', fontSize: '.78rem', color: 'var(--rsp-text-muted)', marginTop: 16 }}>
             Credits are fulfilled automatically after payment. A confirmation email is sent once your credits are active.
           </p>
+
+          <div style={{ textAlign: 'center', marginTop: 32 }}>
+            <button
+              type="button"
+              onClick={handleCheckBalance}
+              disabled={balanceLoading}
+              className="rsp-btn-outline"
+              style={{ fontSize: '.8rem', padding: '8px 18px', cursor: balanceLoading ? 'wait' : 'pointer' }}
+            >
+              {balanceLoading ? 'Checking…' : 'Check my credit balance'}
+            </button>
+            {balance !== null && !balanceError && (
+              <p style={{ fontSize: '.9rem', color: 'var(--rsp-text)', marginTop: 12 }}>
+                Your balance: <strong>{balance} credits</strong>
+              </p>
+            )}
+            {balanceError && (
+              <p style={{ fontSize: '.8rem', color: 'var(--rsp-primary)', marginTop: 12 }}>
+                {balanceError}
+              </p>
+            )}
+          </div>
         </div>
       </section>
 

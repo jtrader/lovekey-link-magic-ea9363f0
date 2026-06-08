@@ -9,7 +9,7 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Love Key Link — Regenerative Synchronization Protocol" },
+      { title: "Love Key Link — Respectful Synchronisation Protocol" },
       {
         name: "description",
         content:

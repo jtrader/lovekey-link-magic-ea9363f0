@@ -874,21 +874,48 @@ npm install @rsp-protocol/react`}
                 <div className="rsp-credit-price">{c.price}</div>
                 <div className="rsp-credit-credits">{c.credits}</div>
                 <div className="rsp-credit-note">{c.note}</div>
-                <a
-                  href={STRIPE_LINKS[c.key as keyof typeof STRIPE_LINKS]}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
+                  onClick={() => handleBuy(c.key)}
+                  disabled={loadingTier !== null}
                   className="rsp-btn-primary"
-                  style={{ marginTop: 16, fontSize: '.8rem', padding: '8px 18px', display: 'inline-flex' }}
+                  style={{ marginTop: 16, fontSize: '.8rem', padding: '8px 18px', display: 'inline-flex', cursor: loadingTier ? 'wait' : 'pointer', opacity: loadingTier && loadingTier !== c.key ? 0.6 : 1 }}
                 >
-                  Buy →
-                </a>
+                  {loadingTier === c.key ? 'Redirecting…' : 'Buy →'}
+                </button>
               </div>
             ))}
           </div>
+          {checkoutError && (
+            <p style={{ textAlign: 'center', fontSize: '.8rem', color: 'var(--rsp-primary)', marginTop: 16 }}>
+              {checkoutError}
+            </p>
+          )}
           <p style={{ textAlign: 'center', fontSize: '.78rem', color: 'var(--rsp-text-muted)', marginTop: 16 }}>
             Credits are fulfilled automatically after payment. A confirmation email is sent once your credits are active.
           </p>
+
+          <div style={{ textAlign: 'center', marginTop: 32 }}>
+            <button
+              type="button"
+              onClick={handleCheckBalance}
+              disabled={balanceLoading}
+              className="rsp-btn-secondary"
+              style={{ fontSize: '.8rem', padding: '8px 18px', cursor: balanceLoading ? 'wait' : 'pointer' }}
+            >
+              {balanceLoading ? 'Checking…' : 'Check my credit balance'}
+            </button>
+            {balance !== null && !balanceError && (
+              <p style={{ fontSize: '.9rem', color: 'var(--rsp-text)', marginTop: 12 }}>
+                Your balance: <strong>{balance} credits</strong>
+              </p>
+            )}
+            {balanceError && (
+              <p style={{ fontSize: '.8rem', color: 'var(--rsp-primary)', marginTop: 12 }}>
+                {balanceError}
+              </p>
+            )}
+          </div>
         </div>
       </section>
 

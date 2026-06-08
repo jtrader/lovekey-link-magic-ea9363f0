@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import {
-  Heart, Shield, Users, Clock, MapPin, Sparkles, MessageCircle, Phone, Calendar, Activity,
+  Heart, Shield, Users, Clock, MapPin, Sparkles, MessageCircle, Phone, Calendar, Activity, Menu, X,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({

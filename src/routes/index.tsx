@@ -315,7 +315,7 @@ function Index() {
           <span className="bg-gradient-primary bg-clip-text text-transparent">Yours could be next.</span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          <a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a>&nbsp;is in private development. Join the early circle to help shape a calmer way
+          <a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a>&nbsp;is in private development. Join RSP to help shape a calmer way
           to stay in sync with the people who matter.
         </p>
         <form

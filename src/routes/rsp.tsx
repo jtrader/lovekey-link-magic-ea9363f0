@@ -6,6 +6,7 @@ import rspLogo from "@/assets/rsp-logo.png.asset.json"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/hooks/use-auth"
 import { lovable } from "@/integrations/lovable/index"
+import { trackEvent } from "@/lib/analytics"
 
 export const Route = createFileRoute('/rsp')({
   head: () => ({

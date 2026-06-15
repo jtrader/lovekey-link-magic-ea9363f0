@@ -120,7 +120,7 @@ function Index() {
               <span className="bg-gradient-primary bg-clip-text text-transparent">not surveillance.</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted-foreground">
-              Love Key Link's&nbsp;<a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> recognises real human coordination — messages of care, voice calls, and time spent together. Each contributes to the node, never to a public score.
+              <a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> recognises real human coordination — messages of care, voice calls, and time spent together. Each contributes to the node, never to a public score.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a href="/rsp" className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition hover:opacity-95 ease-calm">
@@ -189,7 +189,7 @@ function Index() {
           <p className="text-sm font-medium uppercase tracking-widest text-primary">Participation, not performance</p>
           <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Three kinds of meaningful contact.</h2>
           <p className="mt-4 text-muted-foreground">
-            The&nbsp;<a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> recognises real human coordination in Love Key Link — messages of care, voice calls,
+            The&nbsp;<a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> recognises real human coordination — messages of care, voice calls,
             and time spent together. Each contributes to the node, never to a public score.
           </p>
         </div>
@@ -315,7 +315,7 @@ function Index() {
           <span className="bg-gradient-primary bg-clip-text text-transparent">Yours could be next.</span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          <a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a>&nbsp;for Love Key Link is in private development. Join the early circle to help shape a calmer way
+          <a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a>&nbsp;is in private development. Join the early circle to help shape a calmer way
           to stay in sync with the people who matter.
         </p>
         <form

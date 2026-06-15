@@ -852,7 +852,7 @@ function RSPPage() {
           <div className="rsp-eyebrow">Core principles</div>
           <h2 className="rsp-h2">Built on respectful coordination</h2>
           <p className="rsp-lead">
-            RSP defines how Love Key Link observes, interprets, and forgets — without surveilling,
+            RSP defines how an application observes, interprets, and forgets — without surveilling,
             profiling, or coercing anyone.
           </p>
         </div>

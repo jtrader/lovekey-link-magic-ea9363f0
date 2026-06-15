@@ -799,7 +799,7 @@ function RSPPage() {
           </p>
           <div className="rsp-hero-actions">
             <a href="#protocol" className="rsp-btn-primary">Explore the protocol →</a>
-            <Link to="/app" className="rsp-btn-outline">Open Love Key Link</Link>
+            
             <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf" className="rsp-btn-outline">Download white paper ↓</a>
           </div>
         </div>

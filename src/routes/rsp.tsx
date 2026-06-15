@@ -906,7 +906,6 @@ function RSPPage() {
             <a href="#event-token" className={navActive("event-token")} onClick={() => setMenuOpen(false)}>Event Token</a>
             <a href="#credits" className={navActive("credits")} onClick={() => setMenuOpen(false)}>Credits</a>
             <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf" onClick={() => setMenuOpen(false)}>White Paper</a>
-            <a href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5" target="_blank" rel="noopener noreferrer" className="rsp-nav-cta" onClick={() => setMenuOpen(false)}>Genesis NFT →</a>
           </div>
         )}
       </nav>

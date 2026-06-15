@@ -884,7 +884,7 @@ function RSPPage() {
             <li><a href="#credits" className={navActive("credits")}>Credits</a></li>
             <li><a href={whitepaperAsset.url} download="rsp-whitepaper.pdf">White Paper</a></li>
           </ul>
-          <a href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5" target="_blank" rel="noopener noreferrer" className="rsp-nav-cta">Genesis NFT →</a>
+          
           <button
             type="button"
             className="rsp-nav-burger"

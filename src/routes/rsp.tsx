@@ -1419,6 +1419,20 @@ npm install @rsp-protocol/react`}
 
       {/* FOOTER */}
       <footer className="rsp-footer">
+        <div className="rsp-help">
+          <h2 className="rsp-help-title">Love Key HELP Network</h2>
+          <div className="rsp-help-grid">
+            {helpNetwork.map((tile) => (
+              <a key={tile.title} href={tile.href} target="_blank" rel="noopener noreferrer" className="rsp-help-tile">
+                <div className="rsp-help-head">
+                  <span className="rsp-help-name">{tile.title}</span>
+                  <span className="rsp-help-tag">{tile.tag}</span>
+                </div>
+                <p className="rsp-help-body">{tile.body}</p>
+              </a>
+            ))}
+          </div>
+        </div>
         <div className="rsp-footer-inner">
           <img src={lovekeyMark} alt="Love Key Link" style={{ width: 96, height: 96, objectFit: 'contain' }} />
           <div className="rsp-footer-left">

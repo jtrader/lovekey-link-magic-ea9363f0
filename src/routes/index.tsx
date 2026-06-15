@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
+import rspLogo from "@/assets/rsp-logo.png.asset.json";
 import {
   Heart, Shield, Users, Clock, MapPin, Sparkles, MessageCircle, Phone, Calendar, Activity, Menu, X,
 } from "lucide-react";

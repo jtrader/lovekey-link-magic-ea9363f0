@@ -222,7 +222,7 @@ function Index() {
       <section className="border-b border-border/60 bg-surface-warm">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <a
-            href="/rsp"
+            href="/rsp#event-token"
             className="group relative block overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-soft transition hover:-translate-y-0.5 hover:shadow-glow ease-calm sm:p-12"
           >
             {/* Glowing logo backdrop */}

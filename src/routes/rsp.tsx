@@ -556,6 +556,19 @@ const css = `
   .rsp-footer-left { font-size: .8rem; color: var(--rsp-text-muted); max-width: 620px; }
   .rsp-footer-left strong { color: var(--rsp-text); }
   .rsp-footer-right { font-size: .75rem; color: var(--rsp-text-soft); max-width: 320px; }
+  .rsp-help { max-width: 800px; margin: 0 auto 48px; }
+  .rsp-help-title { text-align: center; font-size: 1rem; font-weight: 600; color: var(--rsp-text); margin-bottom: 24px; }
+  .rsp-help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .rsp-help-tile {
+    display: block; text-align: left; border: 1px solid var(--rsp-border); border-radius: 16px;
+    background: var(--rsp-card, rgba(255,255,255,0.02)); padding: 16px 20px; transition: transform .2s, box-shadow .2s;
+  }
+  .rsp-help-tile:hover { transform: translateY(-2px); box-shadow: 0 10px 30px -12px rgba(0,0,0,0.4); }
+  .rsp-help-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .rsp-help-name { font-size: 1.125rem; font-weight: 600; color: var(--rsp-text); }
+  .rsp-help-tag { font-size: .7rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--rsp-text-muted); }
+  .rsp-help-body { margin-top: 4px; font-size: .875rem; color: var(--rsp-text-muted); }
+  @media (max-width: 640px) { .rsp-help-grid { grid-template-columns: 1fr; } }
 
   /* ANIMATION */
   @keyframes rspFadeUp {

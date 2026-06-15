@@ -373,6 +373,72 @@ const css = `
     margin-top: 10px; letter-spacing: .03em; text-transform: uppercase;
   }
 
+  /* EVENT TOKEN */
+  .rsp-event-section {
+    background: var(--rsp-bg-warm);
+    border-top: 1px solid var(--rsp-border); border-bottom: 1px solid var(--rsp-border);
+  }
+  .rsp-event-inner {
+    max-width: 1100px; margin: 0 auto; padding: 80px 2rem;
+  }
+  .rsp-event-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-top: 56px;
+  }
+  .rsp-event-carries {
+    background: var(--rsp-surface); border: 1px solid var(--rsp-border);
+    border-radius: var(--rsp-radius); overflow: hidden;
+  }
+  .rsp-event-carries-header {
+    padding: 14px 20px; border-bottom: 1px solid var(--rsp-border);
+    font-size: .72rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--rsp-text-muted);
+  }
+  .rsp-event-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 20px; border-bottom: 1px solid var(--rsp-border);
+    font-size: .84rem; color: var(--rsp-text);
+  }
+  .rsp-event-row:last-child { border-bottom: none; }
+  .rsp-event-row-yes { color: oklch(45% .14 140); font-size: .9rem; flex-shrink: 0; }
+  .rsp-event-row-no  { color: oklch(50% .14 25);  font-size: .9rem; flex-shrink: 0; }
+  .rsp-event-row-sub { font-size: .74rem; color: var(--rsp-text-muted); margin-top: 1px; }
+  .rsp-event-flow { display: flex; flex-direction: column; gap: 0; }
+  .rsp-event-flow-step {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 0; border-bottom: 1px solid var(--rsp-border);
+  }
+  .rsp-event-flow-step:last-child { border-bottom: none; }
+  .rsp-event-flow-icon {
+    width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--rsp-primary-light); border: 1px solid oklch(88% .018 25);
+  }
+  .rsp-event-flow-icon svg { width: 16px; height: 16px; color: var(--rsp-primary); }
+  .rsp-event-flow-title { font-size: .88rem; font-weight: 500; color: var(--rsp-text); margin-bottom: 3px; }
+  .rsp-event-flow-desc  { font-size: .78rem; color: var(--rsp-text-muted); line-height: 1.6; }
+  .rsp-event-quote {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem; line-height: 1.35; letter-spacing: -.02em;
+    color: var(--rsp-text); margin-bottom: 20px;
+  }
+  .rsp-event-quote em { font-style: italic; color: var(--rsp-primary); }
+  .rsp-event-body { font-size: .88rem; color: var(--rsp-text-muted); line-height: 1.8; margin-bottom: 24px; }
+  .rsp-event-receipt {
+    background: var(--rsp-surface); border: 1px solid var(--rsp-border);
+    border-radius: calc(var(--rsp-radius) - 2px); padding: 16px 20px;
+    font-size: .78rem; color: var(--rsp-text-muted); font-family: monospace; line-height: 1.8;
+  }
+  .rsp-event-receipt-label {
+    font-family: 'DM Sans', sans-serif; font-size: .7rem; font-weight: 500;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--rsp-text-soft);
+    margin-bottom: 10px;
+  }
+  .rsp-event-receipt-key { color: var(--rsp-text-soft); }
+  .rsp-event-receipt-val { color: var(--rsp-text); }
+  .rsp-event-receipt-burned { color: var(--rsp-primary); }
+
+
+
   /* CREDITS */
   .rsp-credits-grid {
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px;
@@ -414,6 +480,7 @@ const css = `
     .rsp-hero, .rsp-burn-inner { grid-template-columns: 1fr; }
     .rsp-hero-visual { display: none; }
     .rsp-principle-grid, .rsp-credits-grid { grid-template-columns: 1fr 1fr; }
+    .rsp-event-grid { grid-template-columns: 1fr; gap: 40px; }
     .rsp-signal-weights { grid-template-columns: 1fr; }
     .rsp-nav-links { display: none; }
     .rsp-nav-inner > .rsp-nav-cta { display: none; }
@@ -649,6 +716,7 @@ function RSPPage() {
             <li><a href="#burn">Burn Clause</a></li>
             <li><a href="#verticals">Verticals</a></li>
             <li><a href="#tiers">NFT Tiers</a></li>
+            <li><a href="#event-token">Event Token</a></li>
             <li><a href="#credits">Credits</a></li>
           </ul>
           <a href="#tiers" className="rsp-nav-cta">Genesis NFT →</a>
@@ -670,6 +738,7 @@ function RSPPage() {
             <a href="#burn" onClick={() => setMenuOpen(false)}>Burn Clause</a>
             <a href="#verticals" onClick={() => setMenuOpen(false)}>Verticals</a>
             <a href="#tiers" onClick={() => setMenuOpen(false)}>NFT Tiers</a>
+            <a href="#event-token" onClick={() => setMenuOpen(false)}>Event Token</a>
             <a href="#credits" onClick={() => setMenuOpen(false)}>Credits</a>
             <a href="#tiers" className="rsp-nav-cta" onClick={() => setMenuOpen(false)}>Genesis NFT →</a>
           </div>
@@ -926,6 +995,7 @@ npm install @rsp-protocol/react`}
             { n: '3', name: 'Certification Badge', desc: 'Verifiable credential for RSP-aligned people or systems.',   supply: 'Issued after review',           genesis: false },
             { n: '4', name: 'Partner Licence',     desc: 'Commercial partner and brand-use licence marker.',           supply: 'Approval-based',                genesis: false },
             { n: '5', name: 'Audit Token',         desc: 'Proof of completed review, workshop, or assessment.',        supply: 'Service-based issuance',        genesis: false },
+            { n: '6', name: 'Event Token',         desc: 'Signal proof that coordination happened. Source identity burned at mint.', supply: 'Unbounded · auto-minted',       genesis: false },
           ].map((t) => (
             <div className={`rsp-tier-card${t.genesis ? ' genesis' : ''}`} key={t.n}>
               <div className="rsp-tier-num">{t.n}</div>
@@ -934,6 +1004,103 @@ npm install @rsp-protocol/react`}
               <div className="rsp-tier-supply">{t.supply}</div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* EVENT TOKEN */}
+      <section className="rsp-event-section" id="event-token">
+        <div className="rsp-event-inner">
+          <div className="rsp-section-header">
+            <div className="rsp-eyebrow">NFT Tier 6 · Event Token</div>
+            <h2 className="rsp-h2">Proof that coordination happened.</h2>
+            <p className="rsp-lead">
+              A cryptographic record that a validated coordination event occurred — with source
+              identity destroyed before the token exists.
+            </p>
+          </div>
+
+          <div className="rsp-event-grid">
+            <div>
+              <div className="rsp-event-quote">
+                The token proves the event.<br />
+                <em>It cannot prove who caused it.</em>
+              </div>
+              <p className="rsp-event-body">
+                Every validated coordination event across RSP nodes produces one Event Token. It
+                carries the signal — event type, weight, node state, a blurred timestamp — but
+                the source identity is cryptographically destroyed at or before mint. The burn
+                receipt hash embedded in the token proves that destruction happened. You can
+                verify the coordination. You cannot recover the person.
+              </p>
+              <p className="rsp-event-body">
+                Minting is automatic. Once a validation delay clears and the event commits to
+                node state, the token is issued. Supply is unbounded: one token per validated
+                event, across every node, forever.
+              </p>
+              <div className="rsp-event-receipt">
+                <div className="rsp-event-receipt-label">Example token payload</div>
+                <div><span className="rsp-event-receipt-key">event_type    </span><span className="rsp-event-receipt-val">coordination.resonant</span></div>
+                <div><span className="rsp-event-receipt-key">signal_weight </span><span className="rsp-event-receipt-val">20</span></div>
+                <div><span className="rsp-event-receipt-key">node_state    </span><span className="rsp-event-receipt-val">resonant</span></div>
+                <div><span className="rsp-event-receipt-key">timestamp     </span><span className="rsp-event-receipt-val">2026-06-16T14:00Z <span style={{ color: 'var(--rsp-text-soft)', fontSize: '.7rem' }}>(hour-level blur)</span></span></div>
+                <div><span className="rsp-event-receipt-key">burn_receipt  </span><span className="rsp-event-receipt-burned">0xd4e8…f1a2</span></div>
+                <div><span className="rsp-event-receipt-key">source_id     </span><span className="rsp-event-receipt-burned">∅ destroyed</span></div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              <div className="rsp-event-carries">
+                <div className="rsp-event-carries-header">What the token carries</div>
+                {[
+                  { yes: true, label: 'Event type',          sub: 'e.g. coordination.resonant, safety.escalation' },
+                  { yes: true, label: 'Signal weight',       sub: 'Normalised 0–25 contribution value' },
+                  { yes: true, label: 'Node state at event', sub: 'resonant, friction, cooling, etc.' },
+                  { yes: true, label: 'Blurred timestamp',   sub: 'Hour-level resolution only — not exact time' },
+                  { yes: true, label: 'Burn receipt hash',   sub: 'Proof that source identity was destroyed' },
+                ].map((r) => (
+                  <div className="rsp-event-row" key={r.label}>
+                    <span className="rsp-event-row-yes">✓</span>
+                    <div>
+                      <div>{r.label}</div>
+                      <div className="rsp-event-row-sub">{r.sub}</div>
+                    </div>
+                  </div>
+                ))}
+                <div className="rsp-event-carries-header" style={{ borderTop: '1px solid var(--rsp-border)' }}>What it never carries</div>
+                {[
+                  { label: 'Identity',        sub: 'No user ID, account reference, or profile link' },
+                  { label: 'Raw location',    sub: 'No coordinates, IP address, or device signal' },
+                  { label: 'Message content', sub: 'No text, media, or payload from the event' },
+                  { label: 'Exact timestamp', sub: 'Sub-hour precision is discarded before mint' },
+                ].map((r) => (
+                  <div className="rsp-event-row" key={r.label}>
+                    <span className="rsp-event-row-no">✗</span>
+                    <div>
+                      <div>{r.label}</div>
+                      <div className="rsp-event-row-sub">{r.sub}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="rsp-event-flow">
+                {[
+                  { icon: <IconEye />,    title: 'Event validated',           desc: 'A coordination event clears the validation delay and commits to node state.' },
+                  { icon: <IconFlame />,  title: 'Source identity burned',    desc: 'Identifiable data is cryptographically destroyed. A burn receipt hash is generated.' },
+                  { icon: <IconLayers />, title: 'Token auto-minted',         desc: 'The Event Token is issued with signal data and burn receipt. Supply unbounded.' },
+                  { icon: <IconShield />, title: 'Verifiable, not traceable', desc: 'Anyone can verify the coordination happened. No one can recover who caused it.' },
+                ].map((s) => (
+                  <div className="rsp-event-flow-step" key={s.title}>
+                    <div className="rsp-event-flow-icon">{s.icon}</div>
+                    <div>
+                      <div className="rsp-event-flow-title">{s.title}</div>
+                      <div className="rsp-event-flow-desc">{s.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

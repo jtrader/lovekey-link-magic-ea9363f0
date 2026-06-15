@@ -136,7 +136,7 @@ const css = `
     0%, 100% { opacity: .18; transform: translate(-50%, -50%) scale(1); }
     50% { opacity: .3; transform: translate(-50%, -50%) scale(1.04); }
   }
-  .rsp-hero > * { position: relative; z-index: 1; }
+  .rsp-hero > *:not(.rsp-hero-backdrop) { position: relative; z-index: 1; }
   @media (max-width: 800px) {
     .rsp-hero-backdrop { width: 520px; max-width: 110%; opacity: .1; }
     @keyframes rsp-backdrop-pulse {

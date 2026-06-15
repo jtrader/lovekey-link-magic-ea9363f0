@@ -4,7 +4,7 @@ import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import {
-  Heart, Shield, Users, Clock, MapPin, Sparkles, MessageCircle, Phone, Calendar, Activity, Menu, X,
+  Heart, Shield, Users, Clock, MapPin, Sparkles, MessageCircle, Phone, Calendar, Activity, Menu, X, Download,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -132,6 +132,13 @@ function Index() {
               </a>
               <a href="#how" className="inline-flex items-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium hover:bg-secondary ease-calm">
                 See how it works
+              </a>
+              <a
+                href={whitepaperAsset.url}
+                download="rsp-whitepaper.pdf"
+                className="inline-flex items-center gap-2 rounded-full border border-primary px-6 py-3 text-sm font-medium text-primary transition hover:bg-primary hover:text-primary-foreground ease-calm"
+              >
+                <Download className="h-4 w-4" /> Download white paper
               </a>
             </div>
           </div>

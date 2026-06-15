@@ -44,6 +44,15 @@ const dimensions = [
   { label: "Circle", value: "Household · Care · Emergency · Extended · School" },
 ];
 
+const helpNetwork = [
+  { title: "First Aid Angel", tag: "PREPARE", body: "Quick first aid guidance and support", href: "https://firstaidangel.org/", highlight: true },
+  { title: "Crisis Compass", tag: "RESPOND", body: "Emergency guidance for active crises", href: "https://crisis-compass.org/" },
+  { title: "Aid Angel", tag: "RECOVER", body: "Recovery support after disaster", href: "https://aidangel.app/" },
+  { title: "Guardian Guide", tag: "HEAL", body: "Mental health and emotional support", href: "https://guardianguide.org/" },
+  { title: "Love Key", tag: "COORDINATE", body: "Connect with the HELP Network", href: "https://lovekeyring.org/" },
+  { title: "Love Key Ring", tag: "REACH", body: "A gentle way to reach help", href: "https://lovekey.com.au/?locale=AU#product-section" },
+];
+
 const states = [
   { c: "bg-health-green", t: "Healthy" },
   { c: "bg-health-blue", t: "Stable" },

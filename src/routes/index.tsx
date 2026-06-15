@@ -164,7 +164,7 @@ function Index() {
               <div>
                 <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.12em] text-primary">
                   <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  Technical protocol
+                  Technical EVENT token protocol
                 </span>
                 <h2 className="mt-5 font-serif text-3xl leading-tight tracking-tight sm:text-4xl">
                   Reciprocal Status Protocol{" "}

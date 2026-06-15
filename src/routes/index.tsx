@@ -402,7 +402,7 @@ function Index() {
           <img src={lovekeyMark} alt="Love Key Link" className="object-contain" style={{ width: 96, height: 96 }} />
           <div className="max-w-[620px] text-sm text-muted-foreground">
             <strong className="text-foreground">Love Key Link / RSP</strong> · Respectful Synchronised Protocol v1.6 ·
-            Part of the Love Key HELP Network ·
+            Part of the <a href="https://lovekeyring.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Love Key HELP Network</a> ·
             Copyright © {new Date().getFullYear()} Jack Oswald. All rights reserved unless otherwise licensed in writing.
           </div>
           <div className="max-w-[320px] text-xs text-muted-foreground/80">

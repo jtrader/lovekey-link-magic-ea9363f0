@@ -803,12 +803,12 @@ function RSPPage() {
         </div>
         {menuOpen && (
           <div className="rsp-nav-mobile">
-            <a href="#protocol" onClick={() => setMenuOpen(false)}>Protocol</a>
-            <a href="#burn" onClick={() => setMenuOpen(false)}>Burn Clause</a>
-            <a href="#verticals" onClick={() => setMenuOpen(false)}>Verticals</a>
-            <a href="#tiers" onClick={() => setMenuOpen(false)}>NFT Tiers</a>
-            <a href="#event-token" onClick={() => setMenuOpen(false)}>Event Token</a>
-            <a href="#credits" onClick={() => setMenuOpen(false)}>Credits</a>
+            <a href="#protocol" className={navActive("protocol")} onClick={() => setMenuOpen(false)}>Protocol</a>
+            <a href="#burn" className={navActive("burn")} onClick={() => setMenuOpen(false)}>Burn Clause</a>
+            <a href="#verticals" className={navActive("verticals")} onClick={() => setMenuOpen(false)}>Verticals</a>
+            <a href="#tiers" className={navActive("tiers")} onClick={() => setMenuOpen(false)}>NFT Tiers</a>
+            <a href="#event-token" className={navActive("event-token")} onClick={() => setMenuOpen(false)}>Event Token</a>
+            <a href="#credits" className={navActive("credits")} onClick={() => setMenuOpen(false)}>Credits</a>
             <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf" onClick={() => setMenuOpen(false)}>White Paper</a>
             <a href="#tiers" className="rsp-nav-cta" onClick={() => setMenuOpen(false)}>Genesis NFT →</a>
           </div>

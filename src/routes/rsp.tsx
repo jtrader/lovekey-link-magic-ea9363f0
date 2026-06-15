@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import lovekeyMark from "@/assets/lovekey-mark.png"
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json"
+import rspLogo from "@/assets/rsp-logo.png.asset.json"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/hooks/use-auth"
 import { lovable } from "@/integrations/lovable/index"
@@ -118,8 +119,30 @@ const css = `
 
   /* HERO */
   .rsp-hero {
+    position: relative; overflow: hidden;
     max-width: 1100px; margin: 0 auto; padding: 80px 2rem 60px;
     display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .rsp-hero-backdrop {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 560px; max-width: 60%; aspect-ratio: 1; pointer-events: none; z-index: 0;
+    background-size: contain; background-repeat: no-repeat; background-position: center;
+    opacity: .22;
+    -webkit-mask-image: radial-gradient(circle at center, black 48%, transparent 72%);
+    mask-image: radial-gradient(circle at center, black 48%, transparent 72%);
+    animation: rsp-backdrop-pulse 7s var(--rsp-ease) infinite;
+  }
+  @keyframes rsp-backdrop-pulse {
+    0%, 100% { opacity: .18; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: .3; transform: translate(-50%, -50%) scale(1.04); }
+  }
+  .rsp-hero > *:not(.rsp-hero-backdrop) { position: relative; z-index: 1; }
+  @media (max-width: 800px) {
+    .rsp-hero-backdrop { width: 520px; max-width: 110%; opacity: .1; }
+    @keyframes rsp-backdrop-pulse {
+      0%, 100% { opacity: .09; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: .15; transform: translate(-50%, -50%) scale(1.04); }
+    }
   }
   .rsp-hero-eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
@@ -750,6 +773,7 @@ function RSPPage() {
 
       {/* HERO */}
       <section className="rsp-hero">
+        <div className="rsp-hero-backdrop" style={{ backgroundImage: `url(${rspLogo.url})` }} aria-hidden="true" />
         <div>
           <div className="rsp-hero-eyebrow">
             <span className="rsp-hero-eyebrow-dot" />

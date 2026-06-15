@@ -67,6 +67,12 @@ const css = `
     border-bottom: 1px solid var(--rsp-border);
     padding: 0 2rem;
   }
+  .rsp-scroll-progress {
+    position: absolute; left: 0; bottom: 0; height: 2px;
+    transform-origin: left; transform: scaleX(0);
+    width: 100%; background: linear-gradient(90deg, var(--rsp-primary), var(--rsp-primary-glow));
+    transition: transform .15s var(--rsp-ease);
+  }
   .rsp-nav-inner {
     max-width: 1100px; margin: auto; height: 60px;
     display: flex; align-items: center; justify-content: space-between; gap: 2rem;

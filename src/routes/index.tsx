@@ -44,6 +44,15 @@ const dimensions = [
   { label: "Circle", value: "Household · Care · Emergency · Extended · School" },
 ];
 
+const helpNetwork = [
+  { title: "First Aid Angel", tag: "PREPARE", body: "Quick first aid guidance and support", href: "https://firstaidangel.org/", highlight: true },
+  { title: "Crisis Compass", tag: "RESPOND", body: "Emergency guidance for active crises", href: "https://crisis-compass.org/" },
+  { title: "Aid Angel", tag: "RECOVER", body: "Recovery support after disaster", href: "https://aidangel.app/" },
+  { title: "Guardian Guide", tag: "HEAL", body: "Mental health and emotional support", href: "https://guardianguide.org/" },
+  { title: "Love Key", tag: "COORDINATE", body: "Connect with the HELP Network", href: "https://lovekeyring.org/" },
+  { title: "Love Key Ring", tag: "REACH", body: "A gentle way to reach help", href: "https://lovekey.com.au/?locale=AU#product-section" },
+];
+
 const states = [
   { c: "bg-health-green", t: "Healthy" },
   { c: "bg-health-blue", t: "Stable" },
@@ -409,6 +418,28 @@ function Index() {
 
       {/* Footer */}
       <footer className="border-t border-border bg-background px-8 py-10">
+        <div className="mx-auto mb-12 max-w-4xl">
+          <h2 className="text-center text-base font-semibold text-foreground">Love Key HELP Network</h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {helpNetwork.map((tile) => (
+              <a
+                key={tile.title}
+                href={tile.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group rounded-2xl border bg-card px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-glow ease-calm ${
+                  tile.highlight ? "border-primary/50 shadow-[0_0_24px_-4px_hsl(var(--primary)/0.5)]" : "border-border"
+                }`}
+              >
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="text-lg font-semibold text-foreground">{tile.title}</span>
+                  <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{tile.tag}</span>
+                </div>
+                <p className="mt-1 text-sm text-muted-foreground">{tile.body}</p>
+              </a>
+            ))}
+          </div>
+        </div>
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-4 text-center">
           <img src={lovekeyMark} alt="Love Key Link" className="object-contain" style={{ width: 96, height: 96 }} />
           <div className="max-w-[620px] text-sm text-muted-foreground">

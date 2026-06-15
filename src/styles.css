@@ -168,6 +168,7 @@
   --color-health-purple: var(--health-purple);
   --color-surface-warm: var(--surface-warm);
   --color-surface-soft: var(--surface-soft);
+  --font-serif: "DM Serif Display", ui-serif, Georgia, serif;
 }
 
 @layer base {

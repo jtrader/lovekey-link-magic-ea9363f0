@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
+import rspLogo from "@/assets/rsp-logo.png.asset.json";
 import {
   Heart, Shield, Users, Clock, MapPin, Sparkles, MessageCircle, Phone, Calendar, Activity, Menu, X,
 } from "lucide-react";
@@ -143,25 +144,46 @@ function Index() {
       </section>
 
       {/* Sub-hero: RSP technical protocol */}
-      <section className="border-b border-border/60 bg-surface-soft">
-        <a
-          href="/rsp"
-          className="group mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 transition sm:flex-row sm:items-center sm:justify-between"
-        >
-          <div>
-            <p className="text-sm font-medium uppercase tracking-widest text-primary">Technical protocol</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
-              Reciprocal Status Protocol (RSP)
-            </h2>
-            <p className="mt-2 max-w-2xl text-muted-foreground">
-              The cryptographic foundation behind meaningful contact — how status is earned, validated, and kept private.
-            </p>
-          </div>
-          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-medium transition group-hover:bg-secondary ease-calm">
-            Explore the protocol <span aria-hidden="true">→</span>
-          </span>
-        </a>
+      <section className="border-b border-border/60 bg-surface-warm">
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <a
+            href="/rsp"
+            className="group relative block overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-soft transition hover:-translate-y-0.5 hover:shadow-glow ease-calm sm:p-12"
+          >
+            {/* Glowing logo backdrop */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-10 top-1/2 hidden h-72 w-72 -translate-y-1/2 bg-contain bg-center bg-no-repeat opacity-[0.08] transition duration-700 group-hover:opacity-[0.14] sm:block"
+              style={{
+                backgroundImage: `url(${rspLogo.url})`,
+                maskImage: "radial-gradient(circle at center, black 45%, transparent 72%)",
+                WebkitMaskImage: "radial-gradient(circle at center, black 45%, transparent 72%)",
+              }}
+            />
+            <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.12em] text-primary">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                  Technical protocol
+                </span>
+                <h2 className="mt-5 font-serif text-3xl leading-tight tracking-tight sm:text-4xl">
+                  Reciprocal Status Protocol{" "}
+                  <span className="bg-gradient-primary bg-clip-text text-transparent">(RSP)</span>
+                </h2>
+                <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
+                  The cryptographic foundation behind meaningful contact — how status is earned,
+                  validated, and kept private.
+                </p>
+              </div>
+              <span className="inline-flex w-fit shrink-0 items-center gap-2 rounded-full border border-border bg-background px-6 py-3 text-sm font-medium transition group-hover:border-primary group-hover:text-primary ease-calm">
+                Explore the protocol
+                <span aria-hidden="true" className="transition group-hover:translate-x-0.5">→</span>
+              </span>
+            </div>
+          </a>
+        </div>
       </section>
+
 
       {/* Participation events */}
       <section id="how" className="mx-auto max-w-6xl px-6 py-24">

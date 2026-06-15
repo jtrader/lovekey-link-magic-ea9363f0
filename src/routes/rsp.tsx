@@ -67,12 +67,28 @@ const css = `
     border-bottom: 1px solid var(--rsp-border);
     padding: 0 2rem;
   }
+  .rsp-scroll-track {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 6px; z-index: 2;
+  }
   .rsp-scroll-progress {
     position: absolute; left: 0; bottom: 0; height: 2px;
     transform-origin: left; transform: scaleX(0);
     width: 100%; background: linear-gradient(90deg, var(--rsp-primary), var(--rsp-primary-glow));
     transition: transform .15s var(--rsp-ease);
   }
+  .rsp-scroll-tooltip {
+    position: absolute; bottom: 10px; transform: translateX(-50%);
+    background: var(--rsp-text); color: var(--rsp-bg);
+    font-size: .72rem; font-weight: 500; letter-spacing: .01em; white-space: nowrap;
+    padding: 4px 10px; border-radius: 999px; pointer-events: none;
+    box-shadow: 0 4px 14px oklch(18% .02 20 / .22);
+    opacity: 0; transition: opacity .2s var(--rsp-ease);
+  }
+  .rsp-scroll-tooltip::after {
+    content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+    border: 4px solid transparent; border-top-color: var(--rsp-text);
+  }
+  .rsp-scroll-track:hover .rsp-scroll-tooltip { opacity: 1; }
   .rsp-nav-inner {
     max-width: 1100px; margin: auto; height: 60px;
     display: flex; align-items: center; justify-content: space-between; gap: 2rem;

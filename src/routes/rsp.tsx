@@ -32,6 +32,9 @@ export const Route = createFileRoute('/rsp')({
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
 
+  html:has(.rsp-root) { scroll-behavior: smooth; }
+
+
   .rsp-root {
     --rsp-primary: oklch(60% .22 25);
     --rsp-primary-light: oklch(96% .012 20);

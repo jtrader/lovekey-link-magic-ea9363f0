@@ -418,15 +418,6 @@ function Index() {
 
       {/* Footer */}
       <footer className="border-t border-border bg-background px-8 py-10">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-4 text-center">
-          <img src={lovekeyMark} alt="Love Key Link" className="object-contain" style={{ width: 96, height: 96 }} />
-          <div className="max-w-[620px] text-sm text-muted-foreground">
-            <strong className="text-foreground">Love Key Link / RSP</strong> · Respectful Synchronised Protocol v1.6 ·
-            Part of the <a href="https://lovekeyring.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Love Key HELP Network</a> ·
-            Copyright © {new Date().getFullYear()} Jack Oswald. All rights reserved unless otherwise licensed in writing.
-          </div>
-      {/* Footer */}
-      <footer className="border-t border-border bg-background px-8 py-10">
         <div className="mx-auto mb-12 max-w-4xl">
           <h2 className="text-center text-base font-semibold text-foreground">Love Key HELP Network</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -460,8 +451,6 @@ function Index() {
             RSP NFTs are utility, provenance, access, participation, and certification tokens.
             Not investment products.
           </div>
-        </div>
-      </footer>
         </div>
       </footer>
     </div>

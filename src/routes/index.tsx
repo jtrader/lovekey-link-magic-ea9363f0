@@ -125,7 +125,7 @@ function Index() {
               addictive engagement.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="/login" className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition hover:opacity-95 ease-calm">
+              <a href="/rsp" className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition hover:opacity-95 ease-calm">
                 <Heart className="h-4 w-4" /> Get started
               </a>
               <a href="#how" className="inline-flex items-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium hover:bg-secondary ease-calm">

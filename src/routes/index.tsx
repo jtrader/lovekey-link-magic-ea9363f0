@@ -427,9 +427,7 @@ function Index() {
                 href={tile.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`group rounded-2xl border bg-card px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-glow ease-calm ${
-                  tile.highlight ? "border-primary/50 shadow-[0_0_24px_-4px_hsl(var(--primary)/0.5)]" : "border-border"
-                }`}
+                className="group rounded-2xl border border-border bg-card px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-glow ease-calm"
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <span className="text-lg font-semibold text-foreground">{tile.title}</span>

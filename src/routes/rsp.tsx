@@ -67,6 +67,12 @@ const css = `
     border-bottom: 1px solid var(--rsp-border);
     padding: 0 2rem;
   }
+  .rsp-scroll-progress {
+    position: absolute; left: 0; bottom: 0; height: 2px;
+    transform-origin: left; transform: scaleX(0);
+    width: 100%; background: linear-gradient(90deg, var(--rsp-primary), var(--rsp-primary-glow));
+    transition: transform .15s var(--rsp-ease);
+  }
   .rsp-nav-inner {
     max-width: 1100px; margin: auto; height: 60px;
     display: flex; align-items: center; justify-content: space-between; gap: 2rem;
@@ -666,6 +672,21 @@ function RSPPage() {
   const [signingIn, setSigningIn] = useState<string | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState<string>("")
+  const [scrollProgress, setScrollProgress] = useState(0)
+
+  useEffect(() => {
+    const update = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      setScrollProgress(max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0)
+    }
+    update()
+    window.addEventListener("scroll", update, { passive: true })
+    window.addEventListener("resize", update)
+    return () => {
+      window.removeEventListener("scroll", update)
+      window.removeEventListener("resize", update)
+    }
+  }, [])
 
   useEffect(() => {
     const ids = ["protocol", "install", "burn", "verticals", "tiers", "event-token", "credits"]
@@ -781,6 +802,11 @@ function RSPPage() {
 
       {/* NAV */}
       <nav className="rsp-nav">
+        <div
+          className="rsp-scroll-progress"
+          aria-hidden="true"
+          style={{ transform: `scaleX(${scrollProgress})` }}
+        />
         <div className="rsp-nav-inner">
           <Link to="/" className="rsp-nav-logo">
             <span className="rsp-nav-logo-mark">

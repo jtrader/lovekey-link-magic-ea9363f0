@@ -210,6 +210,9 @@ function Index() {
               <a href="#how" className="inline-flex items-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium hover:bg-secondary ease-calm">
                 See how it works
               </a>
+              <a href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5" target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium hover:bg-secondary ease-calm">
+                Genesis NFT →
+              </a>
             </div>
           </div>
 

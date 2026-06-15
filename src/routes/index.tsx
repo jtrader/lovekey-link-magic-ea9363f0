@@ -366,8 +366,7 @@ function Index() {
           <Shield className="mx-auto h-10 w-10 text-primary" />
           <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">Private by architecture.</h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            No raw GPS. No message content. No emotional inference. No social scores.
-            &nbsp;<a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> interprets context on-device and shares only what coordination requires.
+            No raw GPS. No message content. No emotional inference. No social scores.&nbsp;<a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> interprets context on-device and shares only what coordination requires.
           </p>
           <div className="mt-10 grid gap-4 text-left sm:grid-cols-2">
             {[

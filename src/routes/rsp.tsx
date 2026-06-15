@@ -1291,6 +1291,7 @@ npm install @rsp-protocol/react`}
           <img src={lovekeyMark} alt="Love Key Link" style={{ width: 96, height: 96, objectFit: 'contain' }} />
           <div className="rsp-footer-left">
             <strong>Love Key Link / RSP</strong> · Respectful Synchronised Protocol v1.6 ·
+            Part of the Love Key HELP Network ·
             Copyright © 2026 Jack Oswald. All rights reserved unless otherwise licensed in writing.
           </div>
           <div className="rsp-footer-right">

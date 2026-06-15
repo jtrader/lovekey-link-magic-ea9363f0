@@ -829,11 +829,20 @@ function RSPPage() {
 
       {/* NAV */}
       <nav className="rsp-nav">
-        <div
-          className="rsp-scroll-progress"
-          aria-hidden="true"
-          style={{ transform: `scaleX(${scrollProgress})` }}
-        />
+        <div className="rsp-scroll-track">
+          <div
+            className="rsp-scroll-progress"
+            aria-hidden="true"
+            style={{ transform: `scaleX(${scrollProgress})` }}
+          />
+          <div
+            className="rsp-scroll-tooltip"
+            role="status"
+            style={{ left: `${Math.min(94, Math.max(6, scrollProgress * 100))}%` }}
+          >
+            {currentSectionLabel}
+          </div>
+        </div>
         <div className="rsp-nav-inner">
           <Link to="/" className="rsp-nav-logo">
             <span className="rsp-nav-logo-mark">

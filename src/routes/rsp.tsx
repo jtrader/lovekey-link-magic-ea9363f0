@@ -1050,11 +1050,11 @@ npm install @rsp-protocol/react`}
             <div className="rsp-eyebrow">NFT Tier 6 · Event Token</div>
             <h2 className="rsp-h2">Proof that coordination happened.</h2>
             <p className="rsp-lead">
-              The native credential of the{' '}
-              <span className="rsp-fullname">Reciprocal&nbsp;Status&nbsp;Protocol</span>{' '}
-              <span className="rsp-fullname-abbr">(RSP)</span> — a cryptographic record that a
-              validated coordination event occurred, with source identity destroyed before the
-              token exists.
+              The <span className="rsp-fullname">Reciprocal&nbsp;Status&nbsp;Protocol</span> is the
+              native credential of the{' '}
+              <span className="rsp-fullname-abbr">Respectful Synchronisation Protocol (RSP)</span> —
+              a cryptographic record that a validated coordination event occurred, with source
+              identity destroyed before the token exists.
             </p>
           </div>
 

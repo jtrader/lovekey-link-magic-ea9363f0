@@ -726,6 +726,17 @@ function RSPPage() {
 
   const navActive = (id: string) => (activeSection === id ? "rsp-nav-active" : undefined)
 
+  const sectionLabels: Record<string, string> = {
+    protocol: "Protocol",
+    install: "Install",
+    burn: "Burn Clause",
+    verticals: "Verticals",
+    tiers: "NFT Tiers",
+    "event-token": "Event Token",
+    credits: "Credits",
+  }
+  const currentSectionLabel = sectionLabels[activeSection] ?? "Top"
+
   async function startCheckout(tier: string) {
     setCheckoutError(null)
     setLoadingTier(tier)

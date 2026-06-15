@@ -88,6 +88,16 @@ const css = `
     text-decoration: none; transition: color .2s;
   }
   .rsp-nav-links a:hover { color: var(--rsp-text); }
+  .rsp-nav-links a { position: relative; padding-bottom: 4px; }
+  .rsp-nav-links a::after {
+    content: ''; position: absolute; left: 0; bottom: 0;
+    height: 2px; width: 0; border-radius: 2px; background: var(--rsp-primary);
+    transition: width .25s var(--rsp-ease);
+  }
+  .rsp-nav-links a:hover::after { width: 100%; }
+  .rsp-nav-links a.rsp-nav-active { color: var(--rsp-primary); font-weight: 500; }
+  .rsp-nav-links a.rsp-nav-active::after { width: 100%; }
+  .rsp-nav-mobile a.rsp-nav-active { color: var(--rsp-primary); font-weight: 500; }
   .rsp-nav-cta {
     font-size: .82rem; font-weight: 500;
     color: var(--rsp-primary); background: var(--rsp-primary-light);

@@ -344,7 +344,7 @@ function AppView() {
         </section>
 
         <footer className="mt-16 flex items-center justify-between border-t border-border/60 pt-6 text-xs text-muted-foreground">
-          <span>Coordination, not surveillance.</span>
+          <span>Coordination, not surveillance. · Part of the Love Key HELP Network</span>
           <Link to="/" className="hover:text-foreground">← Back to overview</Link>
         </footer>
       </main>

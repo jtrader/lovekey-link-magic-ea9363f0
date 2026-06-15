@@ -666,6 +666,21 @@ function RSPPage() {
   const [signingIn, setSigningIn] = useState<string | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState<string>("")
+  const [scrollProgress, setScrollProgress] = useState(0)
+
+  useEffect(() => {
+    const update = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      setScrollProgress(max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0)
+    }
+    update()
+    window.addEventListener("scroll", update, { passive: true })
+    window.addEventListener("resize", update)
+    return () => {
+      window.removeEventListener("scroll", update)
+      window.removeEventListener("resize", update)
+    }
+  }, [])
 
   useEffect(() => {
     const ids = ["protocol", "install", "burn", "verticals", "tiers", "event-token", "credits"]

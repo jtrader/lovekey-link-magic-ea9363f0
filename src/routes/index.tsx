@@ -45,7 +45,7 @@ const dimensions = [
 ];
 
 const helpNetwork = [
-  { title: "First Aid Angel", tag: "PREPARE", body: "Quick first aid guidance and support", href: "https://firstaidangel.org/", highlight: true },
+  { title: "First Aid Angel", tag: "PREPARE", body: "Quick first aid guidance and support", href: "https://firstaidangel.org/" },
   { title: "Crisis Compass", tag: "RESPOND", body: "Emergency guidance for active crises", href: "https://crisis-compass.org/" },
   { title: "Aid Angel", tag: "RECOVER", body: "Recovery support after disaster", href: "https://aidangel.app/" },
   { title: "Guardian Guide", tag: "HEAL", body: "Mental health and emotional support", href: "https://guardianguide.org/" },

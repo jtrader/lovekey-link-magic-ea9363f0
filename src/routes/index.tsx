@@ -304,6 +304,14 @@ function Index() {
           <div className="flex gap-5">
             <a href="https://lovekey.com.au" className="hover:text-foreground">lovekey.com.au</a>
             <a href="https://lovekeyring.org" className="hover:text-foreground">lovekeyring.org</a>
+            <a
+              href="/lovekey-icon.svg"
+              download="lovekey-icon.svg"
+              aria-label="Download Love Key Link icon (32×32 SVG)"
+              className="hover:text-foreground"
+            >
+              Download icon
+            </a>
           </div>
         </div>
       </footer>

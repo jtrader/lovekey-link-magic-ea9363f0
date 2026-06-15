@@ -153,7 +153,7 @@ function Index() {
             {/* Glowing logo backdrop */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute -right-10 top-1/2 hidden h-72 w-72 -translate-y-1/2 bg-contain bg-center bg-no-repeat opacity-[0.08] transition duration-700 group-hover:opacity-[0.14] sm:block"
+              className="pointer-events-none absolute -right-10 top-1/2 hidden h-72 w-72 -translate-y-1/2 bg-contain bg-center bg-no-repeat opacity-[0.16] transition duration-700 group-hover:opacity-[0.28] sm:block"
               style={{
                 backgroundImage: `url(${rspLogo.url})`,
                 maskImage: "radial-gradient(circle at center, black 45%, transparent 72%)",

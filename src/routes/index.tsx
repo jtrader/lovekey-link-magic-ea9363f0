@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import rspLogo from "@/assets/rsp-logo.png.asset.json";
@@ -55,6 +55,33 @@ const states = [
 
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("");
+
+  useEffect(() => {
+    const ids = ["how", "status", "privacy"];
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActiveSection(visible[0].target.id);
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] },
+    );
+
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+
+  const navLinkClass = (id: string) =>
+    activeSection === id
+      ? "text-foreground font-medium"
+      : "hover:text-foreground";
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
@@ -67,9 +94,9 @@ function Index() {
             </span>
           </a>
           <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-            <a href="#how" className="hover:text-foreground">How it works</a>
-            <a href="#status" className="hover:text-foreground">Status model</a>
-            <a href="#privacy" className="hover:text-foreground">Privacy</a>
+            <a href="#how" aria-current={activeSection === "how" ? "true" : undefined} className={navLinkClass("how")}>How it works</a>
+            <a href="#status" aria-current={activeSection === "status" ? "true" : undefined} className={navLinkClass("status")}>Status model</a>
+            <a href="#privacy" aria-current={activeSection === "privacy" ? "true" : undefined} className={navLinkClass("privacy")}>Privacy</a>
             <a href="/rsp" className="hover:text-foreground">RSP</a>
           </nav>
           <a
@@ -91,9 +118,9 @@ function Index() {
         {menuOpen && (
           <nav className="border-t border-border/60 bg-background/95 px-6 py-4 md:hidden">
             <div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm text-muted-foreground">
-              <a href="#how" onClick={() => setMenuOpen(false)} className="hover:text-foreground">How it works</a>
-              <a href="#status" onClick={() => setMenuOpen(false)} className="hover:text-foreground">Status model</a>
-              <a href="#privacy" onClick={() => setMenuOpen(false)} className="hover:text-foreground">Privacy</a>
+              <a href="#how" onClick={() => setMenuOpen(false)} className={navLinkClass("how")}>How it works</a>
+              <a href="#status" onClick={() => setMenuOpen(false)} className={navLinkClass("status")}>Status model</a>
+              <a href="#privacy" onClick={() => setMenuOpen(false)} className={navLinkClass("privacy")}>Privacy</a>
               <a href="/rsp" onClick={() => setMenuOpen(false)} className="hover:text-foreground">RSP</a>
               <a
                 href="/login"

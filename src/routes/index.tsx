@@ -113,7 +113,7 @@ function Index() {
           <div className="animate-fade-up">
             <a href="/rsp" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground transition hover:text-foreground">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              LRespectful Synchronisation Protocol
+              Respectful Synchronisation Protocol
             </a>
             <h1 className="mt-5 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
               Coordination,<br />

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import lovekeyMark from "@/assets/lovekey-mark.png"
+import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/hooks/use-auth"
 import { lovable } from "@/integrations/lovable/index"
@@ -718,6 +719,7 @@ function RSPPage() {
             <li><a href="#tiers">NFT Tiers</a></li>
             <li><a href="#event-token">Event Token</a></li>
             <li><a href="#credits">Credits</a></li>
+            <li><a href={whitepaperAsset.url} download="rsp-whitepaper.pdf">White Paper</a></li>
           </ul>
           <a href="#tiers" className="rsp-nav-cta">Genesis NFT →</a>
           <button
@@ -740,6 +742,7 @@ function RSPPage() {
             <a href="#tiers" onClick={() => setMenuOpen(false)}>NFT Tiers</a>
             <a href="#event-token" onClick={() => setMenuOpen(false)}>Event Token</a>
             <a href="#credits" onClick={() => setMenuOpen(false)}>Credits</a>
+            <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf" onClick={() => setMenuOpen(false)}>White Paper</a>
             <a href="#tiers" className="rsp-nav-cta" onClick={() => setMenuOpen(false)}>Genesis NFT →</a>
           </div>
         )}

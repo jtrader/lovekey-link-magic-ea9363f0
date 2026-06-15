@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
+import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import {
   Heart, Shield, Users, Clock, MapPin, Sparkles, MessageCircle, Phone, Calendar, Activity, Menu, X,
 } from "lucide-react";
@@ -70,6 +71,7 @@ function Index() {
             <a href="#status" className="hover:text-foreground">Status model</a>
             <a href="#privacy" className="hover:text-foreground">Privacy</a>
             <a href="/rsp" className="hover:text-foreground">RSP</a>
+            <a href={whitepaperAsset.url} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">White paper</a>
           </nav>
           <a
             href="/login"
@@ -94,6 +96,7 @@ function Index() {
               <a href="#status" onClick={() => setMenuOpen(false)} className="hover:text-foreground">Status model</a>
               <a href="#privacy" onClick={() => setMenuOpen(false)} className="hover:text-foreground">Privacy</a>
               <a href="/rsp" onClick={() => setMenuOpen(false)} className="hover:text-foreground">RSP</a>
+              <a href={whitepaperAsset.url} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="hover:text-foreground">White paper</a>
               <a
                 href="/login"
                 onClick={() => setMenuOpen(false)}

@@ -3,40 +3,30 @@ import type {} from "@tanstack/react-start";
 
 const BASE_URL = "https://lovekeylink.com";
 
-interface SitemapEntry {
-  path: string;
-  lastmod?: string;
-  changefreq?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
-  priority?: string;
-}
+// Each child sitemap is registered here. Add a new entry (and its
+// corresponding sitemap-*.xml route) as the site grows.
+const CHILD_SITEMAPS = ["sitemap-pages.xml"];
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const entries: SitemapEntry[] = [
-          { path: "/", changefreq: "weekly", priority: "1.0" },
-          { path: "/rsp", changefreq: "monthly", priority: "0.7" },
-        ];
+        const now = new Date().toISOString();
 
-        const urls = entries.map((e) =>
+        const sitemaps = CHILD_SITEMAPS.map((name) =>
           [
-            `  <url>`,
-            `    <loc>${BASE_URL}${e.path}</loc>`,
-            e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
-            e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
-            e.priority ? `    <priority>${e.priority}</priority>` : null,
-            `  </url>`,
-          ]
-            .filter(Boolean)
-            .join("\n"),
+            `  <sitemap>`,
+            `    <loc>${BASE_URL}/${name}</loc>`,
+            `    <lastmod>${now}</lastmod>`,
+            `  </sitemap>`,
+          ].join("\n"),
         );
 
         const xml = [
           `<?xml version="1.0" encoding="UTF-8"?>`,
-          `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
-          ...urls,
-          `</urlset>`,
+          `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
+          ...sitemaps,
+          `</sitemapindex>`,
         ].join("\n");
 
         return new Response(xml, {

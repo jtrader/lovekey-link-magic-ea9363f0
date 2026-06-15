@@ -643,6 +643,29 @@ function RSPPage() {
   const [showSignIn, setShowSignIn] = useState(false)
   const [signingIn, setSigningIn] = useState<string | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState<string>("")
+
+  useEffect(() => {
+    const ids = ["protocol", "install", "burn", "verticals", "tiers", "event-token", "credits"]
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null)
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+        if (visible[0]) setActiveSection(visible[0].target.id)
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] },
+    )
+
+    sections.forEach((s) => observer.observe(s))
+    return () => observer.disconnect()
+  }, [])
+
+  const navActive = (id: string) => (activeSection === id ? "rsp-nav-active" : undefined)
 
   async function startCheckout(tier: string) {
     setCheckoutError(null)

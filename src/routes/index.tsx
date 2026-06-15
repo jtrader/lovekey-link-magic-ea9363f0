@@ -423,6 +423,7 @@ function Index() {
                 href={tile.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent("help_network_tile_click", { tile: tile.title, tag: tile.tag, location: "home_footer" })}
                 className="group rounded-2xl border border-border bg-card px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-glow ease-calm"
               >
                 <div className="flex items-baseline justify-between gap-3">

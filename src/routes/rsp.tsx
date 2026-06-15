@@ -6,6 +6,7 @@ import rspLogo from "@/assets/rsp-logo.png.asset.json"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/hooks/use-auth"
 import { lovable } from "@/integrations/lovable/index"
+import { trackEvent } from "@/lib/analytics"
 
 export const Route = createFileRoute('/rsp')({
   head: () => ({
@@ -1422,7 +1423,7 @@ npm install @rsp-protocol/react`}
           <h2 className="rsp-help-title">Love Key HELP Network</h2>
           <div className="rsp-help-grid">
             {helpNetwork.map((tile) => (
-              <a key={tile.title} href={tile.href} target="_blank" rel="noopener noreferrer" className="rsp-help-tile">
+              <a key={tile.title} href={tile.href} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("help_network_tile_click", { tile: tile.title, tag: tile.tag, location: "rsp_footer" })} className="rsp-help-tile">
                 <div className="rsp-help-head">
                   <span className="rsp-help-name">{tile.title}</span>
                   <span className="rsp-help-tag">{tile.tag}</span>

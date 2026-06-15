@@ -168,7 +168,7 @@ function Index() {
                 </span>
                 <h2 className="mt-5 font-serif text-3xl leading-tight tracking-tight sm:text-4xl">
                   Reciprocal Status Protocol{" "}
-                  <span className="bg-gradient-primary bg-clip-text text-transparent">(RSP)</span>
+                  <span className="bg-gradient-primary bg-clip-text text-transparent">(RSP EVENT)</span>
                 </h2>
                 <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
                   The cryptographic foundation behind meaningful contact — how status is earned,

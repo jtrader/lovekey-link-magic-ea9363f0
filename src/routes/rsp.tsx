@@ -88,6 +88,16 @@ const css = `
     text-decoration: none; transition: color .2s;
   }
   .rsp-nav-links a:hover { color: var(--rsp-text); }
+  .rsp-nav-links a { position: relative; padding-bottom: 4px; }
+  .rsp-nav-links a::after {
+    content: ''; position: absolute; left: 0; bottom: 0;
+    height: 2px; width: 0; border-radius: 2px; background: var(--rsp-primary);
+    transition: width .25s var(--rsp-ease);
+  }
+  .rsp-nav-links a:hover::after { width: 100%; }
+  .rsp-nav-links a.rsp-nav-active { color: var(--rsp-primary); font-weight: 500; }
+  .rsp-nav-links a.rsp-nav-active::after { width: 100%; }
+  .rsp-nav-mobile a.rsp-nav-active { color: var(--rsp-primary); font-weight: 500; }
   .rsp-nav-cta {
     font-size: .82rem; font-weight: 500;
     color: var(--rsp-primary); background: var(--rsp-primary-light);
@@ -643,6 +653,29 @@ function RSPPage() {
   const [showSignIn, setShowSignIn] = useState(false)
   const [signingIn, setSigningIn] = useState<string | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState<string>("")
+
+  useEffect(() => {
+    const ids = ["protocol", "install", "burn", "verticals", "tiers", "event-token", "credits"]
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null)
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+        if (visible[0]) setActiveSection(visible[0].target.id)
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] },
+    )
+
+    sections.forEach((s) => observer.observe(s))
+    return () => observer.disconnect()
+  }, [])
+
+  const navActive = (id: string) => (activeSection === id ? "rsp-nav-active" : undefined)
 
   async function startCheckout(tier: string) {
     setCheckoutError(null)
@@ -747,12 +780,12 @@ function RSPPage() {
             </span>
           </Link>
           <ul className="rsp-nav-links">
-            <li><a href="#protocol">Protocol</a></li>
-            <li><a href="#burn">Burn Clause</a></li>
-            <li><a href="#verticals">Verticals</a></li>
-            <li><a href="#tiers">NFT Tiers</a></li>
-            <li><a href="#event-token">Event Token</a></li>
-            <li><a href="#credits">Credits</a></li>
+            <li><a href="#protocol" className={navActive("protocol")}>Protocol</a></li>
+            <li><a href="#burn" className={navActive("burn")}>Burn Clause</a></li>
+            <li><a href="#verticals" className={navActive("verticals")}>Verticals</a></li>
+            <li><a href="#tiers" className={navActive("tiers")}>NFT Tiers</a></li>
+            <li><a href="#event-token" className={navActive("event-token")}>Event Token</a></li>
+            <li><a href="#credits" className={navActive("credits")}>Credits</a></li>
             <li><a href={whitepaperAsset.url} download="rsp-whitepaper.pdf">White Paper</a></li>
           </ul>
           <a href="#tiers" className="rsp-nav-cta">Genesis NFT →</a>
@@ -770,12 +803,12 @@ function RSPPage() {
         </div>
         {menuOpen && (
           <div className="rsp-nav-mobile">
-            <a href="#protocol" onClick={() => setMenuOpen(false)}>Protocol</a>
-            <a href="#burn" onClick={() => setMenuOpen(false)}>Burn Clause</a>
-            <a href="#verticals" onClick={() => setMenuOpen(false)}>Verticals</a>
-            <a href="#tiers" onClick={() => setMenuOpen(false)}>NFT Tiers</a>
-            <a href="#event-token" onClick={() => setMenuOpen(false)}>Event Token</a>
-            <a href="#credits" onClick={() => setMenuOpen(false)}>Credits</a>
+            <a href="#protocol" className={navActive("protocol")} onClick={() => setMenuOpen(false)}>Protocol</a>
+            <a href="#burn" className={navActive("burn")} onClick={() => setMenuOpen(false)}>Burn Clause</a>
+            <a href="#verticals" className={navActive("verticals")} onClick={() => setMenuOpen(false)}>Verticals</a>
+            <a href="#tiers" className={navActive("tiers")} onClick={() => setMenuOpen(false)}>NFT Tiers</a>
+            <a href="#event-token" className={navActive("event-token")} onClick={() => setMenuOpen(false)}>Event Token</a>
+            <a href="#credits" className={navActive("credits")} onClick={() => setMenuOpen(false)}>Credits</a>
             <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf" onClick={() => setMenuOpen(false)}>White Paper</a>
             <a href="#tiers" className="rsp-nav-cta" onClick={() => setMenuOpen(false)}>Genesis NFT →</a>
           </div>

@@ -189,7 +189,7 @@ function Index() {
           <p className="text-sm font-medium uppercase tracking-widest text-primary">Participation, not performance</p>
           <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Three kinds of meaningful contact.</h2>
           <p className="mt-4 text-muted-foreground">
-            Lv<a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> recognises real human coordination — messages of care, voice calls,
+            The&nbsp;<a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> recognises real human coordination in Love Key Link — messages of care, voice calls,
             and time spent together. Each contributes to the node, never to a public score.
           </p>
         </div>

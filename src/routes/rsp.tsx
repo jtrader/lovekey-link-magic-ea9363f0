@@ -931,7 +931,7 @@ function RSPPage() {
           <div className="rsp-hero-actions">
             <a href="#protocol" className="rsp-btn-primary">Explore the protocol →</a>
             <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf" className="rsp-btn-outline">Download white paper ↓</a>
-            <a href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5" target="_blank" rel="noopener noreferrer" className="rsp-nav-cta">Genesis NFT →</a>
+            <a href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5" target="_blank" rel="noopener noreferrer" className="rsp-btn-outline">Genesis NFT →</a>
           </div>
         </div>
         <div className="rsp-hero-visual">

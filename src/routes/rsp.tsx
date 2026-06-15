@@ -124,24 +124,24 @@ const css = `
     display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
   }
   .rsp-hero-backdrop {
-    position: absolute; top: 50%; right: -10%; transform: translateY(-50%);
-    width: 720px; max-width: 70%; aspect-ratio: 1; pointer-events: none; z-index: 0;
+    position: absolute; top: 50%; right: -16%; transform: translateY(-50%);
+    width: 820px; max-width: 78%; aspect-ratio: 1; pointer-events: none; z-index: 0;
     background-size: contain; background-repeat: no-repeat; background-position: center;
-    opacity: .14;
-    -webkit-mask-image: radial-gradient(circle at center, black 45%, transparent 72%);
-    mask-image: radial-gradient(circle at center, black 45%, transparent 72%);
+    opacity: .28;
+    -webkit-mask-image: radial-gradient(circle at center, black 50%, transparent 75%);
+    mask-image: radial-gradient(circle at center, black 50%, transparent 75%);
     animation: rsp-backdrop-pulse 7s var(--rsp-ease) infinite;
   }
   @keyframes rsp-backdrop-pulse {
-    0%, 100% { opacity: .12; transform: translateY(-50%) scale(1); }
-    50% { opacity: .2; transform: translateY(-50%) scale(1.03); }
+    0%, 100% { opacity: .24; transform: translateY(-50%) scale(1); }
+    50% { opacity: .36; transform: translateY(-50%) scale(1.03); }
   }
   .rsp-hero > * { position: relative; z-index: 1; }
   @media (max-width: 800px) {
-    .rsp-hero-backdrop { right: 50%; transform: translate(50%, -50%); width: 480px; max-width: 110%; opacity: .08; }
+    .rsp-hero-backdrop { right: 50%; transform: translate(50%, -50%); width: 520px; max-width: 120%; opacity: .12; }
     @keyframes rsp-backdrop-pulse {
-      0%, 100% { opacity: .07; transform: translate(50%, -50%) scale(1); }
-      50% { opacity: .12; transform: translate(50%, -50%) scale(1.03); }
+      0%, 100% { opacity: .1; transform: translate(50%, -50%) scale(1); }
+      50% { opacity: .16; transform: translate(50%, -50%) scale(1.03); }
     }
   }
   .rsp-hero-eyebrow {

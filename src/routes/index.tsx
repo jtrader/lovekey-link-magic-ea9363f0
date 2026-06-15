@@ -56,6 +56,26 @@ const states = [
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
+  const [howProgress, setHowProgress] = useState(0);
+
+  useEffect(() => {
+    const update = () => {
+      const el = document.getElementById("how");
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const total = rect.height + window.innerHeight;
+      const scrolled = window.innerHeight - rect.top;
+      const ratio = Math.min(1, Math.max(0, scrolled / total));
+      setHowProgress(ratio);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
 
   useEffect(() => {
     const ids = ["how", "status", "privacy"];

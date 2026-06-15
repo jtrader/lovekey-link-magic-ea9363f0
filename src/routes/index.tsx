@@ -113,16 +113,14 @@ function Index() {
           <div className="animate-fade-up">
             <a href="/rsp" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground transition hover:text-foreground">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              Respectful Synchronisation Protocol
+              LRespectful Synchronisation Protocol
             </a>
             <h1 className="mt-5 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
               Coordination,<br />
               <span className="bg-gradient-primary bg-clip-text text-transparent">not surveillance.</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted-foreground">
-              <a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> is a quiet coordination layer for the people who matter most.
-              It strengthens family and community resilience — without rankings, scores, or
-              addictive engagement.
+              Love Key Link's&nbsp;<a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> recognises real human coordination — messages of care, voice calls, and time spent together. Each contributes to the node, never to a public score.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a href="/rsp" className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition hover:opacity-95 ease-calm">
@@ -191,7 +189,7 @@ function Index() {
           <p className="text-sm font-medium uppercase tracking-widest text-primary">Participation, not performance</p>
           <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Three kinds of meaningful contact.</h2>
           <p className="mt-4 text-muted-foreground">
-            <a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> recognises real human coordination — messages of care, voice calls,
+            Lv<a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> recognises real human coordination — messages of care, voice calls,
             and time spent together. Each contributes to the node, never to a public score.
           </p>
         </div>
@@ -230,7 +228,7 @@ function Index() {
           <div className="max-w-2xl">
             <h2 className="text-3xl font-semibold sm:text-4xl">Designed to feel like care.</h2>
             <p className="mt-4 text-muted-foreground">
-              Every choice in <a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> is shaped by one principle: protect the person, strengthen the node.
+              Every choice in the&nbsp;<a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> is shaped by one principle: protect the person, strengthen the node.
             </p>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -317,7 +315,7 @@ function Index() {
           <span className="bg-gradient-primary bg-clip-text text-transparent">Yours could be next.</span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          <a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> is in private development. Join the early circle to help shape a calmer way
+          <a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a>&nbsp;for Love Key Link is in private development. Join the early circle to help shape a calmer way
           to stay in sync with the people who matter.
         </p>
         <form

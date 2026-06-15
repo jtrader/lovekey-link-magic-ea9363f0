@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import lovekeyMark from "@/assets/lovekey-mark.png"
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json"
+import rspLogo from "@/assets/rsp-logo.png.asset.json"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/hooks/use-auth"
 import { lovable } from "@/integrations/lovable/index"

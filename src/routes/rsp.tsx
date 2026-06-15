@@ -562,7 +562,7 @@ const css = `
     .rsp-event-grid { grid-template-columns: 1fr; gap: 40px; }
     .rsp-signal-weights { grid-template-columns: 1fr; }
     .rsp-nav-links { display: none; }
-    .rsp-nav-inner > .rsp-nav-cta { display: none; }
+    .rsp-nav-inner > .rsp-nav-cta { display: inline-flex; margin-left: auto; }
     .rsp-nav-burger { display: flex; }
   }
   @media (max-width: 600px) {

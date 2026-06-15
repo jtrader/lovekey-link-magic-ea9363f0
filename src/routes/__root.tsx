@@ -53,6 +53,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "google-site-verification", content: "VsxgEQhh77mbKfaA3Qj9tq2q9DQbW9dtuJ2g8JivD6Y" },
       { title: "Love Key Link" },
       { name: "description", content: "A calm, private coordination layer for families." },
       { property: "og:title", content: "Love Key Link" },

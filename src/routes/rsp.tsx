@@ -802,6 +802,11 @@ function RSPPage() {
 
       {/* NAV */}
       <nav className="rsp-nav">
+        <div
+          className="rsp-scroll-progress"
+          aria-hidden="true"
+          style={{ transform: `scaleX(${scrollProgress})` }}
+        />
         <div className="rsp-nav-inner">
           <Link to="/" className="rsp-nav-logo">
             <span className="rsp-nav-logo-mark">

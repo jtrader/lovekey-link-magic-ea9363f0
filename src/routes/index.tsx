@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import rspLogo from "@/assets/rsp-logo.png.asset.json";
+import { trackEvent } from "@/lib/analytics";
 import {
   Heart, Shield, Users, Clock, MapPin, Sparkles, MessageCircle, Phone, Calendar, Activity, Menu, X,
 } from "lucide-react";
@@ -199,10 +200,10 @@ function Index() {
               <a href="#how" className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition hover:opacity-95 ease-calm">
                 <Heart className="h-4 w-4" /> Get started
               </a>
-              <a href="#how" className="inline-flex items-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium hover:bg-secondary ease-calm">
+              <a href="#how" onClick={() => trackEvent("see_how_it_works_click", { location: "home_hero" })} className="inline-flex items-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium hover:bg-secondary ease-calm">
                 See how it works
               </a>
-              <a href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5" target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium hover:bg-secondary ease-calm">
+              <a href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5" target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("genesis_nft_click", { location: "home_hero" })} className="inline-flex items-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium hover:bg-secondary ease-calm">
                 Genesis NFT →
               </a>
             </div>

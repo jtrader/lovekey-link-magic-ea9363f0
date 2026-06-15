@@ -95,9 +95,21 @@ const css = `
     transition: width .25s var(--rsp-ease);
   }
   .rsp-nav-links a:hover::after { width: 100%; }
-  .rsp-nav-links a.rsp-nav-active { color: var(--rsp-primary); font-weight: 500; }
-  .rsp-nav-links a.rsp-nav-active::after { width: 100%; }
-  .rsp-nav-mobile a.rsp-nav-active { color: var(--rsp-primary); font-weight: 500; }
+  .rsp-nav-links a.rsp-nav-active {
+    color: var(--rsp-primary); font-weight: 600;
+    background: var(--rsp-primary-light);
+    border-radius: 999px; padding: 4px 14px;
+    box-shadow: 0 1px 6px oklch(60% .22 25 / .14);
+  }
+  .rsp-nav-links a.rsp-nav-active::after {
+    left: 14px; width: calc(100% - 28px); height: 2.5px; bottom: 1px;
+  }
+  .rsp-nav-mobile a.rsp-nav-active {
+    color: var(--rsp-primary); font-weight: 600;
+    background: var(--rsp-primary-light);
+    border-radius: 8px; padding-left: 12px; padding-right: 12px;
+    border-left: 3px solid var(--rsp-primary);
+  }
   .rsp-nav-cta {
     font-size: .82rem; font-weight: 500;
     color: var(--rsp-primary); background: var(--rsp-primary-light);

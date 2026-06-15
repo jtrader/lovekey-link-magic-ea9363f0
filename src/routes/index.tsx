@@ -94,9 +94,9 @@ function Index() {
             </span>
           </a>
           <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-            <a href="#how" className="hover:text-foreground">How it works</a>
-            <a href="#status" className="hover:text-foreground">Status model</a>
-            <a href="#privacy" className="hover:text-foreground">Privacy</a>
+            <a href="#how" aria-current={activeSection === "how" ? "true" : undefined} className={navLinkClass("how")}>How it works</a>
+            <a href="#status" aria-current={activeSection === "status" ? "true" : undefined} className={navLinkClass("status")}>Status model</a>
+            <a href="#privacy" aria-current={activeSection === "privacy" ? "true" : undefined} className={navLinkClass("privacy")}>Privacy</a>
             <a href="/rsp" className="hover:text-foreground">RSP</a>
           </nav>
           <a

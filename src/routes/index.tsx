@@ -338,23 +338,17 @@ function Index() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-background">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row">
-          <div className="flex items-center gap-2">
-            <img src={lovekeyMark} alt="" className="h-10 w-10" width={40} height={40} />
-            <span>© {new Date().getFullYear()} Love Key Link · Part of the Love Key HELP Network</span>
+      <footer className="border-t border-border bg-background px-8 py-10">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-4 text-center">
+          <img src={lovekeyMark} alt="Love Key Link" className="object-contain" style={{ width: 96, height: 96 }} />
+          <div className="max-w-[620px] text-sm text-muted-foreground">
+            <strong className="text-foreground">Love Key Link / RSP</strong> · Respectful Synchronised Protocol v1.6 ·
+            Part of the Love Key HELP Network ·
+            Copyright © {new Date().getFullYear()} Jack Oswald. All rights reserved unless otherwise licensed in writing.
           </div>
-          <div className="flex gap-5">
-            <a href="https://lovekey.com.au" className="hover:text-foreground">lovekey.com.au</a>
-            <a href="https://lovekeyring.org" className="hover:text-foreground">lovekeyring.org</a>
-            <a
-              href="/lovekey-icon.svg"
-              download="lovekey-icon.svg"
-              aria-label="Download Love Key Link icon (32×32 SVG)"
-              className="hover:text-foreground"
-            >
-              Download icon
-            </a>
+          <div className="max-w-[320px] text-xs text-muted-foreground/80">
+            RSP NFTs are utility, provenance, access, participation, and certification tokens.
+            Not investment products.
           </div>
         </div>
       </footer>

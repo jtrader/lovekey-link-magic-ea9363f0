@@ -773,6 +773,7 @@ function RSPPage() {
 
       {/* HERO */}
       <section className="rsp-hero">
+        <div className="rsp-hero-backdrop" style={{ backgroundImage: `url(${rspLogo.url})` }} aria-hidden="true" />
         <div>
           <div className="rsp-hero-eyebrow">
             <span className="rsp-hero-eyebrow-dot" />

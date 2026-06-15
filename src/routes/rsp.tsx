@@ -780,12 +780,12 @@ function RSPPage() {
             </span>
           </Link>
           <ul className="rsp-nav-links">
-            <li><a href="#protocol">Protocol</a></li>
-            <li><a href="#burn">Burn Clause</a></li>
-            <li><a href="#verticals">Verticals</a></li>
-            <li><a href="#tiers">NFT Tiers</a></li>
-            <li><a href="#event-token">Event Token</a></li>
-            <li><a href="#credits">Credits</a></li>
+            <li><a href="#protocol" className={navActive("protocol")}>Protocol</a></li>
+            <li><a href="#burn" className={navActive("burn")}>Burn Clause</a></li>
+            <li><a href="#verticals" className={navActive("verticals")}>Verticals</a></li>
+            <li><a href="#tiers" className={navActive("tiers")}>NFT Tiers</a></li>
+            <li><a href="#event-token" className={navActive("event-token")}>Event Token</a></li>
+            <li><a href="#credits" className={navActive("credits")}>Credits</a></li>
             <li><a href={whitepaperAsset.url} download="rsp-whitepaper.pdf">White Paper</a></li>
           </ul>
           <a href="#tiers" className="rsp-nav-cta">Genesis NFT →</a>

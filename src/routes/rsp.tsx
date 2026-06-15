@@ -495,7 +495,7 @@ const css = `
   .rsp-footer { border-top: 1px solid var(--rsp-border); padding: 40px 2rem; }
   .rsp-footer-inner {
     max-width: 1100px; margin: auto;
-    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 16px;
   }
   .rsp-footer-left { font-size: .8rem; color: var(--rsp-text-muted); max-width: 620px; }
   .rsp-footer-left strong { color: var(--rsp-text); }

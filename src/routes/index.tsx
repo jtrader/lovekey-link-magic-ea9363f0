@@ -142,6 +142,27 @@ function Index() {
         </div>
       </section>
 
+      {/* Sub-hero: RSP technical protocol */}
+      <section className="border-b border-border/60 bg-surface-soft">
+        <a
+          href="/rsp"
+          className="group mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 transition sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <p className="text-sm font-medium uppercase tracking-widest text-primary">Technical protocol</p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+              Reciprocal Status Protocol (RSP)
+            </h2>
+            <p className="mt-2 max-w-2xl text-muted-foreground">
+              The cryptographic foundation behind meaningful contact — how status is earned, validated, and kept private.
+            </p>
+          </div>
+          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-medium transition group-hover:bg-secondary ease-calm">
+            Explore the protocol <span aria-hidden="true">→</span>
+          </span>
+        </a>
+      </section>
+
       {/* Participation events */}
       <section id="how" className="mx-auto max-w-6xl px-6 py-24">
         <div className="max-w-2xl">

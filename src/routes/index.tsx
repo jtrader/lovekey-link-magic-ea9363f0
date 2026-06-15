@@ -135,14 +135,6 @@ function Index() {
           </nav>
           <div className="flex items-center gap-2">
             <a
-              href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-2 text-xs font-medium text-primary transition hover:bg-primary/20 ease-calm whitespace-nowrap"
-            >
-              Genesis NFT →
-            </a>
-            <a
               href="/login"
               className="hidden md:inline-flex items-center rounded-full bg-gradient-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-soft transition hover:opacity-95 ease-calm"
             >

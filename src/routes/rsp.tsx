@@ -562,7 +562,7 @@ const css = `
     .rsp-event-grid { grid-template-columns: 1fr; gap: 40px; }
     .rsp-signal-weights { grid-template-columns: 1fr; }
     .rsp-nav-links { display: none; }
-    .rsp-nav-inner > .rsp-nav-cta { display: none; }
+    .rsp-nav-inner > .rsp-nav-cta { display: inline-flex; margin-left: auto; }
     .rsp-nav-burger { display: flex; }
   }
   @media (max-width: 600px) {
@@ -862,7 +862,7 @@ function RSPPage() {
             <li><a href="#credits" className={navActive("credits")}>Credits</a></li>
             <li><a href={whitepaperAsset.url} download="rsp-whitepaper.pdf">White Paper</a></li>
           </ul>
-          <a href="#tiers" className="rsp-nav-cta">Genesis NFT →</a>
+          <a href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5" target="_blank" rel="noopener noreferrer" className="rsp-nav-cta">Genesis NFT →</a>
           <button
             type="button"
             className="rsp-nav-burger"
@@ -884,7 +884,7 @@ function RSPPage() {
             <a href="#event-token" className={navActive("event-token")} onClick={() => setMenuOpen(false)}>Event Token</a>
             <a href="#credits" className={navActive("credits")} onClick={() => setMenuOpen(false)}>Credits</a>
             <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf" onClick={() => setMenuOpen(false)}>White Paper</a>
-            <a href="#tiers" className="rsp-nav-cta" onClick={() => setMenuOpen(false)}>Genesis NFT →</a>
+            <a href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5" target="_blank" rel="noopener noreferrer" className="rsp-nav-cta" onClick={() => setMenuOpen(false)}>Genesis NFT →</a>
           </div>
         )}
       </nav>

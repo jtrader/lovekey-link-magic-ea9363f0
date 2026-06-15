@@ -402,6 +402,14 @@ const css = `
     background: var(--rsp-bg-warm);
     border-top: 1px solid var(--rsp-border); border-bottom: 1px solid var(--rsp-border);
   }
+  .rsp-fullname {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic; color: var(--rsp-primary); white-space: nowrap;
+  }
+  .rsp-fullname-abbr {
+    font-size: .78em; font-weight: 600; letter-spacing: .04em;
+    color: var(--rsp-text); white-space: nowrap;
+  }
   .rsp-event-inner {
     max-width: 1100px; margin: 0 auto; padding: 80px 2rem;
   }
@@ -1042,8 +1050,11 @@ npm install @rsp-protocol/react`}
             <div className="rsp-eyebrow">NFT Tier 6 · Event Token</div>
             <h2 className="rsp-h2">Proof that coordination happened.</h2>
             <p className="rsp-lead">
-              A cryptographic record that a validated coordination event occurred — with source
-              identity destroyed before the token exists.
+              The native credential of the{' '}
+              <span className="rsp-fullname">Reciprocal&nbsp;Status&nbsp;Protocol</span>{' '}
+              <span className="rsp-fullname-abbr">(RSP)</span> — a cryptographic record that a
+              validated coordination event occurred, with source identity destroyed before the
+              token exists.
             </p>
           </div>
 

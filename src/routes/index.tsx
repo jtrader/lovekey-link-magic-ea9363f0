@@ -122,6 +122,15 @@ function Index() {
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted-foreground">
               <a href="/rsp" className="text-primary hover:underline">Respectful Synchronisation Protocol</a> recognises real human coordination — messages of care, voice calls, and time spent together. Each contributes to the node, never to a public score.
             </p>
+            <div className="mt-6 max-w-lg rounded-2xl border border-primary/20 bg-primary/5 p-5">
+              <p className="text-xs font-medium uppercase tracking-[0.12em] text-primary">Hypothetical RSP prototype</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Love Key Link is a hypothetical RSP prototype built to demonstrate real-world application. It's a
+                privacy-first family coordination layer that helps loved ones know when and how to connect — using
+                consent-based device, calendar, and location context to share simple availability signals. The result is
+                stronger family unity, better timing, and clearer communication, without ever exposing private details.
+              </p>
+            </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <a href="/rsp" className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition hover:opacity-95 ease-calm">
                 <Heart className="h-4 w-4" /> Get started

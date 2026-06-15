@@ -56,6 +56,26 @@ const states = [
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
+  const [howProgress, setHowProgress] = useState(0);
+
+  useEffect(() => {
+    const update = () => {
+      const el = document.getElementById("how");
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const total = rect.height + window.innerHeight;
+      const scrolled = window.innerHeight - rect.top;
+      const ratio = Math.min(1, Math.max(0, scrolled / total));
+      setHowProgress(ratio);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
 
   useEffect(() => {
     const ids = ["how", "status", "privacy"];
@@ -86,6 +106,11 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-gradient-primary transition-transform duration-150 ease-out"
+          style={{ transform: `scaleX(${howProgress})` }}
+        />
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <a href="/" className="flex items-center gap-2">
             <img src={lovekeyMark} alt="Love Key" className="h-14 w-14" width={56} height={56} />

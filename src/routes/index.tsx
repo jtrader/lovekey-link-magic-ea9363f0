@@ -79,8 +79,8 @@ function Index() {
 
   const navLinkClass = (id: string) =>
     activeSection === id
-      ? "text-foreground font-medium"
-      : "hover:text-foreground";
+      ? "relative font-semibold text-primary transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-primary after:content-['']"
+      : "relative text-muted-foreground transition-colors hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:rounded-full after:bg-primary after:transition-all hover:after:w-full after:content-['']";
 
   return (
     <div className="min-h-screen bg-background text-foreground">

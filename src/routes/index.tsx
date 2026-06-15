@@ -342,7 +342,7 @@ function Index() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row">
           <div className="flex items-center gap-2">
             <img src={lovekeyMark} alt="" className="h-10 w-10" width={40} height={40} />
-            <span>© {new Date().getFullYear()} Love Key Link · Part of the Love Key family</span>
+            <span>© {new Date().getFullYear()} Love Key Link · Part of the Love Key HELP Network</span>
           </div>
           <div className="flex gap-5">
             <a href="https://lovekey.com.au" className="hover:text-foreground">lovekey.com.au</a>

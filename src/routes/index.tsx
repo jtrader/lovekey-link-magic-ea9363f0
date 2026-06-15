@@ -4,7 +4,7 @@ import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import {
-  Heart, Shield, Users, Clock, MapPin, Sparkles, MessageCircle, Phone, Calendar, Activity, Menu, X,
+  Heart, Shield, Users, Clock, MapPin, Sparkles, MessageCircle, Phone, Calendar, Activity, Menu, X, Download,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({

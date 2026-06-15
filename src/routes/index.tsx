@@ -118,9 +118,9 @@ function Index() {
         {menuOpen && (
           <nav className="border-t border-border/60 bg-background/95 px-6 py-4 md:hidden">
             <div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm text-muted-foreground">
-              <a href="#how" onClick={() => setMenuOpen(false)} className="hover:text-foreground">How it works</a>
-              <a href="#status" onClick={() => setMenuOpen(false)} className="hover:text-foreground">Status model</a>
-              <a href="#privacy" onClick={() => setMenuOpen(false)} className="hover:text-foreground">Privacy</a>
+              <a href="#how" onClick={() => setMenuOpen(false)} className={navLinkClass("how")}>How it works</a>
+              <a href="#status" onClick={() => setMenuOpen(false)} className={navLinkClass("status")}>Status model</a>
+              <a href="#privacy" onClick={() => setMenuOpen(false)} className={navLinkClass("privacy")}>Privacy</a>
               <a href="/rsp" onClick={() => setMenuOpen(false)} className="hover:text-foreground">RSP</a>
               <a
                 href="/login"

@@ -1203,8 +1203,9 @@ function RSPPage() {
               title: "Connect to Help Network",
               body: "When private support is not enough, routing considers category, urgency, consent and trusted helper availability.",
             },
-          ].map((item) => (
-            <div className="rsp-principle-card" key={item.title}>
+          ].map((item, i) => (
+            <div className="rsp-principle-card rsp-journey-card" key={item.title}>
+              <span className="rsp-journey-step">{String(i + 1).padStart(2, "0")}</span>
               <h3>{item.title}</h3>
               <p>{item.body}</p>
             </div>

@@ -282,6 +282,73 @@ const css = `
   }
   .rsp-tagline-strip strong { color: var(--rsp-text); }
 
+  /* EVENT TOKEN SUB-HERO */
+  .rsp-subhero {
+    position: relative; overflow: hidden;
+    background:
+      radial-gradient(120% 140% at 85% 0%, color-mix(in oklab, var(--rsp-primary) 16%, transparent), transparent 60%),
+      linear-gradient(135deg, oklch(20% .03 25), oklch(26% .05 22));
+    color: var(--rsp-bg);
+    padding: 72px 2rem;
+  }
+  .rsp-subhero-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.2fr .8fr; gap: 48px; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .rsp-subhero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--rsp-primary-glow);
+    border: 1px solid color-mix(in oklab, var(--rsp-primary) 40%, transparent);
+    background: color-mix(in oklab, var(--rsp-primary) 12%, transparent);
+    padding: 6px 14px; border-radius: 999px; margin-bottom: 20px;
+  }
+  .rsp-subhero h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem); line-height: 1.05; letter-spacing: -.03em;
+    margin-bottom: 18px;
+  }
+  .rsp-subhero h2 em { color: var(--rsp-primary-glow); font-style: italic; }
+  .rsp-subhero p {
+    font-size: 1.05rem; line-height: 1.7;
+    color: color-mix(in oklab, var(--rsp-bg) 80%, transparent);
+    max-width: 540px; margin-bottom: 18px;
+  }
+  .rsp-subhero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
+  .rsp-subhero-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(90deg, var(--rsp-primary), var(--rsp-primary-glow));
+    color: oklch(100% 0 0); font-weight: 600; font-size: .95rem;
+    padding: 12px 22px; border-radius: 999px; text-decoration: none;
+    transition: transform .2s var(--rsp-ease), box-shadow .2s var(--rsp-ease);
+    box-shadow: 0 10px 30px -10px color-mix(in oklab, var(--rsp-primary) 60%, transparent);
+  }
+  .rsp-subhero-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -10px color-mix(in oklab, var(--rsp-primary) 70%, transparent); }
+  .rsp-subhero-btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid color-mix(in oklab, var(--rsp-bg) 35%, transparent);
+    color: var(--rsp-bg); font-weight: 600; font-size: .95rem;
+    padding: 12px 22px; border-radius: 999px; text-decoration: none;
+    transition: background .2s var(--rsp-ease);
+  }
+  .rsp-subhero-btn-ghost:hover { background: color-mix(in oklab, var(--rsp-bg) 12%, transparent); }
+  .rsp-subhero-roles { list-style: none; display: grid; gap: 14px; margin: 0; padding: 0; }
+  .rsp-subhero-role {
+    border: 1px solid color-mix(in oklab, var(--rsp-bg) 18%, transparent);
+    background: color-mix(in oklab, var(--rsp-bg) 6%, transparent);
+    border-radius: var(--rsp-radius); padding: 16px 18px;
+    backdrop-filter: blur(4px);
+  }
+  .rsp-subhero-role-title { font-weight: 700; font-size: .95rem; margin-bottom: 4px; }
+  .rsp-subhero-role-desc { font-size: .85rem; line-height: 1.5; color: color-mix(in oklab, var(--rsp-bg) 70%, transparent); }
+  @media (max-width: 800px) {
+    .rsp-subhero { padding: 48px 1.2rem; }
+    .rsp-subhero-inner { grid-template-columns: 1fr; gap: 32px; }
+  }
+
+
+
   /* SECTIONS */
   .rsp-section { max-width: 1100px; margin: 0 auto; padding: 80px 2rem; }
   .rsp-section-header { text-align: center; margin-bottom: 56px; }
@@ -978,6 +1045,53 @@ function RSPPage() {
           <strong>Burn the identifiable source.</strong>
         </p>
       </div>
+
+      {/* EVENT TOKEN SUB-HERO */}
+      <section className="rsp-subhero">
+        <div className="rsp-subhero-inner">
+          <div>
+            <span className="rsp-subhero-eyebrow">
+              <span className="rsp-hero-eyebrow-dot" />
+              NFT Tier 6 · Reciprocal Status Protocol
+            </span>
+            <h2>
+              The Event Token.<br />
+              <em>Proof without exposure.</em>
+            </h2>
+            <p>
+              The Event Token is the cryptographic receipt of the Reciprocal Status Protocol.
+              Every time two nodes genuinely coordinate, a token is minted — and the
+              identifiable source data is burned before the token ever exists. It records
+              that reciprocity happened, never who, where, or how.
+            </p>
+            <p>
+              Within the RSP ecosystem it is the unit of trust: an unbounded, auto-minted
+              proof that turns private, consent-based coordination into verifiable status —
+              without surveillance, scores, or stored identity.
+            </p>
+            <div className="rsp-subhero-actions">
+              <a href="#event-token" className="rsp-subhero-btn">Explore the Event Token →</a>
+              <a href="#credits" className="rsp-subhero-btn-ghost">View credits & access</a>
+            </div>
+          </div>
+          <ul className="rsp-subhero-roles">
+            <li className="rsp-subhero-role">
+              <div className="rsp-subhero-role-title">Proof of reciprocity</div>
+              <div className="rsp-subhero-role-desc">One token per validated coordination event between RSP nodes.</div>
+            </li>
+            <li className="rsp-subhero-role">
+              <div className="rsp-subhero-role-title">Source burned at mint</div>
+              <div className="rsp-subhero-role-desc">Identifiable data is destroyed; the burn receipt is embedded in the token.</div>
+            </li>
+            <li className="rsp-subhero-role">
+              <div className="rsp-subhero-role-title">Unbounded supply</div>
+              <div className="rsp-subhero-role-desc">Auto-minted as the network coordinates — status that scales with trust.</div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+
 
       {/* PROTOCOL / PRINCIPLES */}
       <section className="rsp-section" id="protocol">

@@ -1041,7 +1041,7 @@ function RSPPage() {
             <em>without coercion.</em>
           </h1>
           <p className="rsp-hero-sub">
-            RSP is the invisible coordination layer beneath Love Key Link, LoveKey Hub and the Love
+            RSP is the invisible coordination layer beneath Love Key Link, Love Key Hub and the Love
             Key Help Network. It synchronises consent, permissions, identity context, roles,
             presence and support signals without making families feel like they are entering a
             protocol.

@@ -343,6 +343,91 @@ export type Database = {
           },
         ]
       }
+      rsp_consent_events: {
+        Row: {
+          actor_user_id: string
+          consent_state: string | null
+          context: string | null
+          created_at: string
+          event_type: string
+          family_id: string
+          id: string
+          metadata: Json
+          signal_type: string | null
+        }
+        Insert: {
+          actor_user_id: string
+          consent_state?: string | null
+          context?: string | null
+          created_at?: string
+          event_type: string
+          family_id: string
+          id?: string
+          metadata?: Json
+          signal_type?: string | null
+        }
+        Update: {
+          actor_user_id?: string
+          consent_state?: string | null
+          context?: string | null
+          created_at?: string
+          event_type?: string
+          family_id?: string
+          id?: string
+          metadata?: Json
+          signal_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rsp_consent_events_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_requests: {
+        Row: {
+          category: string
+          created_at: string
+          family_id: string
+          id: string
+          message: string | null
+          requester_user_id: string
+          route_summary: string | null
+          urgency: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          family_id: string
+          id?: string
+          message?: string | null
+          requester_user_id: string
+          route_summary?: string | null
+          urgency?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          family_id?: string
+          id?: string
+          message?: string | null
+          requester_user_id?: string
+          route_summary?: string | null
+          urgency?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_requests_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       customer_balances: {

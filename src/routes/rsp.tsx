@@ -1,41 +1,68 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import lovekeyMark from "@/assets/lovekey-mark.png"
-import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json"
-import rspLogo from "@/assets/rsp-logo.png.asset.json"
-import { supabase } from "@/integrations/supabase/client"
-import { useAuth } from "@/hooks/use-auth"
-import { lovable } from "@/integrations/lovable/index"
-import { trackEvent } from "@/lib/analytics"
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import lovekeyMark from "@/assets/lovekey-mark.png";
+import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
+import rspLogo from "@/assets/rsp-logo.png.asset.json";
+import { trackEvent } from "@/lib/analytics";
 
-export const Route = createFileRoute('/rsp')({
+export const Route = createFileRoute("/rsp")({
   head: () => ({
     meta: [
-      { title: 'RSP — Respectful Synchronised Protocol · Love Key Link' },
+      { title: "RSP — Respectful Synchronisation Protocol · Love Key Link" },
       {
-        name: 'description',
+        name: "description",
         content:
-          'RSP is a privacy-first coordination framework built into Love Key Link. Translate behaviour into weighted signals, synchronise the state, burn the identifiable source.',
+          "RSP is a privacy-first coordination framework built into Love Key Link. Translate behaviour into weighted signals, synchronise the state, burn the identifiable source.",
       },
-      { property: 'og:title', content: 'RSP — Respectful Synchronised Protocol' },
+      { property: "og:title", content: "RSP — Respectful Synchronisation Protocol" },
       {
-        property: 'og:description',
+        property: "og:description",
         content:
-          'A privacy-first coordination framework. Translate behaviour. Synchronise the signal. Burn the identifiable source.',
+          "A privacy-first coordination framework. Translate behaviour. Synchronise the signal. Burn the identifiable source.",
       },
     ],
   }),
   component: RSPPage,
-})
+});
 
 const helpNetwork = [
-  { title: "First Aid Angel", tag: "PREPARE", body: "Quick first aid guidance and support", href: "https://firstaidangel.org/" },
-  { title: "Crisis Compass", tag: "RESPOND", body: "Emergency guidance for active crises", href: "https://crisis-compass.org/" },
-  { title: "Aid Angel", tag: "RECOVER", body: "Recovery support after disaster", href: "https://aidangel.app/" },
-  { title: "Guardian Guide", tag: "HEAL", body: "Mental health and emotional support", href: "https://guardianguide.org/" },
-  { title: "Love Key", tag: "COORDINATE", body: "Connect with the HELP Network", href: "https://lovekeyring.org/" },
-  { title: "Love Key Ring", tag: "REACH", body: "A gentle way to reach help", href: "https://lovekey.com.au/?locale=AU#product-section" },
-]
+  {
+    title: "First Aid Angel",
+    tag: "PREPARE",
+    body: "Quick first aid guidance and support",
+    href: "https://firstaidangel.org/",
+  },
+  {
+    title: "Crisis Compass",
+    tag: "RESPOND",
+    body: "Emergency guidance for active crises",
+    href: "https://crisis-compass.org/",
+  },
+  {
+    title: "Aid Angel",
+    tag: "RECOVER",
+    body: "Recovery support after disaster",
+    href: "https://aidangel.app/",
+  },
+  {
+    title: "Guardian Guide",
+    tag: "HEAL",
+    body: "Mental health and emotional support",
+    href: "https://guardianguide.org/",
+  },
+  {
+    title: "Love Key",
+    tag: "COORDINATE",
+    body: "Connect with the HELP Network",
+    href: "https://lovekeyring.org/",
+  },
+  {
+    title: "Love Key Ring",
+    tag: "REACH",
+    body: "A gentle way to reach help",
+    href: "https://lovekey.com.au/?locale=AU#product-section",
+  },
+];
 
 // ─── Styles ────────────────────────────────────────────────────────────────
 
@@ -660,63 +687,63 @@ const css = `
     .rsp-nav { padding: 0 1.2rem; }
     .rsp-section { padding: 56px 1.2rem; }
   }
-`
+`;
 
 // ─── Icons ────────────────────────────────────────────────────────────────
 
 const stroke = {
-  fill: 'none',
-  stroke: 'currentColor',
+  fill: "none",
+  stroke: "currentColor",
   strokeWidth: 1.8,
-  strokeLinecap: 'round' as const,
-  strokeLinejoin: 'round' as const,
-}
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+};
 
 const IconEye = () => (
   <svg viewBox="0 0 24 24" {...stroke}>
     <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
     <circle cx="12" cy="12" r="3" />
   </svg>
-)
+);
 const IconScale = () => (
   <svg viewBox="0 0 24 24" {...stroke}>
     <path d="M12 3v18M6 7h12M6 7l-3 7h6l-3-7Zm12 0-3 7h6l-3-7Z" />
   </svg>
-)
+);
 const IconSync = () => (
   <svg viewBox="0 0 24 24" {...stroke}>
     <path d="M21 12a9 9 0 0 1-15 6.7L3 16M3 12a9 9 0 0 1 15-6.7L21 8" />
     <path d="M21 4v4h-4M3 20v-4h4" />
   </svg>
-)
+);
 const IconClock = () => (
   <svg viewBox="0 0 24 24" {...stroke}>
     <circle cx="12" cy="12" r="9" />
     <path d="M12 7v5l3 2" />
   </svg>
-)
+);
 const IconFlame = () => (
   <svg viewBox="0 0 24 24" {...stroke}>
     <path d="M12 2c1 4 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 .5 1.5 1.5 2 2 2-1-2 1-5 1-7Z" />
   </svg>
-)
+);
 const IconShield = () => (
   <svg viewBox="0 0 24 24" {...stroke}>
     <path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3Z" />
     <path d="M9 12l2 2 4-4" />
   </svg>
-)
+);
 const IconLayers = () => (
   <svg viewBox="0 0 24 24" {...stroke}>
     <path d="M12 3 3 8l9 5 9-5-9-5Z" />
     <path d="M3 13l9 5 9-5M3 16.5 12 21l9-4.5" />
   </svg>
-)
+);
 const IconHeart = () => (
   <svg viewBox="0 0 24 24" {...stroke}>
     <path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3 1 4 2.5 1-1.5 2-2.5 4-2.5 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21Z" />
   </svg>
-)
+);
 
 // ─── Sub-components ────────────────────────────────────────────────────────
 
@@ -727,11 +754,11 @@ function FlowCard({
   desc,
   showConnector = true,
 }: {
-  iconClass: string
-  icon: React.ReactNode
-  label: string
-  desc: string
-  showConnector?: boolean
+  iconClass: string;
+  icon: React.ReactNode;
+  label: string;
+  desc: string;
+  showConnector?: boolean;
 }) {
   return (
     <>
@@ -744,7 +771,7 @@ function FlowCard({
       </div>
       {showConnector && <div className="rsp-flow-connector" />}
     </>
-  )
+  );
 }
 
 function PrincipleCard({
@@ -752,9 +779,9 @@ function PrincipleCard({
   title,
   body,
 }: {
-  icon: React.ReactNode
-  title: string
-  body: string
+  icon: React.ReactNode;
+  title: string;
+  body: string;
 }) {
   return (
     <div className="rsp-principle-card">
@@ -762,156 +789,74 @@ function PrincipleCard({
       <div className="rsp-pc-title">{title}</div>
       <div className="rsp-pc-body">{body}</div>
     </div>
-  )
+  );
 }
 
 // ─── Page ──────────────────────────────────────────────────────────────────
 
 function RSPPage() {
-  const { user, loading } = useAuth()
-  const [loadingTier, setLoadingTier] = useState<string | null>(null)
-  const [checkoutError, setCheckoutError] = useState<string | null>(null)
-  const [balance, setBalance] = useState<number | null>(null)
-  const [balanceLoading, setBalanceLoading] = useState(false)
-  const [balanceError, setBalanceError] = useState<string | null>(null)
-  const [showSignIn, setShowSignIn] = useState(false)
-  const [signingIn, setSigningIn] = useState<string | null>(null)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState<string>("")
-  const [scrollProgress, setScrollProgress] = useState(0)
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("");
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const update = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight
-      setScrollProgress(max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0)
-    }
-    update()
-    window.addEventListener("scroll", update, { passive: true })
-    window.addEventListener("resize", update)
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
     return () => {
-      window.removeEventListener("scroll", update)
-      window.removeEventListener("resize", update)
-    }
-  }, [])
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
 
   useEffect(() => {
-    const ids = ["protocol", "install", "burn", "verticals", "tiers", "event-token", "credits"]
+    const ids = [
+      "protocol",
+      "journey",
+      "consent",
+      "install",
+      "burn",
+      "verticals",
+      "tiers",
+      "event-token",
+      "credits",
+    ];
     const sections = ids
       .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null)
+      .filter((el): el is HTMLElement => el !== null);
 
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
           .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
-        if (visible[0]) setActiveSection(visible[0].target.id)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActiveSection(visible[0].target.id);
       },
       { rootMargin: "-40% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] },
-    )
+    );
 
-    sections.forEach((s) => observer.observe(s))
-    return () => observer.disconnect()
-  }, [])
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
 
-  const navActive = (id: string) => (activeSection === id ? "rsp-nav-active" : undefined)
+  const navActive = (id: string) => (activeSection === id ? "rsp-nav-active" : undefined);
 
   const sectionLabels: Record<string, string> = {
     protocol: "Protocol",
+    journey: "Journey",
+    consent: "Consent",
     install: "Install",
     burn: "Burn Clause",
     verticals: "Verticals",
     tiers: "NFT Tiers",
     "event-token": "Event Token",
     credits: "Credits",
-  }
-  const currentSectionLabel = sectionLabels[activeSection] ?? "Top"
-
-  async function startCheckout(tier: string) {
-    setCheckoutError(null)
-    setLoadingTier(tier)
-    try {
-      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
-        body: {
-          tier,
-          successUrl: `${window.location.origin}/rsp?purchase=success`,
-          cancelUrl: `${window.location.origin}/rsp?purchase=cancelled`,
-        },
-      })
-      if (error || !data?.url) {
-        setCheckoutError('Could not start checkout. Please try again.')
-        setLoadingTier(null)
-        return
-      }
-      window.location.href = data.url
-    } catch {
-      setCheckoutError('Could not start checkout. Please try again.')
-      setLoadingTier(null)
-    }
-  }
-
-  // Resume a pending purchase after the user signs in and returns to /rsp
-  useEffect(() => {
-    if (loading || !user) return
-    const pending = sessionStorage.getItem('pending_rsp_tier')
-    if (pending) {
-      sessionStorage.removeItem('pending_rsp_tier')
-      setShowSignIn(false)
-      void startCheckout(pending)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, loading])
-
-  async function handleBuy(tier: string) {
-    setCheckoutError(null)
-    if (!user) {
-      // Remember the tier so we can resume after sign-in, then show inline panel
-      sessionStorage.setItem('pending_rsp_tier', tier)
-      setShowSignIn(true)
-      return
-    }
-    await startCheckout(tier)
-  }
-
-  async function handleSignIn(provider: 'google' | 'apple') {
-    setSigningIn(provider)
-    try {
-      const result = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: window.location.origin + '/rsp',
-      })
-      if (result.error) {
-        setCheckoutError('Sign-in failed. Please try again.')
-        setSigningIn(null)
-        return
-      }
-      // On success the page redirects; the useEffect resumes checkout on return.
-    } catch {
-      setCheckoutError('Sign-in failed. Please try again.')
-      setSigningIn(null)
-    }
-  }
-
-  async function handleCheckBalance() {
-    setBalanceError(null)
-    if (!user) {
-      setShowSignIn(true)
-      return
-    }
-    setBalanceLoading(true)
-    try {
-      const { data, error } = await supabase.functions.invoke('get-balance')
-      if (error || !data) {
-        setBalanceError('Could not load your balance. Please try again.')
-        setBalanceLoading(false)
-        return
-      }
-      setBalance(data.balance ?? 0)
-    } catch {
-      setBalanceError('Could not load your balance. Please try again.')
-    } finally {
-      setBalanceLoading(false)
-    }
-  }
+  };
+  const currentSectionLabel = sectionLabels[activeSection] ?? "Top";
 
   return (
     <div className="rsp-root">
@@ -944,15 +889,53 @@ function RSPPage() {
             </span>
           </Link>
           <ul className="rsp-nav-links">
-            <li><a href="#protocol" className={navActive("protocol")}>Protocol</a></li>
-            <li><a href="#burn" className={navActive("burn")}>Burn Clause</a></li>
-            <li><a href="#verticals" className={navActive("verticals")}>Verticals</a></li>
-            <li><a href="#tiers" className={navActive("tiers")}>NFT Tiers</a></li>
-            <li><a href="#event-token" className={navActive("event-token")}>Event Token</a></li>
-            <li><a href="#credits" className={navActive("credits")}>Credits</a></li>
-            <li><a href={whitepaperAsset.url} download="rsp-whitepaper.pdf">White Paper</a></li>
+            <li>
+              <a href="#protocol" className={navActive("protocol")}>
+                Protocol
+              </a>
+            </li>
+            <li>
+              <a href="#journey" className={navActive("journey")}>
+                Journey
+              </a>
+            </li>
+            <li>
+              <a href="#consent" className={navActive("consent")}>
+                Consent
+              </a>
+            </li>
+            <li>
+              <a href="#burn" className={navActive("burn")}>
+                Burn Clause
+              </a>
+            </li>
+            <li>
+              <a href="#verticals" className={navActive("verticals")}>
+                Verticals
+              </a>
+            </li>
+            <li>
+              <a href="#tiers" className={navActive("tiers")}>
+                NFT Tiers
+              </a>
+            </li>
+            <li>
+              <a href="#event-token" className={navActive("event-token")}>
+                Event Token
+              </a>
+            </li>
+            <li>
+              <a href="#credits" className={navActive("credits")}>
+                Credits
+              </a>
+            </li>
+            <li>
+              <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf">
+                White Paper
+              </a>
+            </li>
           </ul>
-          
+
           <button
             type="button"
             className="rsp-nav-burger"
@@ -960,31 +943,71 @@ function RSPPage() {
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((o) => !o)}
           >
-            <span className={`rsp-burger-bar${menuOpen ? ' open-1' : ''}`} />
-            <span className={`rsp-burger-bar${menuOpen ? ' open-2' : ''}`} />
-            <span className={`rsp-burger-bar${menuOpen ? ' open-3' : ''}`} />
+            <span className={`rsp-burger-bar${menuOpen ? " open-1" : ""}`} />
+            <span className={`rsp-burger-bar${menuOpen ? " open-2" : ""}`} />
+            <span className={`rsp-burger-bar${menuOpen ? " open-3" : ""}`} />
           </button>
         </div>
         {menuOpen && (
           <div className="rsp-nav-mobile">
-            <a href="#protocol" className={navActive("protocol")} onClick={() => setMenuOpen(false)}>Protocol</a>
-            <a href="#burn" className={navActive("burn")} onClick={() => setMenuOpen(false)}>Burn Clause</a>
-            <a href="#verticals" className={navActive("verticals")} onClick={() => setMenuOpen(false)}>Verticals</a>
-            <a href="#tiers" className={navActive("tiers")} onClick={() => setMenuOpen(false)}>NFT Tiers</a>
-            <a href="#event-token" className={navActive("event-token")} onClick={() => setMenuOpen(false)}>Event Token</a>
-            <a href="#credits" className={navActive("credits")} onClick={() => setMenuOpen(false)}>Credits</a>
-            <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf" onClick={() => setMenuOpen(false)}>White Paper</a>
+            <a
+              href="#protocol"
+              className={navActive("protocol")}
+              onClick={() => setMenuOpen(false)}
+            >
+              Protocol
+            </a>
+            <a href="#journey" className={navActive("journey")} onClick={() => setMenuOpen(false)}>
+              Journey
+            </a>
+            <a href="#consent" className={navActive("consent")} onClick={() => setMenuOpen(false)}>
+              Consent
+            </a>
+            <a href="#burn" className={navActive("burn")} onClick={() => setMenuOpen(false)}>
+              Burn Clause
+            </a>
+            <a
+              href="#verticals"
+              className={navActive("verticals")}
+              onClick={() => setMenuOpen(false)}
+            >
+              Verticals
+            </a>
+            <a href="#tiers" className={navActive("tiers")} onClick={() => setMenuOpen(false)}>
+              NFT Tiers
+            </a>
+            <a
+              href="#event-token"
+              className={navActive("event-token")}
+              onClick={() => setMenuOpen(false)}
+            >
+              Event Token
+            </a>
+            <a href="#credits" className={navActive("credits")} onClick={() => setMenuOpen(false)}>
+              Credits
+            </a>
+            <a
+              href={whitepaperAsset.url}
+              download="rsp-whitepaper.pdf"
+              onClick={() => setMenuOpen(false)}
+            >
+              White Paper
+            </a>
           </div>
         )}
       </nav>
 
       {/* HERO */}
       <section className="rsp-hero">
-        <div className="rsp-hero-backdrop" style={{ backgroundImage: `url(${rspLogo.url})` }} aria-hidden="true" />
+        <div
+          className="rsp-hero-backdrop"
+          style={{ backgroundImage: `url(${rspLogo.url})` }}
+          aria-hidden="true"
+        />
         <div>
           <div className="rsp-hero-eyebrow">
             <span className="rsp-hero-eyebrow-dot" />
-            Respectful Synchronised Protocol
+            Respectful Synchronisation Protocol
           </div>
           <h1 className="rsp-h1">
             Synchronisation
@@ -992,15 +1015,26 @@ function RSPPage() {
             <em>without coercion.</em>
           </h1>
           <p className="rsp-hero-sub">
-            RSP is a privacy-first coordination framework built into the core of{" "}
-            <a href="/" className="text-red-500 underline hover:no-underline">Love Key Link</a> our practical real life example application.
-            Translate behaviour into weighted signals. Synchronise the state. Burn the
-            identifiable source.
+            RSP is the invisible coordination layer beneath Love Key Link, LoveKey Hub and the Love
+            Key Help Network. It synchronises consent, permissions, identity context, roles,
+            presence and support signals without making families feel like they are entering a
+            protocol.
           </p>
           <div className="rsp-hero-actions">
-            <a href="#protocol" className="rsp-btn-primary">Explore the protocol →</a>
-            <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf" className="rsp-btn-outline">Download white paper ↓</a>
-            <a href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5" target="_blank" rel="noopener noreferrer" className="rsp-btn-outline">Genesis NFT →</a>
+            <a href="#protocol" className="rsp-btn-primary">
+              Explore the protocol →
+            </a>
+            <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf" className="rsp-btn-outline">
+              Download white paper ↓
+            </a>
+            <a
+              href="https://etherscan.io/token/0xA1755730C6F66dbe3de29e24F4Db9F448ef3FDD5"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rsp-btn-outline"
+            >
+              Genesis NFT →
+            </a>
           </div>
         </div>
         <div className="rsp-hero-visual">
@@ -1041,7 +1075,7 @@ function RSPPage() {
       {/* TAGLINE STRIP */}
       <div className="rsp-tagline-strip">
         <p>
-          Translate behaviour. Synchronise the signal.{' '}
+          Translate behaviour. Synchronise the signal.{" "}
           <strong>Burn the identifiable source.</strong>
         </p>
       </div>
@@ -1055,42 +1089,49 @@ function RSPPage() {
               NFT Tier 6 · Reciprocal Status Protocol
             </span>
             <h2>
-              The Event Token.<br />
+              The Event Token.
+              <br />
               <em>Proof without exposure.</em>
             </h2>
             <p>
-              The Event Token is the cryptographic receipt of the Reciprocal Status Protocol.
-              Every time two nodes genuinely coordinate, a token is minted — and the
-              identifiable source data is burned before the token ever exists. It records
-              that reciprocity happened, never who, where, or how.
+              The Event Token is the cryptographic receipt of the Reciprocal Status Protocol. Every
+              time two nodes genuinely coordinate, a token is minted — and the identifiable source
+              data is burned before the token ever exists. It records that reciprocity happened,
+              never who, where, or how.
             </p>
             <p>
-              Within the RSP ecosystem it is the unit of trust: an unbounded, auto-minted
-              proof that turns private, consent-based coordination into verifiable status —
-              without surveillance, scores, or stored identity.
+              Within the RSP ecosystem it is the unit of trust: an unbounded, auto-minted proof that
+              turns private, consent-based coordination into verifiable status — without
+              surveillance, scores, or stored identity.
             </p>
             <div className="rsp-subhero-actions">
-              <a href="#event-token" className="rsp-subhero-btn">Explore the Event Token →</a>
+              <a href="#event-token" className="rsp-subhero-btn">
+                Explore the Event Token →
+              </a>
             </div>
           </div>
           <ul className="rsp-subhero-roles">
             <li className="rsp-subhero-role">
               <div className="rsp-subhero-role-title">Proof of reciprocity</div>
-              <div className="rsp-subhero-role-desc">One token per validated coordination event between RSP nodes.</div>
+              <div className="rsp-subhero-role-desc">
+                One token per validated coordination event between RSP nodes.
+              </div>
             </li>
             <li className="rsp-subhero-role">
               <div className="rsp-subhero-role-title">Source burned at mint</div>
-              <div className="rsp-subhero-role-desc">Identifiable data is destroyed; the burn receipt is embedded in the token.</div>
+              <div className="rsp-subhero-role-desc">
+                Identifiable data is destroyed; the burn receipt is embedded in the token.
+              </div>
             </li>
             <li className="rsp-subhero-role">
               <div className="rsp-subhero-role-title">Unbounded supply</div>
-              <div className="rsp-subhero-role-desc">Auto-minted as the network coordinates — status that scales with trust.</div>
+              <div className="rsp-subhero-role-desc">
+                Auto-minted as the network coordinates — status that scales with trust.
+              </div>
             </li>
           </ul>
         </div>
       </section>
-
-
 
       {/* PROTOCOL / PRINCIPLES */}
       <section className="rsp-section" id="protocol">
@@ -1126,6 +1167,110 @@ function RSPPage() {
         </div>
       </section>
 
+      {/* USER JOURNEY INTEGRATION */}
+      <section className="rsp-section" id="journey">
+        <div className="rsp-section-header">
+          <div className="rsp-eyebrow">LoveKey Link + Help Network</div>
+          <h2 className="rsp-h2">RSP improves the journey while staying invisible.</h2>
+          <p className="rsp-lead">
+            The public experience starts with a simple promise: are my people okay? RSP sits
+            underneath to make each handoff safer, more contextual and more respectful.
+          </p>
+        </div>
+        <div className="rsp-principle-grid">
+          {[
+            {
+              title: "Discover",
+              body: "LoveKey Link stays warm and human. RSP remains behind the scenes as trust and synchronisation architecture.",
+            },
+            {
+              title: "Onboard",
+              body: "One profile is created with privacy-first defaults, permission preparation and future hub bridging.",
+            },
+            {
+              title: "Create or join a hub",
+              body: "Membership, contextual roles and hub boundaries prevent context collapse across family, work, community and recovery spaces.",
+            },
+            {
+              title: "Share presence",
+              body: "Gentle states such as available, busy, quiet, all good or needs support sync only to permitted people.",
+            },
+            {
+              title: "Request support",
+              body: "RSP decides which trusted contacts should be notified, applies escalation rules and records a respectful support event.",
+            },
+            {
+              title: "Connect to Help Network",
+              body: "When private support is not enough, routing considers category, urgency, consent and trusted helper availability.",
+            },
+          ].map((item) => (
+            <div className="rsp-principle-card" key={item.title}>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CONSENT MODULES */}
+      <section className="rsp-section" id="consent">
+        <div className="rsp-section-header">
+          <div className="rsp-eyebrow">Functional modules</div>
+          <h2 className="rsp-h2">Consent, permissions and support routing.</h2>
+          <p className="rsp-lead">
+            RSP modules map directly to the LoveKey data model and Help Network routing rules, while
+            keeping protocol concepts out of the family UI.
+          </p>
+        </div>
+        <div className="rsp-tier-grid">
+          {[
+            {
+              n: "01",
+              name: "Identity context",
+              desc: "One core profile with hub memberships and contextual roles such as Dad, Coach or Trusted Contact.",
+              supply: "users · profiles · hub_memberships",
+            },
+            {
+              n: "02",
+              name: "Permission defaults",
+              desc: "Presence, location, calendar, emotional status, recovery access and admin rights are scoped per hub.",
+              supply: "hub_roles · hub_permissions",
+            },
+            {
+              n: "03",
+              name: "Presence sync",
+              desc: "Sensitive data is converted into respectful signals before synchronisation.",
+              supply: "presence_states · work_contexts",
+            },
+            {
+              n: "04",
+              name: "Support routing",
+              desc: "Support requests route to the right circle without broadcasting private distress to the wrong people.",
+              supply: "support_requests · trusted_contacts",
+            },
+            {
+              n: "05",
+              name: "Consent ledger",
+              desc: "Permission changes and support events become auditable without becoming surveillance dashboards.",
+              supply: "consent_events · permission_audits",
+            },
+            {
+              n: "06",
+              name: "Participation status",
+              desc: "Helpful participation can be recognised for access or governance without turning people into scores.",
+              supply: "participation_signals · trust_statuses",
+            },
+          ].map((t) => (
+            <div className="rsp-tier-card" key={t.name}>
+              <div className="rsp-tier-num">{t.n}</div>
+              <div className="rsp-tier-name">{t.name}</div>
+              <div className="rsp-tier-desc">{t.desc}</div>
+              <div className="rsp-tier-supply">{t.supply}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* INSTALL */}
       <section className="rsp-section" id="install">
         <div className="rsp-section-header">
@@ -1133,20 +1278,56 @@ function RSPPage() {
           <h2 className="rsp-h2">Get started</h2>
           <p className="rsp-lead">Minimal install and links to packages and repository.</p>
         </div>
-        <div style={{ maxWidth: 820, margin: '0 auto', textAlign: 'left' }}>
-          <pre style={{ background: 'var(--rsp-surface)', border: '1px solid var(--rsp-border)', padding: 14, borderRadius: 8, overflowX: 'auto', marginBottom: 12 }}>
-{`npm install @rsp-protocol/core
+        <div style={{ maxWidth: 820, margin: "0 auto", textAlign: "left" }}>
+          <pre
+            style={{
+              background: "var(--rsp-surface)",
+              border: "1px solid var(--rsp-border)",
+              padding: 14,
+              borderRadius: 8,
+              overflowX: "auto",
+              marginBottom: 12,
+            }}
+          >
+            {`npm install @rsp-protocol/core
 npm install @rsp-protocol/react`}
           </pre>
 
-          <p style={{ marginTop: 0, fontSize: '0.92rem', color: 'var(--rsp-text-muted)' }}>
-            Packages: <a href="https://www.npmjs.com/package/@rsp-protocol/core" target="_blank" rel="noopener noreferrer">@rsp-protocol/core</a>,{' '}
-            <a href="https://www.npmjs.com/package/@rsp-protocol/react" target="_blank" rel="noopener noreferrer">@rsp-protocol/react</a>. Source: {' '}
-            <a href="https://github.com/rsp" target="_blank" rel="noopener noreferrer">https://github.com/rsp</a>.
+          <p style={{ marginTop: 0, fontSize: "0.92rem", color: "var(--rsp-text-muted)" }}>
+            Packages:{" "}
+            <a
+              href="https://www.npmjs.com/package/@rsp-protocol/core"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              @rsp-protocol/core
+            </a>
+            ,{" "}
+            <a
+              href="https://www.npmjs.com/package/@rsp-protocol/react"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              @rsp-protocol/react
+            </a>
+            . Source:{" "}
+            <a href="https://github.com/rsp" target="_blank" rel="noopener noreferrer">
+              https://github.com/rsp
+            </a>
+            .
           </p>
 
-          <pre style={{ background: 'var(--rsp-surface)', border: '1px solid var(--rsp-border)', padding: 14, borderRadius: 8, overflowX: 'auto', marginTop: 12 }}>
-{`import { createConsent, hasConsent, translate, aggregate, 
+          <pre
+            style={{
+              background: "var(--rsp-surface)",
+              border: "1px solid var(--rsp-border)",
+              padding: 14,
+              borderRadius: 8,
+              overflowX: "auto",
+              marginTop: 12,
+            }}
+          >
+            {`import { createConsent, hasConsent, translate, aggregate,
          toNodeSignal, markBurned, generateBurnReceipt } from '@rsp-protocol/core'`}
           </pre>
         </div>
@@ -1158,8 +1339,7 @@ npm install @rsp-protocol/react`}
           <div>
             <div className="rsp-burn-label">Key Clause — v1.6</div>
             <div className="rsp-burn-quote">
-              When behaviour is translated into a signal,{' '}
-              <em>burn the identifiable source.</em>
+              When behaviour is translated into a signal, <em>burn the identifiable source.</em>
             </div>
             <p className="rsp-burn-body">
               When user behaviour is translated, synchronised, aggregated, or converted into a
@@ -1171,9 +1351,21 @@ npm install @rsp-protocol/react`}
           </div>
           <div>
             {[
-              { n: '1', title: 'Translate behaviour', desc: 'Raw events converted to weighted, low-resolution signals' },
-              { n: '2', title: 'Synchronise the signal', desc: 'Aggregate to a node state — resonant, friction, cooling, etc.' },
-              { n: '3', title: 'Burn the identifiable source', desc: 'Delete, anonymise, cryptographically erase, or irreversibly decouple' },
+              {
+                n: "1",
+                title: "Translate behaviour",
+                desc: "Raw events converted to weighted, low-resolution signals",
+              },
+              {
+                n: "2",
+                title: "Synchronise the signal",
+                desc: "Aggregate to a node state — resonant, friction, cooling, etc.",
+              },
+              {
+                n: "3",
+                title: "Burn the identifiable source",
+                desc: "Delete, anonymise, cryptographically erase, or irreversibly decouple",
+              },
             ].map((s) => (
               <div className="rsp-burn-step" key={s.n}>
                 <div className="rsp-burn-step-num">{s.n}</div>
@@ -1193,25 +1385,25 @@ npm install @rsp-protocol/react`}
           <div className="rsp-eyebrow">Integration verticals</div>
           <h2 className="rsp-h2">Where RSP applies</h2>
           <p className="rsp-lead">
-            RSP is designed for any system where group coordination intersects with privacy —
-            human, AI, or hybrid.
+            RSP is designed for any system where group coordination intersects with privacy — human,
+            AI, or hybrid.
           </p>
         </div>
         <div className="rsp-vertical-grid">
           {[
-            'AI Model Congregations & Multi-Agent Systems',
-            'LMS & Online Education',
-            'Product Analytics & UX',
-            'Customer Support & AI Service Operations',
-            'Workplace Collaboration',
-            'Healthcare & Care Coordination',
-            'Governance, DAOs & Civic Coordination',
-            'Cybersecurity & Incident Response',
-            'Creator Platforms & Communities',
-            'E-commerce & Marketplaces',
+            "AI Model Congregations & Multi-Agent Systems",
+            "LMS & Online Education",
+            "Product Analytics & UX",
+            "Customer Support & AI Service Operations",
+            "Workplace Collaboration",
+            "Healthcare & Care Coordination",
+            "Governance, DAOs & Civic Coordination",
+            "Cybersecurity & Incident Response",
+            "Creator Platforms & Communities",
+            "E-commerce & Marketplaces",
           ].map((name, i) => (
             <div className="rsp-vertical-card" key={name}>
-              <div className="rsp-vc-tag">{String(i + 1).padStart(2, '0')}</div>
+              <div className="rsp-vc-tag">{String(i + 1).padStart(2, "0")}</div>
               <div className="rsp-vc-name">{name}</div>
             </div>
           ))}
@@ -1230,22 +1422,36 @@ npm install @rsp-protocol/react`}
             </p>
           </div>
           <div className="rsp-signal-states">
-            {['resonant','active','aware','dormant','friction','overload','drop_off',
-              'support_needed','cooling','converting','mastery',
-              'coordination_degraded','coordination_healthy'].map((s) => (
-              <span className="rsp-state-pill" key={s}>{s}</span>
+            {[
+              "resonant",
+              "active",
+              "aware",
+              "dormant",
+              "friction",
+              "overload",
+              "drop_off",
+              "support_needed",
+              "cooling",
+              "converting",
+              "mastery",
+              "coordination_degraded",
+              "coordination_healthy",
+            ].map((s) => (
+              <span className="rsp-state-pill" key={s}>
+                {s}
+              </span>
             ))}
           </div>
           <div className="rsp-signal-weights">
             {[
-              { name: 'Completion / conversion', pct: 100, val: 25 },
-              { name: 'Return visit',            pct: 80,  val: 20 },
-              { name: 'Safety escalation',       pct: 80,  val: 20 },
-              { name: 'Resource download',       pct: 60,  val: 15 },
-              { name: 'Human correction',        pct: 48,  val: 12 },
-              { name: 'Form interaction',        pct: 48,  val: 12 },
-              { name: 'Active minute',           pct: 40,  val: 10 },
-              { name: 'Agent handoff',           pct: 40,  val: 10 },
+              { name: "Completion / conversion", pct: 100, val: 25 },
+              { name: "Return visit", pct: 80, val: 20 },
+              { name: "Safety escalation", pct: 80, val: 20 },
+              { name: "Resource download", pct: 60, val: 15 },
+              { name: "Human correction", pct: 48, val: 12 },
+              { name: "Form interaction", pct: 48, val: 12 },
+              { name: "Active minute", pct: 40, val: 10 },
+              { name: "Agent handoff", pct: 40, val: 10 },
             ].map((w) => (
               <div className="rsp-weight-row" key={w.name}>
                 <span className="rsp-weight-name">{w.name}</span>
@@ -1265,21 +1471,63 @@ npm install @rsp-protocol/react`}
           <div className="rsp-eyebrow">NFT tier structure</div>
           <h2 className="rsp-h2">Provenance, access & certification</h2>
           <p className="rsp-lead">
-            RSP NFTs are utility tokens — provenance, access, participation, and certification.
-            Not investment products.
+            RSP NFTs are utility tokens — provenance, access, participation, and certification. Not
+            investment products.
           </p>
         </div>
         <div className="rsp-tier-grid">
           {[
-            { n: '0', name: 'Genesis NFT',        desc: 'Origin, provenance, and symbolic protocol anchor.',          supply: 'Supply: 1',                    genesis: true  },
-            { n: '1', name: 'Founder Pass',        desc: 'Early supporter access, private updates, feedback windows.', supply: 'Supply: 25–100 · 100 credits',  genesis: false },
-            { n: '2', name: 'Builder Pass',        desc: 'SDK access, templates, checklists, priority review.',        supply: 'Supply: 100–500 · 250 credits', genesis: false },
-            { n: '3', name: 'Certification Badge', desc: 'Verifiable credential for RSP-aligned people or systems.',   supply: 'Issued after review',           genesis: false },
-            { n: '4', name: 'Partner Licence',     desc: 'Commercial partner and brand-use licence marker.',           supply: 'Approval-based',                genesis: false },
-            { n: '5', name: 'Audit Token',         desc: 'Proof of completed review, workshop, or assessment.',        supply: 'Service-based issuance',        genesis: false },
-            { n: '6', name: 'Event Token',         desc: 'Signal proof that coordination happened. Source identity burned at mint.', supply: 'Unbounded · auto-minted',       genesis: false },
+            {
+              n: "0",
+              name: "Genesis NFT",
+              desc: "Origin, provenance, and symbolic protocol anchor.",
+              supply: "Supply: 1",
+              genesis: true,
+            },
+            {
+              n: "1",
+              name: "Founder Pass",
+              desc: "Early supporter access, private updates, feedback windows.",
+              supply: "Supply: 25–100 · 100 credits",
+              genesis: false,
+            },
+            {
+              n: "2",
+              name: "Builder Pass",
+              desc: "SDK access, templates, checklists, priority review.",
+              supply: "Supply: 100–500 · 250 credits",
+              genesis: false,
+            },
+            {
+              n: "3",
+              name: "Certification Badge",
+              desc: "Verifiable credential for RSP-aligned people or systems.",
+              supply: "Issued after review",
+              genesis: false,
+            },
+            {
+              n: "4",
+              name: "Partner Licence",
+              desc: "Commercial partner and brand-use licence marker.",
+              supply: "Approval-based",
+              genesis: false,
+            },
+            {
+              n: "5",
+              name: "Audit Token",
+              desc: "Proof of completed review, workshop, or assessment.",
+              supply: "Service-based issuance",
+              genesis: false,
+            },
+            {
+              n: "6",
+              name: "Event Token",
+              desc: "Signal proof that coordination happened. Source identity burned at mint.",
+              supply: "Unbounded · auto-minted",
+              genesis: false,
+            },
           ].map((t) => (
-            <div className={`rsp-tier-card${t.genesis ? ' genesis' : ''}`} key={t.n}>
+            <div className={`rsp-tier-card${t.genesis ? " genesis" : ""}`} key={t.n}>
               <div className="rsp-tier-num">{t.n}</div>
               <div className="rsp-tier-name">{t.name}</div>
               <div className="rsp-tier-desc">{t.desc}</div>
@@ -1297,7 +1545,7 @@ npm install @rsp-protocol/react`}
             <h2 className="rsp-h2">Proof that coordination happened.</h2>
             <p className="rsp-lead">
               The <span className="rsp-fullname">Reciprocal&nbsp;Status&nbsp;Protocol</span> is the
-              native credential of the{' '}
+              native credential of the{" "}
               <span className="rsp-fullname-abbr">Respectful Synchronisation Protocol (RSP)</span> —
               a cryptographic record that a validated coordination event occurred, with source
               identity destroyed before the token exists.
@@ -1307,41 +1555,81 @@ npm install @rsp-protocol/react`}
           <div className="rsp-event-grid">
             <div>
               <div className="rsp-event-quote">
-                The token proves the event.<br />
+                The token proves the event.
+                <br />
                 <em>It cannot prove who caused it.</em>
               </div>
               <p className="rsp-event-body">
                 Every validated coordination event across RSP nodes produces one Event Token. It
-                carries the signal — event type, weight, node state, a blurred timestamp — but
-                the source identity is cryptographically destroyed at or before mint. The burn
-                receipt hash embedded in the token proves that destruction happened. You can
-                verify the coordination. You cannot recover the person.
+                carries the signal — event type, weight, node state, a blurred timestamp — but the
+                source identity is cryptographically destroyed at or before mint. The burn receipt
+                hash embedded in the token proves that destruction happened. You can verify the
+                coordination. You cannot recover the person.
               </p>
               <p className="rsp-event-body">
-                Minting is automatic. Once a validation delay clears and the event commits to
-                node state, the token is issued. Supply is unbounded: one token per validated
-                event, across every node, forever.
+                Minting is automatic. Once a validation delay clears and the event commits to node
+                state, the token is issued. Supply is unbounded: one token per validated event,
+                across every node, forever.
               </p>
               <div className="rsp-event-receipt">
                 <div className="rsp-event-receipt-label">Example token payload</div>
-                <div><span className="rsp-event-receipt-key">event_type    </span><span className="rsp-event-receipt-val">coordination.resonant</span></div>
-                <div><span className="rsp-event-receipt-key">signal_weight </span><span className="rsp-event-receipt-val">20</span></div>
-                <div><span className="rsp-event-receipt-key">node_state    </span><span className="rsp-event-receipt-val">resonant</span></div>
-                <div><span className="rsp-event-receipt-key">timestamp     </span><span className="rsp-event-receipt-val">2026-06-16T14:00Z <span style={{ color: 'var(--rsp-text-soft)', fontSize: '.7rem' }}>(hour-level blur)</span></span></div>
-                <div><span className="rsp-event-receipt-key">burn_receipt  </span><span className="rsp-event-receipt-burned">0xd4e8…f1a2</span></div>
-                <div><span className="rsp-event-receipt-key">source_id     </span><span className="rsp-event-receipt-burned">∅ destroyed</span></div>
+                <div>
+                  <span className="rsp-event-receipt-key">event_type </span>
+                  <span className="rsp-event-receipt-val">coordination.resonant</span>
+                </div>
+                <div>
+                  <span className="rsp-event-receipt-key">signal_weight </span>
+                  <span className="rsp-event-receipt-val">20</span>
+                </div>
+                <div>
+                  <span className="rsp-event-receipt-key">node_state </span>
+                  <span className="rsp-event-receipt-val">resonant</span>
+                </div>
+                <div>
+                  <span className="rsp-event-receipt-key">timestamp </span>
+                  <span className="rsp-event-receipt-val">
+                    2026-06-16T14:00Z{" "}
+                    <span style={{ color: "var(--rsp-text-soft)", fontSize: ".7rem" }}>
+                      (hour-level blur)
+                    </span>
+                  </span>
+                </div>
+                <div>
+                  <span className="rsp-event-receipt-key">burn_receipt </span>
+                  <span className="rsp-event-receipt-burned">0xd4e8…f1a2</span>
+                </div>
+                <div>
+                  <span className="rsp-event-receipt-key">source_id </span>
+                  <span className="rsp-event-receipt-burned">∅ destroyed</span>
+                </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
               <div className="rsp-event-carries">
                 <div className="rsp-event-carries-header">What the token carries</div>
                 {[
-                  { yes: true, label: 'Event type',          sub: 'e.g. coordination.resonant, safety.escalation' },
-                  { yes: true, label: 'Signal weight',       sub: 'Normalised 0–25 contribution value' },
-                  { yes: true, label: 'Node state at event', sub: 'resonant, friction, cooling, etc.' },
-                  { yes: true, label: 'Blurred timestamp',   sub: 'Hour-level resolution only — not exact time' },
-                  { yes: true, label: 'Burn receipt hash',   sub: 'Proof that source identity was destroyed' },
+                  {
+                    yes: true,
+                    label: "Event type",
+                    sub: "e.g. coordination.resonant, safety.escalation",
+                  },
+                  { yes: true, label: "Signal weight", sub: "Normalised 0–25 contribution value" },
+                  {
+                    yes: true,
+                    label: "Node state at event",
+                    sub: "resonant, friction, cooling, etc.",
+                  },
+                  {
+                    yes: true,
+                    label: "Blurred timestamp",
+                    sub: "Hour-level resolution only — not exact time",
+                  },
+                  {
+                    yes: true,
+                    label: "Burn receipt hash",
+                    sub: "Proof that source identity was destroyed",
+                  },
                 ].map((r) => (
                   <div className="rsp-event-row" key={r.label}>
                     <span className="rsp-event-row-yes">✓</span>
@@ -1351,12 +1639,17 @@ npm install @rsp-protocol/react`}
                     </div>
                   </div>
                 ))}
-                <div className="rsp-event-carries-header" style={{ borderTop: '1px solid var(--rsp-border)' }}>What it never carries</div>
+                <div
+                  className="rsp-event-carries-header"
+                  style={{ borderTop: "1px solid var(--rsp-border)" }}
+                >
+                  What it never carries
+                </div>
                 {[
-                  { label: 'Identity',        sub: 'No user ID, account reference, or profile link' },
-                  { label: 'Raw location',    sub: 'No coordinates, IP address, or device signal' },
-                  { label: 'Message content', sub: 'No text, media, or payload from the event' },
-                  { label: 'Exact timestamp', sub: 'Sub-hour precision is discarded before mint' },
+                  { label: "Identity", sub: "No user ID, account reference, or profile link" },
+                  { label: "Raw location", sub: "No coordinates, IP address, or device signal" },
+                  { label: "Message content", sub: "No text, media, or payload from the event" },
+                  { label: "Exact timestamp", sub: "Sub-hour precision is discarded before mint" },
                 ].map((r) => (
                   <div className="rsp-event-row" key={r.label}>
                     <span className="rsp-event-row-no">✗</span>
@@ -1370,10 +1663,26 @@ npm install @rsp-protocol/react`}
 
               <div className="rsp-event-flow">
                 {[
-                  { icon: <IconEye />,    title: 'Event validated',           desc: 'A coordination event clears the validation delay and commits to node state.' },
-                  { icon: <IconFlame />,  title: 'Source identity burned',    desc: 'Identifiable data is cryptographically destroyed. A burn receipt hash is generated.' },
-                  { icon: <IconLayers />, title: 'Token auto-minted',         desc: 'The Event Token is issued with signal data and burn receipt. Supply unbounded.' },
-                  { icon: <IconShield />, title: 'Verifiable, not traceable', desc: 'Anyone can verify the coordination happened. No one can recover who caused it.' },
+                  {
+                    icon: <IconEye />,
+                    title: "Event validated",
+                    desc: "A coordination event clears the validation delay and commits to node state.",
+                  },
+                  {
+                    icon: <IconFlame />,
+                    title: "Source identity burned",
+                    desc: "Identifiable data is cryptographically destroyed. A burn receipt hash is generated.",
+                  },
+                  {
+                    icon: <IconLayers />,
+                    title: "Token auto-minted",
+                    desc: "The Event Token is issued with signal data and burn receipt. Supply unbounded.",
+                  },
+                  {
+                    icon: <IconShield />,
+                    title: "Verifiable, not traceable",
+                    desc: "Anyone can verify the coordination happened. No one can recover who caused it.",
+                  },
                 ].map((s) => (
                   <div className="rsp-event-flow-step" key={s.title}>
                     <div className="rsp-event-flow-icon">{s.icon}</div>
@@ -1393,141 +1702,59 @@ npm install @rsp-protocol/react`}
       <section className="rsp-signal-section" id="credits">
         <div className="rsp-signal-inner">
           <div className="rsp-section-header">
-            <div className="rsp-eyebrow">RSP Coordination Credits</div>
-            <h2 className="rsp-h2">Prepaid service credits</h2>
+            <div className="rsp-eyebrow">Service-credit specification</div>
+            <h2 className="rsp-h2">Utility-first credits, documented only.</h2>
             <p className="rsp-lead">
-              1 RSP Credit = £1 of redeemable RSP service value. Credits are not cash,
-              not fiat-redeemable, not investments.
+              RSP credits are described here as service accounting primitives for certification,
+              review, partner onboarding and governance work. This page is technical documentation,
+              not a consumer sales funnel.
             </p>
           </div>
           <div className="rsp-credits-grid">
             {[
               {
-                key: 'standard',
-                name: 'RSP Certification (standard)',
-                credits: '100 credits',
-                desc: 'A structured review of your system, product, or organisation against the RSP framework. Covers the five core principles: privacy by destruction, weighted signals, non-coercive synchronisation, consent architecture, and burn clause compliance. Results in a written assessment and recommendations.',
+                key: "standard",
+                name: "Standard RSP review",
+                credits: "100 credits",
+                desc: "Framework review against privacy by destruction, weighted signals, non-coercive synchronisation, consent architecture and burn-clause compliance.",
               },
               {
-                key: 'full',
-                name: 'RSP Certification (full + badge issuance)',
-                credits: '250 credits',
-                desc: 'Everything in the standard review, plus formal issuance of an RSP Certification Badge — a verifiable on-chain credential (NFT Tier 3) confirming RSP alignment. Suitable for products, platforms, and organisations that want to demonstrate privacy-first coordination publicly.',
+                key: "full",
+                name: "Full review + badge issuance",
+                credits: "250 credits",
+                desc: "Formal assessment with an RSP Certification Badge after review. Intended for products, platforms and organisations demonstrating RSP alignment.",
               },
               {
-                key: 'partner',
-                name: 'RSP Partner Certification',
-                credits: '1,000 credits',
-                desc: 'Full certification for organisations building on RSP at scale — covering enterprise systems, multi-agent architectures, or commercial integrations. Includes a Partner Licence marker (NFT Tier 4), co-authorship credit in the RSP registry, and ongoing alignment support as the protocol evolves.',
+                key: "partner",
+                name: "Partner certification",
+                credits: "1,000 credits",
+                desc: "Enterprise-scale review for partners building on RSP, including registry alignment and governance participation rules.",
               },
               {
-                key: 'certifier',
-                name: 'RSP Certifier Licence',
-                credits: '1,000 credits (£1,000)',
-                desc: "At 125 credits per badge issuance, the licence pays for itself after 8 certifications. A busy certifier doing one a month recovers the cost in under a year, then it's pure margin. That feels like the right balance — serious commitment, clear ROI.",
+                key: "certifier",
+                name: "Certifier licence",
+                credits: "1,000 credits",
+                desc: "Licence model for approved reviewers who issue RSP Certification Badges under documented governance rules.",
               },
             ].map((c) => (
-              <div className="rsp-credit-card" key={c.name}>
+              <div className="rsp-credit-card" key={c.key}>
                 <div className="rsp-credit-name">{c.name}</div>
                 <div className="rsp-credit-credits">{c.credits}</div>
                 <div className="rsp-credit-note">{c.desc}</div>
-                <button
-                  type="button"
-                  onClick={() => handleBuy(c.key)}
-                  disabled={loadingTier !== null}
-                  className="rsp-btn-primary"
-                  style={{ marginTop: 16, fontSize: '.8rem', padding: '8px 18px', display: 'inline-flex', cursor: loadingTier ? 'wait' : 'pointer', opacity: loadingTier && loadingTier !== c.key ? 0.6 : 1 }}
-                >
-                  {loadingTier === c.key ? 'Redirecting…' : 'Buy →'}
-                </button>
               </div>
             ))}
           </div>
-          {checkoutError && (
-            <p style={{ textAlign: 'center', fontSize: '.8rem', color: 'var(--rsp-primary)', marginTop: 16 }}>
-              {checkoutError}
-            </p>
-          )}
-
-          {showSignIn && !user && (
-            <div
-              style={{
-                maxWidth: 420,
-                margin: '24px auto 0',
-                padding: '24px',
-                borderRadius: 'var(--rsp-radius)',
-                border: '1px solid var(--rsp-border-strong)',
-                background: 'var(--rsp-surface)',
-                textAlign: 'center',
-              }}
-            >
-              <div style={{ fontWeight: 600, fontSize: '.95rem', marginBottom: 6 }}>
-                Sign in to buy credits
-              </div>
-              <p style={{ fontSize: '.8rem', color: 'var(--rsp-text-muted)', marginBottom: 16 }}>
-                Use the account you already trust. We&apos;ll bring you right back to complete your purchase.
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <button
-                  type="button"
-                  onClick={() => handleSignIn('google')}
-                  disabled={signingIn !== null}
-                  className="rsp-btn-outline"
-                  style={{ justifyContent: 'center', cursor: signingIn ? 'wait' : 'pointer' }}
-                >
-                  {signingIn === 'google' ? 'Connecting…' : 'Continue with Google'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSignIn('apple')}
-                  disabled={signingIn !== null}
-                  className="rsp-btn-outline"
-                  style={{ justifyContent: 'center', cursor: signingIn ? 'wait' : 'pointer' }}
-                >
-                  {signingIn === 'apple' ? 'Connecting…' : 'Continue with Apple'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowSignIn(false)}
-                  style={{
-                    marginTop: 4,
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--rsp-text-soft)',
-                    fontSize: '.75rem',
-                    cursor: 'pointer',
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
-          <p style={{ textAlign: 'center', fontSize: '.78rem', color: 'var(--rsp-text-muted)', marginTop: 16 }}>
-            Credits are fulfilled automatically after payment. A confirmation email is sent once your credits are active.
+          <p
+            style={{
+              textAlign: "center",
+              fontSize: ".78rem",
+              color: "var(--rsp-text-muted)",
+              marginTop: 16,
+            }}
+          >
+            Credits are not cash, not fiat-redeemable and not investment products. Any activation
+            must follow legal, financial, privacy and security review.
           </p>
-
-          <div style={{ textAlign: 'center', marginTop: 32 }}>
-            <button
-              type="button"
-              onClick={handleCheckBalance}
-              disabled={balanceLoading}
-              className="rsp-btn-outline"
-              style={{ fontSize: '.8rem', padding: '8px 18px', cursor: balanceLoading ? 'wait' : 'pointer' }}
-            >
-              {balanceLoading ? 'Checking…' : 'Check my credit balance'}
-            </button>
-            {balance !== null && !balanceError && (
-              <p style={{ fontSize: '.9rem', color: 'var(--rsp-text)', marginTop: 12 }}>
-                Your balance: <strong>{balance} credits</strong>
-              </p>
-            )}
-            {balanceError && (
-              <p style={{ fontSize: '.8rem', color: 'var(--rsp-primary)', marginTop: 12 }}>
-                {balanceError}
-              </p>
-            )}
-          </div>
         </div>
       </section>
 
@@ -1537,7 +1764,20 @@ npm install @rsp-protocol/react`}
           <h2 className="rsp-help-title">Love Key HELP Network</h2>
           <div className="rsp-help-grid">
             {helpNetwork.map((tile) => (
-              <a key={tile.title} href={tile.href} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("help_network_tile_click", { tile: tile.title, tag: tile.tag, location: "rsp_footer" })} className="rsp-help-tile">
+              <a
+                key={tile.title}
+                href={tile.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent("help_network_tile_click", {
+                    tile: tile.title,
+                    tag: tile.tag,
+                    location: "rsp_footer",
+                  })
+                }
+                className="rsp-help-tile"
+              >
                 <div className="rsp-help-head">
                   <span className="rsp-help-name">{tile.title}</span>
                   <span className="rsp-help-tag">{tile.tag}</span>
@@ -1548,18 +1788,31 @@ npm install @rsp-protocol/react`}
           </div>
         </div>
         <div className="rsp-footer-inner">
-          <img src={lovekeyMark} alt="Love Key Link" style={{ width: 96, height: 96, objectFit: 'contain' }} />
+          <img
+            src={lovekeyMark}
+            alt="Love Key Link"
+            style={{ width: 96, height: 96, objectFit: "contain" }}
+          />
           <div className="rsp-footer-left">
-            <strong>Love Key Link / RSP</strong> · Respectful Synchronised Protocol v1.6 ·
-            Part of the <a href="https://lovekeyring.org" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--rsp-primary)' }}>Love Key HELP Network</a> ·
-            Copyright © 2026 Jack Oswald. All rights reserved unless otherwise licensed in writing.
+            <strong>Love Key Link / RSP</strong> · Respectful Synchronised Protocol v1.6 · Part of
+            the{" "}
+            <a
+              href="https://lovekeyring.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "var(--rsp-primary)" }}
+            >
+              Love Key HELP Network
+            </a>{" "}
+            · Copyright © 2026 Jack Oswald. All rights reserved unless otherwise licensed in
+            writing.
           </div>
           <div className="rsp-footer-right">
-            RSP NFTs are utility, provenance, access, participation, and certification tokens.
-            Not investment products.
+            RSP NFTs are utility, provenance, access, participation, and certification tokens. Not
+            investment products.
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }

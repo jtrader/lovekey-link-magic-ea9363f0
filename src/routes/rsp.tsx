@@ -926,7 +926,7 @@ function RSPPage() {
           </h1>
           <p className="rsp-hero-sub">
             RSP is a privacy-first coordination framework built into the core of{" "}
-            <a href="/" className="underline hover:no-underline">Love Key Link</a> our practical real life example application.
+            <a href="/" className="text-red-500 underline hover:no-underline">Love Key Link</a> our practical real life example application.
             Translate behaviour into weighted signals. Synchronise the state. Burn the
             identifiable source.
           </p>

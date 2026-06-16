@@ -401,6 +401,32 @@ const css = `
     transition: border-color .2s, transform .25s var(--rsp-ease);
   }
   .rsp-principle-card:hover { border-color: var(--rsp-border-strong); transform: translateY(-2px); }
+  #journey .rsp-journey-card {
+    position: relative; overflow: hidden; padding-top: 30px;
+    background:
+      radial-gradient(120% 140% at 100% 0%, var(--rsp-primary-light) 0%, transparent 55%),
+      var(--rsp-surface);
+    border-radius: calc(var(--rsp-radius) + 2px);
+  }
+  #journey .rsp-journey-card::before {
+    content: ""; position: absolute; inset: 0 auto 0 0; width: 3px;
+    background: linear-gradient(180deg, var(--rsp-primary), transparent);
+    opacity: 0; transition: opacity .25s var(--rsp-ease);
+  }
+  #journey .rsp-journey-card:hover::before { opacity: 1; }
+  #journey .rsp-journey-card:hover {
+    box-shadow: 0 18px 40px -24px color-mix(in oklab, var(--rsp-primary) 45%, transparent);
+  }
+  .rsp-journey-step {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: .72rem; font-weight: 600; letter-spacing: .04em;
+    color: var(--rsp-primary);
+    width: 34px; height: 34px; border-radius: 9px; margin-bottom: 14px;
+    background: var(--rsp-primary-light);
+    border: 1px solid oklch(88% .018 25);
+    font-variant-numeric: tabular-nums;
+  }
+  #journey .rsp-journey-card h3 { letter-spacing: -.01em; }
   .rsp-pc-icon {
     width: 40px; height: 40px; border-radius: 10px;
     background: var(--rsp-primary-light); border: 1px solid oklch(88% .018 25);

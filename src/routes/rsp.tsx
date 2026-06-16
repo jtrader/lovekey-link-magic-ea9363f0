@@ -681,10 +681,11 @@ const css = `
   .rsp-help-title { text-align: center; font-size: 1rem; font-weight: 600; color: var(--rsp-text); margin-bottom: 24px; }
   .rsp-help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .rsp-help-tile {
-    display: block; text-align: left; border: 1px solid var(--rsp-border); border-radius: 16px;
-    background: var(--rsp-card, rgba(255,255,255,0.02)); padding: 16px 20px; transition: transform .2s, box-shadow .2s;
+    display: block; text-align: left; border: 1px solid var(--rsp-border); border-radius: 14px;
+    background: var(--rsp-card, rgba(255,255,255,0.02)); padding: 16px 20px;
+    transition: border-color .2s, box-shadow .2s;
   }
-  .rsp-help-tile:hover { transform: translateY(-2px); box-shadow: 0 10px 30px -12px rgba(0,0,0,0.4); }
+  .rsp-help-tile:hover { border-color: rgba(229,57,53,0.55); box-shadow: 0 0 0 1px rgba(229,57,53,0.35), 0 0 22px 2px rgba(229,57,53,0.35); }
   .rsp-help-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
   .rsp-help-name { font-size: 1.125rem; font-weight: 600; color: var(--rsp-text); }
   .rsp-help-tag { font-size: .7rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--rsp-text-muted); }

@@ -610,7 +610,7 @@ function Index() {
                     location: "home_footer",
                   })
                 }
-                className="group rounded-2xl border border-border bg-card px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-glow ease-calm"
+                className="group rounded-2xl border border-border bg-secondary px-5 py-4 text-left transition-[border-color,box-shadow] duration-200 hover:border-primary/55 hover:shadow-[0_0_0_1px_rgba(229,57,53,0.35),0_0_22px_2px_rgba(229,57,53,0.35)] ease-calm"
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <span className="text-lg font-semibold text-foreground">{tile.title}</span>

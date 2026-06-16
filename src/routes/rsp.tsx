@@ -925,7 +925,8 @@ function RSPPage() {
             <em>without coercion.</em>
           </h1>
           <p className="rsp-hero-sub">
-            RSP is a privacy-first coordination framework built into the core of Love Key Link.
+            RSP is a privacy-first coordination framework built into the core of{" "}
+            <a href="/" className="underline hover:no-underline">Love Key Link</a> our practical real life example application.
             Translate behaviour into weighted signals. Synchronise the state. Burn the
             identifiable source.
           </p>

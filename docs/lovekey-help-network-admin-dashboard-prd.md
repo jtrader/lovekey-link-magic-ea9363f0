@@ -2,19 +2,19 @@
 
 ## Purpose
 
-The Love Key HELP Network administration dashboard is the operational intelligence layer for the wider support network. It turns consented hub signals and anonymous public-site journey patterns into calm, meaningful insight so authorised coordinators can route help, improve content, and understand network health without creating a surveillance dashboard.
+The Love Key HELP Network administration dashboard is the operational intelligence layer for the wider support network. It turns consented hub signals and anonymous public-site journey patterns into [...].
 
-The product promise is decision support, not command and control: the dashboard should help the right support reach the right person at the right time, with the right permissions, in the right context.
+The product promise is decision support, not command and control: the dashboard should help the right support reach the right person at the right time, with the right permissions, in the right contex[...].
 
 ## Product Scope
 
 ### Hub Intelligence
 
-Authenticated hub reporting is for known users and consented contexts. It covers support requests, contextual roles, permission health, trust/status, participation signals, and hub health. Private family, wellbeing, recovery, or corporate context must remain separated unless consent explicitly permits visibility.
+Authenticated hub reporting is for known users and consented contexts. It covers support requests, contextual roles, permission health, trust/status, participation signals, and hub health. Private fa[...].
 
 ### Public Site Intelligence
 
-Anonymous public-site reporting is for the six HELP Network front doors. It covers public journey patterns, help-seeking intent, topic engagement, form starts, form abandonment, referral paths, conversion into support, and public-to-hub transitions. Anonymous signals can become support pathways, but they must not become personal records unless a visitor identifies themselves and consents.
+Anonymous public-site reporting is for the six HELP Network front doors. It covers public journey patterns, help-seeking intent, topic engagement, form starts, form abandonment, referral paths, conve[...].
 
 ## Core Dashboard Questions
 
@@ -32,7 +32,7 @@ Show active hubs, open support requests, urgent requests, average response time,
 
 ### 2. Support Requests
 
-Provide an operational board for new, assigned, in-progress, waiting, escalated, and resolved requests. Each request card must show only necessary context: request type, hub context, urgency, consent status, assigned helper, time open, latest update, safe contact method, escalation option, and resolution status.
+Provide an operational board for new, assigned, in-progress, waiting, escalated, and resolved requests. Each request card must show only necessary context: request type, hub context, urgency, consent[...].
 
 ### 3. Hub Explorer
 
@@ -40,7 +40,7 @@ Allow authorised admins to inspect hub health by category: immediate family, bir
 
 ### 4. Permissions & Roles
 
-Show a visual matrix of users, hubs, contextual roles, presence, location, calendar, emotional status, recovery access, and admin rights. Include a clear “Preview what this person can see” feature to prevent context collapse.
+Show a visual matrix of users, hubs, contextual roles, presence, location, calendar, emotional status, recovery access, and admin rights. Include a clear "Preview what this person can see" featur[...].
 
 ### 5. Trust & Status
 
@@ -48,7 +48,7 @@ Show care-readiness bands such as New, Verified, Trusted, Support Ready, Recover
 
 ### 6. Participation Analytics
 
-Track check-ins, support requests opened, requests resolved, response time, event participation, repeated non-response, permission changes, hub creation, and recovery contact readiness. Use gentle language such as “May need follow-up,” not “inactive user.”
+Track check-ins, support requests opened, requests resolved, response time, event participation, repeated non-response, permission changes, hub creation, and recovery contact readiness. Use gentle la[...].
 
 ### 7. Public Site Intelligence
 
@@ -56,13 +56,13 @@ Show a six-site matrix with visitors, help intent, conversions, top topics, drop
 
 ### 8. Insights & Recommendations
 
-Surface rule-based recommendations such as repeated elder-care transport requests, high recovery-page exits, mobile form friction, missing backup trusted contacts, or RSP documentation drop-off. AI may recommend actions, but it must not make sensitive care decisions automatically.
+Surface rule-based recommendations such as repeated elder-care transport requests, high recovery-page exits, mobile form friction, missing backup trusted contacts, or RSP documentation drop-off. AI m[...].
 
 ## Data Model Requirements
 
-Raw signals must be stored separately from interpreted insights. The MVP adds tables for public websites, anonymous sessions, page events, help-intent events, consent transitions, support request events, participation events, dashboard insights, and admin actions.
+Raw signals must be stored separately from interpreted insights. The MVP adds tables for public websites, anonymous sessions, page events, help-intent events, consent transitions, support request eve[...].
 
-Future phases should add escalation rules, notification events, role assignment history, trust/status events, organisation profiles, referral sources, form abandonment events, public-site insights, and privacy suppression rules.
+Future phases should add escalation rules, notification events, role assignment history, trust/status events, organisation profiles, referral sources, form abandonment events, public-site insights, a[...].
 
 ## RSP Rules
 

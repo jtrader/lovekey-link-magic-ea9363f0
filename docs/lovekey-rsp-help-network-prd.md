@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-LoveKey Link is the warm public and product entry point for a human-first coordination, recovery and support ecosystem. Respectful Synchronisation Protocol (RSP) is the invisible coordination infrastructure underneath LoveKey Link, LoveKey Hub and the Love Key Help Network.
+LoveKey Link is the warm public and product entry point for a human-first coordination, recovery and support ecosystem. Respectful Synchronisation Protocol (RSP) is the invisible coordination infrast[...].
 
 The product must help users feel one simple promise:
 
@@ -21,11 +21,11 @@ Family users should never feel like they are using a protocol. They should feel 
 
 ### In scope for the current MVP execution
 
-1. Public homepage copy that leads with “Are my people okay?” rather than protocol terminology.
+1. Public homepage copy that leads with "Are my people okay?" rather than protocol terminology.
 2. One-profile onboarding that creates or joins a family/personal hub.
 3. Invite flow for trusted members.
 4. Gentle presence states and contextual visibility language.
-5. A visible support request surface that answers “Who needs care now?”
+5. A visible support request surface that answers "Who needs care now?"
 6. RSP documentation sections for journey, consent, permissions and support routing.
 7. PRD-aligned terminology: hub, presence, moments, support, permissions, recovery circle and respectful synchronisation.
 
@@ -58,7 +58,7 @@ The homepage must lead with an emotional promise and hide protocol complexity.
 
 The onboarding flow must create one profile and one initial hub.
 
-- Acceptance: terminology uses “hub” instead of “node”.
+- Acceptance: terminology uses "hub" instead of "node".
 - Acceptance: the user understands the hub is private and can later bridge other spaces by consent.
 
 ### R3 — Invite trusted people
@@ -79,7 +79,7 @@ The app must make presence feel reassuring and not like tracking.
 
 The app must make support requests calm, visible and shame-free.
 
-- Acceptance: the app contains a “Who needs care now?” surface.
+- Acceptance: the app contains a "Who needs care now?" surface.
 - Acceptance: support options include all-good, safe-arrival and needs-support states.
 - Acceptance: copy explains that support routes to trusted contacts before wider Help Network escalation.
 
@@ -134,7 +134,7 @@ The current implementation uses family-oriented tables. Future schema evolution 
 
 ## 10. Current Execution Checklist
 
-- [x] Homepage reframed around “Are my people okay?”
+- [x] Homepage reframed around "Are my people okay?"
 - [x] RSP positioned as documentation/infrastructure.
 - [x] `/rsp` includes Journey and Consent sections.
 - [x] Onboarding terminology changed from family node to family hub.

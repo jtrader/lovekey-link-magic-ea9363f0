@@ -25,11 +25,14 @@ const profileSchema = z.object({
   avatar_url: z.string().url().max(500).optional().or(z.literal("")),
 });
 const familySchema = z.object({
-  name: z.string().trim().min(1, "Please name your family node").max(80),
+  name: z.string().trim().min(1, "Please name your family hub").max(80),
   description: z.string().trim().max(280).optional().or(z.literal("")),
 });
 
 type Step = "profile" | "family" | "invite";
+type ExistingFamilyRow = {
+  families: { id: string; name: string } | { id: string; name: string }[] | null;
+};
 
 function Onboarding() {
   const { user } = useAuth();
@@ -46,7 +49,11 @@ function Onboarding() {
         supabase.from("profiles").select("*").eq("id", user!.id).maybeSingle(),
         supabase.from("family_members").select("family_id").eq("user_id", user!.id).limit(1),
       ]);
-      return { profile, hasFamily: (members?.length ?? 0) > 0, familyId: members?.[0]?.family_id ?? null };
+      return {
+        profile,
+        hasFamily: (members?.length ?? 0) > 0,
+        familyId: members?.[0]?.family_id ?? null,
+      };
     },
   });
 
@@ -112,7 +119,7 @@ function CenterLoading() {
 function Stepper({ step }: { step: Step }) {
   const steps: { key: Step; label: string }[] = [
     { key: "profile", label: "Your profile" },
-    { key: "family", label: "Family node" },
+    { key: "family", label: "Family hub" },
     { key: "invite", label: "Invite" },
   ];
   const idx = steps.findIndex((s) => s.key === step);
@@ -136,7 +143,9 @@ function Stepper({ step }: { step: Step }) {
 }
 
 function ProfileStep({
-  initial, userEmail, onDone,
+  initial,
+  userEmail,
+  onDone,
 }: {
   initial: { full_name: string | null; avatar_url: string | null; phone: string | null } | null;
   userEmail?: string;
@@ -177,12 +186,13 @@ function ProfileStep({
   return (
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">Welcome.</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Tell your circle who you are. You can change any of this later.</p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Tell your circle who you are. You can change any of this later.
+      </p>
 
       <div className="mt-6 flex items-center gap-4">
         <div className="relative h-16 w-16 overflow-hidden rounded-full bg-muted ring-1 ring-border">
           {avatarUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
             <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-muted-foreground">
@@ -199,7 +209,9 @@ function ProfileStep({
             placeholder="https://…"
             className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
           />
-          {errors.avatar_url && <p className="mt-1 text-xs text-destructive">{errors.avatar_url}</p>}
+          {errors.avatar_url && (
+            <p className="mt-1 text-xs text-destructive">{errors.avatar_url}</p>
+          )}
         </div>
       </div>
 
@@ -233,7 +245,13 @@ function ProfileStep({
           disabled={saving}
           className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-soft transition ease-calm hover:opacity-95 disabled:opacity-60"
         >
-          {saving ? "Saving…" : <>Continue <ArrowRight className="h-4 w-4" /></>}
+          {saving ? (
+            "Saving…"
+          ) : (
+            <>
+              Continue <ArrowRight className="h-4 w-4" />
+            </>
+          )}
         </button>
       </div>
     </div>
@@ -272,15 +290,19 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
     setSaving(true);
     const { data, error } = await supabase
       .from("families")
-      .insert({ name: parsed.data.name, description: parsed.data.description || null, created_by: user!.id })
+      .insert({
+        name: parsed.data.name,
+        description: parsed.data.description || null,
+        created_by: user!.id,
+      })
       .select("id")
       .single();
     setSaving(false);
     if (error || !data) {
-      toast.error("Couldn't create the family node.");
+      toast.error("Couldn't create the family hub.");
       return;
     }
-    toast.success("Family node created.");
+    toast.success("Family hub created.");
     onCreated(data.id);
   };
 
@@ -290,16 +312,23 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
         <Sparkles className="h-3.5 w-3.5 text-primary" />
         Step two
       </div>
-      <h1 className="mt-1 text-2xl font-semibold tracking-tight">Has a family node been created?</h1>
+      <h1 className="mt-1 text-2xl font-semibold tracking-tight">
+        Has your first hub been created?
+      </h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        A family node is a private circle for the people you coordinate with. If yours hasn't been created yet, set it up below.
+        A family hub is a private, trusted space for the people you coordinate with. It can later
+        connect to recovery, community or Help Network support only by consent.
       </p>
 
       {existing && existing.length > 0 && (
         <div className="mt-5 rounded-2xl bg-surface-warm p-4 ring-1 ring-border">
-          <p className="text-sm">You're already part of a family node.</p>
+          <p className="text-sm">You're already part of a family hub.</p>
           <button
-            onClick={() => onCreated((existing[0] as any).families.id)}
+            onClick={() => {
+              const row = existing[0] as ExistingFamilyRow;
+              const family = Array.isArray(row.families) ? row.families[0] : row.families;
+              if (family) onCreated(family.id);
+            }}
             className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
           >
             Continue with it <ArrowRight className="h-3.5 w-3.5" />
@@ -309,7 +338,7 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
 
       <div className="mt-6 grid gap-4">
         <div>
-          <label className="text-xs text-muted-foreground">Family name</label>
+          <label className="text-xs text-muted-foreground">Hub name</label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -327,7 +356,9 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
             rows={3}
             className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
           />
-          {errors.description && <p className="mt-1 text-xs text-destructive">{errors.description}</p>}
+          {errors.description && (
+            <p className="mt-1 text-xs text-destructive">{errors.description}</p>
+          )}
         </div>
       </div>
 
@@ -338,7 +369,7 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
           className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-soft transition ease-calm hover:opacity-95 disabled:opacity-60"
         >
           <Plus className="h-4 w-4" />
-          {saving ? "Creating…" : "Create family node"}
+          {saving ? "Creating…" : "Create family hub"}
         </button>
       </div>
     </div>
@@ -387,7 +418,9 @@ function InviteStep({ familyId, onDone }: { familyId: string; onDone: () => void
       </div>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">Invite your people</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Generate a private link and share it however you like — message, email, in person. Anyone with the link can join your family node. Links expire in 14 days.
+        Generate a private link and share it however you like — message, email, in person. Anyone
+        with the link can request to join your family hub. Share it only with trusted people. Links
+        expire in 14 days.
       </p>
 
       {!link ? (
@@ -401,12 +434,20 @@ function InviteStep({ familyId, onDone }: { familyId: string; onDone: () => void
         </button>
       ) : (
         <div className="mt-6 rounded-2xl bg-surface-warm p-4 ring-1 ring-border">
-          <div className="break-all rounded-md bg-background p-3 font-mono text-xs ring-1 ring-border">{link}</div>
+          <div className="break-all rounded-md bg-background p-3 font-mono text-xs ring-1 ring-border">
+            {link}
+          </div>
           <div className="mt-3 flex gap-2">
-            <button onClick={copy} className="inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1.5 text-xs ring-1 ring-border hover:bg-accent">
+            <button
+              onClick={copy}
+              className="inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1.5 text-xs ring-1 ring-border hover:bg-accent"
+            >
               <Copy className="h-3 w-3" /> Copy link
             </button>
-            <button onClick={generate} className="inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1.5 text-xs ring-1 ring-border hover:bg-accent">
+            <button
+              onClick={generate}
+              className="inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1.5 text-xs ring-1 ring-border hover:bg-accent"
+            >
               Generate another
             </button>
           </div>

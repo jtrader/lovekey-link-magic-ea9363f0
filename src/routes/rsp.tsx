@@ -1071,7 +1071,6 @@ function RSPPage() {
             </p>
             <div className="rsp-subhero-actions">
               <a href="#event-token" className="rsp-subhero-btn">Explore the Event Token →</a>
-              <a href="#credits" className="rsp-subhero-btn-ghost">View credits & access</a>
             </div>
           </div>
           <ul className="rsp-subhero-roles">

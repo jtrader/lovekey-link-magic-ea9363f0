@@ -1046,6 +1046,53 @@ function RSPPage() {
         </p>
       </div>
 
+      {/* EVENT TOKEN SUB-HERO */}
+      <section className="rsp-subhero">
+        <div className="rsp-subhero-inner">
+          <div>
+            <span className="rsp-subhero-eyebrow">
+              <span className="rsp-hero-eyebrow-dot" />
+              NFT Tier 6 · Reciprocal Status Protocol
+            </span>
+            <h2>
+              The Event Token.<br />
+              <em>Proof without exposure.</em>
+            </h2>
+            <p>
+              The Event Token is the cryptographic receipt of the Reciprocal Status Protocol.
+              Every time two nodes genuinely coordinate, a token is minted — and the
+              identifiable source data is burned before the token ever exists. It records
+              that reciprocity happened, never who, where, or how.
+            </p>
+            <p>
+              Within the RSP ecosystem it is the unit of trust: an unbounded, auto-minted
+              proof that turns private, consent-based coordination into verifiable status —
+              without surveillance, scores, or stored identity.
+            </p>
+            <div className="rsp-subhero-actions">
+              <a href="#event-token" className="rsp-subhero-btn">Explore the Event Token →</a>
+              <a href="#credits" className="rsp-subhero-btn-ghost">View credits & access</a>
+            </div>
+          </div>
+          <ul className="rsp-subhero-roles">
+            <li className="rsp-subhero-role">
+              <div className="rsp-subhero-role-title">Proof of reciprocity</div>
+              <div className="rsp-subhero-role-desc">One token per validated coordination event between RSP nodes.</div>
+            </li>
+            <li className="rsp-subhero-role">
+              <div className="rsp-subhero-role-title">Source burned at mint</div>
+              <div className="rsp-subhero-role-desc">Identifiable data is destroyed; the burn receipt is embedded in the token.</div>
+            </li>
+            <li className="rsp-subhero-role">
+              <div className="rsp-subhero-role-title">Unbounded supply</div>
+              <div className="rsp-subhero-role-desc">Auto-minted as the network coordinates — status that scales with trust.</div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+
+
       {/* PROTOCOL / PRINCIPLES */}
       <section className="rsp-section" id="protocol">
         <div className="rsp-section-header">

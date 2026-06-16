@@ -53,7 +53,7 @@ const helpNetwork = [
   {
     title: "Love Key",
     tag: "COORDINATE",
-    body: "Connect with the HELP Network",
+    body: "Connect with the Help Network",
     href: "https://lovekeyring.org/",
   },
   {
@@ -1130,11 +1130,6 @@ function RSPPage() {
               turns private, consent-based coordination into verifiable status — without
               surveillance, scores, or stored identity.
             </p>
-            <div className="rsp-subhero-actions">
-              <a href="#event-token" className="rsp-subhero-btn">
-                Explore the Event Token →
-              </a>
-            </div>
           </div>
           <ul className="rsp-subhero-roles">
             <li className="rsp-subhero-role">
@@ -1196,7 +1191,7 @@ function RSPPage() {
       {/* USER JOURNEY INTEGRATION */}
       <section className="rsp-section" id="journey">
         <div className="rsp-section-header">
-          <div className="rsp-eyebrow">LoveKey Link + Help Network</div>
+          <div className="rsp-eyebrow">Love Key Link + Help Network</div>
           <h2 className="rsp-h2">RSP improves the journey while staying invisible.</h2>
           <p className="rsp-lead">
             The public experience starts with a simple promise: are my people okay? RSP sits
@@ -1207,7 +1202,7 @@ function RSPPage() {
           {[
             {
               title: "Discover",
-              body: "LoveKey Link stays warm and human. RSP remains behind the scenes as trust and synchronisation architecture.",
+              body: "Love Key Link stays warm and human. RSP remains behind the scenes as trust and synchronisation architecture.",
             },
             {
               title: "Onboard",
@@ -1245,7 +1240,7 @@ function RSPPage() {
           <div className="rsp-eyebrow">Functional modules</div>
           <h2 className="rsp-h2">Consent, permissions and support routing.</h2>
           <p className="rsp-lead">
-            RSP modules map directly to the LoveKey data model and Help Network routing rules, while
+            RSP modules map directly to the Love Key data model and Help Network routing rules, while
             keeping protocol concepts out of the family UI.
           </p>
         </div>
@@ -1788,7 +1783,7 @@ npm install @rsp-protocol/react`}
       {/* FOOTER */}
       <footer className="rsp-footer">
         <div className="rsp-help">
-          <h2 className="rsp-help-title">Love Key HELP Network</h2>
+          <h2 className="rsp-help-title">Love Key Help Network</h2>
           <div className="rsp-help-grid">
             {helpNetwork.map((tile) => (
               <a
@@ -1829,7 +1824,7 @@ npm install @rsp-protocol/react`}
               rel="noopener noreferrer"
               style={{ color: "var(--rsp-primary)" }}
             >
-              Love Key HELP Network
+              Love Key Help Network
             </a>{" "}
             · Copyright © 2026 Jack Oswald. All rights reserved unless otherwise licensed in
             writing.

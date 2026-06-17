@@ -31,47 +31,11 @@ function isMissingCreateFamilyRpc(error: unknown) {
   );
 }
 
-export async function createFamilyHub(input: CreateFamilyHubInput): Promise<CreateFamilyHubResult> {
-  const hubVisibility = input.hubVisibility ?? "private";
-  const publicJoinMode = hubVisibility === "public" ? (input.publicJoinMode ?? "invite") : "invite";
-  const plaintextPassword = publicJoinMode === "password" ? input.plaintextPassword : null;
-
-  const { data: rpcId, error: rpcError } = await supabase.rpc("create_family", {
-    _name: input.name,
-    _hub_type: input.hubType,
-    _description: input.description ?? null,
-    _hub_visibility: hubVisibility,
-    _public_join_mode: publicJoinMode,
-    _plaintext_password: plaintextPassword,
-    _role_label: input.roleLabel ?? "Member",
-    _location_label: input.locationLabel ?? null,
-    _latitude: input.latitude ?? null,
-    _longitude: input.longitude ?? null,
-    _location_accuracy_meters: input.locationAccuracyMeters ?? null,
-    _location_captured_at: input.locationCapturedAt ?? null,
-  });
-
-  if (!rpcError && rpcId) return { id: rpcId, error: null };
-  if (!isMissingCreateFamilyRpc(rpcError)) {
-    return {
-      id: null,
-      error: { message: rpcError?.message ?? "Couldn't create the family hub.", cause: rpcError },
-    };
-  }
-
-  console.warn("[createFamilyHub] create_family RPC missing; falling back to direct insert.", rpcError);
-
-  if (plaintextPassword) {
-    return {
-      id: null,
-      error: {
-        message:
-          "Password-protected public hubs need the create_family database function before they can be created.",
-        cause: rpcError,
-      },
-    };
-  }
-
+async function createFamilyHubDirect(
+  input: CreateFamilyHubInput,
+  hubVisibility: HubVisibility,
+  publicJoinMode: PublicJoinMode,
+): Promise<CreateFamilyHubResult> {
   const { data: hub, error: insertError } = await supabase
     .from("families")
     .insert({
@@ -97,7 +61,7 @@ export async function createFamilyHub(input: CreateFamilyHubInput): Promise<Crea
     };
   }
 
-  await supabase.from("family_members").upsert(
+  const { error: memberError } = await supabase.from("family_members").upsert(
     {
       family_id: hub.id,
       user_id: input.userId,
@@ -109,5 +73,59 @@ export async function createFamilyHub(input: CreateFamilyHubInput): Promise<Crea
     { onConflict: "family_id,user_id" },
   );
 
+  if (memberError) {
+    console.warn("[createFamilyHub] Hub created, but membership metadata was not updated.", memberError);
+  }
+
   return { id: hub.id, error: null };
+}
+
+async function createFamilyHubWithRpc(
+  input: CreateFamilyHubInput,
+  hubVisibility: HubVisibility,
+  publicJoinMode: PublicJoinMode,
+  plaintextPassword: string | null,
+): Promise<CreateFamilyHubResult> {
+  const { data: rpcId, error: rpcError } = await supabase.rpc("create_family", {
+    _name: input.name,
+    _hub_type: input.hubType,
+    _description: input.description ?? null,
+    _hub_visibility: hubVisibility,
+    _public_join_mode: publicJoinMode,
+    _plaintext_password: plaintextPassword,
+    _role_label: input.roleLabel ?? "Member",
+    _location_label: input.locationLabel ?? null,
+    _latitude: input.latitude ?? null,
+    _longitude: input.longitude ?? null,
+    _location_accuracy_meters: input.locationAccuracyMeters ?? null,
+    _location_captured_at: input.locationCapturedAt ?? null,
+  });
+
+  if (!rpcError && rpcId) return { id: rpcId, error: null };
+  if (isMissingCreateFamilyRpc(rpcError) && plaintextPassword) {
+    return {
+      id: null,
+      error: {
+        message:
+          "Password-protected public hubs need the create_family database function before they can be created.",
+        cause: rpcError,
+      },
+    };
+  }
+  return {
+    id: null,
+    error: { message: rpcError?.message ?? "Couldn't create the family hub.", cause: rpcError },
+  };
+}
+
+export async function createFamilyHub(input: CreateFamilyHubInput): Promise<CreateFamilyHubResult> {
+  const hubVisibility = input.hubVisibility ?? "private";
+  const publicJoinMode = hubVisibility === "public" ? (input.publicJoinMode ?? "invite") : "invite";
+  const plaintextPassword = publicJoinMode === "password" ? input.plaintextPassword : null;
+
+  if (!plaintextPassword) {
+    return createFamilyHubDirect(input, hubVisibility, publicJoinMode);
+  }
+
+  return createFamilyHubWithRpc(input, hubVisibility, publicJoinMode, plaintextPassword);
 }

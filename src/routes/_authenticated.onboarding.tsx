@@ -3,10 +3,31 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import {
+  hubTypes,
+  hubVisibilityOptions,
+  privacyPreviewDefaults,
+  publicJoinModes,
+  type HubRole,
+  type HubType,
+  type HubVisibility,
+  type PublicJoinMode,
+} from "@/lib/lovekey-model";
 import { toast } from "sonner";
 import { z } from "zod";
 import lovekeyMark from "@/assets/lovekey-mark.png";
-import { Camera, Users, Check, Copy, Plus, Sparkles, ArrowRight } from "lucide-react";
+import {
+  Camera,
+  Users,
+  Check,
+  Copy,
+  Plus,
+  Sparkles,
+  ArrowRight,
+  LocateFixed,
+  LockKeyhole,
+  MapPin,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
   component: Onboarding,
@@ -26,13 +47,46 @@ const profileSchema = z.object({
 });
 const familySchema = z.object({
   name: z.string().trim().min(1, "Please name your family hub").max(80),
+  hub_type: z.enum([
+    "immediate_family",
+    "birth_family",
+    "blended_family",
+    "co_parenting",
+    "elder_care",
+    "sporting_group",
+    "book_club",
+    "corporate_team",
+    "recovery_circle",
+  ]),
+  role_label: z.string().trim().min(1, "Please choose your role").max(80),
   description: z.string().trim().max(280).optional().or(z.literal("")),
+  hub_visibility: z.enum(["private", "public"]),
+  public_join_mode: z.enum(["invite", "open", "password"]),
+  public_password: z.string().trim().max(120).optional().or(z.literal("")),
+  location_label: z.string().trim().max(120).optional().or(z.literal("")),
+  latitude: z.number().min(-90).max(90).nullable(),
+  longitude: z.number().min(-180).max(180).nullable(),
+  location_accuracy_meters: z.number().nonnegative().nullable(),
 });
 
 type Step = "profile" | "family" | "invite";
 type ExistingFamilyRow = {
   families: { id: string; name: string } | { id: string; name: string }[] | null;
 };
+type CapturedLocation = {
+  latitude: number;
+  longitude: number;
+  accuracy: number | null;
+};
+
+async function hashHubPassword(password: string) {
+  if (!password.trim()) return null;
+  const bytes = new TextEncoder().encode(password.trim());
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
 
 function Onboarding() {
   const { user } = useAuth();
@@ -261,9 +315,19 @@ function ProfileStep({
 function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
   const { user } = useAuth();
   const [name, setName] = useState("");
+  const [hubType, setHubType] = useState<HubType>("immediate_family");
+  const [hubVisibility, setHubVisibility] = useState<HubVisibility>("private");
+  const [publicJoinMode, setPublicJoinMode] = useState<PublicJoinMode>("invite");
+  const [publicPassword, setPublicPassword] = useState("");
+  const [roleLabel, setRoleLabel] = useState<HubRole>("Dad");
   const [description, setDescription] = useState("");
+  const [locationLabel, setLocationLabel] = useState("");
+  const [capturedLocation, setCapturedLocation] = useState<CapturedLocation | null>(null);
+  const [locating, setLocating] = useState(false);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const selectedHubType = hubTypes.find((type) => type.value === hubType) ?? hubTypes[0];
+  const roleSuggestions = selectedHubType.roleSuggestions;
 
   // Check if user already has a family — give them a quick-skip option
   const { data: existing } = useQuery({
@@ -278,21 +342,79 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
     },
   });
 
+  const captureLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error("Geolocation is not available in this browser.");
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCapturedLocation({
+          latitude: Number(position.coords.latitude.toFixed(6)),
+          longitude: Number(position.coords.longitude.toFixed(6)),
+          accuracy: position.coords.accuracy ? Math.round(position.coords.accuracy) : null,
+        });
+        setLocating(false);
+        toast.success("Location captured.");
+      },
+      () => {
+        setLocating(false);
+        toast.error("Location permission was not granted.");
+      },
+      { enableHighAccuracy: false, timeout: 12000, maximumAge: 5 * 60 * 1000 },
+    );
+  };
+
   const create = async () => {
-    const parsed = familySchema.safeParse({ name, description });
+    const parsed = familySchema.safeParse({
+      name,
+      hub_type: hubType,
+      role_label: roleLabel,
+      description,
+      hub_visibility: hubVisibility,
+      public_join_mode: hubVisibility === "public" ? publicJoinMode : "invite",
+      public_password: publicPassword,
+      location_label: locationLabel,
+      latitude: capturedLocation?.latitude ?? null,
+      longitude: capturedLocation?.longitude ?? null,
+      location_accuracy_meters: capturedLocation?.accuracy ?? null,
+    });
     if (!parsed.success) {
       const errs: Record<string, string> = {};
       for (const issue of parsed.error.issues) errs[issue.path[0] as string] = issue.message;
       setErrors(errs);
       return;
     }
+    if (parsed.data.hub_visibility === "public" && !parsed.data.latitude) {
+      setErrors({ location: "Public hubs need a location so nearby users can find them." });
+      return;
+    }
+    if (parsed.data.public_join_mode === "password" && !parsed.data.public_password) {
+      setErrors({ public_password: "Add a password or choose another public access mode." });
+      return;
+    }
     setErrors({});
     setSaving(true);
+    const publicPasswordHash =
+      parsed.data.hub_visibility === "public" && parsed.data.public_join_mode === "password"
+        ? await hashHubPassword(parsed.data.public_password ?? "")
+        : null;
     const { data, error } = await supabase
       .from("families")
       .insert({
         name: parsed.data.name,
+        hub_type: parsed.data.hub_type,
         description: parsed.data.description || null,
+        hub_visibility: parsed.data.hub_visibility,
+        public_join_mode:
+          parsed.data.hub_visibility === "public" ? parsed.data.public_join_mode : "invite",
+        public_password_hash: publicPasswordHash,
+        location_label: parsed.data.location_label || null,
+        latitude: parsed.data.latitude,
+        longitude: parsed.data.longitude,
+        location_accuracy_meters: parsed.data.location_accuracy_meters,
+        location_captured_at: parsed.data.latitude ? new Date().toISOString() : null,
         created_by: user!.id,
       })
       .select("id")
@@ -302,7 +424,22 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
       toast.error("Couldn't create the family hub.");
       return;
     }
-    toast.success("Family hub created.");
+    const { error: memberError } = await supabase
+      .from("family_members")
+      .update({
+        role_label: parsed.data.role_label,
+        member_kind: "owner",
+        visibility_state: "summary",
+        is_hub_admin: true,
+      })
+      .eq("family_id", data.id)
+      .eq("user_id", user!.id);
+    if (memberError) {
+      toast.error("Hub created, but your role could not be saved yet.");
+      onCreated(data.id);
+      return;
+    }
+    toast.success("Hub created.");
     onCreated(data.id);
   };
 
@@ -312,12 +449,10 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
         <Sparkles className="h-3.5 w-3.5 text-primary" />
         Step two
       </div>
-      <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-        Has your first hub been created?
-      </h1>
+      <h1 className="mt-1 text-2xl font-semibold tracking-tight">Create your first hub.</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        A family hub is a private, trusted space for the people you coordinate with. It can later
-        connect to recovery, community or Help Network support only by consent.
+        Choose the kind of private space you need now. Love Key keeps the language human while the
+        hub type quietly shapes the purpose, invites and coordination patterns.
       </p>
 
       {existing && existing.length > 0 && (
@@ -338,27 +473,229 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
 
       <div className="mt-6 grid gap-4">
         <div>
+          <label className="text-xs text-muted-foreground">Hub type</label>
+          <div className="mt-2 grid gap-2 sm:grid-cols-2">
+            {hubTypes.map((type) => {
+              const active = type.value === hubType;
+              return (
+                <button
+                  key={type.value}
+                  type="button"
+                  onClick={() => {
+                    setHubType(type.value);
+                    setRoleLabel(type.roleSuggestions[0]);
+                  }}
+                  className={`min-h-32 rounded-2xl border p-3 text-left transition ease-calm ${
+                    active
+                      ? "border-primary bg-primary/5 shadow-soft"
+                      : "border-border bg-background hover:border-primary/50 hover:bg-accent/40"
+                  }`}
+                  aria-pressed={active}
+                >
+                  <span className="flex items-start justify-between gap-3">
+                    <span className="font-medium text-foreground">{type.label}</span>
+                    <span
+                      className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
+                        active
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border"
+                      }`}
+                    >
+                      {active && <Check className="h-3 w-3" />}
+                    </span>
+                  </span>
+                  <span className="mt-2 block text-xs leading-relaxed text-muted-foreground">
+                    {type.members}
+                  </span>
+                  <span className="mt-2 block text-xs leading-relaxed text-foreground/75">
+                    {type.purpose}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          {errors.hub_type && <p className="mt-1 text-xs text-destructive">{errors.hub_type}</p>}
+        </div>
+        <div>
+          <label className="text-xs text-muted-foreground">Hub visibility</label>
+          <div className="mt-2 grid gap-2 sm:grid-cols-2">
+            {hubVisibilityOptions.map((option) => {
+              const active = hubVisibility === option.value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => {
+                    setHubVisibility(option.value);
+                    if (option.value === "private") setPublicJoinMode("invite");
+                  }}
+                  className={`rounded-2xl border p-4 text-left transition ease-calm ${
+                    active
+                      ? "border-primary bg-primary/5 shadow-soft"
+                      : "border-border bg-background hover:border-primary/50"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 font-medium">
+                    {option.value === "private" ? (
+                      <LockKeyhole className="h-4 w-4 text-primary" />
+                    ) : (
+                      <Users className="h-4 w-4 text-primary" />
+                    )}
+                    {option.label}
+                  </div>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                    {option.description}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        {hubVisibility === "public" && (
+          <div>
+            <label className="text-xs text-muted-foreground">Public access</label>
+            <div className="mt-2 grid gap-2">
+              {publicJoinModes.map((mode) => {
+                const active = publicJoinMode === mode.value;
+                return (
+                  <button
+                    key={mode.value}
+                    type="button"
+                    onClick={() => setPublicJoinMode(mode.value)}
+                    className={`rounded-2xl border p-3 text-left transition ease-calm ${
+                      active
+                        ? "border-primary bg-primary/5 shadow-soft"
+                        : "border-border bg-background hover:border-primary/50"
+                    }`}
+                  >
+                    <div className="font-medium">{mode.label}</div>
+                    <div className="text-xs text-muted-foreground">{mode.description}</div>
+                  </button>
+                );
+              })}
+            </div>
+            {publicJoinMode === "password" && (
+              <div className="mt-3">
+                <label className="text-xs text-muted-foreground">Shared hub password</label>
+                <input
+                  type="password"
+                  value={publicPassword}
+                  onChange={(e) => setPublicPassword(e.target.value)}
+                  placeholder="Create a shared password"
+                  className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                />
+                {errors.public_password && (
+                  <p className="mt-1 text-xs text-destructive">{errors.public_password}</p>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+        <div>
           <label className="text-xs text-muted-foreground">Hub name</label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="The Lee Household"
+            placeholder={selectedHubType.namePlaceholder}
             className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
           />
           {errors.name && <p className="mt-1 text-xs text-destructive">{errors.name}</p>}
+        </div>
+        <div className="rounded-2xl bg-surface-warm p-4 ring-1 ring-border">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 text-sm font-medium">
+                <MapPin className="h-4 w-4 text-primary" />
+                Hub location
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Used for nearby public hub search. Private hub locations stay private to members.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={captureLocation}
+              disabled={locating}
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-3 py-2 text-xs font-medium text-primary-foreground disabled:opacity-60"
+            >
+              <LocateFixed className="h-3.5 w-3.5" />
+              {locating ? "Locating..." : "Use my location"}
+            </button>
+          </div>
+          <input
+            value={locationLabel}
+            onChange={(e) => setLocationLabel(e.target.value)}
+            placeholder="Optional label, e.g. Bendigo Library or North Melbourne"
+            className="mt-3 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+          />
+          {capturedLocation ? (
+            <div className="mt-3 rounded-xl bg-card px-3 py-2 text-xs text-muted-foreground ring-1 ring-border">
+              Captured approximate location: {capturedLocation.latitude},{" "}
+              {capturedLocation.longitude}
+              {capturedLocation.accuracy ? ` · about ${capturedLocation.accuracy}m accuracy` : ""}
+            </div>
+          ) : (
+            <div className="mt-3 text-xs text-muted-foreground">
+              No location captured yet. Public hubs require this before creation.
+            </div>
+          )}
+          {errors.location && <p className="mt-2 text-xs text-destructive">{errors.location}</p>}
+        </div>
+        <div>
+          <label className="text-xs text-muted-foreground">Your role in this hub</label>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {roleSuggestions.map((role) => (
+              <button
+                key={role}
+                type="button"
+                onClick={() => setRoleLabel(role)}
+                className={`rounded-full border px-3 py-1.5 text-sm transition ease-calm ${
+                  roleLabel === role
+                    ? "border-primary/30 bg-primary/5 text-foreground"
+                    : "border-border bg-card text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {role}
+              </button>
+            ))}
+          </div>
+          {errors.role_label && (
+            <p className="mt-1 text-xs text-destructive">{errors.role_label}</p>
+          )}
         </div>
         <div>
           <label className="text-xs text-muted-foreground">A short description (optional)</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Mum, Dad, two kids and Nan up the road."
+            placeholder={selectedHubType.purpose}
             rows={3}
             className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
           />
           {errors.description && (
             <p className="mt-1 text-xs text-destructive">{errors.description}</p>
           )}
+        </div>
+        <div className="rounded-2xl bg-surface-warm p-4 ring-1 ring-border">
+          <div className="text-sm font-medium">What others can see</div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Your first hub starts with privacy-first defaults. You can pause, reduce or revoke
+            visibility later.
+          </p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            {privacyPreviewDefaults.map(({ Icon, label, value }) => (
+              <div
+                key={label}
+                className="flex items-center gap-2 rounded-xl bg-card px-3 py-2 ring-1 ring-border"
+              >
+                <Icon className="h-3.5 w-3.5 text-primary" />
+                <div>
+                  <div className="text-xs font-medium">{label}</div>
+                  <div className="text-[11px] text-muted-foreground">{value}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -369,7 +706,7 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
           className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-soft transition ease-calm hover:opacity-95 disabled:opacity-60"
         >
           <Plus className="h-4 w-4" />
-          {saving ? "Creating…" : "Create family hub"}
+          {saving ? "Creating…" : "Create hub"}
         </button>
       </div>
     </div>

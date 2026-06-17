@@ -63,47 +63,47 @@
 
 :root {
   --radius: 0.875rem;
-  --background: oklch(0.995 0.003 20);
-  --foreground: oklch(0.18 0.02 20);
+  --background: oklch(0.995 0.006 248);
+  --foreground: oklch(0.22 0.08 265); /* #10214A */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 20);
+  --card-foreground: oklch(0.22 0.08 265);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 20);
-  --primary: oklch(0.6 0.22 25);
+  --popover-foreground: oklch(0.22 0.08 265);
+  --primary: oklch(0.6 0.22 264); /* #2E78FF */
   --primary-foreground: oklch(0.99 0 0);
-  --primary-glow: oklch(0.7 0.2 22);
-  --secondary: oklch(0.97 0.008 20);
-  --secondary-foreground: oklch(0.22 0.02 20);
-  --muted: oklch(0.965 0.006 20);
-  --muted-foreground: oklch(0.5 0.02 20);
-  --accent: oklch(0.96 0.012 20);
-  --accent-foreground: oklch(0.22 0.02 20);
-  --destructive: oklch(0.6 0.245 27);
+  --primary-glow: oklch(0.76 0.12 254); /* #7DB6FF */
+  --secondary: oklch(0.97 0.02 250); /* #EAF4FF */
+  --secondary-foreground: oklch(0.22 0.08 265);
+  --muted: oklch(0.965 0.014 248);
+  --muted-foreground: oklch(0.52 0.025 260);
+  --accent: oklch(0.965 0.03 248);
+  --accent-foreground: oklch(0.22 0.08 265);
+  --destructive: oklch(0.7 0.2 25); /* #FF6B6B */
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.92 0.008 20);
-  --input: oklch(0.92 0.008 20);
-  --ring: oklch(0.6 0.22 25);
+  --border: oklch(0.91 0.018 248);
+  --input: oklch(0.91 0.018 248);
+  --ring: oklch(0.6 0.22 264);
 
-  /* Node health states */
-  --health-green: oklch(0.7 0.16 152);
-  --health-blue: oklch(0.65 0.15 235);
-  --health-yellow: oklch(0.85 0.14 95);
+  /* Presence and family connection states */
+  --health-green: oklch(0.78 0.15 160); /* #5ED6A8 */
+  --health-blue: oklch(0.76 0.12 254); /* #7DB6FF */
+  --health-yellow: oklch(0.84 0.14 80); /* #FFC55A */
   --health-orange: oklch(0.72 0.17 55);
-  --health-red: oklch(0.62 0.22 25);
-  --health-purple: oklch(0.6 0.16 305);
+  --health-red: oklch(0.7 0.2 25); /* #FF6B6B */
+  --health-purple: oklch(0.72 0.16 295); /* #B39DFF */
 
   /* Surfaces & atmosphere */
-  --surface-warm: oklch(0.985 0.006 25);
-  --surface-soft: oklch(0.97 0.01 20);
+  --surface-warm: oklch(0.985 0.012 248);
+  --surface-soft: oklch(0.97 0.02 250);
 
   /* Gradients */
-  --gradient-hero: radial-gradient(ellipse at top, oklch(0.97 0.04 25) 0%, oklch(0.995 0.003 20) 60%);
+  --gradient-hero: radial-gradient(ellipse at top, oklch(0.97 0.04 248) 0%, oklch(0.995 0.006 248) 60%);
   --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
-  --gradient-nucleus: radial-gradient(circle at 35% 30%, var(--health-green), var(--health-blue) 60%, oklch(0.5 0.18 270) 100%);
+  --gradient-nucleus: radial-gradient(circle at 35% 30%, oklch(0.88 0.05 248), var(--health-blue) 58%, var(--primary) 100%);
 
   /* Shadows */
-  --shadow-soft: 0 1px 2px oklch(0.18 0.02 20 / 0.04), 0 8px 24px oklch(0.18 0.02 20 / 0.06);
-  --shadow-glow: 0 0 60px oklch(0.6 0.22 25 / 0.18);
+  --shadow-soft: 0 1px 2px oklch(0.22 0.08 265 / 0.04), 0 8px 24px oklch(0.22 0.08 265 / 0.06);
+  --shadow-glow: 0 0 60px oklch(0.6 0.22 264 / 0.18);
   --shadow-nucleus: 0 0 80px oklch(0.65 0.18 200 / 0.35);
 
   /* Motion */

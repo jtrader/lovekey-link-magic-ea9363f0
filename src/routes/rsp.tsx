@@ -1241,8 +1241,8 @@ function RSPPage() {
           <div className="rsp-eyebrow">Functional modules</div>
           <h2 className="rsp-h2">Consent, permissions and support routing.</h2>
           <p className="rsp-lead">
-            RSP modules map directly to the Love Key data model and Help Network routing rules, while
-            keeping protocol concepts out of the family UI.
+            RSP modules map directly to the Love Key data model and Help Network routing rules,
+            while keeping protocol concepts out of the family UI.
           </p>
         </div>
         <div className="rsp-tier-grid">
@@ -1593,6 +1593,12 @@ npm install @rsp-protocol/react`}
                 Minting is automatic. Once a validation delay clears and the event commits to node
                 state, the token is issued. Supply is unbounded: one token per validated event,
                 across every node, forever.
+              </p>
+              <p className="rsp-event-body">
+                In Love Key Link, each validated hub moment also writes an auditable
+                <code>rsp_validation_events</code> record containing the source event reference,
+                validation reason, timestamp, burn receipt hash, and Event Token payload. That
+                backend record is the bridge from the live family hub to this Event Token contract.
               </p>
               <div className="rsp-event-receipt">
                 <div className="rsp-event-receipt-label">Example token payload</div>

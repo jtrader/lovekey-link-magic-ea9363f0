@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import { supabase } from "@/integrations/supabase/client";
@@ -77,33 +77,47 @@ const circles = [
   { name: "School", count: 6, health: "bg-health-green", note: "Pickup confirmed" },
 ];
 
-const events = [
-  { Icon: Phone, who: "Dad", what: "Voice call — 14 min", when: "1h ago", validated: true },
-  { Icon: MessageCircle, who: "Sister", what: "Message exchange", when: "3h ago", validated: true },
-  {
-    Icon: Calendar,
-    who: "Sam",
-    what: "Coffee scheduled — Sat 10am",
-    when: "Yesterday",
-    validated: false,
-  },
-  {
-    Icon: HandHeart,
-    who: "Mum",
-    what: "Offered help with groceries",
-    when: "2 days ago",
-    validated: true,
-  },
-];
+type HubMoment = {
+  id: string;
+  contact_label: string;
+  event_type: string;
+  event_summary: string;
+  validation_status: "pending" | "validated" | "needs_follow_through" | "expired";
+  validation_reason: string | null;
+  validation_delay_until: string;
+  validated_at: string | null;
+  burn_receipt_hash: string | null;
+  created_at: string;
+};
+
+const momentIcons: Record<string, typeof Phone> = {
+  call: Phone,
+  message: MessageCircle,
+  schedule: Calendar,
+  support: HandHeart,
+  safe_arrival: MapPin,
+  all_good: Check,
+  need_support: HandHeart,
+};
 
 const reminders = [
   { text: "Nan has been quiet for 6 days — a gentle check-in could help.", soft: true },
   { text: "School pickup window starts in 25 minutes.", soft: false },
 ];
 
+function formatMomentTime(value: string) {
+  return new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
 function AppView() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [time, setTime] = useState<Time>("Available");
   const [energy, setEnergy] = useState<Energy>("Blue");
   const [loc, setLoc] = useState<Loc>("Home");
@@ -138,6 +152,40 @@ function AppView() {
       navigate({ to: "/onboarding" });
     }
   }, [ctx, navigate]);
+
+  const { data: moments = [], isLoading: momentsLoading } = useQuery({
+    queryKey: ["hub-moments", ctx?.family?.id],
+    enabled: !!ctx?.family,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("hub_moments")
+        .select(
+          "id, contact_label, event_type, event_summary, validation_status, validation_reason, validation_delay_until, validated_at, burn_receipt_hash, created_at",
+        )
+        .eq("family_id", ctx!.family!.id)
+        .order("created_at", { ascending: false })
+        .limit(8);
+
+      if (error) throw error;
+      return (data ?? []) as HubMoment[];
+    },
+  });
+
+  const validateDueMoments = useMutation({
+    mutationFn: async () => {
+      if (!ctx?.family) return;
+      const { error } = await supabase.rpc("validate_due_hub_moments", {
+        _family_id: ctx.family.id,
+        _limit: 100,
+      });
+      if (error) throw error;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["hub-moments", ctx?.family?.id] });
+      toast.success("Moment validation refreshed.");
+    },
+    onError: () => toast.error("Moment validation could not be refreshed yet."),
+  });
 
   const healthLabel = useMemo(() => {
     if (energy === "Yellow" || time === "Unavailable")
@@ -179,19 +227,23 @@ function AppView() {
           : "all_good";
     const urgency = signal === "Need support" ? "medium" : "low";
 
-    const { error: supportError } = await supabase.from("support_requests").insert({
-      family_id: ctx.family.id,
-      requester_user_id: user.id,
-      category,
-      urgency,
-      message:
-        signal === "Need support"
-          ? "I need support. Please route this to my trusted contacts first."
-          : signal === "Safe arrival"
-            ? "Safe arrival confirmed."
-            : "All good check-in shared.",
-      route_summary: "trusted_contacts -> recovery_circle -> help_network_referral",
-    });
+    const { data: supportRequest, error: supportError } = await supabase
+      .from("support_requests")
+      .insert({
+        family_id: ctx.family.id,
+        requester_user_id: user.id,
+        category,
+        urgency,
+        message:
+          signal === "Need support"
+            ? "I need support. Please route this to my trusted contacts first."
+            : signal === "Safe arrival"
+              ? "Safe arrival confirmed."
+              : "All good check-in shared.",
+        route_summary: "trusted_contacts -> recovery_circle -> help_network_referral",
+      })
+      .select("id")
+      .single();
 
     const { error: consentError } = await supabase.from("rsp_consent_events").insert({
       family_id: ctx.family.id,
@@ -203,10 +255,29 @@ function AppView() {
       metadata: { signal, category, route: "trusted_contacts_first" },
     });
 
+    const { error: momentError } = await supabase.from("hub_moments").insert({
+      family_id: ctx.family.id,
+      actor_user_id: user.id,
+      contact_label: firstName,
+      event_type: category,
+      event_summary:
+        signal === "Need support"
+          ? "Support request routed to trusted contacts"
+          : signal === "Safe arrival"
+            ? "Safe arrival shared with the hub"
+            : "All-good presence check-in shared",
+      source_event_id: supportRequest?.id ?? `${category}:${Date.now()}`,
+      follow_through_met: signal !== "Need support",
+    });
+
+    if (!momentError) {
+      await queryClient.invalidateQueries({ queryKey: ["hub-moments", ctx.family.id] });
+    }
+
     await persistPresence(nextWill, signal);
     setSavingSignal(false);
 
-    if (supportError || consentError) {
+    if (supportError || consentError || momentError) {
       toast.error("Support signal could not be routed yet.");
       return;
     }
@@ -321,7 +392,8 @@ function AppView() {
                 Family connection: {healthLabel.t}
               </span>
               <span className="inline-flex items-center gap-2 rounded-full bg-card px-3 py-1.5 text-sm text-muted-foreground shadow-soft ring-1 ring-border">
-                <Sparkles className="h-3.5 w-3.5 text-primary" />3 moments today
+                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                {moments.length} live moments
               </span>
             </div>
           </div>
@@ -452,37 +524,70 @@ function AppView() {
             <p className="mt-1 text-sm text-muted-foreground">
               Care touchpoints and shared updates, not a performance feed.
             </p>
+            <div className="mt-3 flex justify-end">
+              <button
+                type="button"
+                onClick={() => validateDueMoments.mutate()}
+                disabled={validateDueMoments.isPending}
+                className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground transition hover:text-foreground disabled:opacity-60"
+              >
+                {validateDueMoments.isPending ? "Refreshing validation…" : "Refresh validation"}
+              </button>
+            </div>
             <ul className="mt-5 space-y-3">
-              {events.map((e, i) => (
-                <li
-                  key={i}
-                  className="flex items-start gap-3 rounded-2xl bg-card p-4 shadow-soft ring-1 ring-border"
-                >
-                  <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-primary/8 text-primary">
-                    <e.Icon className="h-4 w-4" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="font-medium">{e.who}</div>
-                      <div className="text-xs text-muted-foreground">{e.when}</div>
-                    </div>
-                    <div className="text-sm text-muted-foreground">{e.what}</div>
-                    <div className="mt-2 inline-flex items-center gap-1.5 text-xs">
-                      {e.validated ? (
-                        <>
-                          <Check className="h-3 w-3 text-health-green" />
-                          <span className="text-muted-foreground">Follow-through confirmed</span>
-                        </>
-                      ) : (
-                        <>
-                          <Clock className="h-3 w-3 text-health-yellow" />
-                          <span className="text-muted-foreground">Waiting gently</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
+              {momentsLoading ? (
+                <li className="rounded-2xl bg-card p-4 text-sm text-muted-foreground shadow-soft ring-1 ring-border">
+                  Loading live validation status…
                 </li>
-              ))}
+              ) : moments.length === 0 ? (
+                <li className="rounded-2xl bg-card p-4 text-sm text-muted-foreground shadow-soft ring-1 ring-border">
+                  No persisted moments yet. Share a support signal to start the validation trail.
+                </li>
+              ) : (
+                moments.map((moment) => {
+                  const Icon = momentIcons[moment.event_type] ?? Activity;
+                  const isValidated = moment.validation_status === "validated";
+                  const isWaiting = moment.validation_status === "pending";
+                  const statusText = isValidated
+                    ? "Validated — Event Token audit ready"
+                    : isWaiting
+                      ? `Pending validation until ${formatMomentTime(moment.validation_delay_until)}`
+                      : "Needs follow-through before validation";
+
+                  return (
+                    <li
+                      key={moment.id}
+                      className="flex items-start gap-3 rounded-2xl bg-card p-4 shadow-soft ring-1 ring-border"
+                    >
+                      <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-primary/8 text-primary">
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="font-medium">{moment.contact_label}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {formatMomentTime(moment.created_at)}
+                          </div>
+                        </div>
+                        <div className="text-sm text-muted-foreground">{moment.event_summary}</div>
+                        <div className="mt-2 inline-flex items-center gap-1.5 text-xs">
+                          {isValidated ? (
+                            <Check className="h-3 w-3 text-health-green" />
+                          ) : (
+                            <Clock className="h-3 w-3 text-health-yellow" />
+                          )}
+                          <span className="text-muted-foreground">{statusText}</span>
+                        </div>
+                        {moment.burn_receipt_hash ? (
+                          <div className="mt-1 font-mono text-[10px] text-muted-foreground">
+                            burn receipt {moment.burn_receipt_hash.slice(0, 18)}…
+                          </div>
+                        ) : null}
+                      </div>
+                    </li>
+                  );
+                })
+              )}
             </ul>
           </div>
         </section>

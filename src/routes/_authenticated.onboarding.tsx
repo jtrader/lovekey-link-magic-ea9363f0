@@ -29,6 +29,7 @@ import {
   LockKeyhole,
   MapPin,
   Upload,
+  Info,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
@@ -113,6 +114,22 @@ const genericAvatarChoices = Array.from(
   { length: 15 },
   (_, index) => `/avatar-presence/avatar-${String(index + 1).padStart(2, "0")}.png`,
 );
+const avatarMaxBytes = 5 * 1024 * 1024;
+const avatarAccept = ".jpg,.jpeg,.png,.webp,.gif";
+const avatarAllowedMimeTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+const avatarMimeByExtension: Record<string, string> = {
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+  gif: "image/gif",
+};
+const avatarExtensionByMime: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/gif": "gif",
+};
 
 const defaultProfileDraft: ProfileDraft = {
   fullName: "",
@@ -375,25 +392,33 @@ function ProfileStep({
     event.target.value = "";
     if (!file || !user) return;
 
-    if (!file.type.startsWith("image/")) {
-      toast.error("Choose an image file for your avatar.");
+    const extension =
+      file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "";
+    const contentType = avatarAllowedMimeTypes.has(file.type)
+      ? file.type
+      : avatarMimeByExtension[extension];
+
+    if (!contentType) {
+      toast.error("Upload a JPG, PNG, WebP or GIF image.");
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
+    if (file.size > avatarMaxBytes) {
       toast.error("Avatar images need to be under 5MB.");
       return;
     }
 
     setUploadingAvatar(true);
-    const extension = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "png";
-    const path = `${user.id}/avatar-${Date.now()}.${extension}`;
+    const storageExtension = extension === "jpeg" ? "jpg" : extension || avatarExtensionByMime[contentType];
+    const path = `${user.id}/avatar-${Date.now()}.${storageExtension}`;
     const { error } = await supabase.storage.from("avatars").upload(path, file, {
       cacheControl: "3600",
+      contentType,
       upsert: true,
     });
     setUploadingAvatar(false);
 
     if (error) {
+      console.error(error);
       toast.error("Avatar upload failed. Please try another image.");
       return;
     }
@@ -479,12 +504,29 @@ function ProfileStep({
                 {uploadingAvatar ? "Uploading..." : "Upload image"}
                 <input
                   type="file"
-                  accept="image/*"
+                  accept={avatarAccept}
                   onChange={uploadAvatar}
                   disabled={uploadingAvatar}
                   className="sr-only"
                 />
               </label>
+              <div className="group relative inline-flex items-center">
+                <button
+                  type="button"
+                  aria-label="Accepted avatar image formats"
+                  aria-describedby="avatar-upload-help"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-card text-muted-foreground ring-1 ring-border transition hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <Info className="h-3.5 w-3.5" />
+                </button>
+                <div
+                  id="avatar-upload-help"
+                  role="tooltip"
+                  className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-56 -translate-x-1/2 rounded-xl bg-popover px-3 py-2 text-xs leading-relaxed text-popover-foreground opacity-0 shadow-soft ring-1 ring-border transition group-hover:opacity-100 group-focus-within:opacity-100"
+                >
+                  Accepted formats: JPG, PNG, WebP or GIF. Maximum file size: 5MB.
+                </div>
+              </div>
             </div>
           </div>
         </div>

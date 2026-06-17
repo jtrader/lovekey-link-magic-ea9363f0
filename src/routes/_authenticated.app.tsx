@@ -4135,40 +4135,23 @@ function CreateHubSheet({
     setCreating(true);
     try {
       const name = hubName.trim() || placeholder;
-      // Array select (not .single()) — RLS may block the SELECT return even when INSERT succeeds
-      const { data: hubRows, error } = await supabase
-        .from("families")
-        .insert({
-          name,
-          hub_type: selectedType,
-          hub_visibility: "private",
-          public_join_mode: "invite",
-          created_by: userId,
-        })
-        .select("id");
+      // Use SECURITY DEFINER RPC — avoids RLS chicken-and-egg on families INSERT
+      const { data: newHubId, error } = await supabase.rpc("create_family", {
+        _name:             name,
+        _hub_type:         selectedType,
+        _hub_visibility:   "private",
+        _public_join_mode: "invite",
+        _role_label:       "Hub owner",
+      });
 
-      if (error) console.error("[CreateHubSheet] families insert error:", error);
-      const hubId = hubRows?.[0]?.id;
-      if (error || !hubId) {
+      if (error) console.error("[CreateHubSheet] create_family rpc error:", error);
+      if (error || !newHubId) {
         toast.error(error?.message ? `Hub error: ${error.message}` : "Couldn't create hub. Please try again.");
         return;
       }
-      await supabase
-        .from("family_members")
-        .upsert(
-          {
-            family_id: hubId,
-            user_id: userId,
-            role_label: "Hub owner",
-            member_kind: "owner",
-            visibility_state: "summary",
-            is_hub_admin: true,
-          },
-          { onConflict: "family_id,user_id" },
-        );
 
       toast.success(`${name} created.`);
-      onCreated(hubId);
+      onCreated(newHubId);
       onOpenChange(false);
     } finally {
       setCreating(false);

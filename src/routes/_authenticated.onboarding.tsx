@@ -149,14 +149,8 @@ const defaultFamilyDraft: FamilyDraft = {
   capturedLocation: null,
 };
 
-async function hashHubPassword(password: string) {
-  if (!password.trim()) return null;
-  const bytes = new TextEncoder().encode(password.trim());
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("");
-}
+// Password hashing is handled server-side via bcrypt in create_family() /
+// set_hub_password() RPCs.  Never hash passwords in the browser.
 
 function Onboarding() {
   const { user } = useAuth();
@@ -723,9 +717,11 @@ function FamilyStep({
     }
     setErrors({});
     setSaving(true);
-    const publicPasswordHash =
+    // Plaintext password passed directly to the RPC/update — bcrypt hashing
+    // happens server-side inside create_family() / set_hub_password().
+    const plaintextPassword =
       parsed.data.hub_visibility === "public" && parsed.data.public_join_mode === "password"
-        ? await hashHubPassword(parsed.data.public_password ?? "")
+        ? (parsed.data.public_password ?? null)
         : null;
     const familyPayload = {
       name: parsed.data.name,
@@ -734,65 +730,69 @@ function FamilyStep({
       hub_visibility: parsed.data.hub_visibility,
       public_join_mode:
         parsed.data.hub_visibility === "public" ? parsed.data.public_join_mode : "invite",
-      public_password_hash: publicPasswordHash,
       location_label: parsed.data.location_label || null,
       latitude: parsed.data.latitude,
       longitude: parsed.data.longitude,
       location_accuracy_meters: parsed.data.location_accuracy_meters,
       location_captured_at: parsed.data.latitude ? new Date().toISOString() : null,
     };
-    // Use array select (not .single()) — if RLS blocks the SELECT return,
-    // .single() errors even when the INSERT succeeded. Array access is resilient.
-    const { data: familyRows, error } = familyId
-      ? await supabase
-          .from("families")
-          .update(familyPayload)
-          .eq("id", familyId)
-          .select("id")
-      : await supabase
-          .from("families")
-          .insert({
-            ...familyPayload,
-            created_by: user!.id,
-          })
-          .select("id");
-    setSaving(false);
+    let hubId: string | null = null;
 
-    // Surface the real Supabase error in devtools for debugging
-    if (error) console.error("[onboarding] families insert/update error:", error);
+    if (familyId) {
+      // UPDATE existing hub — direct table write, user is already an admin so RLS passes
+      const { data: updateRows, error: updateError } = await supabase
+        .from("families")
+        .update(familyPayload)
+        .eq("id", familyId)
+        .select("id");
+      setSaving(false);
+      if (updateError) console.error("[onboarding] families update error:", updateError);
+      hubId = updateRows?.[0]?.id ?? familyId;
+      if (updateError) {
+        toast.error(updateError.message ? `Hub error: ${updateError.message}` : "Couldn't update the family hub.");
+        return;
+      }
+      // Update role on existing membership
+      await supabase
+        .from("family_members")
+        .upsert(
+          { family_id: hubId, user_id: user!.id, role_label: parsed.data.role_label, member_kind: "owner", visibility_state: "summary", is_hub_admin: true },
+          { onConflict: "family_id,user_id" },
+        );
+      // Update password server-side (bcrypt) — set_hub_password handles null = clear
+      if (parsed.data.hub_visibility === "public") {
+        await supabase.rpc("set_hub_password", {
+          _family_id: hubId!,
+          _plaintext_password: plaintextPassword,
+        });
+      }
+    } else {
+      // CREATE new hub — use SECURITY DEFINER RPC to avoid RLS chicken-and-egg
+      const { data: newId, error: rpcError } = await supabase.rpc("create_family", {
+        _name:                     parsed.data.name,
+        _hub_type:                 parsed.data.hub_type,
+        _description:              parsed.data.description || null,
+        _hub_visibility:           parsed.data.hub_visibility,
+        _public_join_mode:         parsed.data.hub_visibility === "public" ? parsed.data.public_join_mode : "invite",
+        _plaintext_password:       plaintextPassword,
+        _role_label:               parsed.data.role_label,
+        _location_label:           parsed.data.location_label || null,
+        _latitude:                 parsed.data.latitude,
+        _longitude:                parsed.data.longitude,
+        _location_accuracy_meters: parsed.data.location_accuracy_meters,
+        _location_captured_at:     parsed.data.latitude ? new Date().toISOString() : null,
+      });
+      setSaving(false);
+      if (rpcError) console.error("[onboarding] create_family rpc error:", rpcError);
+      if (rpcError || !newId) {
+        toast.error(rpcError?.message ? `Hub error: ${rpcError.message}` : "Couldn't create the family hub.");
+        return;
+      }
+      hubId = newId;
+    }
 
-    const hubId = familyRows?.[0]?.id ?? familyId;
-    if (error || !hubId) {
-      toast.error(
-        error?.message
-          ? `Hub error: ${error.message}`
-          : familyId
-            ? "Couldn't update the family hub."
-            : "Couldn't create the family hub.",
-      );
-      return;
-    }
-    const { error: memberError } = await supabase
-      .from("family_members")
-      .upsert(
-        {
-          family_id: hubId,
-          user_id: user!.id,
-          role_label: parsed.data.role_label,
-          member_kind: "owner",
-          visibility_state: "summary",
-          is_hub_admin: true,
-        },
-        { onConflict: "family_id,user_id" },
-      );
-    if (memberError) {
-      console.error("[onboarding] family_members upsert error:", memberError);
-      toast.error("Hub created, but your role could not be saved yet.");
-      onCreated(hubId);
-      return;
-    }
     toast.success(familyId ? "Hub details saved." : "Hub created.");
-    onCreated(hubId);
+    onCreated(hubId!);
   };
 
   return (

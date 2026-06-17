@@ -1200,6 +1200,32 @@ export type Database = {
       }
     }
     Functions: {
+      create_family: {
+        Args: {
+          _name: string
+          _hub_type?: string
+          _description?: string | null
+          _hub_visibility?: string
+          _public_join_mode?: string
+          /** Plaintext password — hashed server-side with bcrypt. Never pre-hash on the client. */
+          _plaintext_password?: string | null
+          _role_label?: string
+          _location_label?: string | null
+          _latitude?: number | null
+          _longitude?: number | null
+          _location_accuracy_meters?: number | null
+          _location_captured_at?: string | null
+        }
+        Returns: string
+      }
+      set_hub_password: {
+        Args: { _family_id: string; _plaintext_password: string | null }
+        Returns: void
+      }
+      join_hub_with_password: {
+        Args: { _family_id: string; _plaintext_password: string }
+        Returns: void
+      }
       accept_family_invite: { Args: { _token: string }; Returns: string }
       get_invite_by_token: {
         Args: { _token: string }

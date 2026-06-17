@@ -29,10 +29,10 @@ const defaultMembers: HubMember[] = [
 const positions = [
   "left-[50%] top-[4%] -translate-x-1/2",
   "right-[2%] top-[31%]",
-  "bottom-[4%] left-[50%] -translate-x-1/2",
+  "right-[13%] bottom-[13%]",
   "left-[2%] top-[31%]",
   "left-[13%] bottom-[13%]",
-  "right-[13%] bottom-[13%]",
+  "bottom-[4%] left-[50%] -translate-x-1/2",
 ];
 
 // Only first 4 positions for invite placeholders
@@ -55,12 +55,12 @@ const moodClass: Record<MoodRingState, string> = {
 };
 
 const hubGlowClass: Record<MoodRingState, string> = {
-  healthy: "drop-shadow-[0_0_34px_rgba(94,214,168,0.5)]",
-  stable: "drop-shadow-[0_0_34px_rgba(46,120,255,0.42)]",
-  reduced: "drop-shadow-[0_0_34px_rgba(255,197,90,0.45)]",
-  fragmenting: "drop-shadow-[0_0_34px_rgba(255,132,65,0.42)]",
-  crisis: "drop-shadow-[0_0_34px_rgba(255,55,55,0.45)]",
-  recovering: "drop-shadow-[0_0_34px_rgba(179,157,255,0.45)]",
+  healthy: "drop-shadow-[0_0_46px_rgba(94,214,168,0.82)]",
+  stable: "drop-shadow-[0_0_46px_rgba(46,120,255,0.72)]",
+  reduced: "drop-shadow-[0_0_46px_rgba(255,197,90,0.76)]",
+  fragmenting: "drop-shadow-[0_0_46px_rgba(255,132,65,0.72)]",
+  crisis: "drop-shadow-[0_0_46px_rgba(255,55,55,0.76)]",
+  recovering: "drop-shadow-[0_0_46px_rgba(179,157,255,0.76)]",
 };
 
 const starterAvatarUrl = (index: number) =>

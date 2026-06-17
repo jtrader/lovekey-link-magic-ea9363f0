@@ -86,6 +86,56 @@ export type Database = {
         }
         Relationships: []
       }
+      device_presence_states: {
+        Row: {
+          auto_state: string
+          created_at: string
+          family_id: string
+          is_idle: boolean
+          last_heartbeat_at: string | null
+          last_interaction_at: string | null
+          manual_state: string | null
+          manual_until: string | null
+          updated_at: string
+          user_id: string
+          visibility_state: string
+        }
+        Insert: {
+          auto_state?: string
+          created_at?: string
+          family_id: string
+          is_idle?: boolean
+          last_heartbeat_at?: string | null
+          last_interaction_at?: string | null
+          manual_state?: string | null
+          manual_until?: string | null
+          updated_at?: string
+          user_id: string
+          visibility_state?: string
+        }
+        Update: {
+          auto_state?: string
+          created_at?: string
+          family_id?: string
+          is_idle?: boolean
+          last_heartbeat_at?: string | null
+          last_interaction_at?: string | null
+          manual_state?: string | null
+          manual_until?: string | null
+          updated_at?: string
+          user_id?: string
+          visibility_state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_presence_states_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       families: {
         Row: {
           created_at: string

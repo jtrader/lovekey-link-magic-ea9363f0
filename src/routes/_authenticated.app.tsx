@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Nucleus } from "@/components/Nucleus";
 import { GroupChatSheet } from "@/components/GroupChatSheet";
@@ -13,6 +13,13 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -192,8 +199,47 @@ type PublicHubSearchResult = {
   distance_km: number;
   password_required: boolean;
 };
+type DevicePresenceState =
+  | "active_now"
+  | "recently_seen"
+  | "away_or_locked"
+  | "offline_or_unreachable"
+  | "unknown";
+type DevicePresenceRow = {
+  family_id: string;
+  user_id: string;
+  auto_state: string;
+  manual_state: string | null;
+  manual_until: string | null;
+  last_heartbeat_at: string | null;
+  last_interaction_at: string | null;
+  visibility_state: string;
+  is_idle: boolean;
+  updated_at: string;
+};
+type ManualOverrideDuration = 30 | 60 | 240;
 
 const timeOpts: Time[] = ["Available", "Maybe", "Busy", "Unavailable"];
+const devicePresenceStates: { value: DevicePresenceState; label: string; hint: string }[] = [
+  { value: "active_now", label: "Active now", hint: "App visible with recent interaction" },
+  { value: "recently_seen", label: "Recently seen", hint: "Heartbeat received recently" },
+  { value: "away_or_locked", label: "Away or locked", hint: "Hidden, locked, or idle" },
+  {
+    value: "offline_or_unreachable",
+    label: "Offline or unreachable",
+    hint: "Heartbeat is missing",
+  },
+  { value: "unknown", label: "Unknown", hint: "Cannot determine reliably" },
+];
+const manualOverrideDurations: { value: ManualOverrideDuration; label: string }[] = [
+  { value: 30, label: "30 min" },
+  { value: 60, label: "1 hour" },
+  { value: 240, label: "4 hours" },
+];
+const heartbeatMs = 60 * 1000;
+const idleAfterMs = 5 * 60 * 1000;
+const recentlySeenMs = 15 * 60 * 1000;
+const activeInteractionMs = 2 * 60 * 1000;
 const energyOpts: { v: Energy; cls: string; hint: string }[] = [
   { v: "Green", cls: "bg-health-green", hint: "Resourced" },
   { v: "Blue", cls: "bg-health-blue", hint: "Steady" },
@@ -373,6 +419,239 @@ function toggleParticipantKey(keys: string[], key: string) {
   return keys.includes(key) ? keys.filter((item) => item !== key) : [...keys, key];
 }
 
+function normalizeDeviceState(value: string | null | undefined): DevicePresenceState {
+  return devicePresenceStates.some((state) => state.value === value)
+    ? (value as DevicePresenceState)
+    : "unknown";
+}
+
+function devicePresenceLabel(value: DevicePresenceState) {
+  return devicePresenceStates.find((state) => state.value === value)?.label ?? "Unknown";
+}
+
+function getDevicePresenceHint(value: DevicePresenceState) {
+  return (
+    devicePresenceStates.find((state) => state.value === value)?.hint ??
+    "Cannot determine reliably"
+  );
+}
+
+function formatPresenceTime(value: string | null | undefined) {
+  if (!value) return "Not received yet";
+  return new Intl.DateTimeFormat(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
+function formatManualUntil(value: string | null | undefined) {
+  if (!value) return "";
+  return new Intl.DateTimeFormat(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
+function getDeviceAutoState({
+  visibilityState,
+  isIdle,
+  lastHeartbeatAt,
+  lastInteractionAt,
+  nowMs,
+}: {
+  visibilityState: string;
+  isIdle: boolean;
+  lastHeartbeatAt: string | null;
+  lastInteractionAt: string | null;
+  nowMs: number;
+}): DevicePresenceState {
+  if (!lastHeartbeatAt) return "unknown";
+  if (nowMs - new Date(lastHeartbeatAt).getTime() > recentlySeenMs) {
+    return "offline_or_unreachable";
+  }
+  if (visibilityState !== "visible" || isIdle) return "away_or_locked";
+  if (lastInteractionAt && nowMs - new Date(lastInteractionAt).getTime() <= activeInteractionMs) {
+    return "active_now";
+  }
+  return "recently_seen";
+}
+
+function getEffectiveDevicePresence(row: DevicePresenceRow | null | undefined, nowMs: number) {
+  const manualState = normalizeDeviceState(row?.manual_state);
+  const manualUntilMs = row?.manual_until ? new Date(row.manual_until).getTime() : 0;
+  if (row?.manual_state && manualUntilMs > nowMs) {
+    return { state: manualState, source: "manual" as const };
+  }
+  return { state: normalizeDeviceState(row?.auto_state), source: "auto" as const };
+}
+
+function devicePresenceToPresenceState(state: DevicePresenceState): PresenceState {
+  if (state === "active_now" || state === "recently_seen") return "available";
+  if (state === "away_or_locked") return "busy";
+  return "quiet";
+}
+
+function devicePresenceDotClass(state: DevicePresenceState) {
+  if (state === "active_now" || state === "recently_seen") return "bg-health-green";
+  if (state === "away_or_locked") return "bg-health-yellow";
+  if (state === "offline_or_unreachable") return "bg-muted-foreground/50";
+  return "bg-health-purple";
+}
+
+function useDevicePresence(userId: string | undefined, familyId: string | undefined) {
+  const queryClient = useQueryClient();
+  const [nowMs, setNowMs] = useState(() => Date.now());
+  const [lastInteractionAt, setLastInteractionAt] = useState(() => new Date().toISOString());
+  const [visibilityState, setVisibilityState] = useState(() =>
+    typeof document === "undefined" ? "unknown" : document.visibilityState,
+  );
+  const lastInteractionWriteMs = useRef(0);
+  const enabled = Boolean(userId && familyId);
+
+  const { data: row } = useQuery<DevicePresenceRow | null>({
+    queryKey: ["device-presence", familyId, userId],
+    enabled,
+    refetchInterval: heartbeatMs,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("device_presence_states")
+        .select("*")
+        .eq("family_id", familyId!)
+        .eq("user_id", userId!)
+        .maybeSingle();
+      return (data as DevicePresenceRow | null) ?? null;
+    },
+  });
+
+  const isIdle = nowMs - new Date(lastInteractionAt).getTime() > idleAfterMs;
+  const localAutoState = getDeviceAutoState({
+    visibilityState,
+    isIdle,
+    lastHeartbeatAt: new Date(nowMs).toISOString(),
+    lastInteractionAt,
+    nowMs,
+  });
+
+  const upsertDevicePresence = useCallback(
+    async (override?: {
+      manual_state?: DevicePresenceState | null;
+      manual_until?: string | null;
+    }) => {
+      if (!userId || !familyId) return false;
+      const heartbeatAt = new Date().toISOString();
+      const autoState = getDeviceAutoState({
+        visibilityState,
+        isIdle,
+        lastHeartbeatAt: heartbeatAt,
+        lastInteractionAt,
+        nowMs: Date.now(),
+      });
+      const { error } = await supabase.from("device_presence_states").upsert({
+        family_id: familyId,
+        user_id: userId,
+        auto_state: autoState,
+        last_heartbeat_at: heartbeatAt,
+        last_interaction_at: lastInteractionAt,
+        visibility_state: visibilityState,
+        is_idle: isIdle,
+        updated_at: heartbeatAt,
+        ...override,
+      });
+      if (error) {
+        if (override) toast.error("Device signal could not be saved yet.");
+        return false;
+      }
+      await queryClient.invalidateQueries({ queryKey: ["device-presence", familyId, userId] });
+      return true;
+    },
+    [familyId, isIdle, lastInteractionAt, queryClient, userId, visibilityState],
+  );
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => setNowMs(Date.now()), 30 * 1000);
+    return () => window.clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const markInteraction = () => {
+      const nextMs = Date.now();
+      if (nextMs - lastInteractionWriteMs.current < 15 * 1000) return;
+      lastInteractionWriteMs.current = nextMs;
+      setLastInteractionAt(new Date(nextMs).toISOString());
+      setNowMs(nextMs);
+    };
+    const events: (keyof WindowEventMap)[] = ["pointerdown", "keydown", "touchstart", "scroll"];
+    events.forEach((eventName) =>
+      window.addEventListener(eventName, markInteraction, { passive: true }),
+    );
+    return () => {
+      events.forEach((eventName) => window.removeEventListener(eventName, markInteraction));
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setVisibilityState(document.visibilityState);
+      setNowMs(Date.now());
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+    void upsertDevicePresence();
+    const intervalId = window.setInterval(() => {
+      void upsertDevicePresence();
+    }, heartbeatMs);
+    return () => window.clearInterval(intervalId);
+  }, [enabled, upsertDevicePresence]);
+
+  const optimisticRow: DevicePresenceRow | null = familyId && userId
+    ? {
+        family_id: familyId,
+        user_id: userId,
+        auto_state: localAutoState,
+        manual_state: row?.manual_state ?? null,
+        manual_until: row?.manual_until ?? null,
+        last_heartbeat_at: row?.last_heartbeat_at ?? null,
+        last_interaction_at: row?.last_interaction_at ?? lastInteractionAt,
+        visibility_state: visibilityState,
+        is_idle: isIdle,
+        updated_at: row?.updated_at ?? new Date(nowMs).toISOString(),
+      }
+    : null;
+  const effective = getEffectiveDevicePresence(optimisticRow, nowMs);
+
+  const setManualOverride = useCallback(
+    async (state: DevicePresenceState, durationMinutes: ManualOverrideDuration) => {
+      const manualUntil = new Date(Date.now() + durationMinutes * 60 * 1000).toISOString();
+      const saved = await upsertDevicePresence({ manual_state: state, manual_until: manualUntil });
+      if (!saved) return;
+      toast.success(
+        `${devicePresenceLabel(state)} set for ${
+          durationMinutes === 60 ? "1 hour" : `${durationMinutes} minutes`
+        }.`,
+      );
+    },
+    [upsertDevicePresence],
+  );
+
+  const clearManualOverride = useCallback(async () => {
+    const saved = await upsertDevicePresence({ manual_state: null, manual_until: null });
+    if (!saved) return;
+    toast.success("Device signal returned to auto.");
+  }, [upsertDevicePresence]);
+
+  return {
+    row: optimisticRow,
+    effectiveState: effective.state,
+    source: effective.source,
+    setManualOverride,
+    clearManualOverride,
+  };
+}
+
 function AppView() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -410,6 +689,8 @@ function AppView() {
   const [inviteContact, setInviteContact] = useState("");
   const [inviteLink, setInviteLink] = useState<string | null>(null);
   const [creatingInvite, setCreatingInvite] = useState(false);
+  const [manualDeviceState, setManualDeviceState] = useState<DevicePresenceState>("away_or_locked");
+  const [manualDeviceDuration, setManualDeviceDuration] = useState<ManualOverrideDuration>(60);
 
   // Pull profile + active family (honoring selectedFamilyId if set).
   const { data: ctx, isLoading } = useQuery({
@@ -456,6 +737,7 @@ function AppView() {
       });
     },
   });
+  const devicePresence = useDevicePresence(user?.id, ctx?.family?.id);
 
   // Unread notification count — drives the badge on the bell icon
   const unreadNotificationCount = useUnreadCount(user?.id);
@@ -1198,11 +1480,15 @@ function AppView() {
   }));
   const selectedDemoAccount =
     demoAccounts.find((account) => account.id === selectedDemoId) ?? demoAccounts[0];
+  const currentAvatarPresence =
+    will === "Need help"
+      ? "needs_support"
+      : devicePresenceToPresenceState(devicePresence.effectiveState);
   const hubMembers: HubMemberSummary[] = [
     {
       name: firstName,
       role: contextualRole,
-      presence: will === "Need help" ? "needs_support" : time === "Busy" ? "busy" : "available",
+      presence: currentAvatarPresence,
       mood:
         will === "Need help"
           ? "crisis"
@@ -2128,6 +2414,87 @@ function AppView() {
                     {w}
                   </Chip>
                 ))}
+              </div>
+            </DimensionCard>
+
+            <DimensionCard Icon={Activity} label="Device signal">
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span
+                    className={`h-3 w-3 rounded-full ${devicePresenceDotClass(
+                      devicePresence.effectiveState,
+                    )}`}
+                  />
+                  <div>
+                    <div className="text-sm font-medium">
+                      {devicePresenceLabel(devicePresence.effectiveState)}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {devicePresence.source === "manual"
+                        ? `Manual until ${formatManualUntil(devicePresence.row?.manual_until)}`
+                        : "Auto from app visibility and heartbeat"}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {getDevicePresenceHint(devicePresence.effectiveState)} · Last heartbeat:{" "}
+                  {formatPresenceTime(devicePresence.row?.last_heartbeat_at)}
+                </p>
+                <div className="grid gap-2 sm:grid-cols-[1fr_7rem_auto]">
+                  <Select
+                    value={manualDeviceState}
+                    onValueChange={(value) => setManualDeviceState(value as DevicePresenceState)}
+                  >
+                    <SelectTrigger aria-label="Manual device signal">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {devicePresenceStates.map((state) => (
+                        <SelectItem key={state.value} value={state.value}>
+                          {state.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select
+                    value={String(manualDeviceDuration)}
+                    onValueChange={(value) =>
+                      setManualDeviceDuration(Number(value) as ManualOverrideDuration)
+                    }
+                  >
+                    <SelectTrigger aria-label="Manual device signal duration">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {manualOverrideDurations.map((duration) => (
+                        <SelectItem key={duration.value} value={String(duration.value)}>
+                          {duration.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      void devicePresence.setManualOverride(
+                        manualDeviceState,
+                        manualDeviceDuration,
+                      )
+                    }
+                    className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+                  >
+                    Override
+                  </button>
+                </div>
+                {devicePresence.source === "manual" ? (
+                  <button
+                    type="button"
+                    onClick={() => void devicePresence.clearManualOverride()}
+                    className="w-fit text-xs font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                  >
+                    Return to auto
+                  </button>
+                ) : null}
               </div>
             </DimensionCard>
           </div>

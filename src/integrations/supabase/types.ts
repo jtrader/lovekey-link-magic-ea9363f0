@@ -14,6 +14,182 @@ export type Database = {
   }
   public: {
     Tables: {
+      calendar_availability_windows: {
+        Row: {
+          availability: string
+          connection_id: string | null
+          created_at: string
+          ends_at: string
+          external_event_hash: string | null
+          family_id: string
+          id: string
+          share_label: string
+          source_protocol: string
+          starts_at: string
+          updated_at: string
+          user_id: string
+          visibility_level: string
+        }
+        Insert: {
+          availability?: string
+          connection_id?: string | null
+          created_at?: string
+          ends_at: string
+          external_event_hash?: string | null
+          family_id: string
+          id?: string
+          share_label?: string
+          source_protocol?: string
+          starts_at: string
+          updated_at?: string
+          user_id: string
+          visibility_level?: string
+        }
+        Update: {
+          availability?: string
+          connection_id?: string | null
+          created_at?: string
+          ends_at?: string
+          external_event_hash?: string | null
+          family_id?: string
+          id?: string
+          share_label?: string
+          source_protocol?: string
+          starts_at?: string
+          updated_at?: string
+          user_id?: string
+          visibility_level?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_availability_windows_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_connections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calendar_availability_windows_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      calendar_connections: {
+        Row: {
+          availability_granularity: string
+          created_at: string
+          credential_ref: string | null
+          display_name: string
+          family_id: string
+          id: string
+          include_event_titles: boolean
+          last_synced_at: string | null
+          protocol: string
+          provider: string
+          source_label: string | null
+          status: string
+          sync_cursor: string | null
+          sync_direction: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          availability_granularity?: string
+          created_at?: string
+          credential_ref?: string | null
+          display_name: string
+          family_id: string
+          id?: string
+          include_event_titles?: boolean
+          last_synced_at?: string | null
+          protocol: string
+          provider: string
+          source_label?: string | null
+          status?: string
+          sync_cursor?: string | null
+          sync_direction?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          availability_granularity?: string
+          created_at?: string
+          credential_ref?: string | null
+          display_name?: string
+          family_id?: string
+          id?: string
+          include_event_titles?: boolean
+          last_synced_at?: string | null
+          protocol?: string
+          provider?: string
+          source_label?: string | null
+          status?: string
+          sync_cursor?: string | null
+          sync_direction?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_connections_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      calendar_sync_logs: {
+        Row: {
+          connection_id: string | null
+          created_at: string
+          family_id: string
+          id: string
+          message: string | null
+          status: string
+          user_id: string
+          windows_imported: number
+        }
+        Insert: {
+          connection_id?: string | null
+          created_at?: string
+          family_id: string
+          id?: string
+          message?: string | null
+          status: string
+          user_id: string
+          windows_imported?: number
+        }
+        Update: {
+          connection_id?: string | null
+          created_at?: string
+          family_id?: string
+          id?: string
+          message?: string | null
+          status?: string
+          user_id?: string
+          windows_imported?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_sync_logs_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_connections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calendar_sync_logs_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       credit_transactions: {
         Row: {
           created_at: string
@@ -86,29 +262,106 @@ export type Database = {
         }
         Relationships: []
       }
+      device_presence_states: {
+        Row: {
+          auto_state: string
+          created_at: string
+          family_id: string
+          is_idle: boolean
+          last_heartbeat_at: string | null
+          last_interaction_at: string | null
+          manual_state: string | null
+          manual_until: string | null
+          updated_at: string
+          user_id: string
+          visibility_state: string
+        }
+        Insert: {
+          auto_state?: string
+          created_at?: string
+          family_id: string
+          is_idle?: boolean
+          last_heartbeat_at?: string | null
+          last_interaction_at?: string | null
+          manual_state?: string | null
+          manual_until?: string | null
+          updated_at?: string
+          user_id: string
+          visibility_state?: string
+        }
+        Update: {
+          auto_state?: string
+          created_at?: string
+          family_id?: string
+          is_idle?: boolean
+          last_heartbeat_at?: string | null
+          last_interaction_at?: string | null
+          manual_state?: string | null
+          manual_until?: string | null
+          updated_at?: string
+          user_id?: string
+          visibility_state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_presence_states_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       families: {
         Row: {
           created_at: string
           created_by: string
           description: string | null
+          hub_type: string
+          hub_visibility: string
           id: string
+          latitude: number | null
+          location_accuracy_meters: number | null
+          location_captured_at: string | null
+          location_label: string | null
+          longitude: number | null
           name: string
+          public_join_mode: string
+          public_password_hash: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           created_by: string
           description?: string | null
+          hub_type?: string
+          hub_visibility?: string
           id?: string
+          latitude?: number | null
+          location_accuracy_meters?: number | null
+          location_captured_at?: string | null
+          location_label?: string | null
+          longitude?: number | null
           name: string
+          public_join_mode?: string
+          public_password_hash?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           created_by?: string
           description?: string | null
+          hub_type?: string
+          hub_visibility?: string
           id?: string
+          latitude?: number | null
+          location_accuracy_meters?: number | null
+          location_captured_at?: string | null
+          location_label?: string | null
+          longitude?: number | null
           name?: string
+          public_join_mode?: string
+          public_password_hash?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -157,18 +410,30 @@ export type Database = {
       family_members: {
         Row: {
           family_id: string
+          is_hub_admin: boolean
           joined_at: string
+          member_kind: string
+          role_label: string
           user_id: string
+          visibility_state: string
         }
         Insert: {
           family_id: string
+          is_hub_admin?: boolean
           joined_at?: string
+          member_kind?: string
+          role_label?: string
           user_id: string
+          visibility_state?: string
         }
         Update: {
           family_id?: string
+          is_hub_admin?: boolean
           joined_at?: string
+          member_kind?: string
+          role_label?: string
           user_id?: string
+          visibility_state?: string
         }
         Relationships: [
           {
@@ -213,6 +478,256 @@ export type Database = {
             foreignKeyName: "family_presence_family_id_fkey"
             columns: ["family_id"]
             isOneToOne: true
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hub_chat_messages: {
+        Row: {
+          body: string
+          conversation_id: string
+          created_at: string
+          family_id: string
+          id: string
+          message_type: string
+          metadata: Json
+          sender_label: string
+          sender_user_id: string | null
+          visibility_level: string
+        }
+        Insert: {
+          body: string
+          conversation_id: string
+          created_at?: string
+          family_id: string
+          id?: string
+          message_type?: string
+          metadata?: Json
+          sender_label?: string
+          sender_user_id?: string | null
+          visibility_level?: string
+        }
+        Update: {
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          family_id?: string
+          id?: string
+          message_type?: string
+          metadata?: Json
+          sender_label?: string
+          sender_user_id?: string | null
+          visibility_level?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hub_chat_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "hub_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hub_chat_messages_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hub_conversation_participants: {
+        Row: {
+          conversation_id: string
+          created_at: string
+          family_id: string
+          id: string
+          participant_key: string
+          participant_label: string
+          participant_role: string | null
+          user_id: string | null
+        }
+        Insert: {
+          conversation_id: string
+          created_at?: string
+          family_id: string
+          id?: string
+          participant_key: string
+          participant_label: string
+          participant_role?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          conversation_id?: string
+          created_at?: string
+          family_id?: string
+          id?: string
+          participant_key?: string
+          participant_label?: string
+          participant_role?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hub_conversation_participants_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "hub_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hub_conversation_participants_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hub_conversations: {
+        Row: {
+          conversation_type: string
+          created_at: string
+          created_by: string
+          family_id: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          conversation_type?: string
+          created_at?: string
+          created_by: string
+          family_id: string
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          conversation_type?: string
+          created_at?: string
+          created_by?: string
+          family_id?: string
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hub_conversations_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hub_event_participants: {
+        Row: {
+          created_at: string
+          created_by: string
+          event_id: string
+          family_id: string
+          id: string
+          invited_user_id: string | null
+          participant_key: string
+          participant_label: string
+          participant_role: string | null
+          response_status: string
+          updated_at: string
+          visibility_level: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          event_id: string
+          family_id: string
+          id?: string
+          invited_user_id?: string | null
+          participant_key: string
+          participant_label: string
+          participant_role?: string | null
+          response_status?: string
+          updated_at?: string
+          visibility_level?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          event_id?: string
+          family_id?: string
+          id?: string
+          invited_user_id?: string | null
+          participant_key?: string
+          participant_label?: string
+          participant_role?: string | null
+          response_status?: string
+          updated_at?: string
+          visibility_level?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hub_event_participants_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "hub_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hub_event_participants_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hub_events: {
+        Row: {
+          created_at: string
+          created_by: string
+          event_type: string
+          family_id: string
+          id: string
+          starts_at: string | null
+          status: string
+          support_context: string | null
+          title: string
+          updated_at: string
+          visibility_level: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          event_type?: string
+          family_id: string
+          id?: string
+          starts_at?: string | null
+          status?: string
+          support_context?: string | null
+          title: string
+          updated_at?: string
+          visibility_level?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          event_type?: string
+          family_id?: string
+          id?: string
+          starts_at?: string | null
+          status?: string
+          support_context?: string | null
+          title?: string
+          updated_at?: string
+          visibility_level?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hub_events_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
             referencedRelation: "families"
             referencedColumns: ["id"]
           },
@@ -279,6 +794,128 @@ export type Database = {
             columns: ["family_id"]
             isOneToOne: false
             referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      location_hotspots: {
+        Row: {
+          created_at: string
+          family_id: string
+          hotspot_type: string
+          id: string
+          latitude: number
+          longitude: number
+          name: string
+          radius_meters: number
+          updated_at: string
+          user_id: string
+          visibility: string
+        }
+        Insert: {
+          created_at?: string
+          family_id: string
+          hotspot_type?: string
+          id?: string
+          latitude: number
+          longitude: number
+          name: string
+          radius_meters?: number
+          updated_at?: string
+          user_id: string
+          visibility?: string
+        }
+        Update: {
+          created_at?: string
+          family_id?: string
+          hotspot_type?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          name?: string
+          radius_meters?: number
+          updated_at?: string
+          user_id?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "location_hotspots_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      location_presence_states: {
+        Row: {
+          accuracy_meters: number | null
+          availability: string
+          created_at: string
+          distance_to_hotspot_meters: number | null
+          dwell_minutes: number
+          family_id: string
+          inferred_state: string
+          is_tracking: boolean
+          last_signal_at: string | null
+          nearest_hotspot_id: string | null
+          nearest_hotspot_name: string | null
+          nearest_hotspot_type: string | null
+          speed_kmh: number | null
+          status_label: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accuracy_meters?: number | null
+          availability?: string
+          created_at?: string
+          distance_to_hotspot_meters?: number | null
+          dwell_minutes?: number
+          family_id: string
+          inferred_state?: string
+          is_tracking?: boolean
+          last_signal_at?: string | null
+          nearest_hotspot_id?: string | null
+          nearest_hotspot_name?: string | null
+          nearest_hotspot_type?: string | null
+          speed_kmh?: number | null
+          status_label?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accuracy_meters?: number | null
+          availability?: string
+          created_at?: string
+          distance_to_hotspot_meters?: number | null
+          dwell_minutes?: number
+          family_id?: string
+          inferred_state?: string
+          is_tracking?: boolean
+          last_signal_at?: string | null
+          nearest_hotspot_id?: string | null
+          nearest_hotspot_name?: string | null
+          nearest_hotspot_type?: string | null
+          speed_kmh?: number | null
+          status_label?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "location_presence_states_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "location_presence_states_nearest_hotspot_id_fkey"
+            columns: ["nearest_hotspot_id"]
+            isOneToOne: false
+            referencedRelation: "location_hotspots"
             referencedColumns: ["id"]
           },
         ]
@@ -577,6 +1214,26 @@ export type Database = {
       is_family_member: {
         Args: { _family_id: string; _user_id: string }
         Returns: boolean
+      }
+      search_public_hubs_nearby: {
+        Args: {
+          _latitude: number
+          _limit?: number
+          _longitude: number
+          _radius_km?: number
+        }
+        Returns: {
+          description: string
+          distance_km: number
+          hub_type: string
+          id: string
+          latitude: number
+          location_label: string
+          longitude: number
+          name: string
+          password_required: boolean
+          public_join_mode: string
+        }[]
       }
       validate_due_hub_moments: {
         Args: { _family_id: string; _limit?: number }

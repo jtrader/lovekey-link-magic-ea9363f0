@@ -4153,14 +4153,17 @@ function CreateHubSheet({
       }
       await supabase
         .from("family_members")
-        .update({
-          role_label: "Hub owner",
-          member_kind: "owner",
-          visibility_state: "summary",
-          is_hub_admin: true,
-        })
-        .eq("family_id", hub.id)
-        .eq("user_id", userId);
+        .upsert(
+          {
+            family_id: hub.id,
+            user_id: userId,
+            role_label: "Hub owner",
+            member_kind: "owner",
+            visibility_state: "summary",
+            is_hub_admin: true,
+          },
+          { onConflict: "family_id,user_id" },
+        );
 
       toast.success(`${name} created.`);
       onCreated(hub.id);

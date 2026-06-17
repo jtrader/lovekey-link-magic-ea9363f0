@@ -763,14 +763,17 @@ function FamilyStep({
     }
     const { error: memberError } = await supabase
       .from("family_members")
-      .update({
-        role_label: parsed.data.role_label,
-        member_kind: "owner",
-        visibility_state: "summary",
-        is_hub_admin: true,
-      })
-      .eq("family_id", data.id)
-      .eq("user_id", user!.id);
+      .upsert(
+        {
+          family_id: data.id,
+          user_id: user!.id,
+          role_label: parsed.data.role_label,
+          member_kind: "owner",
+          visibility_state: "summary",
+          is_hub_admin: true,
+        },
+        { onConflict: "family_id,user_id" },
+      );
     if (memberError) {
       toast.error("Hub created, but your role could not be saved yet.");
       onCreated(data.id);

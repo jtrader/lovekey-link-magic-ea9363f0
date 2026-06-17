@@ -28,6 +28,7 @@ export type HubType =
 export type HubRole =
   | "Dad"
   | "Mum"
+  | "Parent"
   | "Partner"
   | "Child"
   | "Son"
@@ -197,7 +198,7 @@ export const hubTypes: {
     purpose: "Extended family support, updates and check-ins",
     category: "Family",
     namePlaceholder: "The Nguyen Family",
-    roleSuggestions: ["Son", "Daughter", "Sibling"],
+    roleSuggestions: ["Parent", "Son", "Daughter", "Sibling"],
   },
   {
     value: "blended_family",

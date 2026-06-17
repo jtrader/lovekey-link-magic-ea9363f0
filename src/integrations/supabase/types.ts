@@ -218,6 +218,71 @@ export type Database = {
           },
         ]
       }
+      hub_moments: {
+        Row: {
+          actor_user_id: string | null
+          burn_receipt_hash: string | null
+          contact_label: string
+          created_at: string
+          event_summary: string
+          event_type: string
+          family_id: string
+          follow_through_met: boolean
+          id: string
+          source_event_id: string | null
+          token_payload: Json | null
+          updated_at: string
+          validated_at: string | null
+          validation_delay_until: string
+          validation_reason: string | null
+          validation_status: string
+        }
+        Insert: {
+          actor_user_id?: string | null
+          burn_receipt_hash?: string | null
+          contact_label: string
+          created_at?: string
+          event_summary: string
+          event_type: string
+          family_id: string
+          follow_through_met?: boolean
+          id?: string
+          source_event_id?: string | null
+          token_payload?: Json | null
+          updated_at?: string
+          validated_at?: string | null
+          validation_delay_until?: string
+          validation_reason?: string | null
+          validation_status?: string
+        }
+        Update: {
+          actor_user_id?: string | null
+          burn_receipt_hash?: string | null
+          contact_label?: string
+          created_at?: string
+          event_summary?: string
+          event_type?: string
+          family_id?: string
+          follow_through_met?: boolean
+          id?: string
+          source_event_id?: string | null
+          token_payload?: Json | null
+          updated_at?: string
+          validated_at?: string | null
+          validation_delay_until?: string
+          validation_reason?: string | null
+          validation_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hub_moments_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       presence_states: {
         Row: {
           family_id: string
@@ -387,6 +452,63 @@ export type Database = {
           },
         ]
       }
+      rsp_validation_events: {
+        Row: {
+          burn_receipt_hash: string | null
+          created_at: string
+          event_token_payload: Json
+          family_id: string
+          hub_moment_id: string
+          id: string
+          reason: string
+          source_event_id: string | null
+          status_from: string | null
+          status_to: string
+          validated_at: string | null
+        }
+        Insert: {
+          burn_receipt_hash?: string | null
+          created_at?: string
+          event_token_payload?: Json
+          family_id: string
+          hub_moment_id: string
+          id?: string
+          reason: string
+          source_event_id?: string | null
+          status_from?: string | null
+          status_to: string
+          validated_at?: string | null
+        }
+        Update: {
+          burn_receipt_hash?: string | null
+          created_at?: string
+          event_token_payload?: Json
+          family_id?: string
+          hub_moment_id?: string
+          id?: string
+          reason?: string
+          source_event_id?: string | null
+          status_from?: string | null
+          status_to?: string
+          validated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rsp_validation_events_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rsp_validation_events_hub_moment_id_fkey"
+            columns: ["hub_moment_id"]
+            isOneToOne: false
+            referencedRelation: "hub_moments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       support_requests: {
         Row: {
           category: string
@@ -455,6 +577,15 @@ export type Database = {
       is_family_member: {
         Args: { _family_id: string; _user_id: string }
         Returns: boolean
+      }
+      validate_due_hub_moments: {
+        Args: { _family_id: string; _limit?: number }
+        Returns: {
+          burn_receipt_hash: string
+          hub_moment_id: string
+          validation_reason: string
+          validation_status: string
+        }[]
       }
     }
     Enums: {

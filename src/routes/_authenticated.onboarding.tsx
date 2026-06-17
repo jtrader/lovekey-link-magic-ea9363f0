@@ -403,17 +403,27 @@ function ProfileStep({
 
     setUploadingAvatar(true);
     const storageExtension = extension === "jpeg" ? "jpg" : extension || avatarExtensionByMime[contentType];
+    // Always use a fresh path — never collides, so upsert is a straight INSERT
     const path = `${user.id}/avatar-${Date.now()}.${storageExtension}`;
     const { error } = await supabase.storage.from("avatars").upload(path, file, {
       cacheControl: "3600",
       contentType,
-      upsert: true,
+      upsert: false,
     });
     setUploadingAvatar(false);
 
     if (error) {
-      console.error(error);
-      toast.error("Avatar upload failed. Please try another image.");
+      console.error("[uploadAvatar] storage error:", error);
+      const msg = error.message ?? "";
+      if (msg.includes("Bucket not found") || msg.includes("bucket")) {
+        toast.error("Storage not configured. Ask your admin to apply the avatars bucket migration.");
+      } else if (msg.includes("security") || msg.includes("policy") || msg.includes("403")) {
+        toast.error("Upload blocked by storage policy. Make sure the avatars bucket migration has been applied.");
+      } else if (msg.includes("size") || msg.includes("limit")) {
+        toast.error("File too large — avatars must be under 5 MB.");
+      } else {
+        toast.error(`Avatar upload failed: ${msg || "unknown error"}`);
+      }
       return;
     }
 

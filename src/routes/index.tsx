@@ -128,6 +128,51 @@ const states = [
   { c: "bg-health-purple", t: "Recovering" },
 ];
 
+const homepageHubMembers = [
+  {
+    name: "Ari",
+    role: "Parent · Available",
+    presence: "available" as const,
+    mood: "healthy" as const,
+    avatarUrl: "/avatar-presence/avatar-01.png",
+  },
+  {
+    name: "Maya",
+    role: "Partner · Available",
+    presence: "available" as const,
+    mood: "stable" as const,
+    avatarUrl: "/avatar-presence/avatar-02.png",
+  },
+  {
+    name: "Leo",
+    role: "At school · Available",
+    presence: "available" as const,
+    mood: "stable" as const,
+    avatarUrl: "/avatar-presence/avatar-03.png",
+  },
+  {
+    name: "Sofia",
+    role: "At home · Available",
+    presence: "available" as const,
+    mood: "healthy" as const,
+    avatarUrl: "/avatar-presence/avatar-04.png",
+  },
+  {
+    name: "Noah",
+    role: "Quiet mode",
+    presence: "quiet" as const,
+    mood: "recovering" as const,
+    avatarUrl: "/avatar-presence/avatar-05.png",
+  },
+  {
+    name: "Nan",
+    role: "Check-in soon",
+    presence: "busy" as const,
+    mood: "reduced" as const,
+    avatarUrl: "/avatar-presence/avatar-11.png",
+  },
+];
+
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
@@ -334,9 +379,9 @@ function Index() {
           </div>
 
           <div className="relative">
-            <Nucleus />
+            <Nucleus members={homepageHubMembers} status="stable" />
             <p className="mt-4 text-center text-sm text-muted-foreground">
-              The node nucleus — ambient, breathing, never a leaderboard.
+              The hub nucleus — real people, soft presence, never a leaderboard.
             </p>
           </div>
         </div>

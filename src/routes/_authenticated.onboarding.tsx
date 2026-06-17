@@ -741,31 +741,42 @@ function FamilyStep({
       location_accuracy_meters: parsed.data.location_accuracy_meters,
       location_captured_at: parsed.data.latitude ? new Date().toISOString() : null,
     };
-    const { data, error } = familyId
+    // Use array select (not .single()) — if RLS blocks the SELECT return,
+    // .single() errors even when the INSERT succeeded. Array access is resilient.
+    const { data: familyRows, error } = familyId
       ? await supabase
           .from("families")
           .update(familyPayload)
           .eq("id", familyId)
           .select("id")
-          .single()
       : await supabase
           .from("families")
           .insert({
             ...familyPayload,
             created_by: user!.id,
           })
-          .select("id")
-          .single();
+          .select("id");
     setSaving(false);
-    if (error || !data) {
-      toast.error(familyId ? "Couldn't update the family hub." : "Couldn't create the family hub.");
+
+    // Surface the real Supabase error in devtools for debugging
+    if (error) console.error("[onboarding] families insert/update error:", error);
+
+    const hubId = familyRows?.[0]?.id ?? familyId;
+    if (error || !hubId) {
+      toast.error(
+        error?.message
+          ? `Hub error: ${error.message}`
+          : familyId
+            ? "Couldn't update the family hub."
+            : "Couldn't create the family hub.",
+      );
       return;
     }
     const { error: memberError } = await supabase
       .from("family_members")
       .upsert(
         {
-          family_id: data.id,
+          family_id: hubId,
           user_id: user!.id,
           role_label: parsed.data.role_label,
           member_kind: "owner",
@@ -775,12 +786,13 @@ function FamilyStep({
         { onConflict: "family_id,user_id" },
       );
     if (memberError) {
+      console.error("[onboarding] family_members upsert error:", memberError);
       toast.error("Hub created, but your role could not be saved yet.");
-      onCreated(data.id);
+      onCreated(hubId);
       return;
     }
     toast.success(familyId ? "Hub details saved." : "Hub created.");
-    onCreated(data.id);
+    onCreated(hubId);
   };
 
   return (

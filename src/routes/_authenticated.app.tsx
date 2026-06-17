@@ -4135,7 +4135,8 @@ function CreateHubSheet({
     setCreating(true);
     try {
       const name = hubName.trim() || placeholder;
-      const { data: hub, error } = await supabase
+      // Array select (not .single()) — RLS may block the SELECT return even when INSERT succeeds
+      const { data: hubRows, error } = await supabase
         .from("families")
         .insert({
           name,
@@ -4144,18 +4145,19 @@ function CreateHubSheet({
           public_join_mode: "invite",
           created_by: userId,
         })
-        .select("id")
-        .single();
+        .select("id");
 
-      if (error || !hub) {
-        toast.error("Couldn't create hub. Please try again.");
+      if (error) console.error("[CreateHubSheet] families insert error:", error);
+      const hubId = hubRows?.[0]?.id;
+      if (error || !hubId) {
+        toast.error(error?.message ? `Hub error: ${error.message}` : "Couldn't create hub. Please try again.");
         return;
       }
       await supabase
         .from("family_members")
         .upsert(
           {
-            family_id: hub.id,
+            family_id: hubId,
             user_id: userId,
             role_label: "Hub owner",
             member_kind: "owner",
@@ -4166,7 +4168,7 @@ function CreateHubSheet({
         );
 
       toast.success(`${name} created.`);
-      onCreated(hub.id);
+      onCreated(hubId);
       onOpenChange(false);
     } finally {
       setCreating(false);

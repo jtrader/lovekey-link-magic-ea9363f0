@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Nucleus } from "@/components/Nucleus";
 import { GroupChatSheet } from "@/components/GroupChatSheet";
+import { NotificationsSheet, useUnreadCount } from "@/components/NotificationsSheet";
+import { HubCalendarView, type HubCalendarEvent, type CalendarWindow } from "@/components/HubCalendarView";
 import {
   Sheet,
   SheetClose,
@@ -68,6 +70,8 @@ import {
   Search,
   LocateFixed,
   Copy,
+  BookOpen,
+  ChevronDown,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/app")({
@@ -394,27 +398,37 @@ function AppView() {
     accuracy: number | null;
   } | null>(null);
   const [nearbyPublicHubs, setNearbyPublicHubs] = useState<PublicHubSearchResult[]>([]);
+  // Active hub selection — null means "use the first hub from the query"
+  const [selectedFamilyId, setSelectedFamilyId] = useState<string | null>(null);
+  const [createHubOpen, setCreateHubOpen] = useState(false);
+  const [createSpaceOpen, setCreateSpaceOpen] = useState(false);
   // Invite-from-home state
   const [inviteSheetOpen, setInviteSheetOpen] = useState(false);
   const [groupChatOpen, setGroupChatOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [inviteContact, setInviteContact] = useState("");
   const [inviteLink, setInviteLink] = useState<string | null>(null);
   const [creatingInvite, setCreatingInvite] = useState(false);
 
-  // Pull profile + first family. Redirect to onboarding if either missing.
+  // Pull profile + active family (honoring selectedFamilyId if set).
   const { data: ctx, isLoading } = useQuery({
-    queryKey: ["app-context", user?.id],
+    queryKey: ["app-context", user?.id, selectedFamilyId],
     enabled: !!user,
     queryFn: async () => {
+      let membersQuery = supabase
+        .from("family_members")
+        .select(
+          "family_id, role_label, member_kind, visibility_state, families(id, name, hub_type)",
+        )
+        .eq("user_id", user!.id);
+      if (selectedFamilyId) {
+        membersQuery = membersQuery.eq("family_id", selectedFamilyId);
+      }
+      membersQuery = membersQuery.limit(1);
+
       const [{ data: profile }, { data: members }] = await Promise.all([
         supabase.from("profiles").select("*").eq("id", user!.id).maybeSingle(),
-        supabase
-          .from("family_members")
-          .select(
-            "family_id, role_label, member_kind, visibility_state, families(id, name, hub_type)",
-          )
-          .eq("user_id", user!.id)
-          .limit(1),
+        membersQuery,
       ]);
       const familyRow = members?.[0] as FamilyMemberRow | undefined;
       const family = Array.isArray(familyRow?.families)
@@ -423,6 +437,27 @@ function AppView() {
       return { profile, family, membership: familyRow ?? null };
     },
   });
+
+  // All hubs this user belongs to — drives the Family section in the side menu.
+  const { data: allHubs = [] } = useQuery<FamilySummary[]>({
+    queryKey: ["all-hubs", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("family_members")
+        .select("families(id, name, hub_type)")
+        .eq("user_id", user!.id);
+      if (!data) return [];
+      return data.flatMap((row) => {
+        const f = (row as { families: FamilySummary | FamilySummary[] | null }).families;
+        if (!f) return [];
+        return Array.isArray(f) ? f : [f];
+      });
+    },
+  });
+
+  // Unread notification count — drives the badge on the bell icon
+  const unreadNotificationCount = useUnreadCount(user?.id);
 
   // Auto-create profile + default family for brand-new users so they land on the home view.
   const [autoSetupDone, setAutoSetupDone] = useState(false);
@@ -538,6 +573,26 @@ function AppView() {
     },
   });
 
+  // Calendar availability windows from connected external calendars — all members' busy/free blocks
+  const { data: calendarWindows = [] } = useQuery<CalendarWindow[]>({
+    queryKey: ["calendar-windows", ctx?.family?.id],
+    enabled: !!ctx?.family,
+    queryFn: async () => {
+      const now = new Date();
+      const monthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString();
+      const monthEnd = new Date(now.getFullYear(), now.getMonth() + 3, 0).toISOString();
+      const { data } = await supabase
+        .from("calendar_availability_windows")
+        .select("id, user_id, share_label, availability, starts_at, ends_at, visibility_level")
+        .eq("family_id", ctx!.family!.id)
+        .gte("starts_at", monthStart)
+        .lte("starts_at", monthEnd)
+        .order("starts_at", { ascending: true })
+        .limit(200);
+      return (data ?? []) as CalendarWindow[];
+    },
+  });
+
   const { data: conversations = [] } = useQuery({
     queryKey: ["hub-conversations", ctx?.family?.id, user?.id],
     enabled: !!ctx?.family && !!user,
@@ -619,6 +674,16 @@ function AppView() {
       return acc;
     }, {});
   }, [eventParticipants]);
+
+  // hub events enriched with participant labels — fed to HubCalendarView
+  const calendarHubEvents = useMemo<HubCalendarEvent[]>(() => {
+    return hubEvents.map((event) => ({
+      ...event,
+      participantLabels: (participantsByEventId[event.id] ?? []).map(
+        (p) => p.participant_label,
+      ),
+    }));
+  }, [hubEvents, participantsByEventId]);
 
   const rowsForParticipantKeys = (eventId: string, keys: string[]) =>
     keys
@@ -1184,12 +1249,29 @@ function AppView() {
     { href: "#home", label: "Home", Icon: Home },
     { href: "#hub-chat", label: "Hub chat", Icon: MessageCircle },
     { href: "#presence", label: "Presence", Icon: HeartPulse },
-    { href: "#family", label: "Family", Icon: Users },
     { href: "#today", label: "Today Together", Icon: Calendar },
     { href: "#calendar-sync", label: "Calendar sync", Icon: CalendarCheck },
     { href: "#support", label: "Support", Icon: HandHeart },
     { href: "#moments", label: "Moments", Icon: Activity },
   ];
+
+  /** Icon to represent a hub type in the side menu */
+  const hubTypeIcon = (hubType: HubType | null | undefined) => {
+    switch (hubType) {
+      case "immediate_family": return Home;
+      case "birth_family": return Users;
+      case "blended_family": return Users;
+      case "co_parenting": return HeartPulse;
+      case "elder_care": return HandHeart;
+      case "sporting_group": return Activity;
+      case "book_club": return BookOpen;
+      case "corporate_team": return Briefcase;
+      case "recovery_circle": return Shield;
+      default: return Home;
+    }
+  };
+
+  const activeHubId = selectedFamilyId ?? ctx?.family?.id ?? null;
   const hubChatMessages = hubConversation
     ? chatMessages.filter((message) => message.conversation_id === hubConversation.id).slice(0, 10)
     : [];
@@ -1259,9 +1341,15 @@ function AppView() {
             </button>
             <button
               aria-label="Notifications"
-              className="rounded-full p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+              onClick={() => setNotificationsOpen(true)}
+              className="relative rounded-full p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
             >
               <Bell className="h-4 w-4" />
+              {unreadNotificationCount > 0 && (
+                <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground ring-2 ring-background">
+                  {unreadNotificationCount > 9 ? "9+" : unreadNotificationCount}
+                </span>
+              )}
             </button>
             <button
               aria-label="Settings"
@@ -1319,19 +1407,74 @@ function AppView() {
             </p>
           </div>
 
-          <nav className="mt-5 grid gap-2">
+          <nav className="mt-5 grid gap-1">
             {homeMenuLinks.map(({ href, label, Icon }) => (
               <SheetClose asChild key={href}>
                 <a
                   href={href}
-                  className="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm text-muted-foreground transition hover:bg-accent hover:text-foreground"
+                  className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm text-muted-foreground transition hover:bg-accent hover:text-foreground"
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-4 w-4 shrink-0" />
                   {label}
                 </a>
               </SheetClose>
             ))}
           </nav>
+
+          {/* ── Family section ─────────────────────────────── */}
+          <div className="mt-5">
+            <div className="mb-2 flex items-center justify-between px-3">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Family
+              </span>
+              <SheetClose asChild>
+                <button
+                  type="button"
+                  onClick={() => setCreateHubOpen(true)}
+                  aria-label="Create a new family hub"
+                  className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-foreground"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                </button>
+              </SheetClose>
+            </div>
+
+            <div className="grid gap-1">
+              {allHubs.length === 0 && (
+                <p className="px-3 text-xs text-muted-foreground">No hubs yet.</p>
+              )}
+              {allHubs.map((hub) => {
+                const HubIcon = hubTypeIcon(hub.hub_type);
+                const isActive = hub.id === activeHubId;
+                return (
+                  <SheetClose asChild key={hub.id}>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedFamilyId(hub.id)}
+                      className={`flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left text-sm transition ${
+                        isActive
+                          ? "bg-primary/10 font-medium text-primary"
+                          : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                      }`}
+                    >
+                      <span
+                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-xl ${
+                          isActive ? "bg-primary/15 text-primary" : "bg-accent text-muted-foreground"
+                        }`}
+                      >
+                        <HubIcon className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="min-w-0 flex-1 truncate">{hub.name}</span>
+                      {isActive && (
+                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                      )}
+                    </button>
+                  </SheetClose>
+                );
+              })}
+            </div>
+          </div>
+          {/* ─────────────────────────────────────────────────── */}
 
           <div className="mt-6 grid gap-2">
             <button
@@ -2046,10 +2189,22 @@ function AppView() {
 
         <section className="mt-12 grid gap-6 lg:grid-cols-[1.05fr_1fr]">
           <div id="hubs">
-            <h2 className="text-xl font-semibold tracking-tight">Hubs & Spaces</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              What do we share together? Contexts stay separate by default.
-            </p>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-semibold tracking-tight">Hubs & Spaces</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  What do we share together? Contexts stay separate by default.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCreateSpaceOpen(true)}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-2 text-xs font-medium text-muted-foreground shadow-soft transition hover:bg-accent hover:text-foreground"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Create hub
+              </button>
+            </div>
             <div className="mt-5 rounded-3xl bg-card p-5 shadow-soft ring-1 ring-border">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
@@ -2197,8 +2352,17 @@ function AppView() {
               <CalendarCheck className="h-5 w-5 text-primary" />
             </div>
 
+            {/* ── Hub calendar grid ────────────────────────────────────── */}
+            <div className="mt-5">
+              <HubCalendarView
+                hubEvents={calendarHubEvents}
+                calendarWindows={calendarWindows}
+                loading={hubEventsLoading}
+              />
+            </div>
+
             <form
-              className="mt-5 rounded-2xl bg-card p-4 shadow-soft ring-1 ring-border"
+              className="mt-6 rounded-2xl bg-card p-4 shadow-soft ring-1 ring-border"
               onSubmit={(event) => {
                 event.preventDefault();
                 if (!eventForm.title.trim()) {
@@ -2861,6 +3025,11 @@ function AppView() {
         onGenerate={generateInviteLink}
         familyName={ctx.family.name}
       />
+      <NotificationsSheet
+        open={notificationsOpen}
+        onOpenChange={setNotificationsOpen}
+        userId={user!.id}
+      />
       <GroupChatSheet
         open={groupChatOpen}
         onOpenChange={setGroupChatOpen}
@@ -2876,6 +3045,32 @@ function AppView() {
           name: m.name,
           avatarUrl: m.avatarUrl,
         }))}
+      />
+      <CreateHubSheet
+        open={createHubOpen}
+        onOpenChange={setCreateHubOpen}
+        userId={user!.id}
+        hubTypes={["immediate_family","birth_family","blended_family","co_parenting","elder_care"]}
+        title="Create a family hub"
+        description="Choose a template and give your hub a name. You can invite members after it's created."
+        onCreated={(hubId) => {
+          setSelectedFamilyId(hubId);
+          void queryClient.invalidateQueries({ queryKey: ["all-hubs", user?.id] });
+          void queryClient.invalidateQueries({ queryKey: ["app-context", user?.id, hubId] });
+        }}
+      />
+      <CreateHubSheet
+        open={createSpaceOpen}
+        onOpenChange={setCreateSpaceOpen}
+        userId={user!.id}
+        hubTypes={["sporting_group","book_club","corporate_team","recovery_circle"]}
+        title="Create a hub or space"
+        description="Choose a template — each one comes with suggested roles and a starter group chat."
+        onCreated={(hubId) => {
+          setSelectedFamilyId(hubId);
+          void queryClient.invalidateQueries({ queryKey: ["all-hubs", user?.id] });
+          void queryClient.invalidateQueries({ queryKey: ["app-context", user?.id, hubId] });
+        }}
       />
 
       <nav className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-2xl bg-card/95 p-2 text-[11px] shadow-soft ring-1 ring-border backdrop-blur md:hidden">
@@ -3027,6 +3222,182 @@ function NewUserHome({ user, hubType, onInviteSlot }: { user: { email?: string }
       </div>
       <p className="text-xs text-muted-foreground">{user?.email}</p>
     </div>
+  );
+}
+
+// ─── Create hub sheet (shared for Family and Hubs & Spaces) ─────────────────
+
+const CATEGORY_BADGE: Record<string, string> = {
+  Family:    "bg-primary/10 text-primary",
+  Community: "bg-health-blue/15 text-health-blue",
+  Work:      "bg-health-yellow/20 text-foreground",
+  Recovery:  "bg-health-purple/15 text-health-purple",
+};
+
+/** Generic hub-creation sheet. Pass `hubTypes` to limit which templates appear. */
+function CreateHubSheet({
+  open,
+  onOpenChange,
+  userId,
+  onCreated,
+  hubTypes: allowedTypes,
+  title = "Create a hub",
+  description = "Choose a template and give your hub a name. You can invite members after it's created.",
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  userId: string;
+  onCreated: (hubId: string) => void;
+  hubTypes: HubType[];
+  title?: string;
+  description?: string;
+}) {
+  const typeOptions = allowedTypes.map((v) => getHubType(v));
+  const [selectedType, setSelectedType] = useState<HubType>(allowedTypes[0]);
+  const [hubName, setHubName] = useState("");
+  const [creating, setCreating] = useState(false);
+
+  // Reset on open / type change
+  useEffect(() => {
+    if (open) { setSelectedType(allowedTypes[0]); setHubName(""); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+  useEffect(() => { setHubName(""); }, [selectedType]);
+
+  const placeholder = getHubType(selectedType).namePlaceholder;
+
+  const handleCreate = async () => {
+    setCreating(true);
+    try {
+      const name = hubName.trim() || placeholder;
+      const { data: hub, error } = await supabase
+        .from("families")
+        .insert({
+          name,
+          hub_type: selectedType,
+          hub_visibility: "private",
+          public_join_mode: "invite",
+          created_by: userId,
+        })
+        .select("id")
+        .single();
+
+      if (error || !hub) {
+        toast.error("Couldn't create hub. Please try again.");
+        return;
+      }
+      await supabase
+        .from("family_members")
+        .update({
+          role_label: "Hub owner",
+          member_kind: "owner",
+          visibility_state: "summary",
+          is_hub_admin: true,
+        })
+        .eq("family_id", hub.id)
+        .eq("user_id", userId);
+
+      toast.success(`${name} created.`);
+      onCreated(hub.id);
+      onOpenChange(false);
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent side="right" className="w-full max-w-md overflow-y-auto">
+        <SheetHeader>
+          <SheetTitle className="flex items-center gap-2">
+            <Plus className="h-4 w-4 text-primary" />
+            {title}
+          </SheetTitle>
+          <SheetDescription>{description}</SheetDescription>
+        </SheetHeader>
+
+        <div className="mt-6 space-y-5">
+          {/* Template picker */}
+          <div>
+            <p className="mb-2 text-xs font-medium text-muted-foreground">Choose a template</p>
+            <div className="grid gap-2">
+              {typeOptions.map((ht) => {
+                const isSelected = ht.value === selectedType;
+                const badgeClass = CATEGORY_BADGE[ht.category] ?? CATEGORY_BADGE.Family;
+                return (
+                  <button
+                    key={ht.value}
+                    type="button"
+                    onClick={() => setSelectedType(ht.value)}
+                    className={`flex items-start gap-3 rounded-2xl border p-3.5 text-left transition ${
+                      isSelected
+                        ? "border-primary/40 bg-primary/8 ring-1 ring-primary/25"
+                        : "border-border bg-card hover:bg-accent"
+                    }`}
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm font-semibold ${isSelected ? "text-primary" : ""}`}>
+                          {ht.label}
+                        </span>
+                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${badgeClass}`}>
+                          {ht.category}
+                        </span>
+                      </div>
+                      <p className="mt-0.5 text-[11px] text-muted-foreground">{ht.purpose}</p>
+                      <p className="mt-1 text-[10px] text-muted-foreground/70">
+                        e.g. {ht.members}
+                      </p>
+                      {isSelected && ht.roleSuggestions.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1">
+                          {ht.roleSuggestions.map((role) => (
+                            <span
+                              key={role}
+                              className="rounded-full bg-primary/8 px-2 py-0.5 text-[10px] font-medium text-primary"
+                            >
+                              {role}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    {isSelected && (
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Hub name */}
+          <div>
+            <label className="text-xs font-medium text-muted-foreground" htmlFor="new-hub-name">
+              Hub name <span className="text-muted-foreground/60">(optional)</span>
+            </label>
+            <input
+              id="new-hub-name"
+              type="text"
+              value={hubName}
+              onChange={(e) => setHubName(e.target.value)}
+              placeholder={placeholder}
+              maxLength={60}
+              className="mt-1 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => void handleCreate()}
+            disabled={creating}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-soft transition ease-calm hover:opacity-95 disabled:opacity-60"
+          >
+            <Plus className="h-4 w-4" />
+            {creating ? "Creating…" : "Create hub"}
+          </button>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }
 

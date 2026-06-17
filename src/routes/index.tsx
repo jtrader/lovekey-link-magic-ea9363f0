@@ -164,13 +164,6 @@ const homepageHubMembers = [
     mood: "recovering" as const,
     avatarUrl: "/avatar-presence/avatar-05.png",
   },
-  {
-    name: "Nan",
-    role: "Check-in soon",
-    presence: "busy" as const,
-    mood: "reduced" as const,
-    avatarUrl: "/avatar-presence/avatar-11.png",
-  },
 ];
 
 function Index() {
@@ -379,7 +372,7 @@ function Index() {
           </div>
 
           <div className="relative">
-            <Nucleus members={homepageHubMembers} status="stable" />
+            <Nucleus members={homepageHubMembers} status="healthy" />
             <p className="mt-4 text-center text-sm text-muted-foreground">
               The hub nucleus — real people, soft presence, never a leaderboard.
             </p>

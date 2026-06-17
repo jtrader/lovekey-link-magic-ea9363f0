@@ -54,6 +54,15 @@ const moodClass: Record<MoodRingState, string> = {
   recovering: "ring-health-purple",
 };
 
+const hubGlowClass: Record<MoodRingState, string> = {
+  healthy: "drop-shadow-[0_0_34px_rgba(94,214,168,0.5)]",
+  stable: "drop-shadow-[0_0_34px_rgba(46,120,255,0.42)]",
+  reduced: "drop-shadow-[0_0_34px_rgba(255,197,90,0.45)]",
+  fragmenting: "drop-shadow-[0_0_34px_rgba(255,132,65,0.42)]",
+  crisis: "drop-shadow-[0_0_34px_rgba(255,55,55,0.45)]",
+  recovering: "drop-shadow-[0_0_34px_rgba(179,157,255,0.45)]",
+};
+
 const starterAvatarUrl = (index: number) =>
   `/avatar-presence/avatar-${String(index + 1).padStart(2, "0")}.png`;
 
@@ -210,7 +219,7 @@ export function Nucleus({
             src={hubHealthImage}
             alt=""
             aria-hidden="true"
-            className="h-full w-full rounded-full object-contain drop-shadow-[0_0_34px_rgba(255,55,55,0.42)] transition-transform group-hover:scale-105"
+            className={`h-full w-full rounded-full object-contain transition-transform group-hover:scale-105 ${hubGlowClass[status]}`}
           />
           {/* Chat hint icon — appears on hover */}
           <span className="absolute bottom-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-white/85 opacity-0 shadow-sm transition group-hover:opacity-100">
@@ -228,7 +237,7 @@ export function Nucleus({
             src={hubHealthImage}
             alt=""
             aria-hidden="true"
-            className="h-full w-full rounded-full object-contain drop-shadow-[0_0_34px_rgba(255,55,55,0.42)]"
+            className={`h-full w-full rounded-full object-contain ${hubGlowClass[status]}`}
           />
         </div>
       )}

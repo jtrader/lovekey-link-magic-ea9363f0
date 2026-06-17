@@ -54,6 +54,9 @@ const moodClass: Record<MoodRingState, string> = {
   recovering: "ring-health-purple",
 };
 
+const urgentAvatarClass =
+  "ring-health-red shadow-[0_0_0_4px_rgba(255,55,55,0.18),0_0_28px_rgba(255,55,55,0.7)] animate-pulse";
+
 const hubGlowClass: Record<MoodRingState, string> = {
   healthy: "drop-shadow-[0_0_46px_rgba(94,214,168,0.82)]",
   stable: "drop-shadow-[0_0_46px_rgba(46,120,255,0.72)]",
@@ -243,34 +246,51 @@ export function Nucleus({
       )}
 
       {/* Real member avatars */}
-      {visibleMembers.map((member, index) => (
-        <div key={`${member.name}-${index}`} className={`absolute ${positions[index]}`}>
-          <div className="flex w-24 flex-col items-center text-center">
-            <div
-              className={`relative flex items-center justify-center overflow-hidden rounded-full bg-card font-semibold text-primary shadow-soft ring-4 ${moodClass[member.mood]} ${
-                isHome ? "h-20 w-20 text-base sm:h-24 sm:w-24" : "h-16 w-16 text-sm"
-              }`}
-            >
-              {member.avatarUrl ? (
-                <img
-                  src={member.avatarUrl}
-                  alt={member.name}
-                  className="h-full w-full object-cover"
+      {visibleMembers.map((member, index) => {
+        const isUrgent = member.presence === "needs_support" || member.mood === "crisis";
+        return (
+          <div key={`${member.name}-${index}`} className={`absolute ${positions[index]}`}>
+            <div className="flex w-24 flex-col items-center text-center">
+              <div
+                className={`relative flex items-center justify-center overflow-hidden rounded-full bg-card font-semibold text-primary ring-4 ${
+                  isUrgent ? urgentAvatarClass : `shadow-soft ${moodClass[member.mood]}`
+                } ${isHome ? "h-20 w-20 text-base sm:h-24 sm:w-24" : "h-16 w-16 text-sm"}`}
+                aria-label={
+                  isUrgent
+                    ? `${member.name}: urgent support signal`
+                    : `${member.name}: ${member.role}`
+                }
+              >
+                {isUrgent ? (
+                  <span className="pointer-events-none absolute inset-0 rounded-full bg-health-red/10" />
+                ) : null}
+                {member.avatarUrl ? (
+                  <img
+                    src={member.avatarUrl}
+                    alt={member.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  initials(member.name)
+                )}
+                <span
+                  className={`absolute bottom-0 right-0 rounded-full border-2 border-card ${
+                    isUrgent ? "bg-health-red shadow-[0_0_14px_rgba(255,55,55,0.85)]" : presenceClass[member.presence]
+                  } ${isHome ? "h-5 w-5" : "h-4 w-4"}`}
                 />
+              </div>
+              {isUrgent ? (
+                <div className="mt-2 max-w-28 truncate text-xs font-semibold text-health-red">
+                  {member.name}
+                </div>
               ) : (
-                initials(member.name)
+                <div className="mt-2 max-w-28 truncate text-xs font-medium">{member.name}</div>
               )}
-              <span
-                className={`absolute bottom-0 right-0 rounded-full border-2 border-card ${presenceClass[member.presence]} ${
-                  isHome ? "h-5 w-5" : "h-4 w-4"
-                }`}
-              />
+              <div className="max-w-28 truncate text-[10px] text-muted-foreground">{member.role}</div>
             </div>
-            <div className="mt-2 max-w-28 truncate text-xs font-medium">{member.name}</div>
-            <div className="max-w-28 truncate text-[10px] text-muted-foreground">{member.role}</div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       {/* Invite placeholder slots — starter avatar + role label */}
       {showInvitePlaceholders &&

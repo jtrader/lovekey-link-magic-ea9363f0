@@ -13,6 +13,7 @@ import {
   type HubVisibility,
   type PublicJoinMode,
 } from "@/lib/lovekey-model";
+import { createFamilyHub } from "@/lib/create-family-hub";
 import { toast } from "sonner";
 import { z } from "zod";
 import lovekeyMark from "@/assets/lovekey-mark.png";
@@ -778,24 +779,26 @@ function FamilyStep({
       }
     } else {
       // CREATE new hub — use SECURITY DEFINER RPC to avoid RLS chicken-and-egg
-      const { data: newId, error: rpcError } = await supabase.rpc("create_family", {
-        _name:                     parsed.data.name,
-        _hub_type:                 parsed.data.hub_type,
-        _description:              parsed.data.description || null,
-        _hub_visibility:           parsed.data.hub_visibility,
-        _public_join_mode:         parsed.data.hub_visibility === "public" ? parsed.data.public_join_mode : "invite",
-        _plaintext_password:       plaintextPassword,
-        _role_label:               parsed.data.role_label,
-        _location_label:           parsed.data.location_label || null,
-        _latitude:                 parsed.data.latitude,
-        _longitude:                parsed.data.longitude,
-        _location_accuracy_meters: parsed.data.location_accuracy_meters,
-        _location_captured_at:     parsed.data.latitude ? new Date().toISOString() : null,
+      const { id: newId, error: createError } = await createFamilyHub({
+        userId: user!.id,
+        name: parsed.data.name,
+        hubType: parsed.data.hub_type,
+        description: parsed.data.description || null,
+        hubVisibility: parsed.data.hub_visibility,
+        publicJoinMode:
+          parsed.data.hub_visibility === "public" ? parsed.data.public_join_mode : "invite",
+        plaintextPassword,
+        roleLabel: parsed.data.role_label,
+        locationLabel: parsed.data.location_label || null,
+        latitude: parsed.data.latitude,
+        longitude: parsed.data.longitude,
+        locationAccuracyMeters: parsed.data.location_accuracy_meters,
+        locationCapturedAt: parsed.data.latitude ? new Date().toISOString() : null,
       });
       setSaving(false);
-      if (rpcError) console.error("[onboarding] create_family rpc error:", rpcError);
-      if (rpcError || !newId) {
-        toast.error(rpcError?.message ? `Hub error: ${rpcError.message}` : "Couldn't create the family hub.");
+      if (createError) console.error("[onboarding] hub create error:", createError.cause);
+      if (createError || !newId) {
+        toast.error(createError?.message ? `Hub error: ${createError.message}` : "Couldn't create the family hub.");
         return;
       }
       hubId = newId;

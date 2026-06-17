@@ -24,6 +24,7 @@ import lovekeyMark from "@/assets/lovekey-mark.png";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { demoAccounts, demoHubStats, type DemoAccount } from "@/lib/demo-accounts";
+import { createFamilyHub } from "@/lib/create-family-hub";
 import {
   hubSpaceCards,
   lowResolutionLocations,
@@ -4136,15 +4137,16 @@ function CreateHubSheet({
     try {
       const name = hubName.trim() || placeholder;
       // Use SECURITY DEFINER RPC — avoids RLS chicken-and-egg on families INSERT
-      const { data: newHubId, error } = await supabase.rpc("create_family", {
-        _name:             name,
-        _hub_type:         selectedType,
-        _hub_visibility:   "private",
-        _public_join_mode: "invite",
-        _role_label:       "Hub owner",
+      const { id: newHubId, error } = await createFamilyHub({
+        userId,
+        name,
+        hubType: selectedType,
+        hubVisibility: "private",
+        publicJoinMode: "invite",
+        roleLabel: "Hub owner",
       });
 
-      if (error) console.error("[CreateHubSheet] create_family rpc error:", error);
+      if (error) console.error("[CreateHubSheet] hub create error:", error.cause);
       if (error || !newHubId) {
         toast.error(error?.message ? `Hub error: ${error.message}` : "Couldn't create hub. Please try again.");
         return;

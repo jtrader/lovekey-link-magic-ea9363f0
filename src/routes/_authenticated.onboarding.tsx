@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -28,6 +28,7 @@ import {
   LocateFixed,
   LockKeyhole,
   MapPin,
+  Upload,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
@@ -44,7 +45,19 @@ const profileSchema = z.object({
     .regex(/^[+0-9()\-\s]*$/, "Phone may contain digits, spaces, +, -, ()")
     .optional()
     .or(z.literal("")),
-  avatar_url: z.string().url().max(500).optional().or(z.literal("")),
+  avatar_url: z
+    .string()
+    .trim()
+    .max(1000)
+    .refine(
+      (value) =>
+        !value ||
+        value.startsWith("/avatar-presence/") ||
+        z.string().url().safeParse(value).success,
+      "Use a valid image URL or choose one of the Love Key avatars",
+    )
+    .optional()
+    .or(z.literal("")),
 });
 const familySchema = z.object({
   name: z.string().trim().min(1, "Please name your family hub").max(80),
@@ -79,6 +92,45 @@ type CapturedLocation = {
   longitude: number;
   accuracy: number | null;
 };
+type ProfileDraft = {
+  fullName: string;
+  phone: string;
+  avatarUrl: string;
+};
+type FamilyDraft = {
+  name: string;
+  hubType: HubType;
+  hubVisibility: HubVisibility;
+  publicJoinMode: PublicJoinMode;
+  publicPassword: string;
+  roleLabel: HubRole;
+  description: string;
+  locationLabel: string;
+  capturedLocation: CapturedLocation | null;
+};
+
+const genericAvatarChoices = Array.from(
+  { length: 15 },
+  (_, index) => `/avatar-presence/avatar-${String(index + 1).padStart(2, "0")}.png`,
+);
+
+const defaultProfileDraft: ProfileDraft = {
+  fullName: "",
+  phone: "",
+  avatarUrl: "",
+};
+
+const defaultFamilyDraft: FamilyDraft = {
+  name: "",
+  hubType: "immediate_family",
+  hubVisibility: "private",
+  publicJoinMode: "invite",
+  publicPassword: "",
+  roleLabel: "Dad",
+  description: "",
+  locationLabel: "",
+  capturedLocation: null,
+};
 
 async function hashHubPassword(password: string) {
   if (!password.trim()) return null;
@@ -94,6 +146,10 @@ function Onboarding() {
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>("profile");
   const [familyId, setFamilyId] = useState<string | null>(null);
+  const [profileDraft, setProfileDraft] = useState<ProfileDraft>(defaultProfileDraft);
+  const [familyDraft, setFamilyDraft] = useState<FamilyDraft>(defaultFamilyDraft);
+  const profileHydratedRef = useRef(false);
+  const familyHydratedRef = useRef(false);
 
   // Load profile + membership; if already onboarded and in a family, skip to /app
   const { data, isLoading } = useQuery({
@@ -102,18 +158,90 @@ function Onboarding() {
     queryFn: async () => {
       const [{ data: profile }, { data: members }] = await Promise.all([
         supabase.from("profiles").select("*").eq("id", user!.id).maybeSingle(),
-        supabase.from("family_members").select("family_id").eq("user_id", user!.id).limit(1),
+        supabase
+          .from("family_members")
+          .select(
+            "family_id, role_label, families(id, name, description, hub_type, hub_visibility, public_join_mode, location_label, latitude, longitude, location_accuracy_meters)",
+          )
+          .eq("user_id", user!.id)
+          .limit(1),
       ]);
+      const member = members?.[0] as
+        | {
+            family_id: string;
+            role_label: HubRole | null;
+            families:
+              | {
+                  id: string;
+                  name: string | null;
+                  description: string | null;
+                  hub_type: HubType | null;
+                  hub_visibility: HubVisibility | null;
+                  public_join_mode: PublicJoinMode | null;
+                  location_label: string | null;
+                  latitude: number | null;
+                  longitude: number | null;
+                  location_accuracy_meters: number | null;
+                }
+              | {
+                  id: string;
+                  name: string | null;
+                  description: string | null;
+                  hub_type: HubType | null;
+                  hub_visibility: HubVisibility | null;
+                  public_join_mode: PublicJoinMode | null;
+                  location_label: string | null;
+                  latitude: number | null;
+                  longitude: number | null;
+                  location_accuracy_meters: number | null;
+                }[]
+              | null;
+          }
+        | undefined;
+      const family = Array.isArray(member?.families)
+        ? (member.families[0] ?? null)
+        : (member?.families ?? null);
       return {
         profile,
         hasFamily: (members?.length ?? 0) > 0,
-        familyId: members?.[0]?.family_id ?? null,
+        familyId: member?.family_id ?? null,
+        member,
+        family,
       };
     },
   });
 
   useEffect(() => {
     if (!data) return;
+    if (!profileHydratedRef.current) {
+      setProfileDraft({
+        fullName: data.profile?.full_name ?? "",
+        phone: data.profile?.phone ?? "",
+        avatarUrl: data.profile?.avatar_url ?? "",
+      });
+      profileHydratedRef.current = true;
+    }
+    if (!familyHydratedRef.current && data.family) {
+      setFamilyDraft({
+        name: data.family.name ?? "",
+        hubType: data.family.hub_type ?? "immediate_family",
+        hubVisibility: data.family.hub_visibility ?? "private",
+        publicJoinMode: data.family.public_join_mode ?? "invite",
+        publicPassword: "",
+        roleLabel: data.member?.role_label ?? "Dad",
+        description: data.family.description ?? "",
+        locationLabel: data.family.location_label ?? "",
+        capturedLocation:
+          data.family.latitude && data.family.longitude
+            ? {
+                latitude: data.family.latitude,
+                longitude: data.family.longitude,
+                accuracy: data.family.location_accuracy_meters,
+              }
+            : null,
+      });
+      familyHydratedRef.current = true;
+    }
     if (data.profile?.onboarded && data.hasFamily) {
       navigate({ to: "/app" });
     } else if (data.profile?.full_name && !data.hasFamily) {
@@ -141,7 +269,8 @@ function Onboarding() {
         <div className="mt-6 rounded-3xl bg-card p-7 shadow-soft ring-1 ring-border">
           {step === "profile" && (
             <ProfileStep
-              initial={data?.profile ?? null}
+              draft={profileDraft}
+              onDraftChange={setProfileDraft}
               userEmail={user?.email}
               onDone={() => setStep(data?.hasFamily ? "invite" : "family")}
               onBack={() => navigate({ to: "/" })}
@@ -149,6 +278,9 @@ function Onboarding() {
           )}
           {step === "family" && (
             <FamilyStep
+              draft={familyDraft}
+              onDraftChange={setFamilyDraft}
+              familyId={familyId}
               onBack={() => setStep("profile")}
               onCreated={(id) => {
                 setFamilyId(id);
@@ -204,22 +336,72 @@ function Stepper({ step }: { step: Step }) {
 }
 
 function ProfileStep({
-  initial,
+  draft,
+  onDraftChange,
   userEmail,
   onDone,
   onBack,
 }: {
-  initial: { full_name: string | null; avatar_url: string | null; phone: string | null } | null;
+  draft: ProfileDraft;
+  onDraftChange: (draft: ProfileDraft) => void;
   userEmail?: string;
   onDone: () => void;
   onBack: () => void;
 }) {
   const { user } = useAuth();
-  const [fullName, setFullName] = useState(initial?.full_name ?? "");
-  const [phone, setPhone] = useState(initial?.phone ?? "");
-  const [avatarUrl, setAvatarUrl] = useState(initial?.avatar_url ?? "");
   const [saving, setSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const updateDraft = (patch: Partial<ProfileDraft>) => onDraftChange({ ...draft, ...patch });
+  const { fullName, phone, avatarUrl } = draft;
+  const facebookAvatarUrl =
+    typeof user?.user_metadata?.picture === "string"
+      ? user.user_metadata.picture
+      : typeof user?.user_metadata?.avatar_url === "string"
+        ? user.user_metadata.avatar_url
+        : "";
+
+  const importFacebookPhoto = () => {
+    if (!facebookAvatarUrl) {
+      toast.error("No Facebook profile image is available for this account.");
+      return;
+    }
+    updateDraft({ avatarUrl: facebookAvatarUrl });
+    toast.success("Facebook profile image selected.");
+  };
+
+  const uploadAvatar = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !user) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Choose an image file for your avatar.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Avatar images need to be under 5MB.");
+      return;
+    }
+
+    setUploadingAvatar(true);
+    const extension = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "png";
+    const path = `${user.id}/avatar-${Date.now()}.${extension}`;
+    const { error } = await supabase.storage.from("avatars").upload(path, file, {
+      cacheControl: "3600",
+      upsert: true,
+    });
+    setUploadingAvatar(false);
+
+    if (error) {
+      toast.error("Avatar upload failed. Please try another image.");
+      return;
+    }
+
+    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+    updateDraft({ avatarUrl: data.publicUrl });
+    toast.success("Avatar uploaded.");
+  };
 
   const save = async () => {
     const parsed = profileSchema.safeParse({ full_name: fullName, phone, avatar_url: avatarUrl });
@@ -266,29 +448,93 @@ function ProfileStep({
         human profile attached to it.
       </p>
 
-      <div className="mt-6 flex items-center gap-4">
-        <div className="relative h-16 w-16 overflow-hidden rounded-full bg-muted ring-1 ring-border">
-          {avatarUrl ? (
-            <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center text-muted-foreground">
-              <Camera className="h-5 w-5" />
+      <div className="mt-6 rounded-2xl bg-surface-warm p-4 ring-1 ring-border">
+        <div className="flex items-center gap-4">
+          <div className="relative h-20 w-20 overflow-hidden rounded-full bg-muted ring-4 ring-white shadow-soft">
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                <Camera className="h-6 w-6" />
+              </div>
+            )}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-sm font-medium">Your avatar</div>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              Use your Facebook photo, upload one, or choose a Love Key avatar.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={importFacebookPhoto}
+                disabled={!facebookAvatarUrl}
+                className="inline-flex items-center gap-2 rounded-full bg-card px-3 py-2 text-xs font-medium ring-1 ring-border transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <Camera className="h-3.5 w-3.5" />
+                Import Facebook photo
+              </button>
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-card px-3 py-2 text-xs font-medium ring-1 ring-border transition hover:bg-accent">
+                <Upload className="h-3.5 w-3.5" />
+                {uploadingAvatar ? "Uploading..." : "Upload image"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={uploadAvatar}
+                  disabled={uploadingAvatar}
+                  className="sr-only"
+                />
+              </label>
             </div>
-          )}
+          </div>
         </div>
-        <div className="flex-1">
-          <label className="text-xs text-muted-foreground">Photo URL</label>
-          <input
-            type="url"
-            value={avatarUrl}
-            onChange={(e) => setAvatarUrl(e.target.value)}
-            placeholder="https://…"
-            className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
-          />
-          {errors.avatar_url && (
-            <p className="mt-1 text-xs text-destructive">{errors.avatar_url}</p>
-          )}
+
+        <div className="mt-5">
+          <div className="mb-2 text-xs font-medium text-muted-foreground">
+            Choose a Love Key avatar
+          </div>
+          <div className="grid grid-cols-5 gap-2 sm:grid-cols-8">
+            {genericAvatarChoices.map((src) => {
+              const selected = avatarUrl === src;
+              return (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => updateDraft({ avatarUrl: src })}
+                  aria-label="Choose this avatar"
+                  aria-pressed={selected}
+                  className={`aspect-square overflow-hidden rounded-full transition ${
+                    selected
+                      ? "ring-4 ring-primary"
+                      : "ring-2 ring-white hover:ring-primary/50"
+                  }`}
+                >
+                  <img src={src} alt="" className="h-full w-full object-cover" />
+                </button>
+              );
+            })}
+          </div>
         </div>
+
+        <div className="mt-4 flex items-center justify-between gap-3">
+          {avatarUrl.startsWith("/avatar-presence/") ? (
+            <p className="text-xs text-muted-foreground">Using a bundled Love Key avatar.</p>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              {avatarUrl ? "Using your selected profile image." : "No avatar selected yet."}
+            </p>
+          )}
+          {avatarUrl ? (
+            <button
+              type="button"
+              onClick={() => updateDraft({ avatarUrl: "" })}
+              className="shrink-0 text-xs font-medium text-muted-foreground hover:text-foreground"
+            >
+              Remove avatar
+            </button>
+          ) : null}
+        </div>
+        {errors.avatar_url && <p className="mt-2 text-xs text-destructive">{errors.avatar_url}</p>}
       </div>
 
       <div className="mt-5 grid gap-4">
@@ -296,7 +542,7 @@ function ProfileStep({
           <label className="text-xs text-muted-foreground">Full name</label>
           <input
             value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            onChange={(e) => updateDraft({ fullName: e.target.value })}
             placeholder="Jamie Lee"
             className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
           />
@@ -307,7 +553,7 @@ function ProfileStep({
           <input
             type="tel"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => updateDraft({ phone: e.target.value })}
             placeholder="+61 4xx xxx xxx"
             className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
           />
@@ -334,20 +580,35 @@ function ProfileStep({
   );
 }
 
-function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id: string) => void }) {
+function FamilyStep({
+  draft,
+  onDraftChange,
+  familyId,
+  onBack,
+  onCreated,
+}: {
+  draft: FamilyDraft;
+  onDraftChange: (draft: FamilyDraft) => void;
+  familyId: string | null;
+  onBack: () => void;
+  onCreated: (id: string) => void;
+}) {
   const { user } = useAuth();
-  const [name, setName] = useState("");
-  const [hubType, setHubType] = useState<HubType>("immediate_family");
-  const [hubVisibility, setHubVisibility] = useState<HubVisibility>("private");
-  const [publicJoinMode, setPublicJoinMode] = useState<PublicJoinMode>("invite");
-  const [publicPassword, setPublicPassword] = useState("");
-  const [roleLabel, setRoleLabel] = useState<HubRole>("Dad");
-  const [description, setDescription] = useState("");
-  const [locationLabel, setLocationLabel] = useState("");
-  const [capturedLocation, setCapturedLocation] = useState<CapturedLocation | null>(null);
   const [locating, setLocating] = useState(false);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const updateDraft = (patch: Partial<FamilyDraft>) => onDraftChange({ ...draft, ...patch });
+  const {
+    name,
+    hubType,
+    hubVisibility,
+    publicJoinMode,
+    publicPassword,
+    roleLabel,
+    description,
+    locationLabel,
+    capturedLocation,
+  } = draft;
   const selectedHubType = hubTypes.find((type) => type.value === hubType) ?? hubTypes[0];
   const roleSuggestions = selectedHubType.roleSuggestions;
 
@@ -372,10 +633,12 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setCapturedLocation({
+        updateDraft({
+          capturedLocation: {
           latitude: Number(position.coords.latitude.toFixed(6)),
           longitude: Number(position.coords.longitude.toFixed(6)),
           accuracy: position.coords.accuracy ? Math.round(position.coords.accuracy) : null,
+          },
         });
         setLocating(false);
         toast.success("Location captured.");
@@ -422,28 +685,38 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
       parsed.data.hub_visibility === "public" && parsed.data.public_join_mode === "password"
         ? await hashHubPassword(parsed.data.public_password ?? "")
         : null;
-    const { data, error } = await supabase
-      .from("families")
-      .insert({
-        name: parsed.data.name,
-        hub_type: parsed.data.hub_type,
-        description: parsed.data.description || null,
-        hub_visibility: parsed.data.hub_visibility,
-        public_join_mode:
-          parsed.data.hub_visibility === "public" ? parsed.data.public_join_mode : "invite",
-        public_password_hash: publicPasswordHash,
-        location_label: parsed.data.location_label || null,
-        latitude: parsed.data.latitude,
-        longitude: parsed.data.longitude,
-        location_accuracy_meters: parsed.data.location_accuracy_meters,
-        location_captured_at: parsed.data.latitude ? new Date().toISOString() : null,
-        created_by: user!.id,
-      })
-      .select("id")
-      .single();
+    const familyPayload = {
+      name: parsed.data.name,
+      hub_type: parsed.data.hub_type,
+      description: parsed.data.description || null,
+      hub_visibility: parsed.data.hub_visibility,
+      public_join_mode:
+        parsed.data.hub_visibility === "public" ? parsed.data.public_join_mode : "invite",
+      public_password_hash: publicPasswordHash,
+      location_label: parsed.data.location_label || null,
+      latitude: parsed.data.latitude,
+      longitude: parsed.data.longitude,
+      location_accuracy_meters: parsed.data.location_accuracy_meters,
+      location_captured_at: parsed.data.latitude ? new Date().toISOString() : null,
+    };
+    const { data, error } = familyId
+      ? await supabase
+          .from("families")
+          .update(familyPayload)
+          .eq("id", familyId)
+          .select("id")
+          .single()
+      : await supabase
+          .from("families")
+          .insert({
+            ...familyPayload,
+            created_by: user!.id,
+          })
+          .select("id")
+          .single();
     setSaving(false);
     if (error || !data) {
-      toast.error("Couldn't create the family hub.");
+      toast.error(familyId ? "Couldn't update the family hub." : "Couldn't create the family hub.");
       return;
     }
     const { error: memberError } = await supabase
@@ -461,7 +734,7 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
       onCreated(data.id);
       return;
     }
-    toast.success("Hub created.");
+    toast.success(familyId ? "Hub details saved." : "Hub created.");
     onCreated(data.id);
   };
 
@@ -512,8 +785,10 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
                   key={type.value}
                   type="button"
                   onClick={() => {
-                    setHubType(type.value);
-                    setRoleLabel(type.roleSuggestions[0]);
+                    updateDraft({
+                      hubType: type.value,
+                      roleLabel: type.roleSuggestions[0],
+                    });
                   }}
                   className={`min-h-32 rounded-2xl border p-3 text-left transition ease-calm ${
                     active
@@ -556,8 +831,10 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
                   key={option.value}
                   type="button"
                   onClick={() => {
-                    setHubVisibility(option.value);
-                    if (option.value === "private") setPublicJoinMode("invite");
+                    updateDraft({
+                      hubVisibility: option.value,
+                      publicJoinMode: option.value === "private" ? "invite" : publicJoinMode,
+                    });
                   }}
                   className={`rounded-2xl border p-4 text-left transition ease-calm ${
                     active
@@ -591,7 +868,7 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
                   <button
                     key={mode.value}
                     type="button"
-                    onClick={() => setPublicJoinMode(mode.value)}
+                    onClick={() => updateDraft({ publicJoinMode: mode.value })}
                     className={`rounded-2xl border p-3 text-left transition ease-calm ${
                       active
                         ? "border-primary bg-primary/5 shadow-soft"
@@ -610,7 +887,7 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
                 <input
                   type="password"
                   value={publicPassword}
-                  onChange={(e) => setPublicPassword(e.target.value)}
+                  onChange={(e) => updateDraft({ publicPassword: e.target.value })}
                   placeholder="Create a shared password"
                   className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
                 />
@@ -625,7 +902,7 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
           <label className="text-xs text-muted-foreground">Hub name</label>
           <input
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => updateDraft({ name: e.target.value })}
             placeholder={selectedHubType.namePlaceholder}
             className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
           />
@@ -654,7 +931,7 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
           </div>
           <input
             value={locationLabel}
-            onChange={(e) => setLocationLabel(e.target.value)}
+            onChange={(e) => updateDraft({ locationLabel: e.target.value })}
             placeholder="Optional label, e.g. Bendigo Library or North Melbourne"
             className="mt-3 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
           />
@@ -678,7 +955,7 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
               <button
                 key={role}
                 type="button"
-                onClick={() => setRoleLabel(role)}
+                onClick={() => updateDraft({ roleLabel: role })}
                 className={`rounded-full border px-3 py-1.5 text-sm transition ease-calm ${
                   roleLabel === role
                     ? "border-primary/30 bg-primary/5 text-foreground"
@@ -697,7 +974,7 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
           <label className="text-xs text-muted-foreground">A short description (optional)</label>
           <textarea
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => updateDraft({ description: e.target.value })}
             placeholder={selectedHubType.purpose}
             rows={3}
             className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
@@ -736,7 +1013,7 @@ function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id:
           className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-soft transition ease-calm hover:opacity-95 disabled:opacity-60"
         >
           <Plus className="h-4 w-4" />
-          {saving ? "Creating…" : "Create hub"}
+          {saving ? "Saving…" : familyId ? "Save hub details" : "Create hub"}
         </button>
       </div>
     </div>

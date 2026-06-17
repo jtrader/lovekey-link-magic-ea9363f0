@@ -1,0 +1,64 @@
+name: RLS Regression
+
+# Runs the cross-family RLS regression suite whenever the database schema or the
+# tests change, so policy enforcement can't silently regress. Uses a throwaway
+# local Supabase stack — no production secrets, fully isolated.
+
+on:
+  pull_request:
+    paths:
+      - "supabase/migrations/**"
+      - "tests/rls/**"
+      - ".github/workflows/rls-regression.yml"
+  push:
+    branches: [main]
+    paths:
+      - "supabase/migrations/**"
+      - "tests/rls/**"
+  workflow_dispatch: {}
+
+jobs:
+  rls-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # The presence_states / family_presence tables predate the captured
+      # migration history. Inject the CI baseline so the local migration chain
+      # is self-contained (sorts after families is created, before the policy
+      # migrations). Never applied to the live database.
+      - name: Add CI baseline to migration chain
+        run: cp tests/rls/ci_baseline.sql supabase/migrations/20260510183210_ci_baseline_presence.sql
+
+      - name: Start local Supabase
+        run: supabase start
+
+      - name: Apply migrations
+        run: supabase db reset --no-seed
+
+      - name: Export local Supabase credentials
+        run: |
+          supabase status -o env | sed 's/^/SUPABASE_/' >> "$GITHUB_ENV"
+          {
+            echo "SUPABASE_URL=$(supabase status -o env | grep '^API_URL=' | cut -d= -f2- | tr -d '\"')"
+            echo "SUPABASE_ANON_KEY=$(supabase status -o env | grep '^ANON_KEY=' | cut -d= -f2- | tr -d '\"')"
+            echo "SUPABASE_SERVICE_ROLE_KEY=$(supabase status -o env | grep '^SERVICE_ROLE_KEY=' | cut -d= -f2- | tr -d '\"')"
+          } >> "$GITHUB_ENV"
+
+      - name: Install test dependencies
+        run: pip install -r tests/rls/requirements.txt
+
+      - name: Run RLS regression suite
+        run: pytest tests/rls -v
+
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop || true

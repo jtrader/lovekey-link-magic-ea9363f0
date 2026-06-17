@@ -218,6 +218,49 @@ type DevicePresenceRow = {
   updated_at: string;
 };
 type ManualOverrideDuration = 30 | 60 | 240;
+type HotspotType = "home" | "school" | "work" | "care" | "custom";
+type HotspotVisibility = "private" | "hub" | "emergency_only";
+type LocationPresenceState =
+  | "at_hotspot_available"
+  | "resting_available"
+  | "commuting_unavailable"
+  | "moving_maybe_unavailable"
+  | "paused"
+  | "unknown";
+type LocationHotspot = {
+  id: string;
+  family_id: string;
+  user_id: string;
+  name: string;
+  hotspot_type: HotspotType;
+  latitude: number;
+  longitude: number;
+  radius_meters: number;
+  visibility: HotspotVisibility;
+};
+type LocationPresenceRow = {
+  family_id: string;
+  user_id: string;
+  inferred_state: LocationPresenceState;
+  status_label: string;
+  availability: "available" | "maybe" | "unavailable" | "unknown";
+  nearest_hotspot_id: string | null;
+  nearest_hotspot_name: string | null;
+  nearest_hotspot_type: string | null;
+  distance_to_hotspot_meters: number | null;
+  speed_kmh: number | null;
+  dwell_minutes: number;
+  is_tracking: boolean;
+  accuracy_meters: number | null;
+  last_signal_at: string | null;
+};
+type LocationPoint = {
+  latitude: number;
+  longitude: number;
+  accuracy: number | null;
+  speedKmh: number | null;
+  capturedAt: number;
+};
 
 const timeOpts: Time[] = ["Available", "Maybe", "Busy", "Unavailable"];
 const devicePresenceStates: { value: DevicePresenceState; label: string; hint: string }[] = [
@@ -240,6 +283,21 @@ const heartbeatMs = 60 * 1000;
 const idleAfterMs = 5 * 60 * 1000;
 const recentlySeenMs = 15 * 60 * 1000;
 const activeInteractionMs = 2 * 60 * 1000;
+const stationaryDwellMs = 10 * 60 * 1000;
+const stationaryRadiusMeters = 30;
+const commutingSpeedKmh = 30;
+const hotspotTypeOptions: { value: HotspotType; label: string }[] = [
+  { value: "home", label: "Home" },
+  { value: "school", label: "School" },
+  { value: "work", label: "Work" },
+  { value: "care", label: "Care" },
+  { value: "custom", label: "Custom" },
+];
+const hotspotVisibilityOptions: { value: HotspotVisibility; label: string }[] = [
+  { value: "hub", label: "Hub visible" },
+  { value: "private", label: "Private" },
+  { value: "emergency_only", label: "Emergency only" },
+];
 const energyOpts: { v: Energy; cls: string; hint: string }[] = [
   { v: "Green", cls: "bg-health-green", hint: "Resourced" },
   { v: "Blue", cls: "bg-health-blue", hint: "Steady" },
@@ -491,6 +549,12 @@ function devicePresenceToPresenceState(state: DevicePresenceState): PresenceStat
   return "quiet";
 }
 
+function locationPresenceToPresenceState(row: LocationPresenceRow | null | undefined) {
+  if (row?.availability === "unavailable" || row?.availability === "maybe") return "busy";
+  if (row?.availability === "available") return "available";
+  return null;
+}
+
 function devicePresenceDotClass(state: DevicePresenceState) {
   if (state === "active_now" || state === "recently_seen") return "bg-health-green";
   if (state === "away_or_locked") return "bg-health-yellow";
@@ -652,6 +716,282 @@ function useDevicePresence(userId: string | undefined, familyId: string | undefi
   };
 }
 
+function distanceMeters(
+  from: Pick<LocationPoint, "latitude" | "longitude">,
+  to: Pick<LocationHotspot, "latitude" | "longitude">,
+) {
+  const radius = 6371000;
+  const lat1 = (from.latitude * Math.PI) / 180;
+  const lat2 = (to.latitude * Math.PI) / 180;
+  const deltaLat = ((to.latitude - from.latitude) * Math.PI) / 180;
+  const deltaLng = ((to.longitude - from.longitude) * Math.PI) / 180;
+  const a =
+    Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLng / 2) * Math.sin(deltaLng / 2);
+  return radius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function locationPresenceTone(state: LocationPresenceState) {
+  if (state === "commuting_unavailable") return "bg-health-yellow";
+  if (state === "moving_maybe_unavailable") return "bg-health-blue";
+  if (state === "paused" || state === "unknown") return "bg-muted-foreground/50";
+  return "bg-health-green";
+}
+
+function classifyLocationPresence({
+  point,
+  hotspots,
+  dwellMinutes,
+}: {
+  point: LocationPoint;
+  hotspots: LocationHotspot[];
+  dwellMinutes: number;
+}): Omit<LocationPresenceRow, "family_id" | "user_id" | "is_tracking"> {
+  const nearest = hotspots
+    .map((hotspot) => ({ hotspot, distance: distanceMeters(point, hotspot) }))
+    .sort((a, b) => a.distance - b.distance)[0];
+  const insideHotspot =
+    nearest && nearest.distance <= Math.max(nearest.hotspot.radius_meters, point.accuracy ?? 0);
+  const speedKmh = point.speedKmh ?? 0;
+  const nearestName = insideHotspot ? nearest.hotspot.name : null;
+  const nearestType = insideHotspot ? nearest.hotspot.hotspot_type : null;
+  const nearestId = insideHotspot ? nearest.hotspot.id : null;
+  const nearestDistance = insideHotspot ? Math.round(nearest.distance) : null;
+
+  if (speedKmh >= commutingSpeedKmh) {
+    return {
+      inferred_state: "commuting_unavailable",
+      status_label: "Commuting · unavailable",
+      availability: "unavailable",
+      nearest_hotspot_id: nearestId,
+      nearest_hotspot_name: nearestName,
+      nearest_hotspot_type: nearestType,
+      distance_to_hotspot_meters: nearestDistance,
+      speed_kmh: Number(speedKmh.toFixed(1)),
+      dwell_minutes: dwellMinutes,
+      accuracy_meters: point.accuracy,
+      last_signal_at: new Date(point.capturedAt).toISOString(),
+    };
+  }
+
+  if (insideHotspot && dwellMinutes >= 10) {
+    return {
+      inferred_state: "at_hotspot_available",
+      status_label: `At ${nearest.hotspot.name} · available`,
+      availability: "available",
+      nearest_hotspot_id: nearest.hotspot.id,
+      nearest_hotspot_name: nearest.hotspot.name,
+      nearest_hotspot_type: nearest.hotspot.hotspot_type,
+      distance_to_hotspot_meters: Math.round(nearest.distance),
+      speed_kmh: Number(speedKmh.toFixed(1)),
+      dwell_minutes: dwellMinutes,
+      accuracy_meters: point.accuracy,
+      last_signal_at: new Date(point.capturedAt).toISOString(),
+    };
+  }
+
+  if (dwellMinutes >= 10) {
+    return {
+      inferred_state: "resting_available",
+      status_label: "Resting · available",
+      availability: "available",
+      nearest_hotspot_id: null,
+      nearest_hotspot_name: null,
+      nearest_hotspot_type: null,
+      distance_to_hotspot_meters: null,
+      speed_kmh: Number(speedKmh.toFixed(1)),
+      dwell_minutes: dwellMinutes,
+      accuracy_meters: point.accuracy,
+      last_signal_at: new Date(point.capturedAt).toISOString(),
+    };
+  }
+
+  return {
+    inferred_state: "moving_maybe_unavailable",
+    status_label: "In transit · maybe unavailable",
+    availability: "maybe",
+    nearest_hotspot_id: nearestId,
+    nearest_hotspot_name: nearestName,
+    nearest_hotspot_type: nearestType,
+    distance_to_hotspot_meters: nearestDistance,
+    speed_kmh: Number(speedKmh.toFixed(1)),
+    dwell_minutes: dwellMinutes,
+    accuracy_meters: point.accuracy,
+    last_signal_at: new Date(point.capturedAt).toISOString(),
+  };
+}
+
+function useLocationPresence(userId: string | undefined, familyId: string | undefined) {
+  const queryClient = useQueryClient();
+  const [tracking, setTracking] = useState(false);
+  const [latestPoint, setLatestPoint] = useState<LocationPoint | null>(null);
+  const [watchError, setWatchError] = useState<string | null>(null);
+  const stationarySinceRef = useRef<number | null>(null);
+  const anchorPointRef = useRef<LocationPoint | null>(null);
+  const lastWriteMs = useRef(0);
+
+  const { data: hotspots = [] } = useQuery<LocationHotspot[]>({
+    queryKey: ["location-hotspots", familyId, userId],
+    enabled: Boolean(userId && familyId),
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("location_hotspots")
+        .select("*")
+        .eq("family_id", familyId!)
+        .eq("user_id", userId!)
+        .order("created_at", { ascending: false });
+      return (data ?? []) as LocationHotspot[];
+    },
+  });
+
+  const { data: presence } = useQuery<LocationPresenceRow | null>({
+    queryKey: ["location-presence", familyId, userId],
+    enabled: Boolean(userId && familyId),
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("location_presence_states")
+        .select("*")
+        .eq("family_id", familyId!)
+        .eq("user_id", userId!)
+        .maybeSingle();
+      return (data as LocationPresenceRow | null) ?? null;
+    },
+  });
+
+  const writePresence = useCallback(
+    async (payload: Partial<LocationPresenceRow>) => {
+      if (!userId || !familyId) return false;
+      const { error } = await supabase.from("location_presence_states").upsert({
+        family_id: familyId,
+        user_id: userId,
+        inferred_state: payload.inferred_state ?? "unknown",
+        status_label: payload.status_label ?? "Location unknown",
+        availability: payload.availability ?? "unknown",
+        nearest_hotspot_id: payload.nearest_hotspot_id ?? null,
+        nearest_hotspot_name: payload.nearest_hotspot_name ?? null,
+        nearest_hotspot_type: payload.nearest_hotspot_type ?? null,
+        distance_to_hotspot_meters: payload.distance_to_hotspot_meters ?? null,
+        speed_kmh: payload.speed_kmh ?? null,
+        dwell_minutes: payload.dwell_minutes ?? 0,
+        is_tracking: payload.is_tracking ?? tracking,
+        accuracy_meters: payload.accuracy_meters ?? null,
+        last_signal_at: payload.last_signal_at ?? new Date().toISOString(),
+      });
+      if (error) {
+        toast.error("Location signal could not be saved yet.");
+        return false;
+      }
+      await queryClient.invalidateQueries({ queryKey: ["location-presence", familyId, userId] });
+      return true;
+    },
+    [familyId, queryClient, tracking, userId],
+  );
+
+  const processPoint = useCallback(
+    async (point: LocationPoint) => {
+      setLatestPoint(point);
+      const anchor = anchorPointRef.current;
+      if (!anchor || distanceMeters(point, anchor) > stationaryRadiusMeters) {
+        anchorPointRef.current = point;
+        stationarySinceRef.current = point.capturedAt;
+      }
+      const stationarySince = stationarySinceRef.current ?? point.capturedAt;
+      const dwellMinutes = Math.floor((point.capturedAt - stationarySince) / 60000);
+      const classified = classifyLocationPresence({ point, hotspots, dwellMinutes });
+      if (point.capturedAt - lastWriteMs.current < 30 * 1000) return;
+      lastWriteMs.current = point.capturedAt;
+      await writePresence({ ...classified, is_tracking: true });
+    },
+    [hotspots, writePresence],
+  );
+
+  useEffect(() => {
+    if (!tracking) return;
+    if (!navigator.geolocation) {
+      setWatchError("Geolocation is not available in this browser.");
+      setTracking(false);
+      return;
+    }
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        setWatchError(null);
+        void processPoint({
+          latitude: Number(position.coords.latitude.toFixed(6)),
+          longitude: Number(position.coords.longitude.toFixed(6)),
+          accuracy: position.coords.accuracy ? Math.round(position.coords.accuracy) : null,
+          speedKmh:
+            typeof position.coords.speed === "number" && position.coords.speed >= 0
+              ? position.coords.speed * 3.6
+              : null,
+          capturedAt: Date.now(),
+        });
+      },
+      () => {
+        setWatchError("Location permission was not granted.");
+        setTracking(false);
+      },
+      { enableHighAccuracy: false, timeout: 15000, maximumAge: 60 * 1000 },
+    );
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, [processPoint, tracking]);
+
+  const pauseTracking = useCallback(async () => {
+    setTracking(false);
+    await writePresence({
+      inferred_state: "paused",
+      status_label: "Location paused",
+      availability: "unknown",
+      is_tracking: false,
+      last_signal_at: new Date().toISOString(),
+    });
+  }, [writePresence]);
+
+  const saveHotspot = useCallback(
+    async ({
+      name,
+      hotspotType,
+      radiusMeters,
+      visibility,
+    }: {
+      name: string;
+      hotspotType: HotspotType;
+      radiusMeters: number;
+      visibility: HotspotVisibility;
+    }) => {
+      if (!userId || !familyId || !latestPoint) return false;
+      const { error } = await supabase.from("location_hotspots").insert({
+        family_id: familyId,
+        user_id: userId,
+        name,
+        hotspot_type: hotspotType,
+        latitude: latestPoint.latitude,
+        longitude: latestPoint.longitude,
+        radius_meters: radiusMeters,
+        visibility,
+      });
+      if (error) {
+        toast.error("Hotspot could not be saved yet.");
+        return false;
+      }
+      await queryClient.invalidateQueries({ queryKey: ["location-hotspots", familyId, userId] });
+      toast.success(`${name} added to hotspot favourites.`);
+      return true;
+    },
+    [familyId, latestPoint, queryClient, userId],
+  );
+
+  return {
+    hotspots,
+    presence,
+    latestPoint,
+    tracking,
+    watchError,
+    startTracking: () => setTracking(true),
+    pauseTracking,
+    saveHotspot,
+  };
+}
+
 function AppView() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -691,6 +1031,10 @@ function AppView() {
   const [creatingInvite, setCreatingInvite] = useState(false);
   const [manualDeviceState, setManualDeviceState] = useState<DevicePresenceState>("away_or_locked");
   const [manualDeviceDuration, setManualDeviceDuration] = useState<ManualOverrideDuration>(60);
+  const [hotspotName, setHotspotName] = useState("");
+  const [hotspotType, setHotspotType] = useState<HotspotType>("home");
+  const [hotspotRadius, setHotspotRadius] = useState(150);
+  const [hotspotVisibility, setHotspotVisibility] = useState<HotspotVisibility>("hub");
 
   // Pull profile + active family (honoring selectedFamilyId if set).
   const { data: ctx, isLoading } = useQuery({
@@ -738,6 +1082,7 @@ function AppView() {
     },
   });
   const devicePresence = useDevicePresence(user?.id, ctx?.family?.id);
+  const locationPresence = useLocationPresence(user?.id, ctx?.family?.id);
 
   // Unread notification count — drives the badge on the bell icon
   const unreadNotificationCount = useUnreadCount(user?.id);
@@ -1480,10 +1825,11 @@ function AppView() {
   }));
   const selectedDemoAccount =
     demoAccounts.find((account) => account.id === selectedDemoId) ?? demoAccounts[0];
+  const locationAvatarPresence = locationPresenceToPresenceState(locationPresence.presence);
   const currentAvatarPresence =
     will === "Need help"
       ? "needs_support"
-      : devicePresenceToPresenceState(devicePresence.effectiveState);
+      : (locationAvatarPresence ?? devicePresenceToPresenceState(devicePresence.effectiveState));
   const hubMembers: HubMemberSummary[] = [
     {
       name: firstName,
@@ -2494,6 +2840,171 @@ function AppView() {
                   >
                     Return to auto
                   </button>
+                ) : null}
+              </div>
+            </DimensionCard>
+
+            <DimensionCard Icon={LocateFixed} label="Location intelligence">
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span
+                    className={`h-3 w-3 rounded-full ${locationPresenceTone(
+                      locationPresence.presence?.inferred_state ?? "unknown",
+                    )}`}
+                  />
+                  <div>
+                    <div className="text-sm font-medium">
+                      {locationPresence.presence?.status_label ?? "Location unknown"}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {locationPresence.tracking
+                        ? "Foreground location signal is active"
+                        : "Location signal is paused"}
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-xs text-muted-foreground">
+                  Uses saved hotspots, 10-minute dwell time and 30 km/h movement to infer context.
+                  Exact live coordinates are not shown to hub members.
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={locationPresence.startTracking}
+                    disabled={locationPresence.tracking}
+                    className="inline-flex items-center gap-2 rounded-full bg-primary px-3 py-2 text-xs font-medium text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
+                  >
+                    <LocateFixed className="h-3.5 w-3.5" />
+                    Start signal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void locationPresence.pauseTracking()}
+                    disabled={!locationPresence.tracking}
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-xs font-medium text-muted-foreground transition hover:bg-accent hover:text-foreground disabled:opacity-60"
+                  >
+                    <PauseCircle className="h-3.5 w-3.5" />
+                    Pause
+                  </button>
+                </div>
+
+                {locationPresence.watchError ? (
+                  <p className="text-xs text-destructive">{locationPresence.watchError}</p>
+                ) : null}
+
+                {locationPresence.latestPoint ? (
+                  <div className="rounded-xl bg-surface-warm px-3 py-2 text-xs text-muted-foreground ring-1 ring-border">
+                    Current reading: about {locationPresence.latestPoint.accuracy ?? "unknown"}m
+                    accuracy
+                    {typeof locationPresence.presence?.speed_kmh === "number"
+                      ? ` · ${locationPresence.presence.speed_kmh.toFixed(1)} km/h`
+                      : ""}
+                    {locationPresence.presence?.dwell_minutes
+                      ? ` · settled ${locationPresence.presence.dwell_minutes} min`
+                      : ""}
+                  </div>
+                ) : null}
+
+                <div className="rounded-xl bg-card p-3 ring-1 ring-border">
+                  <div className="text-xs font-medium text-muted-foreground">
+                    Add current location to hotspot favourites
+                  </div>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    <input
+                      value={hotspotName}
+                      onChange={(event) => setHotspotName(event.target.value)}
+                      placeholder="Home, school, work..."
+                      className="h-9 rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-1 focus:ring-ring"
+                    />
+                    <Select
+                      value={hotspotType}
+                      onValueChange={(value) => setHotspotType(value as HotspotType)}
+                    >
+                      <SelectTrigger aria-label="Hotspot type">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {hotspotTypeOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select
+                      value={String(hotspotRadius)}
+                      onValueChange={(value) => setHotspotRadius(Number(value))}
+                    >
+                      <SelectTrigger aria-label="Hotspot radius">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {[100, 150, 250, 500].map((radius) => (
+                          <SelectItem key={radius} value={String(radius)}>
+                            {radius}m radius
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select
+                      value={hotspotVisibility}
+                      onValueChange={(value) =>
+                        setHotspotVisibility(value as HotspotVisibility)
+                      }
+                    >
+                      <SelectTrigger aria-label="Hotspot visibility">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {hotspotVisibilityOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const name = hotspotName.trim();
+                      if (!name) {
+                        toast.error("Name this hotspot first.");
+                        return;
+                      }
+                      if (!locationPresence.latestPoint) {
+                        toast.error("Start the location signal before saving a hotspot.");
+                        return;
+                      }
+                      const saved = await locationPresence.saveHotspot({
+                        name,
+                        hotspotType,
+                        radiusMeters: hotspotRadius,
+                        visibility: hotspotVisibility,
+                      });
+                      if (saved) setHotspotName("");
+                    }}
+                    className="mt-3 inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-2 text-xs font-medium text-muted-foreground transition hover:bg-accent hover:text-foreground"
+                  >
+                    <Save className="h-3.5 w-3.5" />
+                    Save hotspot
+                  </button>
+                </div>
+
+                {locationPresence.hotspots.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {locationPresence.hotspots.slice(0, 5).map((hotspot) => (
+                      <span
+                        key={hotspot.id}
+                        className="inline-flex items-center gap-1 rounded-full bg-card px-2.5 py-1 text-xs text-muted-foreground ring-1 ring-border"
+                      >
+                        <MapPin className="h-3 w-3" />
+                        {hotspot.name} · {hotspot.radius_meters}m
+                      </span>
+                    ))}
+                  </div>
                 ) : null}
               </div>
             </DimensionCard>

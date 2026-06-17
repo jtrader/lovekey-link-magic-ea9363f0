@@ -333,6 +333,128 @@ export type Database = {
           },
         ]
       }
+      location_hotspots: {
+        Row: {
+          created_at: string
+          family_id: string
+          hotspot_type: string
+          id: string
+          latitude: number
+          longitude: number
+          name: string
+          radius_meters: number
+          updated_at: string
+          user_id: string
+          visibility: string
+        }
+        Insert: {
+          created_at?: string
+          family_id: string
+          hotspot_type?: string
+          id?: string
+          latitude: number
+          longitude: number
+          name: string
+          radius_meters?: number
+          updated_at?: string
+          user_id: string
+          visibility?: string
+        }
+        Update: {
+          created_at?: string
+          family_id?: string
+          hotspot_type?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          name?: string
+          radius_meters?: number
+          updated_at?: string
+          user_id?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "location_hotspots_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      location_presence_states: {
+        Row: {
+          accuracy_meters: number | null
+          availability: string
+          created_at: string
+          distance_to_hotspot_meters: number | null
+          dwell_minutes: number
+          family_id: string
+          inferred_state: string
+          is_tracking: boolean
+          last_signal_at: string | null
+          nearest_hotspot_id: string | null
+          nearest_hotspot_name: string | null
+          nearest_hotspot_type: string | null
+          speed_kmh: number | null
+          status_label: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accuracy_meters?: number | null
+          availability?: string
+          created_at?: string
+          distance_to_hotspot_meters?: number | null
+          dwell_minutes?: number
+          family_id: string
+          inferred_state?: string
+          is_tracking?: boolean
+          last_signal_at?: string | null
+          nearest_hotspot_id?: string | null
+          nearest_hotspot_name?: string | null
+          nearest_hotspot_type?: string | null
+          speed_kmh?: number | null
+          status_label?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accuracy_meters?: number | null
+          availability?: string
+          created_at?: string
+          distance_to_hotspot_meters?: number | null
+          dwell_minutes?: number
+          family_id?: string
+          inferred_state?: string
+          is_tracking?: boolean
+          last_signal_at?: string | null
+          nearest_hotspot_id?: string | null
+          nearest_hotspot_name?: string | null
+          nearest_hotspot_type?: string | null
+          speed_kmh?: number | null
+          status_label?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "location_presence_states_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "location_presence_states_nearest_hotspot_id_fkey"
+            columns: ["nearest_hotspot_id"]
+            isOneToOne: false
+            referencedRelation: "location_hotspots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       presence_states: {
         Row: {
           family_id: string

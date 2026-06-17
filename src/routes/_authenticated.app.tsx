@@ -72,6 +72,7 @@ import {
   Copy,
   BookOpen,
   ChevronDown,
+  ArrowLeft,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/app")({
@@ -459,51 +460,11 @@ function AppView() {
   // Unread notification count — drives the badge on the bell icon
   const unreadNotificationCount = useUnreadCount(user?.id);
 
-  // Auto-create profile + default family for brand-new users so they land on the home view.
-  const [autoSetupDone, setAutoSetupDone] = useState(false);
   useEffect(() => {
-    if (!ctx || autoSetupDone) return;
-    (async () => {
-      // Auto-create profile from OAuth metadata if missing
-      if (!ctx.profile?.full_name) {
-        const nameFromMeta =
-          user?.user_metadata?.full_name ??
-          user?.user_metadata?.name ??
-          user?.email?.split("@")[0] ??
-          "New member";
-        await supabase.from("profiles").upsert({
-          id: user!.id,
-          full_name: nameFromMeta,
-          email: user?.email ?? null,
-          avatar_url: user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture ?? null,
-        });
-      }
-      // Auto-create a default family hub if the user isn't in one yet
-      if (!ctx.family) {
-        const { data: family } = await supabase
-          .from("families")
-          .insert({
-            name: "My Family",
-            hub_type: "immediate_family",
-            hub_visibility: "private",
-            public_join_mode: "invite",
-            created_by: user!.id,
-          })
-          .select("id")
-          .single();
-        if (family) {
-          await supabase.from("family_members").update({
-            role_label: "Hub owner",
-            member_kind: "owner",
-            visibility_state: "summary",
-            is_hub_admin: true,
-          }).eq("family_id", family.id).eq("user_id", user!.id);
-        }
-      }
-      setAutoSetupDone(true);
-      await queryClient.invalidateQueries({ queryKey: ["app-context", user?.id] });
-    })();
-  }, [ctx, user, autoSetupDone, queryClient]);
+    if (!isLoading && ctx && (!ctx.profile?.full_name || !ctx.family)) {
+      navigate({ to: "/onboarding" });
+    }
+  }, [ctx, isLoading, navigate]);
 
   const { data: moments = [], isLoading: momentsLoading } = useQuery({
     queryKey: ["hub-moments", ctx?.family?.id],
@@ -890,6 +851,12 @@ function AppView() {
     setInviteLink(`${window.location.origin}/invite/${data.token}`);
   };
 
+  const openInviteSheet = () => {
+    setInviteLink(null);
+    setInviteContact("");
+    setInviteSheetOpen(true);
+  };
+
   const validateDueMoments = useMutation({
     mutationFn: async () => {
       if (!ctx?.family) return;
@@ -1194,13 +1161,16 @@ function AppView() {
   };
 
   if (isLoading || !ctx?.profile?.full_name || !ctx?.family) {
-    // New user: auto-setup is running — show welcome screen with invite slots
     return (
-      <NewUserHome
-        user={user}
-        hubType={ctx?.family?.hub_type as import("@/lib/lovekey-model").HubType | undefined}
-        onInviteSlot={() => {}}
-      />
+      <div className="flex min-h-screen items-center justify-center bg-gradient-hero px-6 text-center">
+        <div>
+          <img src={lovekeyMark} alt="Love Key" className="mx-auto h-14 w-14" />
+          <h1 className="mt-4 text-2xl font-semibold tracking-tight">Getting your account ready</h1>
+          <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+            We will finish your profile first, then create or join a hub with your consent.
+          </p>
+        </div>
+      </div>
     );
   }
 
@@ -1224,6 +1194,7 @@ function AppView() {
     role: `${account.location} · ${account.role}`,
     presence: account.availability,
     mood: account.mood,
+    avatarUrl: account.avatarUrl,
   }));
   const selectedDemoAccount =
     demoAccounts.find((account) => account.id === selectedDemoId) ?? demoAccounts[0];
@@ -1302,12 +1273,28 @@ function AppView() {
       {/* Top bar */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-          <Link to="/" className="flex items-center gap-2">
-            <img src={lovekeyMark} alt="Love Key" className="h-14 w-14" width={56} height={56} />
-            <span className="font-semibold tracking-tight">
-              Love Key <span className="text-primary">Link</span>
-            </span>
-          </Link>
+          <div className="flex min-w-0 items-center gap-2">
+            <button
+              type="button"
+              aria-label="Go back"
+              onClick={() => {
+                if (window.history.length > 1) {
+                  window.history.back();
+                } else {
+                  navigate({ to: "/" });
+                }
+              }}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-foreground"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </button>
+            <Link to="/" className="flex min-w-0 items-center gap-2">
+              <img src={lovekeyMark} alt="Love Key" className="h-14 w-14" width={56} height={56} />
+              <span className="truncate font-semibold tracking-tight">
+                Love Key <span className="text-primary">Link</span>
+              </span>
+            </Link>
+          </div>
           <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
             <a href="#presence" className="hover:text-foreground">
               Presence
@@ -1754,11 +1741,7 @@ function AppView() {
               inviteSlotCount={4}
               hubType={ctx.family.hub_type as import("@/lib/lovekey-model").HubType}
               onHeartClick={() => setGroupChatOpen(true)}
-              onInviteSlot={() => {
-                setInviteLink(null);
-                setInviteContact("");
-                setInviteSheetOpen(true);
-              }}
+              onInviteSlot={openInviteSheet}
             />
           </div>
         </section>
@@ -3171,7 +3154,7 @@ function AvatarInitials({
   account,
   size = "md",
 }: {
-  account: Pick<DemoAccount, "fullName" | "color">;
+  account: Pick<DemoAccount, "fullName" | "color" | "avatarUrl">;
   size?: "md" | "lg";
 }) {
   const letters = account.fullName
@@ -3184,11 +3167,15 @@ function AvatarInitials({
 
   return (
     <div
-      className={`flex shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white shadow-soft ring-4 ring-white/70 ${
+      className={`flex shrink-0 items-center justify-center overflow-hidden rounded-full text-sm font-semibold text-white shadow-soft ring-4 ring-white/70 ${
         size === "lg" ? "h-16 w-16" : "h-11 w-11"
-      } ${account.color}`}
+      } ${account.avatarUrl ? "bg-card" : account.color}`}
     >
-      {letters}
+      {account.avatarUrl ? (
+        <img src={account.avatarUrl} alt="" className="h-full w-full object-cover" />
+      ) : (
+        letters
+      )}
     </div>
   );
 }

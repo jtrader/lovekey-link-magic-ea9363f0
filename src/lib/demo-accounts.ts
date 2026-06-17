@@ -14,6 +14,7 @@ export type DemoAccount = {
   lastMoment: string;
   privacyNote: string;
   color: string;
+  avatarUrl: string;
 };
 
 export const demoAccounts: DemoAccount[] = [
@@ -31,6 +32,7 @@ export const demoAccounts: DemoAccount[] = [
     lastMoment: "Shared an all-good check-in",
     privacyNote: "Calendar and presence visible. Wellbeing detail stays private.",
     color: "bg-health-green",
+    avatarUrl: "/avatar-presence/avatar-02.png",
   },
   {
     id: "liam",
@@ -46,6 +48,7 @@ export const demoAccounts: DemoAccount[] = [
     lastMoment: "Safe arrival confirmed",
     privacyNote: "Location is categorical only. No exact tracking.",
     color: "bg-health-blue",
+    avatarUrl: "/avatar-presence/avatar-03.png",
   },
   {
     id: "mia",
@@ -61,6 +64,7 @@ export const demoAccounts: DemoAccount[] = [
     lastMoment: "Marked busy until late afternoon",
     privacyNote: "Work state is visible, family wellbeing is not shared outside this hub.",
     color: "bg-health-yellow",
+    avatarUrl: "/avatar-presence/avatar-14.png",
   },
   {
     id: "noah",
@@ -76,6 +80,7 @@ export const demoAccounts: DemoAccount[] = [
     lastMoment: "Quiet mode turned on",
     privacyNote: "Quiet mode reduces notifications and hides extra detail.",
     color: "bg-health-purple",
+    avatarUrl: "/avatar-presence/avatar-05.png",
   },
   {
     id: "nan",
@@ -91,6 +96,7 @@ export const demoAccounts: DemoAccount[] = [
     lastMoment: "Support request ready for trusted contacts",
     privacyNote: "Support routes to trusted contacts first. No public alert is shown.",
     color: "bg-health-red",
+    avatarUrl: "/avatar-presence/avatar-11.png",
   },
 ];
 

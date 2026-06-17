@@ -77,7 +77,7 @@ export type PublicJoinMode = "invite" | "open" | "password";
 export type HubSlotTemplate = {
   /** Short role label shown beneath the avatar */
   role: string;
-  /** Seed passed to DiceBear Personas — deterministic illustrated portrait */
+  /** Stable starter avatar key for deterministic local portrait selection */
   seed: string;
 };
 

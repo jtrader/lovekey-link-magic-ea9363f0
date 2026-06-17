@@ -24,6 +24,7 @@ import {
   Plus,
   Sparkles,
   ArrowRight,
+  ArrowLeft,
   LocateFixed,
   LockKeyhole,
   MapPin,
@@ -143,10 +144,12 @@ function Onboarding() {
               initial={data?.profile ?? null}
               userEmail={user?.email}
               onDone={() => setStep(data?.hasFamily ? "invite" : "family")}
+              onBack={() => navigate({ to: "/" })}
             />
           )}
           {step === "family" && (
             <FamilyStep
+              onBack={() => setStep("profile")}
               onCreated={(id) => {
                 setFamilyId(id);
                 setStep("invite");
@@ -154,7 +157,11 @@ function Onboarding() {
             />
           )}
           {step === "invite" && familyId && (
-            <InviteStep familyId={familyId} onDone={() => navigate({ to: "/app" })} />
+            <InviteStep
+              familyId={familyId}
+              onBack={() => setStep("family")}
+              onDone={() => navigate({ to: "/app" })}
+            />
           )}
         </div>
       </div>
@@ -200,10 +207,12 @@ function ProfileStep({
   initial,
   userEmail,
   onDone,
+  onBack,
 }: {
   initial: { full_name: string | null; avatar_url: string | null; phone: string | null } | null;
   userEmail?: string;
   onDone: () => void;
+  onBack: () => void;
 }) {
   const { user } = useAuth();
   const [fullName, setFullName] = useState(initial?.full_name ?? "");
@@ -239,9 +248,22 @@ function ProfileStep({
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Welcome.</h1>
+      <button
+        type="button"
+        onClick={onBack}
+        className="mb-5 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back
+      </button>
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <Camera className="h-3.5 w-3.5 text-primary" />
+        Step one
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold tracking-tight">Create your account profile.</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Tell your circle who you are. You can change any of this later.
+        Start with your name and presence identity. Your hub comes next, after your account has a
+        human profile attached to it.
       </p>
 
       <div className="mt-6 flex items-center gap-4">
@@ -312,7 +334,7 @@ function ProfileStep({
   );
 }
 
-function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
+function FamilyStep({ onBack, onCreated }: { onBack: () => void; onCreated: (id: string) => void }) {
   const { user } = useAuth();
   const [name, setName] = useState("");
   const [hubType, setHubType] = useState<HubType>("immediate_family");
@@ -445,6 +467,14 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
 
   return (
     <div>
+      <button
+        type="button"
+        onClick={onBack}
+        className="mb-5 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back to profile
+      </button>
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <Sparkles className="h-3.5 w-3.5 text-primary" />
         Step two
@@ -713,7 +743,15 @@ function FamilyStep({ onCreated }: { onCreated: (id: string) => void }) {
   );
 }
 
-function InviteStep({ familyId, onDone }: { familyId: string; onDone: () => void }) {
+function InviteStep({
+  familyId,
+  onBack,
+  onDone,
+}: {
+  familyId: string;
+  onBack: () => void;
+  onDone: () => void;
+}) {
   const { user } = useAuth();
   const [link, setLink] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
@@ -749,6 +787,14 @@ function InviteStep({ familyId, onDone }: { familyId: string; onDone: () => void
 
   return (
     <div>
+      <button
+        type="button"
+        onClick={onBack}
+        className="mb-5 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back to hub setup
+      </button>
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <Users className="h-3.5 w-3.5 text-primary" />
         Step three

@@ -54,12 +54,8 @@ const moodClass: Record<MoodRingState, string> = {
   recovering: "ring-health-purple",
 };
 
-/** Warm gradient backgrounds for DiceBear Personas avatars */
-const AVATAR_BG = "b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf,bde4c8";
-
-function dicebearUrl(seed: string) {
-  return `https://api.dicebear.com/9.x/personas/svg?seed=${encodeURIComponent(seed)}&backgroundColor=${AVATAR_BG}&backgroundType=gradientLinear&size=96`;
-}
+const starterAvatarUrl = (index: number) =>
+  `/avatar-presence/avatar-${String(index + 1).padStart(2, "0")}.png`;
 
 function initials(name: string) {
   return name
@@ -267,7 +263,7 @@ export function Nucleus({
         </div>
       ))}
 
-      {/* Invite placeholder slots — DiceBear avatar + role label */}
+      {/* Invite placeholder slots — starter avatar + role label */}
       {showInvitePlaceholders &&
         invitePositions.slice(0, slotCount).map((pos, index) => {
           const slot = template.defaultSlots[index];
@@ -278,16 +274,16 @@ export function Nucleus({
                   type="button"
                   onClick={() => onInviteSlot?.(index)}
                   aria-label={template.inviteLabel}
-                  className={`group relative flex items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-primary/40 bg-card/60 shadow-soft ring-4 ring-primary/10 backdrop-blur transition ease-calm hover:border-primary/70 hover:ring-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                  className={`group relative flex items-center justify-center overflow-hidden rounded-full bg-card shadow-soft ring-4 ring-primary/10 backdrop-blur transition ease-calm hover:ring-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                     isHome ? "h-20 w-20 sm:h-24 sm:w-24" : "h-16 w-16"
                   }`}
                 >
-                  {/* Illustrated generic avatar */}
+                  {/* Local starter avatar from the LoveKey avatar and presence system */}
                   <img
-                    src={dicebearUrl(slot.seed)}
+                    src={starterAvatarUrl(index)}
                     alt=""
                     aria-hidden="true"
-                    className="absolute h-full w-full rounded-full object-cover opacity-50 transition-opacity group-hover:opacity-75"
+                    className="absolute h-full w-full rounded-full object-cover opacity-95 transition group-hover:scale-105 group-hover:opacity-100"
                   />
                   {/* UserPlus overlay — appears on hover */}
                   <span className="relative z-10 flex items-center justify-center rounded-full bg-white/80 p-1 opacity-0 shadow-sm transition group-hover:opacity-100">

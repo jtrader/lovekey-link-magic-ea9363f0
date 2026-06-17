@@ -1,4 +1,4 @@
-import lovekeyMark from "@/assets/lovekey-mark.png";
+import hubHealthImage from "@/assets/lovekey-hub-health.png";
 import {
   hubInviteTemplates,
   moodRingStates,
@@ -6,7 +6,7 @@ import {
   type MoodRingState,
   type PresenceState,
 } from "@/lib/lovekey-model";
-import { Heart, MessageCircle, UserPlus, X } from "lucide-react";
+import { MessageCircle, UserPlus, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 type HubMember = {
@@ -52,16 +52,6 @@ const moodClass: Record<MoodRingState, string> = {
   fragmenting: "ring-health-orange",
   crisis: "ring-health-red",
   recovering: "ring-health-purple",
-};
-
-const heartClass: Record<MoodRingState, string> = {
-  healthy: "from-health-green to-primary text-white shadow-[0_0_44px_rgba(94,214,168,0.45)]",
-  stable: "from-primary to-soft-blue text-white shadow-[0_0_44px_rgba(46,120,255,0.42)]",
-  reduced: "from-health-yellow to-soft-blue text-foreground shadow-[0_0_44px_rgba(255,197,90,0.4)]",
-  fragmenting:
-    "from-health-orange to-health-yellow text-foreground shadow-[0_0_44px_rgba(255,132,65,0.35)]",
-  crisis: "from-health-red to-health-orange text-white shadow-[0_0_44px_rgba(255,107,107,0.45)]",
-  recovering: "from-health-purple to-soft-blue text-white shadow-[0_0_44px_rgba(179,157,255,0.42)]",
 };
 
 /** Warm gradient backgrounds for DiceBear Personas avatars */
@@ -215,44 +205,34 @@ export function Nucleus({
             onHeartClick();
           }}
           aria-label="Open group chat"
-          className={`group absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2.25rem] bg-gradient-to-br ring-8 ring-white/70 transition hover:scale-[1.04] hover:ring-white/90 active:scale-[0.97] ${heartClass[status]} ${
+          className={`group absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full transition hover:scale-[1.04] active:scale-[0.97] ${
             isHome ? "h-40 w-40 sm:h-52 sm:w-52" : "h-28 w-28 sm:h-36 sm:w-36"
           }`}
           aria-describedby="hub-health"
         >
-          <Heart
-            className={`transition-transform group-hover:scale-105 ${isHome ? "h-24 w-24 sm:h-32 sm:w-32" : "h-16 w-16 sm:h-20 sm:w-20"}`}
-            fill="currentColor"
-            strokeWidth={1.5}
-          />
           <img
-            src={lovekeyMark}
+            src={hubHealthImage}
             alt=""
             aria-hidden="true"
-            className="absolute h-12 w-12 opacity-85 mix-blend-screen sm:h-16 sm:w-16"
+            className="h-full w-full rounded-full object-contain drop-shadow-[0_0_34px_rgba(255,55,55,0.42)] transition-transform group-hover:scale-105"
           />
           {/* Chat hint icon — appears on hover */}
-          <span className="absolute bottom-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-white/80 opacity-0 shadow-sm transition group-hover:opacity-100">
+          <span className="absolute bottom-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-white/85 opacity-0 shadow-sm transition group-hover:opacity-100">
             <MessageCircle className="h-3.5 w-3.5 text-primary" />
           </span>
         </button>
       ) : (
         <div
-          className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[2.25rem] bg-gradient-to-br ring-8 ring-white/70 ${heartClass[status]} ${
+          className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full ${
             isHome ? "h-40 w-40 sm:h-52 sm:w-52" : "h-28 w-28 sm:h-36 sm:w-36"
           }`}
           aria-label={`Hub health: ${statusLabel}`}
         >
-          <Heart
-            className={`${isHome ? "h-24 w-24 sm:h-32 sm:w-32" : "h-16 w-16 sm:h-20 sm:w-20"}`}
-            fill="currentColor"
-            strokeWidth={1.5}
-          />
           <img
-            src={lovekeyMark}
+            src={hubHealthImage}
             alt=""
             aria-hidden="true"
-            className="absolute h-12 w-12 opacity-85 mix-blend-screen sm:h-16 sm:w-16"
+            className="h-full w-full rounded-full object-contain drop-shadow-[0_0_34px_rgba(255,55,55,0.42)]"
           />
         </div>
       )}

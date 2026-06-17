@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Nucleus } from "@/components/Nucleus";
+import { GroupChatSheet } from "@/components/GroupChatSheet";
 import {
   Sheet,
   SheetClose,
@@ -16,7 +17,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { demoAccounts, demoHubStats, type DemoAccount } from "@/lib/demo-accounts";
 import {
   hubSpaceCards,
-  helpNetworkServices,
   lowResolutionLocations,
   permissionSignals,
   privacyPreviewDefaults,
@@ -65,9 +65,9 @@ import {
   Send,
   Lock,
   Menu,
-  ExternalLink,
   Search,
   LocateFixed,
+  Copy,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/app")({
@@ -394,6 +394,12 @@ function AppView() {
     accuracy: number | null;
   } | null>(null);
   const [nearbyPublicHubs, setNearbyPublicHubs] = useState<PublicHubSearchResult[]>([]);
+  // Invite-from-home state
+  const [inviteSheetOpen, setInviteSheetOpen] = useState(false);
+  const [groupChatOpen, setGroupChatOpen] = useState(false);
+  const [inviteContact, setInviteContact] = useState("");
+  const [inviteLink, setInviteLink] = useState<string | null>(null);
+  const [creatingInvite, setCreatingInvite] = useState(false);
 
   // Pull profile + first family. Redirect to onboarding if either missing.
   const { data: ctx, isLoading } = useQuery({
@@ -418,12 +424,51 @@ function AppView() {
     },
   });
 
+  // Auto-create profile + default family for brand-new users so they land on the home view.
+  const [autoSetupDone, setAutoSetupDone] = useState(false);
   useEffect(() => {
-    if (!ctx) return;
-    if (!ctx.profile?.full_name || !ctx.family) {
-      navigate({ to: "/onboarding" });
-    }
-  }, [ctx, navigate]);
+    if (!ctx || autoSetupDone) return;
+    (async () => {
+      // Auto-create profile from OAuth metadata if missing
+      if (!ctx.profile?.full_name) {
+        const nameFromMeta =
+          user?.user_metadata?.full_name ??
+          user?.user_metadata?.name ??
+          user?.email?.split("@")[0] ??
+          "New member";
+        await supabase.from("profiles").upsert({
+          id: user!.id,
+          full_name: nameFromMeta,
+          email: user?.email ?? null,
+          avatar_url: user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture ?? null,
+        });
+      }
+      // Auto-create a default family hub if the user isn't in one yet
+      if (!ctx.family) {
+        const { data: family } = await supabase
+          .from("families")
+          .insert({
+            name: "My Family",
+            hub_type: "immediate_family",
+            hub_visibility: "private",
+            public_join_mode: "invite",
+            created_by: user!.id,
+          })
+          .select("id")
+          .single();
+        if (family) {
+          await supabase.from("family_members").update({
+            role_label: "Hub owner",
+            member_kind: "owner",
+            visibility_state: "summary",
+            is_hub_admin: true,
+          }).eq("family_id", family.id).eq("user_id", user!.id);
+        }
+      }
+      setAutoSetupDone(true);
+      await queryClient.invalidateQueries({ queryKey: ["app-context", user?.id] });
+    })();
+  }, [ctx, user, autoSetupDone, queryClient]);
 
   const { data: moments = [], isLoading: momentsLoading } = useQuery({
     queryKey: ["hub-moments", ctx?.family?.id],
@@ -579,7 +624,7 @@ function AppView() {
     keys
       .map((key) => {
         const option = participantOptions.find((participant) => participant.key === key);
-        if (!option || !ctx?.family || !user) return null;
+        if (!option || !ctx?.family || !user) return null as never;
         return {
           family_id: ctx.family.id,
           event_id: eventId,
@@ -762,6 +807,22 @@ function AppView() {
       },
       { enableHighAccuracy: false, timeout: 12000, maximumAge: 5 * 60 * 1000 },
     );
+  };
+
+  const generateInviteLink = async () => {
+    if (!ctx?.family || !user) return;
+    setCreatingInvite(true);
+    const { data, error } = await supabase
+      .from("family_invites")
+      .insert({ family_id: ctx.family.id, created_by: user.id })
+      .select("token")
+      .single();
+    setCreatingInvite(false);
+    if (error || !data) {
+      toast.error("Couldn't create invite link.");
+      return;
+    }
+    setInviteLink(`${window.location.origin}/invite/${data.token}`);
   };
 
   const validateDueMoments = useMutation({
@@ -1068,10 +1129,13 @@ function AppView() {
   };
 
   if (isLoading || !ctx?.profile?.full_name || !ctx?.family) {
+    // New user: auto-setup is running — show welcome screen with invite slots
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <div className="text-sm text-muted-foreground">Loading your link…</div>
-      </div>
+      <NewUserHome
+        user={user}
+        hubType={ctx?.family?.hub_type as import("@/lib/lovekey-model").HubType | undefined}
+        onInviteSlot={() => {}}
+      />
     );
   }
 
@@ -1540,7 +1604,19 @@ function AppView() {
           </div>
 
           <div className="relative hidden items-center justify-center md:flex lg:order-2">
-            <Nucleus members={hubMembers} status={hubHealth} variant="home" />
+            <Nucleus
+              members={hubMembers.slice(1)}
+              status={hubHealth}
+              variant="home"
+              inviteSlotCount={4}
+              hubType={ctx.family.hub_type as import("@/lib/lovekey-model").HubType}
+              onHeartClick={() => setGroupChatOpen(true)}
+              onInviteSlot={() => {
+                setInviteLink(null);
+                setInviteContact("");
+                setInviteSheetOpen(true);
+              }}
+            />
           </div>
         </section>
 
@@ -2076,86 +2152,6 @@ function AppView() {
               )}
             </div>
             <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-              <li className="overflow-hidden rounded-3xl bg-gradient-to-b from-health-red to-[#b90000] p-4 text-white shadow-[0_22px_70px_rgba(255,107,107,0.25)] ring-1 ring-health-red/25 sm:col-span-2">
-                <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-                  <div>
-                    <div className="inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-medium uppercase tracking-wide ring-1 ring-white/20">
-                      Standard hub · always available
-                    </div>
-                    <h3 className="mt-3 text-2xl font-semibold tracking-tight">HELP Network Hub</h3>
-                    <p className="mt-2 max-w-xl text-sm text-white/80">
-                      Public support pathways from the Love Key support hub: prepare, respond,
-                      recover and heal. This hub appears for every LoveKey user by default.
-                    </p>
-                  </div>
-
-                  <div className="relative mx-auto flex min-h-72 w-full max-w-sm items-center justify-center lg:mx-0">
-                    <div className="absolute top-0 flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-[0_14px_40px_rgba(0,0,0,0.22)]">
-                      <img
-                        src={helpNetworkServices[0].logo}
-                        alt=""
-                        className="h-16 w-16 rounded-2xl object-contain"
-                      />
-                    </div>
-                    <div className="absolute bottom-0 flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-[0_14px_40px_rgba(0,0,0,0.22)]">
-                      <img
-                        src={helpNetworkServices[3].logo}
-                        alt=""
-                        className="h-16 w-16 rounded-2xl object-contain"
-                      />
-                    </div>
-                    <div className="absolute left-0 top-1/2 flex h-20 w-20 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-[0_14px_40px_rgba(0,0,0,0.22)]">
-                      <img
-                        src={helpNetworkServices[1].logo}
-                        alt=""
-                        className="h-14 w-14 rounded-2xl object-contain"
-                      />
-                    </div>
-                    <div className="absolute right-0 top-1/2 flex h-20 w-20 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-[0_14px_40px_rgba(0,0,0,0.22)]">
-                      <img
-                        src={helpNetworkServices[2].logo}
-                        alt=""
-                        className="h-14 w-14 rounded-2xl object-contain"
-                      />
-                    </div>
-                    <div className="flex h-36 w-36 items-center justify-center rounded-full bg-white shadow-[0_22px_70px_rgba(0,0,0,0.28)]">
-                      <img src={lovekeyMark} alt="Love Key" className="h-24 w-24" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-5 grid gap-2 sm:grid-cols-2">
-                  {helpNetworkServices.map((service) => (
-                    <a
-                      key={service.href}
-                      href={service.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group rounded-2xl bg-white/95 p-3 text-foreground shadow-soft ring-1 ring-white/40 transition hover:-translate-y-0.5 hover:bg-white"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-surface-warm">
-                          <img
-                            src={service.logo}
-                            alt=""
-                            className="h-8 w-8 rounded-lg object-contain"
-                          />
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="truncate text-sm font-semibold">{service.title}</div>
-                            <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition group-hover:text-primary" />
-                          </div>
-                          <div className="text-[11px] font-medium uppercase tracking-wide text-health-red">
-                            {service.stage}
-                          </div>
-                          <p className="mt-0.5 text-xs text-muted-foreground">{service.body}</p>
-                        </div>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </li>
               {hubSpaceCards.map(({ title, body, Icon }) => (
                 <li key={title} className="rounded-2xl bg-card p-4 shadow-soft ring-1 ring-border">
                   <div className="flex items-center gap-3">
@@ -2847,15 +2843,41 @@ function AppView() {
           </div>
         </section>
 
-        <footer className="mt-16 flex items-center justify-between border-t border-border/60 pb-24 pt-6 text-xs text-muted-foreground md:pb-0">
-          <span>
-            Presence before messaging. · Support without shame. · Part of the Love Key HELP Network
-          </span>
-          <Link to="/" className="hover:text-foreground">
-            ← Back to overview
-          </Link>
+        <footer className="mt-12 border-t border-border/60 pb-24 pt-5 text-center text-xs text-muted-foreground md:pb-6">
+          © {new Date().getFullYear()} Love Key · Part of the Love Key HELP Network
         </footer>
+
       </main>
+      <InviteSheet
+        open={inviteSheetOpen}
+        onOpenChange={(open) => {
+          setInviteSheetOpen(open);
+          if (!open) { setInviteLink(null); setInviteContact(""); }
+        }}
+        contact={inviteContact}
+        onContactChange={setInviteContact}
+        inviteLink={inviteLink}
+        creating={creatingInvite}
+        onGenerate={generateInviteLink}
+        familyName={ctx.family.name}
+      />
+      <GroupChatSheet
+        open={groupChatOpen}
+        onOpenChange={setGroupChatOpen}
+        hubName={ctx.family.name}
+        hubType={ctx.family.hub_type as import("@/lib/lovekey-model").HubType | undefined}
+        currentUser={{
+          id: user!.id,
+          name: ctx.profile.full_name,
+          avatarUrl: ctx.profile.avatar_url,
+        }}
+        members={hubMembers.map((m, i) => ({
+          id: i === 0 ? user!.id : `member-${i}`,
+          name: m.name,
+          avatarUrl: m.avatarUrl,
+        }))}
+      />
+
       <nav className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-2xl bg-card/95 p-2 text-[11px] shadow-soft ring-1 ring-border backdrop-blur md:hidden">
         {[
           { href: "#presence", label: "Home", Icon: Home },
@@ -2973,6 +2995,179 @@ function AvatarInitials({
     >
       {letters}
     </div>
+  );
+}
+
+// ─── New user welcome screen ───────────────────────────────────────────────
+
+function NewUserHome({ user, hubType, onInviteSlot }: { user: { email?: string } | null; hubType?: import("@/lib/lovekey-model").HubType; onInviteSlot: (index: number) => void }) {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-gradient-hero px-6 py-12">
+      <div className="flex items-center gap-2">
+        <img src={lovekeyMark} alt="Love Key" className="h-14 w-14" />
+        <span className="font-semibold tracking-tight">
+          Love Key <span className="text-primary">Link</span>
+        </span>
+      </div>
+      <div className="text-center">
+        <h1 className="text-3xl font-semibold tracking-tight">Welcome to your hub.</h1>
+        <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
+          Setting up your private family space… Tap the invite slots to bring your people in.
+        </p>
+      </div>
+      <div className="w-full max-w-lg">
+        <Nucleus
+          members={[]}
+          status="healthy"
+          variant="home"
+          inviteSlotCount={4}
+          hubType={hubType}
+          onInviteSlot={onInviteSlot}
+        />
+      </div>
+      <p className="text-xs text-muted-foreground">{user?.email}</p>
+    </div>
+  );
+}
+
+// ─── Invite sheet ──────────────────────────────────────────────────────────
+
+function InviteSheet({
+  open,
+  onOpenChange,
+  contact,
+  onContactChange,
+  inviteLink,
+  creating,
+  onGenerate,
+  familyName,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  contact: string;
+  onContactChange: (v: string) => void;
+  inviteLink: string | null;
+  creating: boolean;
+  onGenerate: () => void;
+  familyName: string;
+}) {
+  const isEmail = contact.includes("@");
+  const isPhone = /^[\d+\s\-()]{7,}$/.test(contact.trim());
+
+  const copyLink = async () => {
+    if (!inviteLink) return;
+    await navigator.clipboard.writeText(inviteLink);
+    toast.success("Invite link copied.");
+  };
+
+  const mailtoHref = inviteLink && isEmail
+    ? `mailto:${encodeURIComponent(contact.trim())}?subject=${encodeURIComponent(`Join ${familyName} on Love Key`)}&body=${encodeURIComponent(`Hi,\n\nI'd like to invite you to join my family hub on Love Key Link.\n\nClick this link to join:\n${inviteLink}\n\nLinks expire in 14 days.\n`)}`
+    : null;
+
+  const smsHref = inviteLink && isPhone
+    ? `sms:${encodeURIComponent(contact.trim())}?body=${encodeURIComponent(`Join my Love Key family hub: ${inviteLink}`)}`
+    : null;
+
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent side="right" className="w-full max-w-md overflow-y-auto">
+        <SheetHeader>
+          <SheetTitle className="flex items-center gap-2">
+            <UserPlus className="h-4 w-4 text-primary" />
+            Invite a family member
+          </SheetTitle>
+          <SheetDescription>
+            Invite someone to join <span className="font-medium text-foreground">{familyName}</span>.
+            Links expire in 14 days and can only be used once.
+          </SheetDescription>
+        </SheetHeader>
+
+        <div className="mt-6 space-y-4">
+          <div>
+            <label className="text-xs text-muted-foreground">Email address or phone number</label>
+            <input
+              type="text"
+              value={contact}
+              onChange={(e) => onContactChange(e.target.value)}
+              placeholder="name@example.com or +61 4xx xxx xxx"
+              className="mt-1 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+            />
+            {contact && !isEmail && !isPhone && (
+              <p className="mt-1 text-xs text-muted-foreground">
+                Enter a valid email or phone to unlock send shortcuts.
+              </p>
+            )}
+          </div>
+
+          {!inviteLink ? (
+            <button
+              onClick={onGenerate}
+              disabled={creating}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-soft transition ease-calm hover:opacity-95 disabled:opacity-60"
+            >
+              <Plus className="h-4 w-4" />
+              {creating ? "Generating…" : "Generate invite link"}
+            </button>
+          ) : (
+            <div className="space-y-3">
+              <div className="rounded-2xl bg-surface-warm p-4 ring-1 ring-border">
+                <p className="text-xs font-medium text-muted-foreground">Your invite link</p>
+                <div className="mt-2 break-all rounded-md bg-background p-3 font-mono text-xs ring-1 ring-border">
+                  {inviteLink}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={copyLink}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-card px-4 py-2 text-xs font-medium ring-1 ring-border hover:bg-accent"
+                >
+                  <Copy className="h-3.5 w-3.5" /> Copy link
+                </button>
+
+                {mailtoHref && (
+                  <a
+                    href={mailtoHref}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-card px-4 py-2 text-xs font-medium ring-1 ring-border hover:bg-accent"
+                  >
+                    <Send className="h-3.5 w-3.5" /> Send via email
+                  </a>
+                )}
+
+                {smsHref && (
+                  <a
+                    href={smsHref}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-card px-4 py-2 text-xs font-medium ring-1 ring-border hover:bg-accent"
+                  >
+                    <Phone className="h-3.5 w-3.5" /> Send via SMS
+                  </a>
+                )}
+
+                <button
+                  onClick={onGenerate}
+                  disabled={creating}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-card px-4 py-2 text-xs font-medium ring-1 ring-border hover:bg-accent disabled:opacity-60"
+                >
+                  <RefreshCw className="h-3.5 w-3.5" /> New link
+                </button>
+              </div>
+
+              <p className="text-xs text-muted-foreground">
+                Share this link only with trusted people. Anyone with it can request to join.
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-8 border-t border-border/60 pt-5">
+          <SheetClose asChild>
+            <button className="text-sm text-muted-foreground hover:text-foreground">
+              Close
+            </button>
+          </SheetClose>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }
 

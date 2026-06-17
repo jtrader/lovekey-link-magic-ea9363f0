@@ -74,6 +74,104 @@ export type SupportSignal = "All good" | "Safe arrival" | "Need support";
 export type HubVisibility = "private" | "public";
 export type PublicJoinMode = "invite" | "open" | "password";
 
+export type HubSlotTemplate = {
+  /** Short role label shown beneath the avatar */
+  role: string;
+  /** Seed passed to DiceBear Personas — deterministic illustrated portrait */
+  seed: string;
+};
+
+export type HubInviteTemplate = {
+  /** Button / sheet headline, e.g. "Invite a family member" */
+  inviteLabel: string;
+  /** 4 default placeholder slots shown in Nucleus before any members join */
+  defaultSlots: [HubSlotTemplate, HubSlotTemplate, HubSlotTemplate, HubSlotTemplate];
+};
+
+export const hubInviteTemplates: Record<HubType, HubInviteTemplate> = {
+  immediate_family: {
+    inviteLabel: "Invite a family member",
+    defaultSlots: [
+      { role: "Partner", seed: "lena-hayes" },
+      { role: "Son", seed: "marcus-reed" },
+      { role: "Daughter", seed: "sofia-chen" },
+      { role: "Family", seed: "noah-patel" },
+    ],
+  },
+  birth_family: {
+    inviteLabel: "Invite a family member",
+    defaultSlots: [
+      { role: "Parent", seed: "dorothy-silva" },
+      { role: "Parent", seed: "graham-osei" },
+      { role: "Sibling", seed: "priya-santos" },
+      { role: "Sibling", seed: "kieran-walsh" },
+    ],
+  },
+  blended_family: {
+    inviteLabel: "Invite a family member",
+    defaultSlots: [
+      { role: "Step-parent", seed: "alice-morgan" },
+      { role: "Step-parent", seed: "james-okoro" },
+      { role: "Step-sibling", seed: "ella-foster" },
+      { role: "Guardian", seed: "sam-nguyen" },
+    ],
+  },
+  co_parenting: {
+    inviteLabel: "Invite a co-parent",
+    defaultSlots: [
+      { role: "Co-parent", seed: "rachel-kim" },
+      { role: "Child", seed: "theo-martin" },
+      { role: "Child", seed: "isla-brooks" },
+      { role: "Guardian", seed: "david-ali" },
+    ],
+  },
+  elder_care: {
+    inviteLabel: "Invite a care member",
+    defaultSlots: [
+      { role: "Elder", seed: "margaret-jones" },
+      { role: "Carer", seed: "chen-liu" },
+      { role: "Neighbour", seed: "betty-anderson" },
+      { role: "Support", seed: "oliver-smith" },
+    ],
+  },
+  sporting_group: {
+    inviteLabel: "Invite a team mate",
+    defaultSlots: [
+      { role: "Coach", seed: "blake-turner" },
+      { role: "Player", seed: "ava-scott" },
+      { role: "Player", seed: "finn-jackson" },
+      { role: "Player", seed: "zara-hussain" },
+    ],
+  },
+  book_club: {
+    inviteLabel: "Invite a member",
+    defaultSlots: [
+      { role: "Host", seed: "helen-price" },
+      { role: "Reader", seed: "carlos-diaz" },
+      { role: "Reader", seed: "marie-dubois" },
+      { role: "Organiser", seed: "tom-wright" },
+    ],
+  },
+  corporate_team: {
+    inviteLabel: "Invite a team member",
+    defaultSlots: [
+      { role: "Manager", seed: "sarah-coleman" },
+      { role: "HR", seed: "raj-mehta" },
+      { role: "IT Lead", seed: "mei-zhang" },
+      { role: "Team", seed: "ethan-black" },
+    ],
+  },
+  recovery_circle: {
+    inviteLabel: "Invite a trusted contact",
+    defaultSlots: [
+      { role: "Trusted", seed: "julia-harris" },
+      { role: "Support", seed: "patrick-o-brien" },
+      { role: "Guardian", seed: "nadia-volkov" },
+      { role: "Trusted", seed: "leon-adeyemi" },
+    ],
+  },
+};
+
 export const hubTypes: {
   value: HubType;
   label: string;

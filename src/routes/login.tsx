@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { lovable } from "@/integrations/lovable/index";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import lovekeyMark from "@/assets/lovekey-mark.png";
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const [busy, setBusy] = useState<string | null>(null);
+  const [busy, setBusy] = useState<"google" | "apple" | "facebook" | null>(null);
 
   useEffect(() => {
     if (!loading && user) {
@@ -51,6 +52,30 @@ function LoginPage() {
     }
   };
 
+  const signInWithFacebook = async () => {
+    setBusy("facebook");
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "facebook",
+        options: {
+          redirectTo: window.location.origin + "/app",
+          // public_profile gives name + avatar; email gives email address;
+          // user_friends returns mutual friends who have also connected this app
+          // (user_friends requires Facebook App Review for production — works for test users now)
+          scopes: "public_profile,email,user_friends",
+        },
+      });
+      if (error) {
+        toast.error("Facebook sign-in failed. Please try again.");
+        setBusy(null);
+      }
+      // On success Supabase redirects — no further action needed here
+    } catch {
+      toast.error("Facebook sign-in failed.");
+      setBusy(null);
+    }
+  };
+
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-gradient-hero px-6">
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-30">
@@ -69,6 +94,23 @@ function LoginPage() {
         </p>
 
         <div className="mt-6 space-y-3">
+          {/* Facebook — primary easy sign-in; imports name, photo and (with App Review) mutual friends */}
+          <button
+            onClick={signInWithFacebook}
+            disabled={busy !== null}
+            className="flex w-full items-center justify-center gap-3 rounded-full px-4 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
+            style={{ backgroundColor: "#1877F2" }}
+          >
+            <FacebookIcon />
+            {busy === "facebook" ? "Connecting…" : "Continue with Facebook"}
+          </button>
+
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <div className="h-px flex-1 bg-border" />
+            or
+            <div className="h-px flex-1 bg-border" />
+          </div>
+
           <button
             onClick={() => signIn("google")}
             disabled={busy !== null}
@@ -88,10 +130,18 @@ function LoginPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          By continuing, you agree that Love Key Link will store your name, photo and email to identify you within your circle.
+          Facebook sign-in imports your name, profile photo and friend connections to help you build your hub. By continuing, you agree that Love Key Link stores your name, photo and email to identify you within your circle.
         </p>
       </div>
     </div>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.514c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+    </svg>
   );
 }
 

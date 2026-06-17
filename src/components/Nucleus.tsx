@@ -1,6 +1,13 @@
 import lovekeyMark from "@/assets/lovekey-mark.png";
-import { moodRingStates, type MoodRingState, type PresenceState } from "@/lib/lovekey-model";
-import { Heart } from "lucide-react";
+import {
+  hubInviteTemplates,
+  moodRingStates,
+  type HubType,
+  type MoodRingState,
+  type PresenceState,
+} from "@/lib/lovekey-model";
+import { Heart, MessageCircle, UserPlus, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 type HubMember = {
   name: string;
@@ -18,6 +25,7 @@ const defaultMembers: HubMember[] = [
   { name: "Nan", role: "Quiet", presence: "quiet", mood: "recovering" },
 ];
 
+// 4 cardinal + 2 diagonal — matches invite slot count
 const positions = [
   "left-[50%] top-[4%] -translate-x-1/2",
   "right-[2%] top-[31%]",
@@ -26,6 +34,9 @@ const positions = [
   "left-[13%] bottom-[13%]",
   "right-[13%] bottom-[13%]",
 ];
+
+// Only first 4 positions for invite placeholders
+const invitePositions = positions.slice(0, 4);
 
 const presenceClass: Record<PresenceState, string> = {
   available: "bg-health-green",
@@ -53,6 +64,13 @@ const heartClass: Record<MoodRingState, string> = {
   recovering: "from-health-purple to-soft-blue text-white shadow-[0_0_44px_rgba(179,157,255,0.42)]",
 };
 
+/** Warm gradient backgrounds for DiceBear Personas avatars */
+const AVATAR_BG = "b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf,bde4c8";
+
+function dicebearUrl(seed: string) {
+  return `https://api.dicebear.com/9.x/personas/svg?seed=${encodeURIComponent(seed)}&backgroundColor=${AVATAR_BG}&backgroundType=gradientLinear&size=96`;
+}
+
 function initials(name: string) {
   return name
     .split(" ")
@@ -63,19 +81,104 @@ function initials(name: string) {
     .toUpperCase();
 }
 
+// ─── Tooltip ──────────────────────────────────────────────────────────────────
+
+/**
+ * Auto-appearing tooltip that floats above the heart.
+ * Fades in after `delayMs`, auto-hides after `visibleMs`, has a close button.
+ * Suppressed once dismissed (per page session via ref).
+ */
+function HeartTooltip({
+  visible,
+  onClose,
+  isHome,
+}: {
+  visible: boolean;
+  onClose: () => void;
+  isHome: boolean;
+}) {
+  return (
+    <div
+      role="tooltip"
+      className={`pointer-events-none absolute left-1/2 z-20 -translate-x-1/2 transition-all duration-500 ease-in-out ${
+        isHome ? "top-[18%]" : "top-[16%]"
+      } ${visible ? "pointer-events-auto opacity-100 translate-y-0" : "opacity-0 translate-y-1"}`}
+    >
+      <div className="relative flex items-center gap-2 whitespace-nowrap rounded-2xl bg-card px-3.5 py-2 text-xs font-medium shadow-[0_8px_24px_rgba(0,0,0,0.12)] ring-1 ring-border">
+        <MessageCircle className="h-3.5 w-3.5 shrink-0 text-primary" />
+        <span>Tap to open group chat</span>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
+          aria-label="Dismiss tooltip"
+          className="ml-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:text-foreground"
+        >
+          <X className="h-3 w-3" />
+        </button>
+        {/* Caret pointing down toward the heart */}
+        <span className="absolute -bottom-[5px] left-1/2 h-2.5 w-2.5 -translate-x-1/2 rotate-45 border-b border-r border-border bg-card" />
+      </div>
+    </div>
+  );
+}
+
+// ─── Nucleus ──────────────────────────────────────────────────────────────────
+
 export function Nucleus({
   members = defaultMembers,
   status = "healthy",
   variant = "card",
+  inviteSlotCount = 0,
+  hubType,
+  onInviteSlot,
+  onHeartClick,
 }: {
   members?: HubMember[];
   status?: MoodRingState;
   variant?: "card" | "home";
+  /** Number of placeholder invite slots to show (max 4) */
+  inviteSlotCount?: number;
+  /** Hub type — drives invite label text and avatar seeds */
+  hubType?: HubType;
+  /** Called with the slot index (0–3) when a placeholder is clicked */
+  onInviteSlot?: (index: number) => void;
+  /** Called when the central heart is clicked — opens group chat */
+  onHeartClick?: () => void;
 }) {
-  const visibleMembers = members.slice(0, positions.length);
+  const showInvitePlaceholders = inviteSlotCount > 0;
+  const visibleMembers = showInvitePlaceholders ? [] : members.slice(0, positions.length);
   const statusLabel =
     moodRingStates.find((state) => state.value === status)?.label ?? moodRingStates[0].label;
   const isHome = variant === "home";
+
+  const template = hubInviteTemplates[hubType ?? "immediate_family"];
+  const slotCount = Math.min(inviteSlotCount, 4);
+
+  // Tooltip state — auto-appears after 1.8s, auto-hides after 5s, close button dismisses permanently
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const dismissedRef = useRef(false);
+
+  useEffect(() => {
+    if (!onHeartClick || dismissedRef.current) return;
+    const showTimer = setTimeout(() => {
+      if (!dismissedRef.current) setTooltipVisible(true);
+    }, 1800);
+    return () => clearTimeout(showTimer);
+  }, [onHeartClick]);
+
+  useEffect(() => {
+    if (!tooltipVisible) return;
+    const hideTimer = setTimeout(() => setTooltipVisible(false), 5000);
+    return () => clearTimeout(hideTimer);
+  }, [tooltipVisible]);
+
+  const dismissTooltip = () => {
+    dismissedRef.current = true;
+    setTooltipVisible(false);
+  };
 
   return (
     <div
@@ -85,6 +188,7 @@ export function Nucleus({
           : "max-w-[29rem] rounded-[2rem] shadow-soft ring-1 ring-border"
       }`}
     >
+      {/* Orbital guide lines */}
       <div className="absolute inset-8 rounded-full border border-primary/10" />
       <div className="absolute inset-20 rounded-full border border-primary/10" />
       <div className="absolute inset-32 rounded-full border border-primary/8" />
@@ -93,25 +197,67 @@ export function Nucleus({
       <div className="absolute left-[18%] top-[18%] h-px w-[64%] rotate-[-28deg] bg-primary/10" />
       <div className="absolute left-[18%] bottom-[18%] h-px w-[64%] rotate-[28deg] bg-primary/10" />
 
-      <div
-        className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[2.25rem] bg-gradient-to-br ring-8 ring-white/70 ${heartClass[status]} ${
-          isHome ? "h-40 w-40 sm:h-52 sm:w-52" : "h-28 w-28 sm:h-36 sm:w-36"
-        }`}
-        aria-label={`Hub health: ${statusLabel}`}
-      >
-        <Heart
-          className={`${isHome ? "h-24 w-24 sm:h-32 sm:w-32" : "h-16 w-16 sm:h-20 sm:w-20"}`}
-          fill="currentColor"
-          strokeWidth={1.5}
+      {/* Tooltip — floats above the heart */}
+      {onHeartClick && (
+        <HeartTooltip
+          visible={tooltipVisible}
+          onClose={dismissTooltip}
+          isHome={isHome}
         />
-        <img
-          src={lovekeyMark}
-          alt=""
-          aria-hidden="true"
-          className="absolute h-12 w-12 opacity-85 mix-blend-screen sm:h-16 sm:w-16"
-        />
-      </div>
+      )}
 
+      {/* Central Love Key Heart — clickable when onHeartClick is provided */}
+      {onHeartClick ? (
+        <button
+          type="button"
+          onClick={() => {
+            dismissTooltip();
+            onHeartClick();
+          }}
+          aria-label="Open group chat"
+          className={`group absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2.25rem] bg-gradient-to-br ring-8 ring-white/70 transition hover:scale-[1.04] hover:ring-white/90 active:scale-[0.97] ${heartClass[status]} ${
+            isHome ? "h-40 w-40 sm:h-52 sm:w-52" : "h-28 w-28 sm:h-36 sm:w-36"
+          }`}
+          aria-describedby="hub-health"
+        >
+          <Heart
+            className={`transition-transform group-hover:scale-105 ${isHome ? "h-24 w-24 sm:h-32 sm:w-32" : "h-16 w-16 sm:h-20 sm:w-20"}`}
+            fill="currentColor"
+            strokeWidth={1.5}
+          />
+          <img
+            src={lovekeyMark}
+            alt=""
+            aria-hidden="true"
+            className="absolute h-12 w-12 opacity-85 mix-blend-screen sm:h-16 sm:w-16"
+          />
+          {/* Chat hint icon — appears on hover */}
+          <span className="absolute bottom-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-white/80 opacity-0 shadow-sm transition group-hover:opacity-100">
+            <MessageCircle className="h-3.5 w-3.5 text-primary" />
+          </span>
+        </button>
+      ) : (
+        <div
+          className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[2.25rem] bg-gradient-to-br ring-8 ring-white/70 ${heartClass[status]} ${
+            isHome ? "h-40 w-40 sm:h-52 sm:w-52" : "h-28 w-28 sm:h-36 sm:w-36"
+          }`}
+          aria-label={`Hub health: ${statusLabel}`}
+        >
+          <Heart
+            className={`${isHome ? "h-24 w-24 sm:h-32 sm:w-32" : "h-16 w-16 sm:h-20 sm:w-20"}`}
+            fill="currentColor"
+            strokeWidth={1.5}
+          />
+          <img
+            src={lovekeyMark}
+            alt=""
+            aria-hidden="true"
+            className="absolute h-12 w-12 opacity-85 mix-blend-screen sm:h-16 sm:w-16"
+          />
+        </div>
+      )}
+
+      {/* Real member avatars */}
       {visibleMembers.map((member, index) => (
         <div key={`${member.name}-${index}`} className={`absolute ${positions[index]}`}>
           <div className="flex w-24 flex-col items-center text-center">
@@ -141,7 +287,46 @@ export function Nucleus({
         </div>
       ))}
 
-      <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full bg-card/90 px-3 py-1.5 text-xs shadow-soft ring-1 ring-border backdrop-blur">
+      {/* Invite placeholder slots — DiceBear avatar + role label */}
+      {showInvitePlaceholders &&
+        invitePositions.slice(0, slotCount).map((pos, index) => {
+          const slot = template.defaultSlots[index];
+          return (
+            <div key={`invite-slot-${index}`} className={`absolute ${pos}`}>
+              <div className="flex w-24 flex-col items-center text-center">
+                <button
+                  type="button"
+                  onClick={() => onInviteSlot?.(index)}
+                  aria-label={template.inviteLabel}
+                  className={`group relative flex items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-primary/40 bg-card/60 shadow-soft ring-4 ring-primary/10 backdrop-blur transition ease-calm hover:border-primary/70 hover:ring-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                    isHome ? "h-20 w-20 sm:h-24 sm:w-24" : "h-16 w-16"
+                  }`}
+                >
+                  {/* Illustrated generic avatar */}
+                  <img
+                    src={dicebearUrl(slot.seed)}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute h-full w-full rounded-full object-cover opacity-50 transition-opacity group-hover:opacity-75"
+                  />
+                  {/* UserPlus overlay — appears on hover */}
+                  <span className="relative z-10 flex items-center justify-center rounded-full bg-white/80 p-1 opacity-0 shadow-sm transition group-hover:opacity-100">
+                    <UserPlus
+                      className={`text-primary ${isHome ? "h-5 w-5 sm:h-6 sm:w-6" : "h-4 w-4"}`}
+                    />
+                  </span>
+                </button>
+                <div className="mt-2 max-w-28 text-center text-xs font-medium leading-tight text-foreground/65">
+                  {slot.role}
+                </div>
+                <div className="max-w-28 text-[10px] text-muted-foreground">Tap to invite</div>
+              </div>
+            </div>
+          );
+        })}
+
+      {/* Hub health pill */}
+      <div id="hub-health" className="absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full bg-card/90 px-3 py-1.5 text-xs shadow-soft ring-1 ring-border backdrop-blur">
         <span
           className={`h-2 w-2 rounded-full ${
             status === "crisis"

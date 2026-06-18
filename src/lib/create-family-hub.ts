@@ -89,16 +89,16 @@ async function createFamilyHubWithRpc(
   const { data: rpcId, error: rpcError } = await supabase.rpc("create_family", {
     _name: input.name,
     _hub_type: input.hubType,
-    _description: input.description ?? null,
+    _description: input.description ?? undefined,
     _hub_visibility: hubVisibility,
     _public_join_mode: publicJoinMode,
-    _plaintext_password: plaintextPassword,
+    _plaintext_password: plaintextPassword ?? undefined,
     _role_label: input.roleLabel ?? "Member",
-    _location_label: input.locationLabel ?? null,
-    _latitude: input.latitude ?? null,
-    _longitude: input.longitude ?? null,
-    _location_accuracy_meters: input.locationAccuracyMeters ?? null,
-    _location_captured_at: input.locationCapturedAt ?? null,
+    _location_label: input.locationLabel ?? undefined,
+    _latitude: input.latitude ?? undefined,
+    _longitude: input.longitude ?? undefined,
+    _location_accuracy_meters: input.locationAccuracyMeters ?? undefined,
+    _location_captured_at: input.locationCapturedAt ?? undefined,
   });
 
   if (!rpcError && rpcId) return { id: rpcId, error: null };

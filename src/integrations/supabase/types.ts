@@ -1212,8 +1212,8 @@ export type Database = {
           _location_label?: string
           _longitude?: number
           _name: string
+          _plaintext_password?: string
           _public_join_mode?: string
-          _public_password_hash?: string
           _role_label?: string
         }
         Returns: string
@@ -1231,6 +1231,10 @@ export type Database = {
       is_family_member: {
         Args: { _family_id: string; _user_id: string }
         Returns: boolean
+      }
+      join_hub_with_password: {
+        Args: { _family_id: string; _plaintext_password: string }
+        Returns: undefined
       }
       search_public_hubs_nearby: {
         Args: {
@@ -1251,6 +1255,10 @@ export type Database = {
           password_required: boolean
           public_join_mode: string
         }[]
+      }
+      set_hub_password: {
+        Args: { _family_id: string; _plaintext_password: string }
+        Returns: undefined
       }
       validate_due_hub_moments: {
         Args: { _family_id: string; _limit?: number }

@@ -774,7 +774,7 @@ function FamilyStep({
       if (parsed.data.hub_visibility === "public") {
         await supabase.rpc("set_hub_password", {
           _family_id: hubId!,
-          _plaintext_password: plaintextPassword ?? undefined,
+          _plaintext_password: plaintextPassword ?? "",
         });
       }
     } else {

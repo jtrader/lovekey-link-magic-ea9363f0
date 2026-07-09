@@ -61,6 +61,7 @@ function QuizPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const answeredCount = useMemo(
     () => answers.filter((a) => a >= 0).length,

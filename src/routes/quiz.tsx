@@ -217,12 +217,12 @@ function QuizPage() {
                 })()}
               </div>
             )}
-            <div className="mt-6 flex justify-center gap-3">
-              <Button asChild variant="outline">
-                <Link to="/">Back to home</Link>
+            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <Button asChild size="lg" className="w-full sm:w-auto">
+                <Link to="/">Love Key Link home →</Link>
               </Button>
-              <Button asChild variant="outline">
-                <Link to="/rsp">Read about RSP</Link>
+              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
+                <Link to="/rsp">RSP protocol page →</Link>
               </Button>
             </div>
           </div>

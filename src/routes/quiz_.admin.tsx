@@ -166,13 +166,14 @@ function QuizAdminPage() {
                 <th className="px-4 py-3 font-medium">Result</th>
                 <th className="px-4 py-3 font-medium">Score</th>
                 <th className="px-4 py-3 font-medium">Date</th>
+                <th className="px-4 py-3 font-medium">Answers</th>
               </tr>
             </thead>
             <tbody>
               {attempts.length === 0 && (
                 <tr>
                   <td
-                    colSpan={5}
+                    colSpan={6}
                     className="px-4 py-8 text-center text-muted-foreground"
                   >
                     No attempts yet.
@@ -180,28 +181,86 @@ function QuizAdminPage() {
                 </tr>
               )}
               {attempts.map((a) => (
-                <tr key={a.id} className="border-t border-border">
-                  <td className="px-4 py-3">{a.name}</td>
-                  <td className="px-4 py-3">{a.phone}</td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-                        a.passed
-                          ? "bg-primary/10 text-primary"
-                          : "bg-destructive/10 text-destructive"
-                      }`}
-                    >
-                      {a.passed ? "Passed" : "Not passed"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    {a.score}/{a.total}
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    {new Date(a.createdAt).toLocaleString()}
-                  </td>
-                </tr>
+                <FragmentRow
+                  key={a.id}
+                  attempt={a}
+                  open={!!expanded[a.id]}
+                  onToggle={() => toggleExpanded(a.id)}
+                />
               ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function FragmentRow({
+  attempt: a,
+  open,
+  onToggle,
+}: {
+  attempt: QuizAttempt;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <>
+      <tr className="border-t border-border">
+        <td className="px-4 py-3">{a.name}</td>
+        <td className="px-4 py-3">{a.phone}</td>
+        <td className="px-4 py-3">
+          <span
+            className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+              a.passed
+                ? "bg-primary/10 text-primary"
+                : "bg-destructive/10 text-destructive"
+            }`}
+          >
+            {a.passed ? "Passed" : "Not passed"}
+          </span>
+        </td>
+        <td className="px-4 py-3">
+          {a.score}/{a.total}
+        </td>
+        <td className="px-4 py-3 text-muted-foreground">
+          {new Date(a.createdAt).toLocaleString()}
+        </td>
+        <td className="px-4 py-3">
+          {a.answers.length > 0 ? (
+            <Button variant="ghost" size="sm" onClick={onToggle}>
+              {open ? "Hide" : `View (${a.answers.length})`}
+            </Button>
+          ) : (
+            <span className="text-muted-foreground">—</span>
+          )}
+        </td>
+      </tr>
+      {open && a.answers.length > 0 && (
+        <tr className="border-t border-border bg-muted/30">
+          <td colSpan={6} className="px-4 py-4">
+            <ol className="space-y-3">
+              {a.answers.map((ans, i) => (
+                <li key={i} className="text-sm">
+                  <p className="font-medium text-foreground">
+                    {i + 1}. {ans.question}
+                  </p>
+                  <p className="mt-0.5 text-muted-foreground">
+                    Selected:{" "}
+                    <span className="font-medium text-foreground">
+                      {ans.selected}
+                    </span>
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </td>
+        </tr>
+      )}
+    </>
+  );
+}
             </tbody>
           </table>
         </div>

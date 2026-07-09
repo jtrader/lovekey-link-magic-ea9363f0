@@ -306,19 +306,42 @@ function QuizPage() {
 
         <div className="mb-6">
           <div className="mb-2 flex items-center justify-between text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">
+              {SECTION_LABELS[currentSection]}
+            </span>
             <span>
               {answeredCount} of {QUIZ_QUESTIONS.length} answered
             </span>
           </div>
           <Progress value={(answeredCount / QUIZ_QUESTIONS.length) * 100} />
+          <div className="mt-2 flex gap-2">
+            {SECTION_LABELS.map((label, i) => (
+              <span
+                key={label}
+                className={`flex-1 rounded-full py-1 text-center text-xs transition-colors ${
+                  i === currentSection
+                    ? "bg-primary/10 font-medium text-primary"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
         </div>
 
         <ol className="space-y-6">
-          {QUIZ_QUESTIONS.map((q, qIndex) => (
-            <li
-              key={q.id}
-              className="rounded-xl border border-border bg-card p-6"
-            >
+          {QUIZ_QUESTIONS.map((q, qIndex) => {
+            const showSectionHeader = qIndex % SECTION_SIZE === 0;
+            const sectionIndex = sectionOf(qIndex);
+            return (
+            <li key={q.id}>
+              {showSectionHeader && (
+                <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {SECTION_LABELS[sectionIndex]}
+                </p>
+              )}
+              <div className="rounded-xl border border-border bg-card p-6">
               <p className="font-medium">
                 <span className="text-muted-foreground">{qIndex + 1}.</span>{" "}
                 {q.question}

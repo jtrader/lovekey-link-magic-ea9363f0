@@ -21,6 +21,7 @@ import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
 import { Route as ApiPublicQuizSubmitRouteImport } from './routes/api/public/quiz-submit'
+import { Route as ApiPublicQuizResultTokenRouteImport } from './routes/api/public/quiz-result.$token'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -81,6 +82,12 @@ const ApiPublicQuizSubmitRoute = ApiPublicQuizSubmitRouteImport.update({
   path: '/api/public/quiz-submit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicQuizResultTokenRoute =
+  ApiPublicQuizResultTokenRouteImport.update({
+    id: '/api/public/quiz-result/$token',
+    path: '/api/public/quiz-result/$token',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
+  '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -107,6 +115,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
+  '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -122,6 +131,7 @@ export interface FileRoutesById {
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
+  '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/invite/$token'
     | '/api/public/quiz-submit'
+    | '/api/public/quiz-result/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/invite/$token'
     | '/api/public/quiz-submit'
+    | '/api/public/quiz-result/$token'
   id:
     | '__root__'
     | '/'
@@ -164,6 +176,7 @@ export interface FileRouteTypes {
     | '/_authenticated/onboarding'
     | '/invite/$token'
     | '/api/public/quiz-submit'
+    | '/api/public/quiz-result/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -177,6 +190,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   InviteTokenRoute: typeof InviteTokenRoute
   ApiPublicQuizSubmitRoute: typeof ApiPublicQuizSubmitRoute
+  ApiPublicQuizResultTokenRoute: typeof ApiPublicQuizResultTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -265,6 +279,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicQuizSubmitRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/quiz-result/$token': {
+      id: '/api/public/quiz-result/$token'
+      path: '/api/public/quiz-result/$token'
+      fullPath: '/api/public/quiz-result/$token'
+      preLoaderRoute: typeof ApiPublicQuizResultTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -293,6 +314,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   InviteTokenRoute: InviteTokenRoute,
   ApiPublicQuizSubmitRoute: ApiPublicQuizSubmitRoute,
+  ApiPublicQuizResultTokenRoute: ApiPublicQuizResultTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

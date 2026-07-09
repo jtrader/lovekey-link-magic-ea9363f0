@@ -304,7 +304,11 @@ function QuizPage() {
           </div>
         </section>
 
-        <div className="mb-6">
+        <section
+          className="mb-6"
+          role="group"
+          aria-label="Quiz progress"
+        >
           <div className="mb-2 flex items-center justify-between text-sm">
             <span
               className={`font-medium ${
@@ -316,6 +320,7 @@ function QuizPage() {
                 : SECTION_LABELS[currentSection]}
             </span>
             <span
+              aria-hidden="true"
               className={
                 allAnswered
                   ? "font-medium text-primary"
@@ -325,30 +330,55 @@ function QuizPage() {
               {answeredCount} of {QUIZ_QUESTIONS.length} answered
             </span>
           </div>
-          <Progress value={(answeredCount / QUIZ_QUESTIONS.length) * 100} />
-          <div className="mt-2 flex gap-2">
-            {SECTION_LABELS.map((label, i) => (
-              <span
-                key={label}
-                className={`flex-1 rounded-full py-1 text-center text-xs transition-colors ${
-                  allAnswered
-                    ? "bg-primary/10 font-medium text-primary"
-                    : i === currentSection
+          <Progress
+            value={(answeredCount / QUIZ_QUESTIONS.length) * 100}
+            aria-label={`Questions answered: ${answeredCount} of ${QUIZ_QUESTIONS.length}`}
+          />
+          {/* Announce progress and current section changes to screen readers. */}
+          <p className="sr-only" aria-live="polite">
+            {answeredCount} of {QUIZ_QUESTIONS.length} questions answered.{" "}
+            {allAnswered
+              ? "All questions answered — ready to submit."
+              : `Currently in the ${SECTION_LABELS[currentSection].toLowerCase()} of the quiz.`}
+          </p>
+          <ol className="mt-2 flex gap-2" aria-label="Quiz sections">
+            {SECTION_LABELS.map((label, i) => {
+              const isComplete = allAnswered;
+              const isCurrent = !allAnswered && i === currentSection;
+              const stateText = isComplete
+                ? "completed"
+                : isCurrent
+                  ? "current section"
+                  : "not started";
+              return (
+                <li
+                  key={label}
+                  aria-current={isCurrent ? "step" : undefined}
+                  className={`flex-1 rounded-full py-1 text-center text-xs transition-colors ${
+                    isComplete || isCurrent
                       ? "bg-primary/10 font-medium text-primary"
                       : "text-muted-foreground"
-                }`}
-              >
-                {label}
-              </span>
-            ))}
-          </div>
+                  }`}
+                >
+                  <span aria-hidden="true">{label}</span>
+                  <span className="sr-only">
+                    {label}, {stateText}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
           {allAnswered && (
-            <p className="mt-3 flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary">
-              <Check className="h-4 w-4" />
+            <p
+              className="mt-3 flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary"
+              role="status"
+            >
+              <Check className="h-4 w-4" aria-hidden="true" />
               All {QUIZ_QUESTIONS.length} questions answered — ready to submit.
             </p>
           )}
-        </div>
+        </section>
+
 
 
         <ol className="space-y-6">
@@ -359,6 +389,7 @@ function QuizPage() {
             <li key={q.id}>
               {showSectionHeader && (
                 <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <span className="sr-only">Section: </span>
                   {SECTION_LABELS[sectionIndex]}
                 </p>
               )}

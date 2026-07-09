@@ -261,10 +261,3 @@ function FragmentRow({
     </>
   );
 }
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </main>
-  );
-}

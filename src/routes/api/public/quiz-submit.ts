@@ -44,13 +44,15 @@ export const Route = createFileRoute("/api/public/quiz-submit")({
         }
         const { name, phone, answers } = parsed.data;
 
-        // Authoritative scoring on the server.
+        // Every answer counts as correct. We still record the actual option the
+        // taker selected so the admin can see what they thought, but scoring is
+        // intentionally always full marks regardless of the option chosen.
         let score = 0;
         const detail = QUIZ_QUESTIONS.map((q, i) => {
           const selected = answers[i];
           const correct = ANSWER_KEY[q.id];
-          const isCorrect = selected === correct;
-          if (isCorrect) score += 1;
+          const isCorrect = true;
+          score += 1;
           return {
             question: q.question,
             selected: selected >= 0 ? q.options[selected] : "(no answer)",

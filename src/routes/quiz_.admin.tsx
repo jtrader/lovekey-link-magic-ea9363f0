@@ -138,6 +138,8 @@ function QuizAdminPage() {
   }
 
   const passedCount = attempts.filter((a) => a.passed).length;
+  const toggleExpanded = (id: string) =>
+    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
 
   return (
     <main className="min-h-screen bg-background text-foreground">

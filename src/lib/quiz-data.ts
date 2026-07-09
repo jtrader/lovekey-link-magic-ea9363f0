@@ -137,3 +137,33 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     ],
   },
 ];
+
+// ---- Section (thirds) helpers ----
+// Pure, dependency-free helpers so both the UI and tests share one source of truth.
+
+export const SECTION_LABELS = [
+  "First third",
+  "Second third",
+  "Final third",
+] as const;
+
+/** Number of questions per third (rounded up). */
+export function sectionSize(total: number = QUIZ_QUESTIONS.length): number {
+  return Math.ceil(total / SECTION_LABELS.length);
+}
+
+/** Which third (0-based) a 0-based question index belongs to. */
+export function sectionOf(
+  index: number,
+  total: number = QUIZ_QUESTIONS.length,
+): number {
+  return Math.min(
+    Math.floor(index / sectionSize(total)),
+    SECTION_LABELS.length - 1,
+  );
+}
+
+/** Count of answered questions (option index >= 0 means answered). */
+export function countAnswered(answers: number[]): number {
+  return answers.filter((a) => a >= 0).length;
+}

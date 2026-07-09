@@ -265,7 +265,10 @@ function QuizPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone number</Label>
+              <Label htmlFor="phone">
+                Phone number{" "}
+                <span className="font-medium text-destructive">(optional)</span>
+              </Label>
               <Input
                 id="phone"
                 value={phone}

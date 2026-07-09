@@ -18,7 +18,7 @@ const ANSWER_KEY: Record<number, number> = {
 
 const submissionSchema = z.object({
   name: z.string().trim().min(1).max(120),
-  phone: z.string().trim().min(3).max(40),
+  phone: z.string().trim().max(40).optional().default(""),
   // answers[i] is the selected option index for QUIZ_QUESTIONS[i]
   answers: z.array(z.number().int().min(-1).max(3)).length(QUIZ_QUESTIONS.length),
 });

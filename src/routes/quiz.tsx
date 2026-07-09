@@ -235,9 +235,14 @@ function QuizPage() {
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-2xl px-6 py-12">
         <header className="mb-8">
-          <Link to="/rsp" className="text-sm text-muted-foreground hover:text-foreground">
-            ← RSP
-          </Link>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <Link to="/" className="hover:text-foreground">
+              ← Love Key Link home
+            </Link>
+            <Link to="/rsp" className="hover:text-foreground">
+              RSP →
+            </Link>
+          </div>
           <h1 className="mt-4 text-3xl font-bold sm:text-4xl">{QUIZ_TITLE}</h1>
           <p className="mt-2 text-muted-foreground">{QUIZ_SUBTITLE}</p>
         </header>

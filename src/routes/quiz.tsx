@@ -217,12 +217,12 @@ function QuizPage() {
                 })()}
               </div>
             )}
-            <div className="mt-6 flex justify-center gap-3">
-              <Button asChild variant="outline">
-                <Link to="/">Back to home</Link>
+            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <Button asChild size="lg" className="w-full sm:w-auto">
+                <Link to="/">Love Key Link home →</Link>
               </Button>
-              <Button asChild variant="outline">
-                <Link to="/rsp">Read about RSP</Link>
+              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
+                <Link to="/rsp">RSP protocol page →</Link>
               </Button>
             </div>
           </div>
@@ -235,9 +235,14 @@ function QuizPage() {
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-2xl px-6 py-12">
         <header className="mb-8">
-          <Link to="/rsp" className="text-sm text-muted-foreground hover:text-foreground">
-            ← RSP
-          </Link>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <Link to="/" className="hover:text-foreground">
+              ← Love Key Link home
+            </Link>
+            <Link to="/rsp" className="hover:text-foreground">
+              RSP →
+            </Link>
+          </div>
           <h1 className="mt-4 text-3xl font-bold sm:text-4xl">{QUIZ_TITLE}</h1>
           <p className="mt-2 text-muted-foreground">{QUIZ_SUBTITLE}</p>
         </header>

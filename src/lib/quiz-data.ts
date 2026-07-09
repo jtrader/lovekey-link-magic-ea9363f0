@@ -10,7 +10,7 @@ export interface QuizQuestion {
 
 export const QUIZ_TITLE = "RSP: The Law of Vibration";
 export const QUIZ_SUBTITLE =
-  "Reciprocal balance as a coordination principle — 10 questions, pass mark 6.";
+  "Reciprocal balance as a coordination principle — 12 questions, pass mark 6.";
 export const PASS_MARK = 6;
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
@@ -43,6 +43,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Transparent, reciprocal systems attract more stable, trusted coordination",
       "Extractive, one-sided systems attract the most trust",
       "Every system is treated identically regardless of behaviour",
+    ],
+  },
+  {
+    id: 11,
+    question: "In RSP, a higher 'vibration' of coordination corresponds to:",
+    options: [
+      "More rigid enforcement of fixed, binary rules",
+      "Greater transparency and reciprocity between parties",
+      "Faster one-sided extraction of value",
+      "Complete removal of consent checks",
     ],
   },
   {
@@ -84,6 +94,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Start, Stop, Continue",
       "Plan, Do, Check, Act",
       "Strengths, Weaknesses, Opportunities, Threats",
+    ],
+  },
+  {
+    id: 12,
+    question: 'The "WHERE" dimension is a compromise between:',
+    options: [
+      "Local control and global consistency",
+      "Marketing reach and engineering effort",
+      "Speed and financial cost",
+      "Total secrecy and full public exposure",
     ],
   },
   {

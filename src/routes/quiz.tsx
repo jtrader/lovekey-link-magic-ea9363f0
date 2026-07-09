@@ -33,7 +33,21 @@ export const Route = createFileRoute("/quiz")({
   component: QuizPage,
 });
 
-type Result = { score: number; total: number; passed: boolean; emailed: boolean };
+type ResultDetail = {
+  question: string;
+  selected: string;
+  correct: string;
+  isCorrect: boolean;
+};
+type Result = {
+  score: number;
+  total: number;
+  passed: boolean;
+  emailed: boolean;
+  attempt: number;
+  attemptsRemaining: number;
+  detail: ResultDetail[];
+};
 
 function QuizPage() {
   const [name, setName] = useState("");

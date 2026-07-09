@@ -78,6 +78,8 @@ function QuizPage() {
   // Refs to each question container and each option button for focus handling.
   const questionRefs = useRef<Array<HTMLDivElement | null>>([]);
   const optionRefs = useRef<Array<Array<HTMLButtonElement | null>>>([]);
+  // Results heading, focused when the form is replaced by the results view.
+  const resultHeadingRef = useRef<HTMLHeadingElement | null>(null);
   // Only steal focus when navigation was explicitly requested (Prev/Next),
   // never on a plain answer selection.
   const pendingFocus = useRef(false);
@@ -130,6 +132,14 @@ function QuizPage() {
     }
   }, [activeIndex, answers]);
 
+  // When the results view replaces the form, move focus to the results heading.
+  useEffect(() => {
+    if (!result) return;
+    requestAnimationFrame(() => resultHeadingRef.current?.focus());
+  }, [result]);
+
+
+
 
   async function handleSubmit() {
     setError(null);
@@ -180,7 +190,14 @@ function QuizPage() {
             <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
               Your result
             </p>
-            <h1 className="mt-4 text-5xl font-bold">
+            <h1
+              ref={resultHeadingRef}
+              tabIndex={-1}
+              aria-label={`Your result: ${result.score} out of ${result.total}. ${
+                result.passed ? "Passed." : "Not passed."
+              }`}
+              className="mt-4 text-5xl font-bold outline-none"
+            >
               {result.score}
               <span className="text-2xl text-muted-foreground">/{result.total}</span>
             </h1>

@@ -139,6 +139,26 @@ function QuizPage() {
           <p className="mt-2 text-muted-foreground">{QUIZ_SUBTITLE}</p>
         </header>
 
+        <section className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-6">
+          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-lg font-semibold">Read the chapter first</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Download the RSP Law of Vibration chapter before you start.
+                <span className="ml-1 inline-block rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                  ~5–10 min read
+                </span>
+              </p>
+            </div>
+            <Button asChild variant="default" size="default">
+              <a href={pdfAsset.url} download target="_blank" rel="noopener noreferrer">
+                <Download className="mr-2 h-4 w-4" />
+                Download PDF
+              </a>
+            </Button>
+          </div>
+        </section>
+
         <section className="mb-8 rounded-xl border border-border bg-card p-6">
           <h2 className="mb-4 text-lg font-semibold">Your details</h2>
           <div className="grid gap-4 sm:grid-cols-2">

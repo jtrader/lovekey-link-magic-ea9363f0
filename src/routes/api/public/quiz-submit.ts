@@ -141,7 +141,17 @@ export const Route = createFileRoute("/api/public/quiz-submit")({
           console.error("[quiz-submit] email step failed:", e);
         }
 
-        return json({ score, total, passed, emailed, attempt, attemptsRemaining, detail });
+        return json({
+          score,
+          total,
+          passed,
+          emailed,
+          attempt,
+          attemptsRemaining,
+          detail,
+          shareToken,
+          shareExpiresAt,
+        });
       },
     },
   },

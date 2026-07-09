@@ -10,7 +10,7 @@ export interface QuizQuestion {
 
 export const QUIZ_TITLE = "RSP: The Law of Vibration";
 export const QUIZ_SUBTITLE =
-  "Reciprocal balance as a coordination principle — 10 questions, pass mark 6.";
+  "Reciprocal balance as a coordination principle — 12 questions, pass mark 6.";
 export const PASS_MARK = 6;
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [

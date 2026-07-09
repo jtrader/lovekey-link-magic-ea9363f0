@@ -132,6 +132,14 @@ function QuizPage() {
     }
   }, [activeIndex, answers]);
 
+  // When the results view replaces the form, move focus to the results heading.
+  useEffect(() => {
+    if (!result) return;
+    requestAnimationFrame(() => resultHeadingRef.current?.focus());
+  }, [result]);
+
+
+
 
   async function handleSubmit() {
     setError(null);

@@ -244,6 +244,7 @@ function FragmentRow({
         <td className="px-4 py-3">
           {a.answers.length > 0 ? (
             <Button
+              ref={buttonRef}
               variant="ghost"
               size="sm"
               onClick={onToggle}

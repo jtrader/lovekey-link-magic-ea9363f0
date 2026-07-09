@@ -68,7 +68,7 @@ function QuizPage() {
     [answers],
   );
   const allAnswered = answeredCount === QUIZ_QUESTIONS.length;
-  const detailsValid = name.trim().length > 0 && phone.trim().length >= 3;
+  const detailsValid = name.trim().length > 0;
 
   function selectOption(qIndex: number, optIndex: number) {
     setAnswers((prev) => {

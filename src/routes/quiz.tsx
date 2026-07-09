@@ -442,9 +442,28 @@ function QuizPage() {
                   {SECTION_LABELS[sectionIndex]}
                 </p>
               )}
-              <div className="rounded-xl border border-border bg-card p-6">
-              <p className="font-medium">
-                <span className="text-muted-foreground">{qIndex + 1}.</span>{" "}
+              <div
+                ref={(el) => {
+                  questionRefs.current[qIndex] = el;
+                }}
+                tabIndex={-1}
+                role="group"
+                aria-labelledby={`question-${q.id}-heading`}
+                aria-current={qIndex === activeIndex ? "step" : undefined}
+                onFocus={() => setActiveIndex(qIndex)}
+                className={`rounded-xl border bg-card p-6 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                  qIndex === activeIndex
+                    ? "border-primary ring-1 ring-primary/40"
+                    : "border-border"
+                }`}
+              >
+              <p id={`question-${q.id}-heading`} className="font-medium">
+                <span className="sr-only">
+                  Question {qIndex + 1} of {QUIZ_QUESTIONS.length}:{" "}
+                </span>
+                <span className="text-muted-foreground" aria-hidden="true">
+                  {qIndex + 1}.
+                </span>{" "}
                 {q.question}
               </p>
               <div className="mt-4 space-y-2">
@@ -453,6 +472,12 @@ function QuizPage() {
                   return (
                     <button
                       key={optIndex}
+                      ref={(el) => {
+                        if (!optionRefs.current[qIndex]) {
+                          optionRefs.current[qIndex] = [];
+                        }
+                        optionRefs.current[qIndex][optIndex] = el;
+                      }}
                       type="button"
                       onClick={() => selectOption(qIndex, optIndex)}
                       disabled={submitting}
@@ -476,6 +501,29 @@ function QuizPage() {
                     </button>
                   );
                 })}
+              </div>
+              <div className="mt-4 flex items-center justify-between gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToQuestion(prevIndex(qIndex))}
+                  disabled={qIndex === 0}
+                >
+                  ← Previous
+                </Button>
+                <span className="text-xs text-muted-foreground" aria-hidden="true">
+                  {qIndex + 1} / {QUIZ_QUESTIONS.length}
+                </span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToQuestion(nextIndex(qIndex))}
+                  disabled={qIndex === QUIZ_QUESTIONS.length - 1}
+                >
+                  Next →
+                </Button>
               </div>
               </div>
             </li>

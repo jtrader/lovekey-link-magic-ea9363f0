@@ -375,7 +375,9 @@ function QuizPage() {
                       key={optIndex}
                       type="button"
                       onClick={() => selectOption(qIndex, optIndex)}
-                      className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left text-sm transition-colors ${
+                      disabled={submitting}
+                      aria-pressed={selected}
+                      className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
                         selected
                           ? "border-primary bg-primary/10"
                           : "border-border hover:bg-muted"

@@ -46,6 +46,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     ],
   },
   {
+    id: 11,
+    question: "In RSP, a higher 'vibration' of coordination corresponds to:",
+    options: [
+      "More rigid enforcement of fixed, binary rules",
+      "Greater transparency and reciprocity between parties",
+      "Faster one-sided extraction of value",
+      "Complete removal of consent checks",
+    ],
+  },
+  {
     id: 4,
     question: "RSP treats consent and coordination as:",
     options: [

@@ -14,6 +14,8 @@ const ANSWER_KEY: Record<number, number> = {
   8: 1,
   9: 0,
   10: 1,
+  11: 1,
+  12: 0,
 };
 
 const submissionSchema = z.object({

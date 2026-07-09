@@ -305,11 +305,23 @@ function QuizPage() {
         </section>
 
         <div className="mb-6">
-          <div className="mb-2 flex items-center justify-between text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">
-              {SECTION_LABELS[currentSection]}
+          <div className="mb-2 flex items-center justify-between text-sm">
+            <span
+              className={`font-medium ${
+                allAnswered ? "text-primary" : "text-foreground"
+              }`}
+            >
+              {allAnswered
+                ? "All questions answered"
+                : SECTION_LABELS[currentSection]}
             </span>
-            <span>
+            <span
+              className={
+                allAnswered
+                  ? "font-medium text-primary"
+                  : "text-muted-foreground"
+              }
+            >
               {answeredCount} of {QUIZ_QUESTIONS.length} answered
             </span>
           </div>
@@ -319,16 +331,25 @@ function QuizPage() {
               <span
                 key={label}
                 className={`flex-1 rounded-full py-1 text-center text-xs transition-colors ${
-                  i === currentSection
+                  allAnswered
                     ? "bg-primary/10 font-medium text-primary"
-                    : "text-muted-foreground"
+                    : i === currentSection
+                      ? "bg-primary/10 font-medium text-primary"
+                      : "text-muted-foreground"
                 }`}
               >
                 {label}
               </span>
             ))}
           </div>
+          {allAnswered && (
+            <p className="mt-3 flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary">
+              <Check className="h-4 w-4" />
+              All {QUIZ_QUESTIONS.length} questions answered — ready to submit.
+            </p>
+          )}
         </div>
+
 
         <ol className="space-y-6">
           {QUIZ_QUESTIONS.map((q, qIndex) => {
@@ -354,7 +375,9 @@ function QuizPage() {
                       key={optIndex}
                       type="button"
                       onClick={() => selectOption(qIndex, optIndex)}
-                      className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left text-sm transition-colors ${
+                      disabled={submitting}
+                      aria-pressed={selected}
+                      className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
                         selected
                           ? "border-primary bg-primary/10"
                           : "border-border hover:bg-muted"

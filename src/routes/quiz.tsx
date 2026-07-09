@@ -428,6 +428,10 @@ function QuizPage() {
           )}
         </section>
 
+        {/* Announces the active question when navigating with Previous/Next. */}
+        <p className="sr-only" aria-live="polite">
+          {announcement}
+        </p>
 
 
         <ol className="space-y-6">

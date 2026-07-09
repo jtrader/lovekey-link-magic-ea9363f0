@@ -70,6 +70,16 @@ function QuizPage() {
   const [result, setResult] = useState<Result | null>(null);
   const [copied, setCopied] = useState(false);
 
+  // Which question is "active" for keyboard navigation.
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [announcement, setAnnouncement] = useState("");
+  // Refs to each question container and each option button for focus handling.
+  const questionRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const optionRefs = useRef<Array<Array<HTMLButtonElement | null>>>([]);
+  // Only steal focus when navigation was explicitly requested (Prev/Next),
+  // never on a plain answer selection.
+  const pendingFocus = useRef(false);
+
   const answeredCount = useMemo(() => countAnswered(answers), [answers]);
   const allAnswered = answeredCount === QUIZ_QUESTIONS.length;
   const detailsValid = name.trim().length > 0;
@@ -81,12 +91,48 @@ function QuizPage() {
   );
 
   function selectOption(qIndex: number, optIndex: number) {
+    setActiveIndex(qIndex);
     setAnswers((prev) => {
       const next = [...prev];
       next[qIndex] = optIndex;
       return next;
     });
   }
+
+  // Move the active question and request focus/announcement.
+  const goToQuestion = useCallback(
+    (target: number) => {
+      const i = clampIndex(target, QUIZ_QUESTIONS.length);
+      pendingFocus.current = true;
+      setActiveIndex(i);
+    },
+    [],
+  );
+
+  // After the active question changes via navigation, move keyboard focus to
+  // the selected option (if answered) or the question container, and announce it.
+  useEffect(() => {
+    const q = QUIZ_QUESTIONS[activeIndex];
+    const selected = answers[activeIndex];
+    setAnnouncement(
+      `Question ${activeIndex + 1} of ${QUIZ_QUESTIONS.length}, ${SECTION_LABELS[
+        sectionOf(activeIndex)
+      ].toLowerCase()}. ${q.question}`,
+    );
+
+    if (!pendingFocus.current) return;
+    pendingFocus.current = false;
+
+    const target =
+      selected >= 0
+        ? optionRefs.current[activeIndex]?.[selected]
+        : questionRefs.current[activeIndex];
+    if (target) {
+      target.focus();
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [activeIndex, answers]);
+
 
   async function handleSubmit() {
     setError(null);

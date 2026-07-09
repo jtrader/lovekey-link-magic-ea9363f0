@@ -51,7 +51,7 @@ describe("navigating forward keeps index, section, and label aligned", () => {
       expect(state.index).toBe(i);
       expect(state.questionNumber).toBe(i + 1);
       expect(state.label).toBe(EXPECTED_LABELS[i]);
-      expect(state.section).toBe(SECTION_LABELS.indexOf(EXPECTED_LABELS[i]));
+      expect(state.section).toBe((SECTION_LABELS as readonly string[]).indexOf(EXPECTED_LABELS[i]));
       expect(state.isFirst).toBe(i === 0);
       expect(state.isLast).toBe(i === TOTAL - 1);
       i = nextIndex(i);
@@ -69,7 +69,7 @@ describe("navigating backward keeps index, section, and label aligned", () => {
       expect(state.index).toBe(i);
       expect(state.questionNumber).toBe(i + 1);
       expect(state.label).toBe(EXPECTED_LABELS[i]);
-      expect(state.section).toBe(SECTION_LABELS.indexOf(EXPECTED_LABELS[i]));
+      expect(state.section).toBe((SECTION_LABELS as readonly string[]).indexOf(EXPECTED_LABELS[i]));
       i = prevIndex(i);
     }
     expect(i).toBe(0);

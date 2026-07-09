@@ -6,6 +6,8 @@ import {
   QUIZ_SUBTITLE,
   QUIZ_TITLE,
 } from "@/lib/quiz-data";
+import pdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
+import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

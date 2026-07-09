@@ -7,12 +7,12 @@ import {
   QUIZ_TITLE,
 } from "@/lib/quiz-data";
 import pdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
-import logoAsset from "@/assets/rsp-logo.png.asset.json";
-import { Download, FileDown } from "lucide-react";
+import { Download, FileDown, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import { downloadQuizResultPdf } from "@/lib/quiz-result-pdf";
 
 export const Route = createFileRoute("/quiz")({
   head: () => ({
@@ -48,6 +48,8 @@ type Result = {
   attempt: number;
   attemptsRemaining: number;
   detail: ResultDetail[];
+  shareToken: string;
+  shareExpiresAt: string;
 };
 
 function QuizPage() {
@@ -59,6 +61,7 @@ function QuizPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const answeredCount = useMemo(
     () => answers.filter((a) => a >= 0).length,
@@ -105,88 +108,15 @@ function QuizPage() {
   }
 
   async function downloadResultsPdf(r: Result) {
-    const { jsPDF } = await import("jspdf");
-    const doc = new jsPDF({ unit: "pt", format: "a4" });
-    const pageW = doc.internal.pageSize.getWidth();
-    const margin = 48;
-
-    // Logo (centered at top).
-    try {
-      const res = await fetch(logoAsset.url);
-      const blob = await res.blob();
-      const dataUrl = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-      const logoW = 90;
-      const logoH = 90;
-      doc.addImage(dataUrl, "PNG", (pageW - logoW) / 2, 36, logoW, logoH);
-    } catch {
-      // Logo is best-effort; continue without it.
-    }
-
-    let y = 150;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text("RSP Law of Vibration — Quiz Result", pageW / 2, y, { align: "center" });
-
-    y += 30;
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-    doc.text(`Name: ${name.trim()}`, margin, y);
-    y += 18;
-    doc.text(`Phone: ${phone.trim()}`, margin, y);
-    y += 18;
-    doc.text(`Date: ${new Date().toLocaleString()}`, margin, y);
-    y += 18;
-    doc.text(`Attempt: ${r.attempt} of 3`, margin, y);
-
-    y += 34;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(28);
-    doc.text(`${r.score} / ${r.total}`, pageW / 2, y, { align: "center" });
-    y += 26;
-    doc.setFontSize(16);
-    doc.setTextColor(r.passed ? 22 : 200, r.passed ? 130 : 30, r.passed ? 90 : 30);
-    doc.text(r.passed ? "PASSED" : "NOT PASSED", pageW / 2, y, { align: "center" });
-    doc.setTextColor(0, 0, 0);
-
-    y += 34;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.text("Answer summary", margin, y);
-    y += 8;
-    doc.setDrawColor(200);
-    doc.line(margin, y, pageW - margin, y);
-    y += 18;
-
-    doc.setFontSize(10);
-    r.detail.forEach((d, i) => {
-      if (y > 780) {
-        doc.addPage();
-        y = 60;
-      }
-      doc.setFont("helvetica", "bold");
-      const qLines = doc.splitTextToSize(`${i + 1}. ${d.question}`, pageW - margin * 2);
-      doc.text(qLines, margin, y);
-      y += qLines.length * 13;
-      doc.setFont("helvetica", "normal");
-      doc.text(
-        `Your answer: ${d.selected}  ${d.isCorrect ? "✓" : "✗"}`,
-        margin + 12,
-        y,
-      );
-      y += 13;
-      if (!d.isCorrect) {
-        doc.text(`Correct answer: ${d.correct}`, margin + 12, y);
-        y += 13;
-      }
-      y += 6;
+    await downloadQuizResultPdf({
+      name: name.trim(),
+      phone: phone.trim(),
+      score: r.score,
+      total: r.total,
+      passed: r.passed,
+      detail: r.detail,
+      attempt: r.attempt,
     });
-
-    doc.save(`RSP-Quiz-Result-${name.trim().replace(/\s+/g, "-") || "result"}.pdf`);
   }
 
   if (result) {
@@ -232,6 +162,48 @@ function QuizPage() {
                   Please download the PDF — or screenshot it once it opens — and
                   keep it for your records.
                 </p>
+              </div>
+            )}
+
+            {result.passed && (
+              <div className="mt-6 rounded-xl border border-border bg-muted/40 p-4 text-left">
+                <p className="text-sm font-medium">Shareable link</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Save this private link to view your result later. It works for
+                  30 days (expires{" "}
+                  {new Date(result.shareExpiresAt).toLocaleDateString()}).
+                </p>
+                {(() => {
+                  const shareUrl = `${
+                    typeof window !== "undefined" ? window.location.origin : ""
+                  }/r/${result.shareToken}`;
+                  return (
+                    <div className="mt-3 flex items-center gap-2">
+                      <Input readOnly value={shareUrl} className="text-xs" />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={async () => {
+                          try {
+                            await navigator.clipboard.writeText(shareUrl);
+                            setCopied(true);
+                            setTimeout(() => setCopied(false), 2000);
+                          } catch {
+                            /* clipboard unavailable */
+                          }
+                        }}
+                        aria-label="Copy link"
+                      >
+                        {copied ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  );
+                })()}
               </div>
             )}
             <div className="mt-6 flex justify-center gap-3">

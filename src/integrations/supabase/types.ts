@@ -1005,6 +1005,8 @@ export type Database = {
           id: string
           passed: boolean
           score: number
+          share_expires_at: string | null
+          share_token: string | null
           taker_name: string
           taker_phone: string
           total: number
@@ -1016,6 +1018,8 @@ export type Database = {
           id?: string
           passed: boolean
           score: number
+          share_expires_at?: string | null
+          share_token?: string | null
           taker_name: string
           taker_phone: string
           total: number
@@ -1027,6 +1031,8 @@ export type Database = {
           id?: string
           passed?: boolean
           score?: number
+          share_expires_at?: string | null
+          share_token?: string | null
           taker_name?: string
           taker_phone?: string
           total?: number

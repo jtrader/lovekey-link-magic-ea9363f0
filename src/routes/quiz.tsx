@@ -389,6 +389,7 @@ function QuizPage() {
             <li key={q.id}>
               {showSectionHeader && (
                 <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <span className="sr-only">Section: </span>
                   {SECTION_LABELS[sectionIndex]}
                 </p>
               )}

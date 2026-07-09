@@ -68,7 +68,7 @@ function QuizPage() {
     [answers],
   );
   const allAnswered = answeredCount === QUIZ_QUESTIONS.length;
-  const detailsValid = name.trim().length > 0 && phone.trim().length >= 3;
+  const detailsValid = name.trim().length > 0;
 
   function selectOption(qIndex: number, optIndex: number) {
     setAnswers((prev) => {
@@ -81,7 +81,7 @@ function QuizPage() {
   async function handleSubmit() {
     setError(null);
     if (!detailsValid) {
-      setError("Please enter your name and phone number.");
+      setError("Please enter your name.");
       return;
     }
     if (!allAnswered) {
@@ -169,39 +169,50 @@ function QuizPage() {
               <div className="mt-6 rounded-xl border border-border bg-muted/40 p-4 text-left">
                 <p className="text-sm font-medium">Shareable link</p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Save this private link to view your result later. It works for
-                  30 days (expires{" "}
-                  {new Date(result.shareExpiresAt).toLocaleDateString()}).
+                  Save this private link to view your result later.
                 </p>
                 {(() => {
                   const shareUrl = `${
                     typeof window !== "undefined" ? window.location.origin : ""
                   }/r/${result.shareToken}`;
+                  const expiry = new Date(result.shareExpiresAt);
                   return (
-                    <div className="mt-3 flex items-center gap-2">
-                      <Input readOnly value={shareUrl} className="text-xs" />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={async () => {
-                          try {
-                            await navigator.clipboard.writeText(shareUrl);
-                            setCopied(true);
-                            setTimeout(() => setCopied(false), 2000);
-                          } catch {
-                            /* clipboard unavailable */
-                          }
-                        }}
-                        aria-label="Copy link"
-                      >
-                        {copied ? (
-                          <Check className="h-4 w-4" />
-                        ) : (
-                          <Copy className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
+                    <>
+                      <div className="mt-3 flex items-center gap-2">
+                        <Input readOnly value={shareUrl} className="text-xs" />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={async () => {
+                            try {
+                              await navigator.clipboard.writeText(shareUrl);
+                              setCopied(true);
+                              setTimeout(() => setCopied(false), 2000);
+                            } catch {
+                              /* clipboard unavailable */
+                            }
+                          }}
+                          aria-label="Copy link"
+                        >
+                          {copied ? (
+                            <Check className="h-4 w-4" />
+                          ) : (
+                            <Copy className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        <span className="font-medium text-foreground">
+                          Time limit:
+                        </span>{" "}
+                        30 days · expires{" "}
+                        {expiry.toLocaleString(undefined, {
+                          dateStyle: "full",
+                          timeStyle: "short",
+                        })}
+                      </p>
+                    </>
                   );
                 })()}
               </div>
@@ -265,7 +276,10 @@ function QuizPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone number</Label>
+              <Label htmlFor="phone">
+                Phone number{" "}
+                <span className="font-medium text-destructive">(optional)</span>
+              </Label>
               <Input
                 id="phone"
                 value={phone}

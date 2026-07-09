@@ -18,7 +18,7 @@ const ANSWER_KEY: Record<number, number> = {
 
 const submissionSchema = z.object({
   name: z.string().trim().min(1).max(120),
-  phone: z.string().trim().min(3).max(40),
+  phone: z.string().trim().max(40).optional().default(""),
   // answers[i] is the selected option index for QUIZ_QUESTIONS[i]
   answers: z.array(z.number().int().min(-1).max(3)).length(QUIZ_QUESTIONS.length),
 });
@@ -66,26 +66,30 @@ export const Route = createFileRoute("/api/public/quiz-submit")({
         const MAX_ATTEMPTS = 3;
 
         // Enforce a maximum of 3 attempts per taker (matched on phone number).
-        const { count: priorCount, error: countError } = await supabaseAdmin
-          .from("quiz_submissions")
-          .select("id", { count: "exact", head: true })
-          .eq("taker_phone", phone);
+        // Only enforceable when a phone number was provided.
+        let priorAttempts = 0;
+        if (phone) {
+          const { count: priorCount, error: countError } = await supabaseAdmin
+            .from("quiz_submissions")
+            .select("id", { count: "exact", head: true })
+            .eq("taker_phone", phone);
 
-        if (countError) {
-          console.error("[quiz-submit] attempt count failed:", countError);
-          return json({ error: "Could not verify your attempts" }, 500);
-        }
+          if (countError) {
+            console.error("[quiz-submit] attempt count failed:", countError);
+            return json({ error: "Could not verify your attempts" }, 500);
+          }
 
-        const priorAttempts = priorCount ?? 0;
-        if (priorAttempts >= MAX_ATTEMPTS) {
-          return json(
-            {
-              error: `You have reached the maximum of ${MAX_ATTEMPTS} attempts.`,
-              attemptsUsed: priorAttempts,
-              maxAttempts: MAX_ATTEMPTS,
-            },
-            429,
-          );
+          priorAttempts = priorCount ?? 0;
+          if (priorAttempts >= MAX_ATTEMPTS) {
+            return json(
+              {
+                error: `You have reached the maximum of ${MAX_ATTEMPTS} attempts.`,
+                attemptsUsed: priorAttempts,
+                maxAttempts: MAX_ATTEMPTS,
+              },
+              429,
+            );
+          }
         }
 
         const attempt = priorAttempts + 1;

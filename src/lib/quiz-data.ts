@@ -222,3 +222,40 @@ export function navState(
   };
 }
 
+// ---- Focus + announcement helpers ----
+// Decides where keyboard focus should land and what a screen reader hears when
+// the active question changes. Shared so the UI and tests stay in lockstep.
+
+export type FocusTarget =
+  | { kind: "option"; qIndex: number; optIndex: number }
+  | { kind: "heading"; qIndex: number };
+
+/**
+ * Where focus should move for the active question: the selected option when the
+ * question is answered, otherwise the question heading/container.
+ */
+export function focusTargetFor(
+  activeIndex: number,
+  answers: number[],
+  total: number = QUIZ_QUESTIONS.length,
+): FocusTarget {
+  const i = clampIndex(activeIndex, total);
+  const selected = answers[i];
+  return selected >= 0
+    ? { kind: "option", qIndex: i, optIndex: selected }
+    : { kind: "heading", qIndex: i };
+}
+
+/** Screen-reader announcement text for the active question. */
+export function announcementFor(
+  activeIndex: number,
+  total: number = QUIZ_QUESTIONS.length,
+): string {
+  const i = clampIndex(activeIndex, total);
+  const q = QUIZ_QUESTIONS[i];
+  return `Question ${i + 1} of ${total}, ${SECTION_LABELS[
+    sectionOf(i, total)
+  ].toLowerCase()}. ${q.question}`;
+}
+
+

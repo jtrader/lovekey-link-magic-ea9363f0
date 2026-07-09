@@ -167,3 +167,58 @@ export function sectionOf(
 export function countAnswered(answers: number[]): number {
   return answers.filter((a) => a >= 0).length;
 }
+
+// ---- Navigation helpers ----
+// Clamp movement between questions so the active index never leaves the flow.
+
+/** Clamp any index into the valid [0, total-1] range. */
+export function clampIndex(
+  index: number,
+  total: number = QUIZ_QUESTIONS.length,
+): number {
+  return Math.max(0, Math.min(index, total - 1));
+}
+
+/** Move to the next question, clamped at the last one. */
+export function nextIndex(
+  index: number,
+  total: number = QUIZ_QUESTIONS.length,
+): number {
+  return clampIndex(index + 1, total);
+}
+
+/** Move to the previous question, clamped at the first one. */
+export function prevIndex(
+  index: number,
+  total: number = QUIZ_QUESTIONS.length,
+): number {
+  return clampIndex(index - 1, total);
+}
+
+/**
+ * Full navigation state for a given active question index: the 0-based index,
+ * its human question number, which third it belongs to, and the section label.
+ */
+export function navState(
+  index: number,
+  total: number = QUIZ_QUESTIONS.length,
+): {
+  index: number;
+  questionNumber: number;
+  section: number;
+  label: string;
+  isFirst: boolean;
+  isLast: boolean;
+} {
+  const i = clampIndex(index, total);
+  const section = sectionOf(i, total);
+  return {
+    index: i,
+    questionNumber: i + 1,
+    section,
+    label: SECTION_LABELS[section],
+    isFirst: i === 0,
+    isLast: i === total - 1,
+  };
+}
+

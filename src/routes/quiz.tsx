@@ -187,6 +187,7 @@ function QuizPage() {
     });
 
     doc.save(`RSP-Quiz-Result-${name.trim().replace(/\s+/g, "-") || "result"}.pdf`);
+  }
 
   if (result) {
     return (

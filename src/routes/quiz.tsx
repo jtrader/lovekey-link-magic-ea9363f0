@@ -214,7 +214,23 @@ function QuizPage() {
             <p className="mt-6 text-sm text-muted-foreground">
               Thanks, {name.trim()}. Your result has been recorded.
             </p>
-            <div className="mt-8 flex justify-center gap-3">
+            <p className="mt-1 text-sm text-muted-foreground">
+              Attempt {result.attempt} of 3
+              {result.attemptsRemaining > 0
+                ? ` · ${result.attemptsRemaining} attempt${
+                    result.attemptsRemaining === 1 ? "" : "s"
+                  } remaining`
+                : " · no attempts remaining"}
+            </p>
+            {result.passed && (
+              <div className="mt-8">
+                <Button onClick={() => downloadResultsPdf(result)}>
+                  <FileDown className="mr-2 h-4 w-4" />
+                  Download results PDF
+                </Button>
+              </div>
+            )}
+            <div className="mt-6 flex justify-center gap-3">
               <Button asChild variant="outline">
                 <Link to="/">Back to home</Link>
               </Button>

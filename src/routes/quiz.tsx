@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   PASS_MARK,
   QUIZ_QUESTIONS,
@@ -9,6 +9,9 @@ import {
   sectionOf,
   sectionSize,
   countAnswered,
+  clampIndex,
+  nextIndex,
+  prevIndex,
 } from "@/lib/quiz-data";
 import pdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
 import { Download, FileDown, Copy, Check } from "lucide-react";
@@ -67,6 +70,16 @@ function QuizPage() {
   const [result, setResult] = useState<Result | null>(null);
   const [copied, setCopied] = useState(false);
 
+  // Which question is "active" for keyboard navigation.
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [announcement, setAnnouncement] = useState("");
+  // Refs to each question container and each option button for focus handling.
+  const questionRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const optionRefs = useRef<Array<Array<HTMLButtonElement | null>>>([]);
+  // Only steal focus when navigation was explicitly requested (Prev/Next),
+  // never on a plain answer selection.
+  const pendingFocus = useRef(false);
+
   const answeredCount = useMemo(() => countAnswered(answers), [answers]);
   const allAnswered = answeredCount === QUIZ_QUESTIONS.length;
   const detailsValid = name.trim().length > 0;
@@ -78,12 +91,48 @@ function QuizPage() {
   );
 
   function selectOption(qIndex: number, optIndex: number) {
+    setActiveIndex(qIndex);
     setAnswers((prev) => {
       const next = [...prev];
       next[qIndex] = optIndex;
       return next;
     });
   }
+
+  // Move the active question and request focus/announcement.
+  const goToQuestion = useCallback(
+    (target: number) => {
+      const i = clampIndex(target, QUIZ_QUESTIONS.length);
+      pendingFocus.current = true;
+      setActiveIndex(i);
+    },
+    [],
+  );
+
+  // After the active question changes via navigation, move keyboard focus to
+  // the selected option (if answered) or the question container, and announce it.
+  useEffect(() => {
+    const q = QUIZ_QUESTIONS[activeIndex];
+    const selected = answers[activeIndex];
+    setAnnouncement(
+      `Question ${activeIndex + 1} of ${QUIZ_QUESTIONS.length}, ${SECTION_LABELS[
+        sectionOf(activeIndex)
+      ].toLowerCase()}. ${q.question}`,
+    );
+
+    if (!pendingFocus.current) return;
+    pendingFocus.current = false;
+
+    const target =
+      selected >= 0
+        ? optionRefs.current[activeIndex]?.[selected]
+        : questionRefs.current[activeIndex];
+    if (target) {
+      target.focus();
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [activeIndex, answers]);
+
 
   async function handleSubmit() {
     setError(null);
@@ -379,6 +428,10 @@ function QuizPage() {
           )}
         </section>
 
+        {/* Announces the active question when navigating with Previous/Next. */}
+        <p className="sr-only" aria-live="polite">
+          {announcement}
+        </p>
 
 
         <ol className="space-y-6">
@@ -393,9 +446,28 @@ function QuizPage() {
                   {SECTION_LABELS[sectionIndex]}
                 </p>
               )}
-              <div className="rounded-xl border border-border bg-card p-6">
-              <p className="font-medium">
-                <span className="text-muted-foreground">{qIndex + 1}.</span>{" "}
+              <div
+                ref={(el) => {
+                  questionRefs.current[qIndex] = el;
+                }}
+                tabIndex={-1}
+                role="group"
+                aria-labelledby={`question-${q.id}-heading`}
+                aria-current={qIndex === activeIndex ? "step" : undefined}
+                onFocus={() => setActiveIndex(qIndex)}
+                className={`rounded-xl border bg-card p-6 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                  qIndex === activeIndex
+                    ? "border-primary ring-1 ring-primary/40"
+                    : "border-border"
+                }`}
+              >
+              <p id={`question-${q.id}-heading`} className="font-medium">
+                <span className="sr-only">
+                  Question {qIndex + 1} of {QUIZ_QUESTIONS.length}:{" "}
+                </span>
+                <span className="text-muted-foreground" aria-hidden="true">
+                  {qIndex + 1}.
+                </span>{" "}
                 {q.question}
               </p>
               <div className="mt-4 space-y-2">
@@ -404,6 +476,12 @@ function QuizPage() {
                   return (
                     <button
                       key={optIndex}
+                      ref={(el) => {
+                        if (!optionRefs.current[qIndex]) {
+                          optionRefs.current[qIndex] = [];
+                        }
+                        optionRefs.current[qIndex][optIndex] = el;
+                      }}
                       type="button"
                       onClick={() => selectOption(qIndex, optIndex)}
                       disabled={submitting}
@@ -427,6 +505,29 @@ function QuizPage() {
                     </button>
                   );
                 })}
+              </div>
+              <div className="mt-4 flex items-center justify-between gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToQuestion(prevIndex(qIndex))}
+                  disabled={qIndex === 0}
+                >
+                  ← Previous
+                </Button>
+                <span className="text-xs text-muted-foreground" aria-hidden="true">
+                  {qIndex + 1} / {QUIZ_QUESTIONS.length}
+                </span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToQuestion(nextIndex(qIndex))}
+                  disabled={qIndex === QUIZ_QUESTIONS.length - 1}
+                >
+                  Next →
+                </Button>
               </div>
               </div>
             </li>

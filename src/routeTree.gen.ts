@@ -18,6 +18,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RTokenRouteImport } from './routes/r.$token'
+import { Route as QuizAdminRouteImport } from './routes/quiz_.admin'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
@@ -68,6 +69,11 @@ const RTokenRoute = RTokenRouteImport.update({
   path: '/r/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuizAdminRoute = QuizAdminRouteImport.update({
+  id: '/quiz_/admin',
+  path: '/quiz/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AuthenticatedAppRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/app': typeof AuthenticatedAppRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/quiz_/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/onboarding'
     | '/invite/$token'
+    | '/quiz/admin'
     | '/r/$token'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/onboarding'
     | '/invite/$token'
+    | '/quiz/admin'
     | '/r/$token'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app'
     | '/_authenticated/onboarding'
     | '/invite/$token'
+    | '/quiz_/admin'
     | '/r/$token'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  QuizAdminRoute: typeof QuizAdminRoute
   RTokenRoute: typeof RTokenRoute
   ApiPublicQuizSubmitRoute: typeof ApiPublicQuizSubmitRoute
   ApiPublicQuizResultTokenRoute: typeof ApiPublicQuizResultTokenRoute
@@ -271,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quiz_/admin': {
+      id: '/quiz_/admin'
+      path: '/quiz/admin'
+      fullPath: '/quiz/admin'
+      preLoaderRoute: typeof QuizAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
@@ -333,6 +353,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   InviteTokenRoute: InviteTokenRoute,
+  QuizAdminRoute: QuizAdminRoute,
   RTokenRoute: RTokenRoute,
   ApiPublicQuizSubmitRoute: ApiPublicQuizSubmitRoute,
   ApiPublicQuizResultTokenRoute: ApiPublicQuizResultTokenRoute,

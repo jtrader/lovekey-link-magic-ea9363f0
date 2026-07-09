@@ -91,6 +91,12 @@ export const Route = createFileRoute("/api/public/quiz-submit")({
         const attempt = priorAttempts + 1;
         const attemptsRemaining = MAX_ATTEMPTS - attempt;
 
+        // Time-limited shareable link (valid for 30 days).
+        const shareToken = crypto.randomUUID().replace(/-/g, "");
+        const shareExpiresAt = new Date(
+          Date.now() + 30 * 24 * 60 * 60 * 1000,
+        ).toISOString();
+
         const { data: inserted, error: insertError } = await supabaseAdmin
           .from("quiz_submissions")
           .insert({
@@ -100,6 +106,8 @@ export const Route = createFileRoute("/api/public/quiz-submit")({
             total,
             passed,
             answers: detail,
+            share_token: shareToken,
+            share_expires_at: shareExpiresAt,
           })
           .select("id")
           .single();

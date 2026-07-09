@@ -112,24 +112,19 @@ function QuizPage() {
   // After the active question changes via navigation, move keyboard focus to
   // the selected option (if answered) or the question container, and announce it.
   useEffect(() => {
-    const q = QUIZ_QUESTIONS[activeIndex];
-    const selected = answers[activeIndex];
-    setAnnouncement(
-      `Question ${activeIndex + 1} of ${QUIZ_QUESTIONS.length}, ${SECTION_LABELS[
-        sectionOf(activeIndex)
-      ].toLowerCase()}. ${q.question}`,
-    );
+    setAnnouncement(announcementFor(activeIndex));
 
     if (!pendingFocus.current) return;
     pendingFocus.current = false;
 
-    const target =
-      selected >= 0
-        ? optionRefs.current[activeIndex]?.[selected]
-        : questionRefs.current[activeIndex];
-    if (target) {
-      target.focus();
-      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    const focusTarget = focusTargetFor(activeIndex, answers);
+    const el =
+      focusTarget.kind === "option"
+        ? optionRefs.current[focusTarget.qIndex]?.[focusTarget.optIndex]
+        : questionRefs.current[focusTarget.qIndex];
+    if (el) {
+      el.focus();
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [activeIndex, answers]);
 

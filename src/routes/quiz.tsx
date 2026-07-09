@@ -5,6 +5,10 @@ import {
   QUIZ_QUESTIONS,
   QUIZ_SUBTITLE,
   QUIZ_TITLE,
+  SECTION_LABELS,
+  sectionOf,
+  sectionSize,
+  countAnswered,
 } from "@/lib/quiz-data";
 import pdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
 import { Download, FileDown, Copy, Check } from "lucide-react";
@@ -63,19 +67,15 @@ function QuizPage() {
   const [result, setResult] = useState<Result | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const answeredCount = useMemo(
-    () => answers.filter((a) => a >= 0).length,
-    [answers],
-  );
+  const answeredCount = useMemo(() => countAnswered(answers), [answers]);
   const allAnswered = answeredCount === QUIZ_QUESTIONS.length;
   const detailsValid = name.trim().length > 0;
 
-  // Split the quiz into three equal sections (thirds).
-  const SECTION_SIZE = Math.ceil(QUIZ_QUESTIONS.length / 3);
-  const SECTION_LABELS = ["First third", "Second third", "Final third"];
-  const sectionOf = (index: number) =>
-    Math.min(Math.floor(index / SECTION_SIZE), SECTION_LABELS.length - 1);
-  const currentSection = sectionOf(Math.min(answeredCount, QUIZ_QUESTIONS.length - 1));
+  // Split the quiz into three equal sections (thirds) via shared helpers.
+  const SECTION_SIZE = sectionSize();
+  const currentSection = sectionOf(
+    Math.min(answeredCount, QUIZ_QUESTIONS.length - 1),
+  );
 
   function selectOption(qIndex: number, optIndex: number) {
     setAnswers((prev) => {

@@ -190,7 +190,14 @@ function QuizPage() {
             <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
               Your result
             </p>
-            <h1 className="mt-4 text-5xl font-bold">
+            <h1
+              ref={resultHeadingRef}
+              tabIndex={-1}
+              aria-label={`Your result: ${result.score} out of ${result.total}. ${
+                result.passed ? "Passed." : "Not passed."
+              }`}
+              className="mt-4 text-5xl font-bold outline-none"
+            >
               {result.score}
               <span className="text-2xl text-muted-foreground">/{result.total}</span>
             </h1>

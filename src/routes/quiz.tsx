@@ -164,6 +164,48 @@ function QuizPage() {
                 </p>
               </div>
             )}
+
+            {result.passed && (
+              <div className="mt-6 rounded-xl border border-border bg-muted/40 p-4 text-left">
+                <p className="text-sm font-medium">Shareable link</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Save this private link to view your result later. It works for
+                  30 days (expires{" "}
+                  {new Date(result.shareExpiresAt).toLocaleDateString()}).
+                </p>
+                {(() => {
+                  const shareUrl = `${
+                    typeof window !== "undefined" ? window.location.origin : ""
+                  }/r/${result.shareToken}`;
+                  return (
+                    <div className="mt-3 flex items-center gap-2">
+                      <Input readOnly value={shareUrl} className="text-xs" />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={async () => {
+                          try {
+                            await navigator.clipboard.writeText(shareUrl);
+                            setCopied(true);
+                            setTimeout(() => setCopied(false), 2000);
+                          } catch {
+                            /* clipboard unavailable */
+                          }
+                        }}
+                        aria-label="Copy link"
+                      >
+                        {copied ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
             <div className="mt-6 flex justify-center gap-3">
               <Button asChild variant="outline">
                 <Link to="/">Back to home</Link>

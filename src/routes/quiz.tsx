@@ -48,6 +48,8 @@ type Result = {
   attempt: number;
   attemptsRemaining: number;
   detail: ResultDetail[];
+  shareToken: string;
+  shareExpiresAt: string;
 };
 
 function QuizPage() {

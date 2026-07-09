@@ -374,8 +374,10 @@ function QuizPage() {
                   );
                 })}
               </div>
+              </div>
             </li>
-          ))}
+            );
+          })}
         </ol>
 
         {error && (

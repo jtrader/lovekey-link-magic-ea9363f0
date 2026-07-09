@@ -205,6 +205,20 @@ function FragmentRow({
   open: boolean;
   onToggle: () => void;
 }) {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const prevOpen = useRef(open);
+
+  useEffect(() => {
+    if (open === prevOpen.current) return;
+    if (open) {
+      sectionRef.current?.focus();
+    } else {
+      buttonRef.current?.focus();
+    }
+    prevOpen.current = open;
+  }, [open]);
+
   return (
     <>
       <tr className="border-t border-border">

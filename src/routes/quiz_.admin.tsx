@@ -263,8 +263,11 @@ function FragmentRow({
         <tr className="border-t border-border bg-muted/30">
           <td colSpan={6} className="px-4 py-4">
             <section
+              ref={sectionRef}
               id={`answers-${a.id}`}
+              tabIndex={-1}
               aria-label={`Answers submitted by ${a.name}`}
+              className="outline-none"
             >
               <ol className="space-y-3">
                 {a.answers.map((ans, i) => (

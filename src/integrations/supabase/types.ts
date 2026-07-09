@@ -997,6 +997,42 @@ export type Database = {
         }
         Relationships: []
       }
+      quiz_submissions: {
+        Row: {
+          answers: Json
+          created_at: string
+          emailed: boolean
+          id: string
+          passed: boolean
+          score: number
+          taker_name: string
+          taker_phone: string
+          total: number
+        }
+        Insert: {
+          answers?: Json
+          created_at?: string
+          emailed?: boolean
+          id?: string
+          passed: boolean
+          score: number
+          taker_name: string
+          taker_phone: string
+          total: number
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          emailed?: boolean
+          id?: string
+          passed?: boolean
+          score?: number
+          taker_name?: string
+          taker_phone?: string
+          total?: number
+        }
+        Relationships: []
+      }
       redemptions: {
         Row: {
           created_at: string

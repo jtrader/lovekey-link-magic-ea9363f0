@@ -81,7 +81,7 @@ function QuizPage() {
   async function handleSubmit() {
     setError(null);
     if (!detailsValid) {
-      setError("Please enter your name and phone number.");
+      setError("Please enter your name.");
       return;
     }
     if (!allAnswered) {

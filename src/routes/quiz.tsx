@@ -7,7 +7,8 @@ import {
   QUIZ_TITLE,
 } from "@/lib/quiz-data";
 import pdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
-import { Download } from "lucide-react";
+import logoAsset from "@/assets/rsp-logo.png.asset.json";
+import { Download, FileDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,7 +34,21 @@ export const Route = createFileRoute("/quiz")({
   component: QuizPage,
 });
 
-type Result = { score: number; total: number; passed: boolean; emailed: boolean };
+type ResultDetail = {
+  question: string;
+  selected: string;
+  correct: string;
+  isCorrect: boolean;
+};
+type Result = {
+  score: number;
+  total: number;
+  passed: boolean;
+  emailed: boolean;
+  attempt: number;
+  attemptsRemaining: number;
+  detail: ResultDetail[];
+};
 
 function QuizPage() {
   const [name, setName] = useState("");
@@ -89,6 +104,91 @@ function QuizPage() {
     }
   }
 
+  async function downloadResultsPdf(r: Result) {
+    const { jsPDF } = await import("jspdf");
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const pageW = doc.internal.pageSize.getWidth();
+    const margin = 48;
+
+    // Logo (centered at top).
+    try {
+      const res = await fetch(logoAsset.url);
+      const blob = await res.blob();
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+      const logoW = 90;
+      const logoH = 90;
+      doc.addImage(dataUrl, "PNG", (pageW - logoW) / 2, 36, logoW, logoH);
+    } catch {
+      // Logo is best-effort; continue without it.
+    }
+
+    let y = 150;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("RSP Law of Vibration — Quiz Result", pageW / 2, y, { align: "center" });
+
+    y += 30;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    doc.text(`Name: ${name.trim()}`, margin, y);
+    y += 18;
+    doc.text(`Phone: ${phone.trim()}`, margin, y);
+    y += 18;
+    doc.text(`Date: ${new Date().toLocaleString()}`, margin, y);
+    y += 18;
+    doc.text(`Attempt: ${r.attempt} of 3`, margin, y);
+
+    y += 34;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(28);
+    doc.text(`${r.score} / ${r.total}`, pageW / 2, y, { align: "center" });
+    y += 26;
+    doc.setFontSize(16);
+    doc.setTextColor(r.passed ? 22 : 200, r.passed ? 130 : 30, r.passed ? 90 : 30);
+    doc.text(r.passed ? "PASSED" : "NOT PASSED", pageW / 2, y, { align: "center" });
+    doc.setTextColor(0, 0, 0);
+
+    y += 34;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("Answer summary", margin, y);
+    y += 8;
+    doc.setDrawColor(200);
+    doc.line(margin, y, pageW - margin, y);
+    y += 18;
+
+    doc.setFontSize(10);
+    r.detail.forEach((d, i) => {
+      if (y > 780) {
+        doc.addPage();
+        y = 60;
+      }
+      doc.setFont("helvetica", "bold");
+      const qLines = doc.splitTextToSize(`${i + 1}. ${d.question}`, pageW - margin * 2);
+      doc.text(qLines, margin, y);
+      y += qLines.length * 13;
+      doc.setFont("helvetica", "normal");
+      doc.text(
+        `Your answer: ${d.selected}  ${d.isCorrect ? "✓" : "✗"}`,
+        margin + 12,
+        y,
+      );
+      y += 13;
+      if (!d.isCorrect) {
+        doc.text(`Correct answer: ${d.correct}`, margin + 12, y);
+        y += 13;
+      }
+      y += 6;
+    });
+
+    doc.save(`RSP-Quiz-Result-${name.trim().replace(/\s+/g, "-") || "result"}.pdf`);
+  }
+
   if (result) {
     return (
       <main className="min-h-screen bg-background text-foreground">
@@ -114,7 +214,23 @@ function QuizPage() {
             <p className="mt-6 text-sm text-muted-foreground">
               Thanks, {name.trim()}. Your result has been recorded.
             </p>
-            <div className="mt-8 flex justify-center gap-3">
+            <p className="mt-1 text-sm text-muted-foreground">
+              Attempt {result.attempt} of 3
+              {result.attemptsRemaining > 0
+                ? ` · ${result.attemptsRemaining} attempt${
+                    result.attemptsRemaining === 1 ? "" : "s"
+                  } remaining`
+                : " · no attempts remaining"}
+            </p>
+            {result.passed && (
+              <div className="mt-8">
+                <Button onClick={() => downloadResultsPdf(result)}>
+                  <FileDown className="mr-2 h-4 w-4" />
+                  Download results PDF
+                </Button>
+              </div>
+            )}
+            <div className="mt-6 flex justify-center gap-3">
               <Button asChild variant="outline">
                 <Link to="/">Back to home</Link>
               </Button>

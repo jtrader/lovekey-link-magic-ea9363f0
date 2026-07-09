@@ -97,6 +97,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     ],
   },
   {
+    id: 12,
+    question: 'The "WHERE" dimension is a compromise between:',
+    options: [
+      "Local control and global consistency",
+      "Marketing reach and engineering effort",
+      "Speed and financial cost",
+      "Total secrecy and full public exposure",
+    ],
+  },
+  {
     id: 8,
     question: 'The "WHAT" dimension is a compromise between:',
     options: [

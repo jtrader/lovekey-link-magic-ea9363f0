@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   adminLogin,
   adminLogout,
@@ -205,6 +205,20 @@ function FragmentRow({
   open: boolean;
   onToggle: () => void;
 }) {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const prevOpen = useRef(open);
+
+  useEffect(() => {
+    if (open === prevOpen.current) return;
+    if (open) {
+      sectionRef.current?.focus();
+    } else {
+      buttonRef.current?.focus();
+    }
+    prevOpen.current = open;
+  }, [open]);
+
   return (
     <>
       <tr className="border-t border-border">
@@ -230,6 +244,7 @@ function FragmentRow({
         <td className="px-4 py-3">
           {a.answers.length > 0 ? (
             <Button
+              ref={buttonRef}
               variant="ghost"
               size="sm"
               onClick={onToggle}
@@ -248,8 +263,11 @@ function FragmentRow({
         <tr className="border-t border-border bg-muted/30">
           <td colSpan={6} className="px-4 py-4">
             <section
+              ref={sectionRef}
               id={`answers-${a.id}`}
+              tabIndex={-1}
               aria-label={`Answers submitted by ${a.name}`}
+              className="outline-none"
             >
               <ol className="space-y-3">
                 {a.answers.map((ans, i) => (

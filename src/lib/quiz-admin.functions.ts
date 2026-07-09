@@ -48,6 +48,13 @@ export const adminLogout = createServerFn({ method: "POST" }).handler(async () =
   return { ok: true as const };
 });
 
+export type QuizAnswerDetail = {
+  question: string;
+  selected: string;
+  correct: string;
+  isCorrect: boolean;
+};
+
 export type QuizAttempt = {
   id: string;
   name: string;
@@ -56,6 +63,7 @@ export type QuizAttempt = {
   total: number;
   passed: boolean;
   createdAt: string;
+  answers: QuizAnswerDetail[];
 };
 
 export const getQuizAttempts = createServerFn({ method: "GET" }).handler(
@@ -70,7 +78,9 @@ export const getQuizAttempts = createServerFn({ method: "GET" }).handler(
     );
     const { data, error } = await supabaseAdmin
       .from("quiz_submissions")
-      .select("id, taker_name, taker_phone, score, total, passed, created_at")
+      .select(
+        "id, taker_name, taker_phone, score, total, passed, created_at, answers",
+      )
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -88,6 +98,9 @@ export const getQuizAttempts = createServerFn({ method: "GET" }).handler(
         total: r.total,
         passed: r.passed,
         createdAt: r.created_at,
+        answers: Array.isArray(r.answers)
+          ? (r.answers as unknown as QuizAnswerDetail[])
+          : [],
       })),
     };
   },

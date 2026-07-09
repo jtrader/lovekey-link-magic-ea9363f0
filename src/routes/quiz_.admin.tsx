@@ -229,7 +229,14 @@ function FragmentRow({
         </td>
         <td className="px-4 py-3">
           {a.answers.length > 0 ? (
-            <Button variant="ghost" size="sm" onClick={onToggle}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onToggle}
+              aria-expanded={open}
+              aria-controls={`answers-${a.id}`}
+              aria-label={`${open ? "Hide" : "View"} ${a.answers.length} answers for ${a.name}`}
+            >
               {open ? "Hide" : `View (${a.answers.length})`}
             </Button>
           ) : (
@@ -240,21 +247,27 @@ function FragmentRow({
       {open && a.answers.length > 0 && (
         <tr className="border-t border-border bg-muted/30">
           <td colSpan={6} className="px-4 py-4">
-            <ol className="space-y-3">
-              {a.answers.map((ans, i) => (
-                <li key={i} className="text-sm">
-                  <p className="font-medium text-foreground">
-                    {i + 1}. {ans.question}
-                  </p>
-                  <p className="mt-0.5 text-muted-foreground">
-                    Selected:{" "}
-                    <span className="font-medium text-foreground">
-                      {ans.selected}
-                    </span>
-                  </p>
-                </li>
-              ))}
-            </ol>
+            <section
+              id={`answers-${a.id}`}
+              aria-label={`Answers submitted by ${a.name}`}
+            >
+              <ol className="space-y-3">
+                {a.answers.map((ans, i) => (
+                  <li key={i} className="text-sm">
+                    <p className="font-medium text-foreground">
+                      {i + 1}. {ans.question}
+                    </p>
+                    <p className="mt-0.5 text-muted-foreground">
+                      <span className="sr-only">Selected answer: </span>
+                      <span aria-hidden="true">Selected: </span>
+                      <span className="font-medium text-foreground">
+                        {ans.selected}
+                      </span>
+                    </p>
+                  </li>
+                ))}
+              </ol>
+            </section>
           </td>
         </tr>
       )}

@@ -5,6 +5,10 @@ import {
   QUIZ_QUESTIONS,
   QUIZ_SUBTITLE,
   QUIZ_TITLE,
+  SECTION_LABELS,
+  sectionOf,
+  sectionSize,
+  countAnswered,
 } from "@/lib/quiz-data";
 import pdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
 import { Download, FileDown, Copy, Check } from "lucide-react";

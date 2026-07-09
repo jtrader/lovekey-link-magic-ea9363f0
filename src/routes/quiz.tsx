@@ -7,12 +7,12 @@ import {
   QUIZ_TITLE,
 } from "@/lib/quiz-data";
 import pdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
-import logoAsset from "@/assets/rsp-logo.png.asset.json";
-import { Download, FileDown } from "lucide-react";
+import { Download, FileDown, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import { downloadQuizResultPdf } from "@/lib/quiz-result-pdf";
 
 export const Route = createFileRoute("/quiz")({
   head: () => ({

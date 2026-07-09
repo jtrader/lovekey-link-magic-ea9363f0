@@ -228,6 +228,10 @@ function QuizPage() {
                   <FileDown className="mr-2 h-4 w-4" />
                   Download results PDF
                 </Button>
+                <p className="mt-3 text-xs text-muted-foreground">
+                  Please download the PDF — or screenshot it once it opens — and
+                  keep it for your records.
+                </p>
               </div>
             )}
             <div className="mt-6 flex justify-center gap-3">

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
+import chapterPdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
 import rspLogo from "@/assets/rsp-logo.png.asset.json";
 import { trackEvent } from "@/lib/analytics";
 
@@ -265,6 +266,16 @@ const css = `
     display: inline-flex; align-items: center; gap: 8px;
   }
   .rsp-btn-outline:hover { border-color: var(--rsp-primary); color: var(--rsp-primary); }
+  .rsp-btn-group { display: inline-flex; gap: 0; }
+  .rsp-btn-pill-left, .rsp-btn-pill-right {
+    font-size: .88rem; font-weight: 500; color: white;
+    background: var(--rsp-primary); border: none;
+    padding: 12px 24px; cursor: pointer; text-decoration: none;
+    transition: all .2s; display: inline-flex; align-items: center; gap: 8px;
+  }
+  .rsp-btn-pill-left:hover, .rsp-btn-pill-right:hover { background: var(--rsp-primary-glow); }
+  .rsp-btn-pill-left { border-radius: 999px 0 0 999px; }
+  .rsp-btn-pill-right { border-radius: 0 999px 999px 0; border-left: 1px solid rgba(255,255,255,0.25); }
 
   /* FLOW CARDS */
   .rsp-hero-visual { display: flex; flex-direction: column; }
@@ -1062,9 +1073,14 @@ function RSPPage() {
             >
               Genesis NFT →
             </a>
-            <Link to="/quiz" className="rsp-btn-outline">
-              Law of Vibration RSP Chapter + Quiz →
-            </Link>
+            <div className="rsp-btn-group">
+              <a href={chapterPdfAsset.url} download="RSP_Chapter_Law_of_Vibration.pdf" className="rsp-btn-pill-left">
+                Chapter PDF ↓
+              </a>
+              <Link to="/quiz" className="rsp-btn-pill-right">
+                Quiz →
+              </Link>
+            </div>
           </div>
         </div>
         <div className="rsp-hero-visual">

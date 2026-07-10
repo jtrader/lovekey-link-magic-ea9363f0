@@ -149,6 +149,15 @@ export const Route = createFileRoute("/api/public/quiz-submit")({
           console.error("[quiz-submit] email step failed:", e);
         }
 
+        // Never return the answer key to the client. Only echo back what the
+        // taker selected (and whether it was accepted) so the raw API response
+        // cannot be used to harvest correct answers across attempts.
+        const clientDetail = detail.map((d) => ({
+          question: d.question,
+          selected: d.selected,
+          isCorrect: d.isCorrect,
+        }));
+
         return json({
           score,
           total,
@@ -156,7 +165,7 @@ export const Route = createFileRoute("/api/public/quiz-submit")({
           emailed,
           attempt,
           attemptsRemaining,
-          detail,
+          detail: clientDetail,
           shareToken,
           shareExpiresAt,
         });

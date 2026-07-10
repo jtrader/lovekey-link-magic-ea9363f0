@@ -1062,6 +1062,9 @@ function RSPPage() {
             >
               Genesis NFT →
             </a>
+            <Link to="/quiz" className="rsp-btn-outline">
+              Law of Vibration RSP Chapter + Quiz →
+            </Link>
           </div>
         </div>
         <div className="rsp-hero-visual">

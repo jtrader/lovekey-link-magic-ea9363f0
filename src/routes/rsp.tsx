@@ -807,7 +807,7 @@ const css = `
     .rsp-principle-grid, .rsp-credits-grid { grid-template-columns: 1fr 1fr; }
     .rsp-event-grid { grid-template-columns: 1fr; gap: 40px; }
     .rsp-signal-weights { grid-template-columns: 1fr; }
-    .rsp-nav-links { display: none; }
+    .rsp-nav-links, .rsp-menus-wrap { display: none; }
     .rsp-nav-inner > .rsp-nav-cta { display: inline-flex; margin-left: auto; }
     .rsp-nav-burger { display: flex; }
   }
@@ -855,6 +855,56 @@ const css = `
   .rsp-crumb-current { color: var(--rsp-text); font-weight: 600; }
   .rsp-crumb-sep { color: var(--rsp-text-soft); opacity: .7; }
   @media (max-width: 600px) { .rsp-crumbs { padding: 10px 1.2rem 0; font-size: .72rem; } }
+
+  /* DROPDOWN MENUS (Love Key Link · RSP · Identity Avatars) */
+  .rsp-menus-wrap { display: flex; align-items: center; gap: 1.5rem; }
+  .rsp-menus { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
+  .rsp-menu { position: relative; }
+  .rsp-menu-trigger {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: inherit; font-size: .85rem; font-weight: 500;
+    color: var(--rsp-text-muted); background: none; border: none;
+    cursor: pointer; padding: 6px 2px; transition: color .2s;
+  }
+  .rsp-menu-trigger:hover, .rsp-menu[data-open="true"] .rsp-menu-trigger { color: var(--rsp-text); }
+  .rsp-menu-trigger.rsp-menu-current { color: var(--rsp-primary); font-weight: 600; }
+  .rsp-menu-caret {
+    width: 8px; height: 8px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg) translateY(-1px); transition: transform .2s var(--rsp-ease); opacity: .7;
+  }
+  .rsp-menu[data-open="true"] .rsp-menu-caret { transform: rotate(-135deg) translateY(-1px); }
+  .rsp-menu-panel {
+    position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+    min-width: 220px; background: var(--rsp-surface);
+    border: 1px solid var(--rsp-border); border-radius: var(--rsp-radius);
+    box-shadow: 0 12px 34px oklch(18% .02 20 / .14); padding: 8px;
+    display: flex; flex-direction: column; gap: 2px; z-index: 60;
+    animation: rspFadeUp .18s var(--rsp-ease);
+  }
+  .rsp-menu-panel::before {
+    content: ''; position: absolute; bottom: 100%; left: 0; right: 0; height: 12px;
+  }
+  .rsp-menu-item {
+    display: block; font-size: .84rem; color: var(--rsp-text-muted);
+    text-decoration: none; padding: 8px 12px; border-radius: 8px; transition: background .15s, color .15s;
+    white-space: nowrap;
+  }
+  .rsp-menu-item:hover { background: var(--rsp-bg-warm); color: var(--rsp-text); }
+  .rsp-menu-item.rsp-nav-active { color: var(--rsp-primary); font-weight: 600; background: var(--rsp-primary-light); }
+
+  /* Mobile grouped menu */
+  .rsp-mobile-group { padding: 8px 0; border-top: 1px solid var(--rsp-border); }
+  .rsp-mobile-group:first-child { border-top: none; }
+  .rsp-mobile-group-label {
+    font-size: .74rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--rsp-text-soft); padding: 6px 4px;
+  }
+  .rsp-mobile-group a {
+    display: block; font-size: .9rem; color: var(--rsp-text-muted);
+    text-decoration: none; padding: 8px 14px; transition: color .2s;
+  }
+  .rsp-mobile-group a:hover { color: var(--rsp-text); }
+  @media (max-width: 800px) { .rsp-menus { display: none; } }
 `;
 
 
@@ -868,30 +918,107 @@ const AVATAR_PATHS = [
   "/rsp/faq",
 ];
 
-function AreaSwitcher() {
+function isAvatarPath(pathname: string) {
+  return AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
+}
+
+type AreaLink = { to: string; label: string; exact?: boolean };
+type AreaMenu = {
+  label: string;
+  to: string;
+  match: (pathname: string) => boolean;
+  links: AreaLink[];
+};
+
+const areaMenus: AreaMenu[] = [
+  {
+    label: "Love Key Link",
+    to: "/",
+    match: (p) => p === "/",
+    links: [{ to: "/", label: "Home", exact: true }],
+  },
+  {
+    label: "RSP",
+    to: "/rsp",
+    match: (p) => p !== "/" && !isAvatarPath(p),
+    links: [
+      { to: "/rsp", label: "Overview", exact: true },
+      { to: "/rsp/principles", label: "Principles" },
+      { to: "/rsp/implementations", label: "Implementations" },
+      { to: "/rsp/event-token", label: "Event Token" },
+      { to: "/rsp/for-developers", label: "Developers" },
+      { to: "/rsp/governance", label: "Governance" },
+    ],
+  },
+  {
+    label: "Identity Avatars",
+    to: "/rsp/avatars",
+    match: isAvatarPath,
+    links: [
+      { to: "/rsp/avatars", label: "Overview", exact: true },
+      { to: "/rsp/how-it-works", label: "How it works" },
+      { to: "/rsp/dimensions", label: "Dimensions" },
+      { to: "/rsp/checklist", label: "Checklist" },
+      { to: "/rsp/faq", label: "FAQ" },
+    ],
+  },
+];
+
+function AreaMenus() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isAvatars = AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
-  const isHome = pathname === "/";
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
   return (
-    <div className="rsp-areabar">
-      <div className="rsp-areabar-inner">
-        <Link to="/" className={`rsp-area${isHome ? " rsp-area-active" : ""}`}>
-          Love Key Link
-        </Link>
-        <Link
-          to="/rsp"
-          className={`rsp-area${!isHome && !isAvatars ? " rsp-area-active" : ""}`}
-        >
-          RSP
-        </Link>
-        <Link
-          to="/rsp/avatars"
-          className={`rsp-area${isAvatars ? " rsp-area-active" : ""}`}
-        >
-          Identity Avatars
-        </Link>
-      </div>
-    </div>
+    <ul className="rsp-menus" onMouseLeave={() => setOpenIdx(null)}>
+      {areaMenus.map((menu, i) => {
+        const current = menu.match(pathname);
+        const single = menu.links.length <= 1;
+        return (
+          <li
+            key={menu.label}
+            className="rsp-menu"
+            data-open={openIdx === i}
+            onMouseEnter={() => setOpenIdx(i)}
+          >
+            {single ? (
+              <Link
+                to={menu.to}
+                className={`rsp-menu-trigger${current ? " rsp-menu-current" : ""}`}
+              >
+                {menu.label}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                className={`rsp-menu-trigger${current ? " rsp-menu-current" : ""}`}
+                aria-expanded={openIdx === i}
+                onClick={() => setOpenIdx((o) => (o === i ? null : i))}
+              >
+                {menu.label}
+                <span className="rsp-menu-caret" aria-hidden="true" />
+              </button>
+            )}
+            {!single && openIdx === i && (
+              <div className="rsp-menu-panel" role="menu">
+                {menu.links.map((l) => (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    role="menuitem"
+                    className="rsp-menu-item"
+                    activeProps={{ className: "rsp-menu-item rsp-nav-active" }}
+                    activeOptions={{ exact: l.exact }}
+                    onClick={() => setOpenIdx(null)}
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
@@ -957,20 +1084,8 @@ function Breadcrumbs() {
 
 
 
-const navLinks = [
-  { to: "/rsp", label: "Overview", exact: true },
-  { to: "/rsp/principles", label: "Principles", exact: false },
-  { to: "/rsp/how-it-works", label: "How it works", exact: false },
-  { to: "/rsp/dimensions", label: "Dimensions", exact: false },
-  { to: "/rsp/checklist", label: "Checklist", exact: false },
-  { to: "/rsp/implementations", label: "Implementations", exact: false },
-  { to: "/rsp/event-token", label: "Event Token", exact: false },
-  { to: "/rsp/for-developers", label: "Developers", exact: false },
-  { to: "/rsp/governance", label: "Governance", exact: false },
-  { to: "/rsp/faq", label: "FAQ", exact: false },
-] as const;
-
 // ─── Layout shell ────────────────────────────────────────────────────────────
+
 
 function RspLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -991,24 +1106,16 @@ function RspLayout() {
               <span className="rsp-nav-logo-sub">/ RSP</span>
             </span>
           </Link>
-          <ul className="rsp-nav-links">
-            {navLinks.map((l) => (
-              <li key={l.to}>
-                <Link
-                  to={l.to}
-                  activeProps={{ className: "rsp-nav-active" }}
-                  activeOptions={{ exact: l.exact }}
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf">
-                White Paper
-              </a>
-            </li>
-          </ul>
+          <div className="rsp-menus-wrap">
+            <AreaMenus />
+            <a
+              className="rsp-nav-cta"
+              href={whitepaperAsset.url}
+              download="rsp-whitepaper.pdf"
+            >
+              White Paper
+            </a>
+          </div>
 
           <button
             type="button"
@@ -1024,29 +1131,35 @@ function RspLayout() {
         </div>
         {menuOpen && (
           <div className="rsp-nav-mobile">
-            {navLinks.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                activeProps={{ className: "rsp-nav-active" }}
-                activeOptions={{ exact: l.exact }}
+            {areaMenus.map((menu) => (
+              <div key={menu.label} className="rsp-mobile-group">
+                <div className="rsp-mobile-group-label">{menu.label}</div>
+                {menu.links.map((l) => (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    activeProps={{ className: "rsp-nav-active" }}
+                    activeOptions={{ exact: l.exact }}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            ))}
+            <div className="rsp-mobile-group">
+              <a
+                href={whitepaperAsset.url}
+                download="rsp-whitepaper.pdf"
                 onClick={() => setMenuOpen(false)}
               >
-                {l.label}
-              </Link>
-            ))}
-            <a
-              href={whitepaperAsset.url}
-              download="rsp-whitepaper.pdf"
-              onClick={() => setMenuOpen(false)}
-            >
-              White Paper
-            </a>
+                White Paper
+              </a>
+            </div>
           </div>
         )}
       </nav>
 
-      <AreaSwitcher />
       <Breadcrumbs />
 
       <Outlet />

@@ -1271,8 +1271,11 @@ function RspLayout() {
       </nav>
 
       <Breadcrumbs />
+      <ClusterPager variant="header" />
 
       <Outlet />
+
+      <ClusterPager variant="footer" />
 
       {/* FOOTER */}
       <footer className="rsp-footer">

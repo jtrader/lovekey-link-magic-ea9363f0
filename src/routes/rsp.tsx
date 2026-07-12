@@ -856,6 +856,7 @@ function RSPPage() {
       "protocol",
       "journey",
       "consent",
+      "avatars",
       "install",
       "burn",
       "verticals",
@@ -887,6 +888,7 @@ function RSPPage() {
     protocol: "Protocol",
     journey: "Journey",
     consent: "Consent",
+    avatars: "Avatars",
     install: "Install",
     burn: "Burn Clause",
     verticals: "Verticals",
@@ -940,6 +942,11 @@ function RSPPage() {
             <li>
               <a href="#consent" className={navActive("consent")}>
                 Consent
+              </a>
+            </li>
+            <li>
+              <a href="#avatars" className={navActive("avatars")}>
+                Avatars
               </a>
             </li>
             <li>
@@ -1000,6 +1007,9 @@ function RSPPage() {
             </a>
             <a href="#consent" className={navActive("consent")} onClick={() => setMenuOpen(false)}>
               Consent
+            </a>
+            <a href="#avatars" className={navActive("avatars")} onClick={() => setMenuOpen(false)}>
+              Avatars
             </a>
             <a href="#burn" className={navActive("burn")} onClick={() => setMenuOpen(false)}>
               Burn Clause
@@ -1313,7 +1323,68 @@ function RSPPage() {
         </div>
       </section>
 
-      {/* INSTALL */}
+      {/* AVATARS */}
+      <section className="rsp-section" id="avatars">
+        <div className="rsp-section-header">
+          <div className="rsp-eyebrow">Represented identity</div>
+          <h2 className="rsp-h2">Avatars are how people show up online now.</h2>
+          <p className="rsp-lead">
+            Most online interaction happens through a represented self — a name and picture, a
+            curated profile, a creator persona, a voice, and increasingly an AI stand-in that can
+            act on someone's behalf. RSP treats that avatar as something the person owns and
+            controls, not something a platform can quietly reuse.
+          </p>
+        </div>
+        <div className="rsp-tier-grid">
+          {[
+            {
+              n: "01",
+              name: "Why avatars matter",
+              desc: "Reputation, relationships and trust increasingly ride on the avatar, not the raw account behind it.",
+              supply: "identity · presence · persona",
+            },
+            {
+              n: "02",
+              name: "Current-climate stakes",
+              desc: "Impersonation, deepfaked likeness, voice cloning and persona reuse blur the line between a real person and a copy.",
+              supply: "likeness · voice · exposure",
+            },
+            {
+              n: "03",
+              name: "Likeness & voice grants",
+              desc: "Visual and voice likeness is projected only with active, context-scoped consent — never a permanent grant.",
+              supply: "likeness_grants · voice_grants",
+            },
+            {
+              n: "04",
+              name: "AI stand-ins",
+              desc: "Whether an AI twin may speak or act for you is an explicit permission, applied per context and per session.",
+              supply: "ai_twin · agency_delegation",
+            },
+            {
+              n: "05",
+              name: "Presence & appearance",
+              desc: "Presence signals control how an avatar appears live to others, so being seen never means being surveilled.",
+              supply: "presence_states · visibility",
+            },
+            {
+              n: "06",
+              name: "Revocation",
+              desc: "A represented self is withdrawn the same way as any other grant — revoke consent and the projection stops.",
+              supply: "consent_events · revocation",
+            },
+          ].map((t) => (
+            <div className="rsp-tier-card" key={t.name}>
+              <div className="rsp-tier-num">{t.n}</div>
+              <div className="rsp-tier-name">{t.name}</div>
+              <div className="rsp-tier-desc">{t.desc}</div>
+              <div className="rsp-tier-supply">{t.supply}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+
       <section className="rsp-section" id="install">
         <div className="rsp-section-header">
           <div className="rsp-eyebrow">Install</div>

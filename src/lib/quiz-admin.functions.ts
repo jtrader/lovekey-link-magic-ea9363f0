@@ -68,11 +68,6 @@ export type QuizAttempt = {
 
 export const getQuizAttempts = createServerFn({ method: "GET" }).handler(
   async (): Promise<{ authorized: boolean; attempts: QuizAttempt[] }> => {
-    const session = await useSession<AdminSession>(sessionConfig());
-    if (!session.data.admin) {
-      return { authorized: false, attempts: [] };
-    }
-
     const { supabaseAdmin } = await import(
       "@/integrations/supabase/client.server"
     );

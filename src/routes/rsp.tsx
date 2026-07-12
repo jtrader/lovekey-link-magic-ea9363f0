@@ -1036,6 +1036,7 @@ const PAGE_LABELS: Record<string, string> = {
   "/rsp/governance": "Governance",
   "/rsp/faq": "FAQ",
   "/rsp/avatars": "Overview",
+  "/rsp/spec-check": "Spec checklist",
 };
 
 function Breadcrumbs() {

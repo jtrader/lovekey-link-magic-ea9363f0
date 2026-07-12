@@ -17,6 +17,15 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RspIndexRouteImport } from './routes/rsp.index'
+import { Route as RspPrinciplesRouteImport } from './routes/rsp.principles'
+import { Route as RspImplementationsRouteImport } from './routes/rsp.implementations'
+import { Route as RspHowItWorksRouteImport } from './routes/rsp.how-it-works'
+import { Route as RspGovernanceRouteImport } from './routes/rsp.governance'
+import { Route as RspForDevelopersRouteImport } from './routes/rsp.for-developers'
+import { Route as RspFaqRouteImport } from './routes/rsp.faq'
+import { Route as RspEventTokenRouteImport } from './routes/rsp.event-token'
+import { Route as RspDimensionsRouteImport } from './routes/rsp.dimensions'
 import { Route as RTokenRouteImport } from './routes/r.$token'
 import { Route as QuizAdminRouteImport } from './routes/quiz_.admin'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
@@ -64,6 +73,51 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RspIndexRoute = RspIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspPrinciplesRoute = RspPrinciplesRouteImport.update({
+  id: '/principles',
+  path: '/principles',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspImplementationsRoute = RspImplementationsRouteImport.update({
+  id: '/implementations',
+  path: '/implementations',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspHowItWorksRoute = RspHowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspGovernanceRoute = RspGovernanceRouteImport.update({
+  id: '/governance',
+  path: '/governance',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspForDevelopersRoute = RspForDevelopersRouteImport.update({
+  id: '/for-developers',
+  path: '/for-developers',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspFaqRoute = RspFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspEventTokenRoute = RspEventTokenRouteImport.update({
+  id: '/event-token',
+  path: '/event-token',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspDimensionsRoute = RspDimensionsRouteImport.update({
+  id: '/dimensions',
+  path: '/dimensions',
+  getParentRoute: () => RspRoute,
+} as any)
 const RTokenRoute = RTokenRouteImport.update({
   id: '/r/$token',
   path: '/r/$token',
@@ -106,7 +160,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
-  '/rsp': typeof RspRoute
+  '/rsp': typeof RspRouteWithChildren
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app': typeof AuthenticatedAppRoute
@@ -114,6 +168,15 @@ export interface FileRoutesByFullPath {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/dimensions': typeof RspDimensionsRoute
+  '/rsp/event-token': typeof RspEventTokenRoute
+  '/rsp/faq': typeof RspFaqRoute
+  '/rsp/for-developers': typeof RspForDevelopersRoute
+  '/rsp/governance': typeof RspGovernanceRoute
+  '/rsp/how-it-works': typeof RspHowItWorksRoute
+  '/rsp/implementations': typeof RspImplementationsRoute
+  '/rsp/principles': typeof RspPrinciplesRoute
+  '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
@@ -122,7 +185,6 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
-  '/rsp': typeof RspRoute
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app': typeof AuthenticatedAppRoute
@@ -130,6 +192,15 @@ export interface FileRoutesByTo {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/dimensions': typeof RspDimensionsRoute
+  '/rsp/event-token': typeof RspEventTokenRoute
+  '/rsp/faq': typeof RspFaqRoute
+  '/rsp/for-developers': typeof RspForDevelopersRoute
+  '/rsp/governance': typeof RspGovernanceRoute
+  '/rsp/how-it-works': typeof RspHowItWorksRoute
+  '/rsp/implementations': typeof RspImplementationsRoute
+  '/rsp/principles': typeof RspPrinciplesRoute
+  '/rsp': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
@@ -140,7 +211,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
-  '/rsp': typeof RspRoute
+  '/rsp': typeof RspRouteWithChildren
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
@@ -148,6 +219,15 @@ export interface FileRoutesById {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz_/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/dimensions': typeof RspDimensionsRoute
+  '/rsp/event-token': typeof RspEventTokenRoute
+  '/rsp/faq': typeof RspFaqRoute
+  '/rsp/for-developers': typeof RspForDevelopersRoute
+  '/rsp/governance': typeof RspGovernanceRoute
+  '/rsp/how-it-works': typeof RspHowItWorksRoute
+  '/rsp/implementations': typeof RspImplementationsRoute
+  '/rsp/principles': typeof RspPrinciplesRoute
+  '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
@@ -166,6 +246,15 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp/dimensions'
+    | '/rsp/event-token'
+    | '/rsp/faq'
+    | '/rsp/for-developers'
+    | '/rsp/governance'
+    | '/rsp/how-it-works'
+    | '/rsp/implementations'
+    | '/rsp/principles'
+    | '/rsp/'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
   fileRoutesByTo: FileRoutesByTo
@@ -174,7 +263,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/quiz'
-    | '/rsp'
     | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/app'
@@ -182,6 +270,15 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp/dimensions'
+    | '/rsp/event-token'
+    | '/rsp/faq'
+    | '/rsp/for-developers'
+    | '/rsp/governance'
+    | '/rsp/how-it-works'
+    | '/rsp/implementations'
+    | '/rsp/principles'
+    | '/rsp'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
   id:
@@ -199,6 +296,15 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz_/admin'
     | '/r/$token'
+    | '/rsp/dimensions'
+    | '/rsp/event-token'
+    | '/rsp/faq'
+    | '/rsp/for-developers'
+    | '/rsp/governance'
+    | '/rsp/how-it-works'
+    | '/rsp/implementations'
+    | '/rsp/principles'
+    | '/rsp/'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
   fileRoutesById: FileRoutesById
@@ -209,7 +315,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   LoginRoute: typeof LoginRoute
   QuizRoute: typeof QuizRoute
-  RspRoute: typeof RspRoute
+  RspRoute: typeof RspRouteWithChildren
   SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   InviteTokenRoute: typeof InviteTokenRoute
@@ -277,6 +383,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp/': {
+      id: '/rsp/'
+      path: '/'
+      fullPath: '/rsp/'
+      preLoaderRoute: typeof RspIndexRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/principles': {
+      id: '/rsp/principles'
+      path: '/principles'
+      fullPath: '/rsp/principles'
+      preLoaderRoute: typeof RspPrinciplesRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/implementations': {
+      id: '/rsp/implementations'
+      path: '/implementations'
+      fullPath: '/rsp/implementations'
+      preLoaderRoute: typeof RspImplementationsRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/how-it-works': {
+      id: '/rsp/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/rsp/how-it-works'
+      preLoaderRoute: typeof RspHowItWorksRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/governance': {
+      id: '/rsp/governance'
+      path: '/governance'
+      fullPath: '/rsp/governance'
+      preLoaderRoute: typeof RspGovernanceRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/for-developers': {
+      id: '/rsp/for-developers'
+      path: '/for-developers'
+      fullPath: '/rsp/for-developers'
+      preLoaderRoute: typeof RspForDevelopersRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/faq': {
+      id: '/rsp/faq'
+      path: '/faq'
+      fullPath: '/rsp/faq'
+      preLoaderRoute: typeof RspFaqRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/event-token': {
+      id: '/rsp/event-token'
+      path: '/event-token'
+      fullPath: '/rsp/event-token'
+      preLoaderRoute: typeof RspEventTokenRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/dimensions': {
+      id: '/rsp/dimensions'
+      path: '/dimensions'
+      fullPath: '/rsp/dimensions'
+      preLoaderRoute: typeof RspDimensionsRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/r/$token': {
       id: '/r/$token'
       path: '/r/$token'
@@ -343,13 +512,39 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface RspRouteChildren {
+  RspDimensionsRoute: typeof RspDimensionsRoute
+  RspEventTokenRoute: typeof RspEventTokenRoute
+  RspFaqRoute: typeof RspFaqRoute
+  RspForDevelopersRoute: typeof RspForDevelopersRoute
+  RspGovernanceRoute: typeof RspGovernanceRoute
+  RspHowItWorksRoute: typeof RspHowItWorksRoute
+  RspImplementationsRoute: typeof RspImplementationsRoute
+  RspPrinciplesRoute: typeof RspPrinciplesRoute
+  RspIndexRoute: typeof RspIndexRoute
+}
+
+const RspRouteChildren: RspRouteChildren = {
+  RspDimensionsRoute: RspDimensionsRoute,
+  RspEventTokenRoute: RspEventTokenRoute,
+  RspFaqRoute: RspFaqRoute,
+  RspForDevelopersRoute: RspForDevelopersRoute,
+  RspGovernanceRoute: RspGovernanceRoute,
+  RspHowItWorksRoute: RspHowItWorksRoute,
+  RspImplementationsRoute: RspImplementationsRoute,
+  RspPrinciplesRoute: RspPrinciplesRoute,
+  RspIndexRoute: RspIndexRoute,
+}
+
+const RspRouteWithChildren = RspRoute._addFileChildren(RspRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AdminRoute: AdminRoute,
   LoginRoute: LoginRoute,
   QuizRoute: QuizRoute,
-  RspRoute: RspRoute,
+  RspRoute: RspRouteWithChildren,
   SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   InviteTokenRoute: InviteTokenRoute,

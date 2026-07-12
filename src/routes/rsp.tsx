@@ -341,6 +341,27 @@ const css = `
     }
   }
 
+  /* AVATAR FAQ */
+  .rsp-faq { max-width: 760px; margin: 40px auto 0; }
+  .rsp-faq-item {
+    border: 1px solid var(--rsp-border); border-radius: var(--rsp-radius);
+    background: var(--rsp-surface); margin-bottom: 10px; overflow: hidden;
+  }
+  .rsp-faq-item[open] { border-color: var(--rsp-border-strong); }
+  .rsp-faq-q {
+    list-style: none; cursor: pointer; padding: 18px 22px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    font-size: .95rem; font-weight: 500; color: var(--rsp-text); letter-spacing: -.01em;
+  }
+  .rsp-faq-q::-webkit-details-marker { display: none; }
+  .rsp-faq-q::after {
+    content: "+"; font-size: 1.2rem; color: var(--rsp-text-muted);
+    transition: transform .2s var(--rsp-ease); flex-shrink: 0;
+  }
+  .rsp-faq-item[open] .rsp-faq-q::after { transform: rotate(45deg); color: var(--rsp-primary); }
+  .rsp-faq-a { padding: 0 22px 20px; font-size: .88rem; line-height: 1.6; color: var(--rsp-text-muted); }
+
+
 
   /* TAGLINE STRIP */
   .rsp-tagline-strip {

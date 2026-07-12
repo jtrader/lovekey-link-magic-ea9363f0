@@ -3,6 +3,7 @@ import { useState } from "react";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import { trackEvent } from "@/lib/analytics";
+import { getCaseStudy } from "@/lib/case-studies";
 
 export const Route = createFileRoute("/rsp")({
   head: () => ({

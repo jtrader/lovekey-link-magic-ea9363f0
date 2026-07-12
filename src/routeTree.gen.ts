@@ -18,6 +18,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RspIndexRouteImport } from './routes/rsp.index'
+import { Route as RspPrinciplesRouteImport } from './routes/rsp.principles'
 import { Route as RTokenRouteImport } from './routes/r.$token'
 import { Route as QuizAdminRouteImport } from './routes/quiz_.admin'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
@@ -70,6 +71,11 @@ const RspIndexRoute = RspIndexRouteImport.update({
   path: '/',
   getParentRoute: () => RspRoute,
 } as any)
+const RspPrinciplesRoute = RspPrinciplesRouteImport.update({
+  id: '/principles',
+  path: '/principles',
+  getParentRoute: () => RspRoute,
+} as any)
 const RTokenRoute = RTokenRouteImport.update({
   id: '/r/$token',
   path: '/r/$token',
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -136,6 +143,7 @@ export interface FileRoutesByTo {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -155,6 +163,7 @@ export interface FileRoutesById {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz_/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -174,6 +183,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp/principles'
     | '/rsp/'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
@@ -190,6 +200,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp/principles'
     | '/rsp'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
@@ -208,6 +219,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz_/admin'
     | '/r/$token'
+    | '/rsp/principles'
     | '/rsp/'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
@@ -294,6 +306,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspIndexRouteImport
       parentRoute: typeof RspRoute
     }
+    '/rsp/principles': {
+      id: '/rsp/principles'
+      path: '/principles'
+      fullPath: '/rsp/principles'
+      preLoaderRoute: typeof RspPrinciplesRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/r/$token': {
       id: '/r/$token'
       path: '/r/$token'
@@ -361,10 +380,12 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface RspRouteChildren {
+  RspPrinciplesRoute: typeof RspPrinciplesRoute
   RspIndexRoute: typeof RspIndexRoute
 }
 
 const RspRouteChildren: RspRouteChildren = {
+  RspPrinciplesRoute: RspPrinciplesRoute,
   RspIndexRoute: RspIndexRoute,
 }
 

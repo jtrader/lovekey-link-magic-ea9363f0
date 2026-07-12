@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useRef, useState } from "react";
 
 export const Route = createFileRoute("/rsp/how-it-works")({
   head: () => ({
@@ -20,9 +21,69 @@ export const Route = createFileRoute("/rsp/how-it-works")({
   component: RspHowItWorks,
 });
 
+const steps = [
+  {
+    label: "Claim",
+    anchor: "avatar-claim",
+    desc: "Your avatar — name, likeness, voice or AI stand-in — is bound to you as a represented self you own.",
+  },
+  {
+    label: "Grant",
+    anchor: "avatar-grant",
+    desc: "You allow a specific context to project that avatar, scoped to where, how and for how long it applies.",
+  },
+  {
+    label: "Project",
+    anchor: "avatar-project",
+    desc: "RSP renders only what you permitted — presence signals show you live without exposing more than agreed.",
+  },
+  {
+    label: "Revoke",
+    anchor: "avatar-revoke",
+    desc: "Withdraw consent and the projection stops everywhere it reached, the same as any other RSP grant.",
+  },
+];
+
+const details = [
+  {
+    id: "avatar-claim",
+    step: "01",
+    title: "Claim — binding your represented self",
+    body: "Claiming establishes that a given avatar is yours. Your display name, picture, likeness, recorded voice and any AI stand-in are linked to your core identity in the RSP model, so every later grant references one owner. Nothing is shared at this stage — claiming is about ownership, not exposure. This is the identity-context layer described under Consent modules, applied to representation rather than raw account data.",
+  },
+  {
+    id: "avatar-grant",
+    step: "02",
+    title: "Grant — scoped, revocable permission",
+    body: "A grant lets a specific context project part of your avatar. Each grant is scoped by where it applies (which hub or product), how it may be used (view-only likeness, live voice, an acting AI twin), and for how long (a single session, a fixed window, or until revoked). Grants are additive and never permanent — likeness and voice are always time- or session-bounded rather than a blanket hand-over.",
+  },
+  {
+    id: "avatar-project",
+    step: "03",
+    title: "Project — rendering only what you allowed",
+    body: "When others encounter you, RSP renders only the facets your active grants permit. Presence signals control how your avatar appears live — available, busy, quiet — so being seen never means being surveilled. Identity-exposure protection guards against unwanted visual or voice similarity, keeping an AI representation clearly tied to, and bounded by, your consent.",
+  },
+  {
+    id: "avatar-revoke",
+    step: "04",
+    title: "Revoke — withdrawing a represented self",
+    body: "Revocation withdraws a grant the same way it withdraws any other RSP permission. The projection stops everywhere the grant reached, AI stand-ins lose the authority to act or speak for you, and the change is recorded in the consent ledger without becoming a surveillance dashboard. Consent is a living state you can end at any time, not a one-time checkbox.",
+  },
+];
+
 function RspHowItWorks() {
+  const [active, setActive] = useState<string>(details[0].id);
+  const detailRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const select = (id: string) => {
+    setActive(id);
+    detailRefs.current[id]?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
   return (
     <section className="rsp-section" id="avatars">
+      <style dangerouslySetInnerHTML={{ __html: walkCss }} />
+
       <div className="rsp-section-header">
         <div className="rsp-eyebrow">How it works</div>
         <h2 className="rsp-h2">Avatars are how people show up online now.</h2>
@@ -39,68 +100,39 @@ function RspHowItWorks() {
         </p>
       </div>
 
-      <div className="rsp-steps">
-        {[
-          {
-            label: "Claim",
-            anchor: "avatar-claim",
-            desc: "Your avatar — name, likeness, voice or AI stand-in — is bound to you as a represented self you own.",
-          },
-          {
-            label: "Grant",
-            anchor: "avatar-grant",
-            desc: "You allow a specific context to project that avatar, scoped to where, how and for how long it applies.",
-          },
-          {
-            label: "Project",
-            anchor: "avatar-project",
-            desc: "RSP renders only what you permitted — presence signals show you live without exposing more than agreed.",
-          },
-          {
-            label: "Revoke",
-            anchor: "avatar-revoke",
-            desc: "Withdraw consent and the projection stops everywhere it reached, the same as any other RSP grant.",
-          },
-        ].map((s, i) => (
-          <a className="rsp-step" href={`#${s.anchor}`} key={s.label}>
+      <p className="rsp-walk-hint">Select a step to see how it works ↓</p>
+
+      <div className="rsp-steps" role="tablist" aria-label="Avatar lifecycle steps">
+        {steps.map((s, i) => (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={active === s.anchor}
+            aria-controls={s.anchor}
+            className={`rsp-step${active === s.anchor ? " rsp-step-active" : ""}`}
+            onClick={() => select(s.anchor)}
+            key={s.label}
+          >
             <div className="rsp-step-num">{i + 1}</div>
             <div className="rsp-step-label">
               {s.label}
-              <span className="rsp-step-more">More detail →</span>
+              <span className="rsp-step-more">View detail →</span>
             </div>
             <div className="rsp-step-desc">{s.desc}</div>
-          </a>
+          </button>
         ))}
       </div>
 
       <div className="rsp-avatar-details">
-        {[
-          {
-            id: "avatar-claim",
-            step: "01",
-            title: "Claim — binding your represented self",
-            body: "Claiming establishes that a given avatar is yours. Your display name, picture, likeness, recorded voice and any AI stand-in are linked to your core identity in the RSP model, so every later grant references one owner. Nothing is shared at this stage — claiming is about ownership, not exposure. This is the identity-context layer described under Consent modules, applied to representation rather than raw account data.",
-          },
-          {
-            id: "avatar-grant",
-            step: "02",
-            title: "Grant — scoped, revocable permission",
-            body: "A grant lets a specific context project part of your avatar. Each grant is scoped by where it applies (which hub or product), how it may be used (view-only likeness, live voice, an acting AI twin), and for how long (a single session, a fixed window, or until revoked). Grants are additive and never permanent — likeness and voice are always time- or session-bounded rather than a blanket hand-over.",
-          },
-          {
-            id: "avatar-project",
-            step: "03",
-            title: "Project — rendering only what you allowed",
-            body: "When others encounter you, RSP renders only the facets your active grants permit. Presence signals control how your avatar appears live — available, busy, quiet — so being seen never means being surveilled. Identity-exposure protection guards against unwanted visual or voice similarity, keeping an AI representation clearly tied to, and bounded by, your consent.",
-          },
-          {
-            id: "avatar-revoke",
-            step: "04",
-            title: "Revoke — withdrawing a represented self",
-            body: "Revocation withdraws a grant the same way it withdraws any other RSP permission. The projection stops everywhere the grant reached, AI stand-ins lose the authority to act or speak for you, and the change is recorded in the consent ledger without becoming a surveillance dashboard. Consent is a living state you can end at any time, not a one-time checkbox.",
-          },
-        ].map((d) => (
-          <div className="rsp-avatar-detail" id={d.id} key={d.id}>
+        {details.map((d) => (
+          <div
+            className={`rsp-avatar-detail${active === d.id ? " rsp-avatar-detail-active" : ""}`}
+            id={d.id}
+            key={d.id}
+            ref={(el) => {
+              detailRefs.current[d.id] = el;
+            }}
+          >
             <div className="rsp-avatar-detail-step">{d.step}</div>
             <div>
               <h3 className="rsp-avatar-detail-title">{d.title}</h3>
@@ -150,3 +182,37 @@ function RspHowItWorks() {
     </section>
   );
 }
+
+const walkCss = `
+  .rsp-walk-hint {
+    text-align: center; font-size: .82rem; color: var(--rsp-text-muted);
+    margin: 0 0 20px;
+  }
+  .rsp-step {
+    cursor: pointer; text-align: left; font: inherit; color: inherit;
+    background: var(--rsp-surface);
+    transition: border-color .2s var(--rsp-ease), box-shadow .2s var(--rsp-ease),
+      transform .2s var(--rsp-ease), background .2s var(--rsp-ease);
+  }
+  .rsp-step:hover { transform: translateY(-2px); }
+  .rsp-step-active {
+    border-color: var(--rsp-primary);
+    box-shadow: 0 0 0 1px var(--rsp-primary), 0 10px 30px -12px var(--rsp-primary-glow);
+  }
+  .rsp-step-active .rsp-step-num {
+    background: var(--rsp-primary); color: #fff; border-color: var(--rsp-primary);
+  }
+  .rsp-step-active .rsp-step-more { opacity: 1; color: var(--rsp-primary); }
+
+  .rsp-avatar-detail {
+    transition: border-color .3s var(--rsp-ease), box-shadow .3s var(--rsp-ease),
+      background .3s var(--rsp-ease);
+    scroll-margin-top: 90px;
+  }
+  .rsp-avatar-detail-active {
+    border-color: var(--rsp-primary);
+    background: var(--rsp-bg-warm);
+    box-shadow: 0 0 0 1px var(--rsp-primary), 0 16px 40px -18px var(--rsp-primary-glow);
+  }
+  .rsp-avatar-detail-active .rsp-avatar-detail-step { color: var(--rsp-primary); }
+`;

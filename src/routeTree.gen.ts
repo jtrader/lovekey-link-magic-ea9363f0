@@ -32,6 +32,7 @@ import { Route as RspAvatarsRouteImport } from './routes/rsp.avatars'
 import { Route as RTokenRouteImport } from './routes/r.$token'
 import { Route as QuizAdminRouteImport } from './routes/quiz_.admin'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as ApiAvatarGenerateRouteImport } from './routes/api/avatar-generate'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
 import { Route as ApiPublicQuizSubmitRouteImport } from './routes/api/public/quiz-submit'
@@ -151,6 +152,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAvatarGenerateRoute = ApiAvatarGenerateRouteImport.update({
+  id: '/api/avatar-generate',
+  path: '/api/avatar-generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -183,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app': typeof AuthenticatedAppRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/api/avatar-generate': typeof ApiAvatarGenerateRoute
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
@@ -210,6 +217,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app': typeof AuthenticatedAppRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/api/avatar-generate': typeof ApiAvatarGenerateRoute
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
@@ -240,6 +248,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/api/avatar-generate': typeof ApiAvatarGenerateRoute
   '/invite/$token': typeof InviteTokenRoute
   '/quiz_/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
@@ -270,6 +279,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/app'
     | '/onboarding'
+    | '/api/avatar-generate'
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
@@ -297,6 +307,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/app'
     | '/onboarding'
+    | '/api/avatar-generate'
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
@@ -326,6 +337,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/_authenticated/app'
     | '/_authenticated/onboarding'
+    | '/api/avatar-generate'
     | '/invite/$token'
     | '/quiz_/admin'
     | '/r/$token'
@@ -354,6 +366,7 @@ export interface RootRouteChildren {
   RspRoute: typeof RspRouteWithChildren
   SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiAvatarGenerateRoute: typeof ApiAvatarGenerateRoute
   InviteTokenRoute: typeof InviteTokenRoute
   QuizAdminRoute: typeof QuizAdminRoute
   RTokenRoute: typeof RTokenRoute
@@ -524,6 +537,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/avatar-generate': {
+      id: '/api/avatar-generate'
+      path: '/api/avatar-generate'
+      fullPath: '/api/avatar-generate'
+      preLoaderRoute: typeof ApiAvatarGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/onboarding': {
       id: '/_authenticated/onboarding'
       path: '/onboarding'
@@ -610,6 +630,7 @@ const rootRouteChildren: RootRouteChildren = {
   RspRoute: RspRouteWithChildren,
   SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiAvatarGenerateRoute: ApiAvatarGenerateRoute,
   InviteTokenRoute: InviteTokenRoute,
   QuizAdminRoute: QuizAdminRoute,
   RTokenRoute: RTokenRoute,

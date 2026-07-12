@@ -138,6 +138,107 @@ function RspDimensions() {
           ))}
         </div>
       </section>
+
+      <section className="rsp-section" id="reference">
+        <style dangerouslySetInnerHTML={{ __html: tableCss }} />
+        <div className="rsp-section-header">
+          <div className="rsp-eyebrow">Structured reference</div>
+          <h2 className="rsp-h2">The consent dimensions at a glance.</h2>
+          <p className="rsp-lead">
+            Every dimension RSP tracks is scoped and revocable. This table is the quick reference —
+            what each dimension governs, a concrete example, and how it is withdrawn.
+          </p>
+        </div>
+        <div className="rsp-table-wrap">
+          <table className="rsp-table">
+            <thead>
+              <tr>
+                <th>Dimension</th>
+                <th>What it governs</th>
+                <th>Example</th>
+                <th>Revocability</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                {
+                  d: "Permissions & visibility",
+                  g: "Which people or hubs can see which parts of your profile and data.",
+                  e: "Let your care circle see your calendar, but not your location.",
+                  r: "Revoke per grant; visibility stops immediately.",
+                },
+                {
+                  d: "Identity context",
+                  g: "Your core profile plus contextual roles resolved per hub.",
+                  e: "You appear as \u201cCoach\u201d in one hub and \u201cDad\u201d in another.",
+                  r: "Leave a hub or drop a role; context resolution updates.",
+                },
+                {
+                  d: "Presence",
+                  g: "How your live state (available, busy, quiet) is shown to others.",
+                  e: "Show \u201cavailable\u201d to your household, nothing to everyone else.",
+                  r: "Change or clear presence at any time; scoped per audience.",
+                },
+                {
+                  d: "Identity exposure",
+                  g: "Protection of visual and voice likeness against unwanted similarity.",
+                  e: "An AI stand-in may read a message in your voice only during a session.",
+                  r: "Session- or time-bounded; revoke and the likeness stops projecting.",
+                },
+                {
+                  d: "Support signals",
+                  g: "How a request for help routes to the right circle without broadcasting distress.",
+                  e: "A quiet \u201cneed help\u201d reaches your emergency circle only.",
+                  r: "Withdraw the signal; routing ends and nothing is retained as a score.",
+                },
+              ].map((row) => (
+                <tr key={row.d}>
+                  <td data-label="Dimension">
+                    <strong>{row.d}</strong>
+                  </td>
+                  <td data-label="What it governs">{row.g}</td>
+                  <td data-label="Example">{row.e}</td>
+                  <td data-label="Revocability">{row.r}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </>
   );
 }
+
+const tableCss = `
+  .rsp-table-wrap { max-width: 1000px; margin: 0 auto; overflow-x: auto; }
+  .rsp-table {
+    width: 100%; border-collapse: collapse; font-size: .88rem;
+    background: var(--rsp-surface); border: 1px solid var(--rsp-border);
+    border-radius: var(--rsp-radius); overflow: hidden;
+  }
+  .rsp-table th {
+    text-align: left; font-size: .72rem; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--rsp-text-muted);
+    background: var(--rsp-bg-warm); padding: 14px 16px;
+    border-bottom: 1px solid var(--rsp-border);
+  }
+  .rsp-table td {
+    padding: 14px 16px; vertical-align: top; color: var(--rsp-text-muted);
+    line-height: 1.55; border-bottom: 1px solid var(--rsp-border);
+  }
+  .rsp-table tr:last-child td { border-bottom: none; }
+  .rsp-table td strong { color: var(--rsp-text); font-weight: 600; }
+  @media (max-width: 720px) {
+    .rsp-table, .rsp-table thead, .rsp-table tbody, .rsp-table tr, .rsp-table td { display: block; width: 100%; }
+    .rsp-table thead { display: none; }
+    .rsp-table tr { border-bottom: 1px solid var(--rsp-border-strong); padding: 8px 0; }
+    .rsp-table tr:last-child { border-bottom: none; }
+    .rsp-table td { border: none; padding: 6px 16px; }
+    .rsp-table td::before {
+      content: attr(data-label); display: block;
+      font-size: .68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--rsp-text-soft); margin-bottom: 2px;
+    }
+  }
+`;
+

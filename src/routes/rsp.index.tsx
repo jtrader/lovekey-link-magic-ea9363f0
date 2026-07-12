@@ -167,7 +167,40 @@ function RspLanding() {
         </p>
       </div>
 
-      {/* EVENT TOKEN SUB-HERO */}
+      {/* WHAT RSP IS / IS NOT — TRUST SECTION */}
+      <section className="rsp-section" id="what-rsp-is">
+        <style dangerouslySetInnerHTML={{ __html: trustCss }} />
+        <div className="rsp-section-header">
+          <div className="rsp-eyebrow">A trust document, not just a spec</div>
+          <h2 className="rsp-h2">What RSP is — and what it is not.</h2>
+          <p className="rsp-lead">
+            RSP is the consent and coordination layer that governs how personal data, identity and
+            permissions move between people and products across the Love Key ecosystem. Being clear
+            about what it refuses to do matters as much as what it does.
+          </p>
+        </div>
+        <div className="rsp-trust-grid">
+          <div className="rsp-trust-col rsp-trust-is">
+            <div className="rsp-trust-head">RSP is</div>
+            <ul>
+              <li>A consent layer — one profile, many hubs, presence without surveillance.</li>
+              <li>Synchronisation without coercion, with minimisation on by default.</li>
+              <li>Consent as a living, revocable state — never a one-time checkbox.</li>
+              <li>Transparent about what moves between people and products, and why.</li>
+            </ul>
+          </div>
+          <div className="rsp-trust-col rsp-trust-isnot">
+            <div className="rsp-trust-head">RSP is not</div>
+            <ul>
+              <li>Not a surveillance system — it translates behaviour into signals, then burns the source.</li>
+              <li>Not a data-selling mechanism — your data is not a product.</li>
+              <li>Not something that operates without your knowledge or consent.</li>
+              <li>Not a replacement for a product's privacy policy — it is the mechanism, not the legal document.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section className="rsp-subhero">
         <div className="rsp-subhero-inner">
           <div>
@@ -240,3 +273,30 @@ function RspLanding() {
     </>
   );
 }
+
+const trustCss = `
+  .rsp-trust-grid {
+    max-width: 1000px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  .rsp-trust-col {
+    border: 1px solid var(--rsp-border); border-radius: var(--rsp-radius);
+    background: var(--rsp-surface); padding: 24px 26px;
+  }
+  .rsp-trust-is { border-top: 3px solid oklch(62% .17 160); }
+  .rsp-trust-isnot { border-top: 3px solid var(--rsp-primary); }
+  .rsp-trust-head {
+    font-size: .78rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    margin-bottom: 14px; color: var(--rsp-text);
+  }
+  .rsp-trust-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .rsp-trust-col li {
+    position: relative; padding-left: 26px; font-size: .9rem; line-height: 1.55; color: var(--rsp-text-muted);
+  }
+  .rsp-trust-col li::before {
+    position: absolute; left: 0; top: -1px; font-size: 1rem; font-weight: 700;
+  }
+  .rsp-trust-is li::before { content: '✓'; color: oklch(55% .15 160); }
+  .rsp-trust-isnot li::before { content: '✕'; color: var(--rsp-primary); }
+  @media (max-width: 700px) { .rsp-trust-grid { grid-template-columns: 1fr; } }
+`;

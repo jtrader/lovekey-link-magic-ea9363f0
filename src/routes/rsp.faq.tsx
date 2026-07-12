@@ -51,6 +51,23 @@ function RspFaq() {
             q: "What happens to my avatar if I leave a product?",
             a: "Revoking consent withdraws the projection everywhere it reached, just like any other RSP grant. Your represented self stops being rendered in that context rather than lingering after you've gone.",
           },
+          {
+            q: "Does this mean a product like Twinly can see my data on other sites?",
+            a: "No. RSP is built around minimisation and context — data and permissions only move where you have granted them, scoped to a specific hub or product. Cross-site identity means you can be recognised as the same person where you choose, not that any one product can reach across everything you do.",
+          },
+          {
+            q: "Can I revoke access once I've granted it?",
+            a: "Yes. Consent in RSP is a living, revocable state rather than a one-time checkbox. When you revoke a grant, the access ends and any projection it enabled stops everywhere it reached.",
+          },
+          {
+            q: "What happens to my data if I stop using a product?",
+            a: "Revoking your grants withdraws what the product could see or use. Under the burn clause, identifiable source information is removed, cryptographically erased, or irreversibly decoupled once it is no longer necessary — unless retention is required by law, safety, or your explicit consent.",
+          },
+          {
+            q: "Is RSP the same thing as a privacy policy?",
+            a: "No, and the difference matters. RSP is the mechanism — the technical consent and coordination layer that actually governs how data and permissions move. A privacy policy is the legal document that describes a product's data practices. They should cross-reference each other: read the privacy policy of whichever Love Key product you use for the legal terms, and treat RSP as how those commitments are enforced in practice.",
+          },
+
         ].map((f) => (
           <details className="rsp-faq-item" key={f.q}>
             <summary className="rsp-faq-q">{f.q}</summary>

@@ -842,7 +842,21 @@ const css = `
     .rsp-areabar-inner { padding: 8px 1rem; gap: 4px; }
     .rsp-area { padding: 6px 12px; font-size: .74rem; }
   }
+
+  /* BREADCRUMB */
+  .rsp-crumbs {
+    max-width: 1100px; margin: auto;
+    display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+    padding: 12px 2rem 0;
+    font-size: .78rem; color: var(--rsp-text-muted);
+  }
+  .rsp-crumb { color: var(--rsp-text-muted); text-decoration: none; transition: color .2s var(--rsp-ease); }
+  .rsp-crumb:hover { color: var(--rsp-primary); }
+  .rsp-crumb-current { color: var(--rsp-text); font-weight: 600; }
+  .rsp-crumb-sep { color: var(--rsp-text-soft); opacity: .7; }
+  @media (max-width: 600px) { .rsp-crumbs { padding: 10px 1.2rem 0; font-size: .72rem; } }
 `;
+
 
 // ─── Area switcher (3 main site areas) ───────────────────────────────────────
 
@@ -880,6 +894,67 @@ function AreaSwitcher() {
     </div>
   );
 }
+
+// ─── Breadcrumb trail ────────────────────────────────────────────────────────
+
+const PAGE_LABELS: Record<string, string> = {
+  "/rsp": "Overview",
+  "/rsp/principles": "Principles",
+  "/rsp/how-it-works": "How it works",
+  "/rsp/dimensions": "Dimensions",
+  "/rsp/checklist": "Identity checklist",
+  "/rsp/implementations": "Implementations",
+  "/rsp/event-token": "Event Token",
+  "/rsp/for-developers": "For developers",
+  "/rsp/governance": "Governance",
+  "/rsp/faq": "FAQ",
+  "/rsp/avatars": "Overview",
+};
+
+function Breadcrumbs() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAvatars = AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
+
+  const crumbs: { label: string; to?: string }[] = [
+    { label: "Love Key Link", to: "/" },
+  ];
+
+  if (isAvatars) {
+    crumbs.push({ label: "Identity Avatars", to: "/rsp/avatars" });
+    if (pathname !== "/rsp/avatars") {
+      crumbs.push({ label: PAGE_LABELS[pathname] ?? "Page" });
+    }
+  } else {
+    crumbs.push({ label: "RSP", to: "/rsp" });
+    if (pathname !== "/rsp") {
+      crumbs.push({ label: PAGE_LABELS[pathname] ?? "Page" });
+    }
+  }
+
+  // Mark the final crumb as current (no link).
+  const last = crumbs.length - 1;
+
+  return (
+    <nav className="rsp-crumbs" aria-label="Breadcrumb">
+      {crumbs.map((c, i) => (
+        <span key={`${c.label}-${i}`} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+          {i > 0 && <span className="rsp-crumb-sep" aria-hidden="true">/</span>}
+          {i === last || !c.to ? (
+            <span className="rsp-crumb-current" aria-current="page">
+              {c.label}
+            </span>
+          ) : (
+            <Link to={c.to} className="rsp-crumb">
+              {c.label}
+            </Link>
+          )}
+        </span>
+      ))}
+    </nav>
+  );
+}
+
+
 
 
 const navLinks = [
@@ -972,6 +1047,7 @@ function RspLayout() {
       </nav>
 
       <AreaSwitcher />
+      <Breadcrumbs />
 
       <Outlet />
 

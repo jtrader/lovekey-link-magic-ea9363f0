@@ -1120,9 +1120,11 @@ function RSPPage() {
           <p className="rsp-hero-sub">
             RSP is the invisible coordination layer beneath Love Key Link, Love Key Hub and the Love
             Key Help Network. It synchronises consent, permissions, identity context, roles,
-            presence and support signals without making families feel like they are entering a
-            protocol.
+            presence and support signals — and, in an online world where people increasingly show up
+            through avatars, likeness and AI stand-ins, it keeps that represented self tied to the
+            person it belongs to, without making families feel like they are entering a protocol.
           </p>
+
           <div className="rsp-hero-actions">
             <a href="#protocol" className="rsp-btn-primary">
               Explore the protocol →
@@ -1246,8 +1248,11 @@ function RSPPage() {
           <h2 className="rsp-h2">Built on respectful coordination</h2>
           <p className="rsp-lead">
             RSP defines how an application observes, interprets, and forgets — without surveilling,
-            profiling, or coercing anyone.
+            profiling, or coercing anyone. In an online ecosystem where people are experienced
+            through avatars, likeness and AI stand-ins, those same principles govern the represented
+            self as much as the raw data behind it.
           </p>
+
         </div>
         <div className="rsp-principle-grid">
           <PrincipleCard
@@ -1270,7 +1275,13 @@ function RSPPage() {
             title="Portable across systems"
             body="The same protocol applies to humans, AI agents, and hybrid systems wherever coordination meets privacy."
           />
+          <PrincipleCard
+            icon={<IconShield />}
+            title="Avatar sovereignty"
+            body="Your represented self — likeness, voice and AI stand-ins — is projected only with active, revocable consent, never treated as a platform's to reuse."
+          />
         </div>
+
       </section>
 
       {/* USER JOURNEY INTEGRATION */}

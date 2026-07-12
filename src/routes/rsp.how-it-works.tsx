@@ -194,7 +194,8 @@ const walkCss = `
     transition: border-color .2s var(--rsp-ease), box-shadow .2s var(--rsp-ease),
       transform .2s var(--rsp-ease), background .2s var(--rsp-ease);
   }
-  .rsp-step:hover { transform: translateY(-2px); }
+  .rsp-step:hover { transform: translateY(-2px); background: var(--rsp-bg-warm); border-color: var(--rsp-border-strong); }
+  .rsp-step:hover .rsp-step-more, .rsp-step:focus-visible .rsp-step-more { opacity: 1; }
   .rsp-step-active {
     border-color: var(--rsp-primary);
     box-shadow: 0 0 0 1px var(--rsp-primary), 0 10px 30px -12px var(--rsp-primary-glow);

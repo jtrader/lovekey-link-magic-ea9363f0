@@ -1,15 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  adminLogin,
-  adminLogout,
-  getQuizAttempts,
-  type QuizAttempt,
-} from "@/lib/quiz-admin.functions";
+import { getQuizAttempts, type QuizAttempt } from "@/lib/quiz-admin.functions";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 
 export const Route = createFileRoute("/quiz_/admin")({
   head: () => ({

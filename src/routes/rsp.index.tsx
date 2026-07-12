@@ -70,8 +70,11 @@ const sections = [
 function RspLanding() {
   return (
     <>
+      <style dangerouslySetInnerHTML={{ __html: brandCss }} />
+      <div className="rsp-brand">
       {/* HERO */}
       <section className="rsp-hero">
+        <div className="rsp-circuit" aria-hidden="true" />
         <div
           className="rsp-hero-backdrop"
           style={{ backgroundImage: `url(${rspLogo.url})` }}

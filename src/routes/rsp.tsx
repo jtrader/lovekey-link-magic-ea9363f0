@@ -1047,6 +1047,7 @@ function RspLayout() {
       </nav>
 
       <AreaSwitcher />
+      <Breadcrumbs />
 
       <Outlet />
 

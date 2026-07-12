@@ -945,6 +945,11 @@ function RSPPage() {
               </a>
             </li>
             <li>
+              <a href="#avatars" className={navActive("avatars")}>
+                Avatars
+              </a>
+            </li>
+            <li>
               <a href="#burn" className={navActive("burn")}>
                 Burn Clause
               </a>

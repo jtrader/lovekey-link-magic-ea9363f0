@@ -196,6 +196,65 @@ function RspGovernance() {
           </p>
         </div>
       </section>
+
+      <section className="rsp-section" id="versioning">
+        <div className="rsp-section-header">
+          <div className="rsp-eyebrow">Maintenance & versioning</div>
+          <h2 className="rsp-h2">How RSP is maintained.</h2>
+          <p className="rsp-lead">
+            RSP is a living specification. It is versioned so that anyone building on it — inside or
+            beyond the Love Key ecosystem — can rely on a known reference point.
+          </p>
+        </div>
+        <div className="rsp-tier-grid">
+          {[
+            {
+              n: "v1.6",
+              name: "Current version",
+              desc: "The active specification, including the burn clause that mandates destroying identifiable source data.",
+              supply: "Reference: RSP v1.6",
+            },
+            {
+              n: "01",
+              name: "Who maintains it",
+              desc: "RSP is maintained by the Love Key core team, with principles anchored across the HELP Network and Twinly.",
+              supply: "Love Key · HELP Network",
+            },
+            {
+              n: "02",
+              name: "How it changes",
+              desc: "Principles and the spec evolve through reviewed, documented revisions — changes are additive and backward-aware, never silent.",
+              supply: "reviewed · documented",
+            },
+            {
+              n: "03",
+              name: "Versioning approach",
+              desc: "Semantic-style version numbers signal the scope of a change so integrators know what a new release affects.",
+              supply: "major · minor · patch",
+            },
+            {
+              n: "04",
+              name: "Adoption beyond Love Key",
+              desc: "RSP is written to be adoptable by other products and teams, so the spec is kept stable and portable.",
+              supply: "portable · referenceable",
+            },
+            {
+              n: "05",
+              name: "Change log",
+              desc: "Each version records what changed and why, so the trust proposition can be audited over time.",
+              supply: "consent_events · spec_history",
+            },
+          ].map((t) => (
+            <div className="rsp-tier-card" key={t.name}>
+              <div className="rsp-tier-num">{t.n}</div>
+              <div className="rsp-tier-name">{t.name}</div>
+              <div className="rsp-tier-desc">{t.desc}</div>
+              <div className="rsp-tier-supply">{t.supply}</div>
+            </div>
+          ))}
+        </div>
+      </section>
     </>
   );
 }
+

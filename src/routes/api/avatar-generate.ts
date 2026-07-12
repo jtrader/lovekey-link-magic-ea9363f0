@@ -95,18 +95,32 @@ export const Route = createFileRoute("/api/avatar-generate")({
           return json({ error: "Invalid request body." }, 400);
         }
 
-        const { image, style = "illustrated", likeness = 50 } = body;
+        const { image, style = "illustrated", likeness = 50, sourceType } = body;
+        const userId = await resolveUserId(request);
+        const clampLikeness = Math.max(0, Math.min(100, Math.round(likeness)));
+
+        const fail = async (msg: string, status: number) => {
+          await logActivity({
+            user_id: userId,
+            style_preset: style,
+            likeness_level: clampLikeness,
+            source_type: sourceType,
+            status: "error",
+            error_detail: `${status}: ${msg}`.slice(0, 300),
+          });
+          return json({ error: msg }, status);
+        };
+
         if (!image || !image.startsWith("data:image/")) {
-          return json({ error: "A valid image is required." }, 400);
+          return fail("A valid image is required.", 400);
         }
         if (image.length > 12_000_000) {
-          return json({ error: "Image is too large. Please use a smaller photo." }, 413);
+          return fail("Image is too large. Please use a smaller photo.", 413);
         }
 
         const key = process.env.LOVABLE_API_KEY;
-        if (!key) return json({ error: "Image generation is not configured." }, 500);
+        if (!key) return fail("Image generation is not configured.", 500);
 
-        const clampLikeness = Math.max(0, Math.min(100, Math.round(likeness)));
         const prompt = buildPrompt(style, clampLikeness);
 
         let upstream: Response;
@@ -129,17 +143,17 @@ export const Route = createFileRoute("/api/avatar-generate")({
             }),
           });
         } catch {
-          return json({ error: "Could not reach the image generator. Try again." }, 502);
+          return fail("Could not reach the image generator. Try again.", 502);
         }
 
         if (upstream.status === 429)
-          return json({ error: "The generator is busy right now. Please try again in a moment." }, 429);
+          return fail("The generator is busy right now. Please try again in a moment.", 429);
         if (upstream.status === 402)
-          return json({ error: "Image generation credits are exhausted." }, 402);
+          return fail("Image generation credits are exhausted.", 402);
 
         if (!upstream.ok) {
           const txt = await upstream.text().catch(() => "");
-          return json({ error: `Generation failed. ${txt.slice(0, 200)}` }, 502);
+          return fail(`Generation failed. ${txt.slice(0, 200)}`, 502);
         }
 
         const data = (await upstream.json().catch(() => null)) as
@@ -147,13 +161,18 @@ export const Route = createFileRoute("/api/avatar-generate")({
           | null;
         const b64 = data?.data?.[0]?.b64_json;
         if (!b64) {
-          return json(
-            { error: "The generator did not return an image. Try a different photo or style." },
-            502,
-          );
+          return fail("The generator did not return an image. Try a different photo or style.", 502);
         }
 
+        await logActivity({
+          user_id: userId,
+          style_preset: style,
+          likeness_level: clampLikeness,
+          source_type: sourceType,
+          status: "success",
+        });
         return json({ image: `data:image/png;base64,${b64}` }, 200);
+
       },
     },
   },

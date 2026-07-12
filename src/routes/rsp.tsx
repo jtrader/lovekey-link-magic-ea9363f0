@@ -351,6 +351,33 @@ const css = `
   .rsp-avatar-detail-title { font-size: 1rem; font-weight: 600; color: var(--rsp-text); letter-spacing: -.01em; margin: 0 0 8px; }
   .rsp-avatar-detail-body { font-size: .88rem; line-height: 1.6; color: var(--rsp-text-muted); margin: 0; }
 
+  /* AVATAR WORKED EXAMPLE */
+  .rsp-example {
+    max-width: 760px; margin: 40px auto 0; padding: 32px;
+    background: var(--rsp-bg-warm); border: 1px solid var(--rsp-border);
+    border-radius: var(--rsp-radius);
+  }
+  .rsp-example-intro { font-size: .95rem; line-height: 1.6; color: var(--rsp-text); margin: 0 0 24px; }
+  .rsp-example-flow { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .rsp-example-item { display: flex; gap: 16px; padding-bottom: 22px; position: relative; }
+  .rsp-example-item:not(:last-child)::before {
+    content: ""; position: absolute; left: 13px; top: 30px; bottom: 0;
+    width: 2px; background: var(--rsp-border-strong);
+  }
+  .rsp-example-num {
+    flex-shrink: 0; z-index: 1; width: 28px; height: 28px; border-radius: 999px;
+    background: var(--rsp-primary); color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: .78rem; font-weight: 600;
+  }
+  .rsp-example-tag {
+    display: inline-block; font-size: .72rem; font-weight: 600; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--rsp-primary); margin: 4px 0 4px;
+  }
+  .rsp-example-body { font-size: .86rem; line-height: 1.55; color: var(--rsp-text-muted); margin: 0; }
+
+
+
   @media (max-width: 860px) {
     .rsp-steps { grid-template-columns: 1fr; }
     .rsp-step { border-right: 1px solid var(--rsp-border); border-bottom: none; }

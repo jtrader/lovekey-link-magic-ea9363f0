@@ -4,7 +4,45 @@ type Body = {
   image?: string; // data URL
   style?: string;
   likeness?: number; // 0 (stylized) .. 100 (realistic)
+  sourceType?: string; // 'uploaded' | 'live_capture'
 };
+
+// Resolve the signed-in user (if any) from the request bearer token — used only
+// to attribute activity-log rows. Generation works with or without a session.
+async function resolveUserId(request: Request): Promise<string | null> {
+  const auth = request.headers.get("authorization");
+  const token = auth?.replace(/^Bearer\s+/i, "");
+  if (!token) return null;
+  try {
+    const { createClient } = await import("@supabase/supabase-js");
+    const supa = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_PUBLISHABLE_KEY!,
+      { auth: { persistSession: false, autoRefreshToken: false } },
+    );
+    const { data } = await supa.auth.getUser(token);
+    return data.user?.id ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function logActivity(row: {
+  user_id: string | null;
+  style_preset?: string;
+  likeness_level?: number;
+  source_type?: string;
+  status: "success" | "error";
+  error_detail?: string;
+}) {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await supabaseAdmin.from("avatar_activity_log").insert({ action: "generate", ...row });
+  } catch {
+    /* logging must never break generation */
+  }
+}
+
 
 const STYLE_PROMPTS: Record<string, string> = {
   illustrated:

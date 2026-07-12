@@ -18,6 +18,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RspIndexRouteImport } from './routes/rsp.index'
+import { Route as RspSpecCheckRouteImport } from './routes/rsp.spec-check'
 import { Route as RspPrinciplesRouteImport } from './routes/rsp.principles'
 import { Route as RspImplementationsRouteImport } from './routes/rsp.implementations'
 import { Route as RspHowItWorksRouteImport } from './routes/rsp.how-it-works'
@@ -78,6 +79,11 @@ const IndexRoute = IndexRouteImport.update({
 const RspIndexRoute = RspIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspSpecCheckRoute = RspSpecCheckRouteImport.update({
+  id: '/spec-check',
+  path: '/spec-check',
   getParentRoute: () => RspRoute,
 } as any)
 const RspPrinciplesRoute = RspPrinciplesRouteImport.update({
@@ -190,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/rsp/how-it-works': typeof RspHowItWorksRoute
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
+  '/rsp/spec-check': typeof RspSpecCheckRoute
   '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -216,6 +223,7 @@ export interface FileRoutesByTo {
   '/rsp/how-it-works': typeof RspHowItWorksRoute
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
+  '/rsp/spec-check': typeof RspSpecCheckRoute
   '/rsp': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -245,6 +253,7 @@ export interface FileRoutesById {
   '/rsp/how-it-works': typeof RspHowItWorksRoute
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
+  '/rsp/spec-check': typeof RspSpecCheckRoute
   '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -274,6 +283,7 @@ export interface FileRouteTypes {
     | '/rsp/how-it-works'
     | '/rsp/implementations'
     | '/rsp/principles'
+    | '/rsp/spec-check'
     | '/rsp/'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
@@ -300,6 +310,7 @@ export interface FileRouteTypes {
     | '/rsp/how-it-works'
     | '/rsp/implementations'
     | '/rsp/principles'
+    | '/rsp/spec-check'
     | '/rsp'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
@@ -328,6 +339,7 @@ export interface FileRouteTypes {
     | '/rsp/how-it-works'
     | '/rsp/implementations'
     | '/rsp/principles'
+    | '/rsp/spec-check'
     | '/rsp/'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
@@ -412,6 +424,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/rsp/'
       preLoaderRoute: typeof RspIndexRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/spec-check': {
+      id: '/rsp/spec-check'
+      path: '/spec-check'
+      fullPath: '/rsp/spec-check'
+      preLoaderRoute: typeof RspSpecCheckRouteImport
       parentRoute: typeof RspRoute
     }
     '/rsp/principles': {
@@ -561,6 +580,7 @@ interface RspRouteChildren {
   RspHowItWorksRoute: typeof RspHowItWorksRoute
   RspImplementationsRoute: typeof RspImplementationsRoute
   RspPrinciplesRoute: typeof RspPrinciplesRoute
+  RspSpecCheckRoute: typeof RspSpecCheckRoute
   RspIndexRoute: typeof RspIndexRoute
 }
 
@@ -575,6 +595,7 @@ const RspRouteChildren: RspRouteChildren = {
   RspHowItWorksRoute: RspHowItWorksRoute,
   RspImplementationsRoute: RspImplementationsRoute,
   RspPrinciplesRoute: RspPrinciplesRoute,
+  RspSpecCheckRoute: RspSpecCheckRoute,
   RspIndexRoute: RspIndexRoute,
 }
 

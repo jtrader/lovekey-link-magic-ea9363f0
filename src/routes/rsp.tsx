@@ -807,7 +807,7 @@ const css = `
     .rsp-principle-grid, .rsp-credits-grid { grid-template-columns: 1fr 1fr; }
     .rsp-event-grid { grid-template-columns: 1fr; gap: 40px; }
     .rsp-signal-weights { grid-template-columns: 1fr; }
-    .rsp-nav-links { display: none; }
+    .rsp-nav-links, .rsp-menus-wrap { display: none; }
     .rsp-nav-inner > .rsp-nav-cta { display: inline-flex; margin-left: auto; }
     .rsp-nav-burger { display: flex; }
   }

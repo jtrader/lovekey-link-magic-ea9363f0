@@ -888,6 +888,7 @@ function RSPPage() {
     protocol: "Protocol",
     journey: "Journey",
     consent: "Consent",
+    avatars: "Avatars",
     install: "Install",
     burn: "Burn Clause",
     verticals: "Verticals",

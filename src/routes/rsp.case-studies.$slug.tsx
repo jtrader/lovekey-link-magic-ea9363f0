@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getCaseStudy, type CaseStudyApplication } from "@/lib/case-studies";
+import { getCaseStudy, type CaseStudy, type CaseStudyApplication } from "@/lib/case-studies";
 
 export const Route = createFileRoute("/rsp/case-studies/$slug")({
   loader: ({ params }) => {
@@ -133,7 +133,7 @@ function CaseStudyPage() {
 
           <p className="rsp-csd-overview">{study.overview}</p>
 
-          {study.applications.map((app, i) => (
+          {study.applications.map((app: CaseStudyApplication, i: number) => (
             <div className="rsp-csd-app" key={app.title}>
               <div className="rsp-csd-app-eyebrow">Application {i + 1}</div>
               <h2 className="rsp-csd-app-title">{app.title}</h2>

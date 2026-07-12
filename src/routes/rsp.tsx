@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
@@ -816,9 +816,71 @@ const css = `
     .rsp-nav { padding: 0 1.2rem; }
     .rsp-section { padding: 56px 1.2rem; }
   }
+
+  /* AREA SWITCHER (Love Key Link · RSP · Identity Avatars) */
+  .rsp-areabar {
+    position: sticky; top: 60px; z-index: 49;
+    background: rgba(255,255,255,.82); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rsp-border);
+  }
+  .rsp-areabar-inner {
+    max-width: 1100px; margin: auto;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 9px 2rem;
+  }
+  .rsp-area {
+    font-size: .8rem; font-weight: 500; color: var(--rsp-text-muted);
+    text-decoration: none; padding: 7px 18px; border-radius: 999px;
+    border: 1px solid transparent;
+    transition: color .2s var(--rsp-ease), background .2s var(--rsp-ease), border-color .2s var(--rsp-ease);
+  }
+  .rsp-area:hover { color: var(--rsp-text); background: var(--rsp-bg-warm); }
+  .rsp-area-active, .rsp-area-active:hover {
+    color: #fff; background: var(--rsp-primary); border-color: var(--rsp-primary);
+  }
+  @media (max-width: 600px) {
+    .rsp-areabar-inner { padding: 8px 1rem; gap: 4px; }
+    .rsp-area { padding: 6px 12px; font-size: .74rem; }
+  }
 `;
 
-// ─── Nav links (cross-route menu) ───────────────────────────────────────────
+// ─── Area switcher (3 main site areas) ───────────────────────────────────────
+
+const AVATAR_PATHS = [
+  "/rsp/avatars",
+  "/rsp/how-it-works",
+  "/rsp/dimensions",
+  "/rsp/checklist",
+  "/rsp/faq",
+];
+
+function AreaSwitcher() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAvatars = AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
+  const isHome = pathname === "/";
+  return (
+    <div className="rsp-areabar">
+      <div className="rsp-areabar-inner">
+        <Link to="/" className={`rsp-area${isHome ? " rsp-area-active" : ""}`}>
+          Love Key Link
+        </Link>
+        <Link
+          to="/rsp"
+          className={`rsp-area${!isHome && !isAvatars ? " rsp-area-active" : ""}`}
+        >
+          RSP
+        </Link>
+        <Link
+          to="/rsp/avatars"
+          className={`rsp-area${isAvatars ? " rsp-area-active" : ""}`}
+        >
+          Identity Avatars
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 
 const navLinks = [
   { to: "/rsp", label: "Overview", exact: true },
@@ -908,6 +970,8 @@ function RspLayout() {
           </div>
         )}
       </nav>
+
+      <AreaSwitcher />
 
       <Outlet />
 

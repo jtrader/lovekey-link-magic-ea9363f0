@@ -14,6 +14,71 @@ export type Database = {
   }
   public: {
     Tables: {
+      avatar_results: {
+        Row: {
+          avatar_source_id: string
+          created_at: string
+          generated_image_ref: string
+          id: string
+          is_saved: boolean
+          likeness_level: number
+          style_preset: string
+          user_id: string
+        }
+        Insert: {
+          avatar_source_id: string
+          created_at?: string
+          generated_image_ref: string
+          id?: string
+          is_saved?: boolean
+          likeness_level?: number
+          style_preset: string
+          user_id: string
+        }
+        Update: {
+          avatar_source_id?: string
+          created_at?: string
+          generated_image_ref?: string
+          id?: string
+          is_saved?: boolean
+          likeness_level?: number
+          style_preset?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "avatar_results_avatar_source_id_fkey"
+            columns: ["avatar_source_id"]
+            isOneToOne: false
+            referencedRelation: "avatar_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      avatar_sources: {
+        Row: {
+          created_at: string
+          id: string
+          original_image_ref: string
+          source_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          original_image_ref: string
+          source_type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          original_image_ref?: string
+          source_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       calendar_availability_windows: {
         Row: {
           availability: string

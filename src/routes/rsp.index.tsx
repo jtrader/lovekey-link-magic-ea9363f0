@@ -306,3 +306,52 @@ const trustCss = `
   .rsp-trust-isnot li::before { content: '✕'; color: var(--rsp-primary); }
   @media (max-width: 700px) { .rsp-trust-grid { grid-template-columns: 1fr; } }
 `;
+
+const brandCss = `
+  /* RSP brand identity — Orbitron / IBM Plex + circuit aesthetic (landing) */
+  .rsp-brand .rsp-hero-eyebrow {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    letter-spacing: .14em; font-weight: 500;
+  }
+  .rsp-brand .rsp-h1 {
+    font-family: 'Orbitron', 'DM Serif Display', sans-serif;
+    font-weight: 700; letter-spacing: -.01em; line-height: 1.08;
+    text-transform: none;
+  }
+  .rsp-brand .rsp-h1 em {
+    font-style: normal; color: var(--rsp-primary);
+    text-shadow: 0 0 26px oklch(70% .2 22 / .35);
+  }
+  .rsp-brand .rsp-hero-sub {
+    font-family: 'IBM Plex Sans', 'DM Sans', sans-serif;
+  }
+  .rsp-brand .rsp-btn-primary,
+  .rsp-brand .rsp-btn-outline,
+  .rsp-brand .rsp-btn-pill-left,
+  .rsp-brand .rsp-btn-pill-right {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    letter-spacing: .03em;
+  }
+
+  /* Tagline strip reads like an engraved circuit label */
+  .rsp-brand .rsp-tagline-strip p {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    letter-spacing: .04em;
+  }
+  .rsp-brand .rsp-tagline-strip strong {
+    font-family: 'Orbitron', sans-serif; font-weight: 600;
+  }
+
+  /* Circuit-board backdrop layer behind the hero */
+  .rsp-brand .rsp-hero { position: relative; }
+  .rsp-circuit {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='%23c0362f' stroke-width='1.2'%3E%3Cpath d='M8 8h44v44h44'/%3E%3Cpath d='M8 80h34M96 52v56'/%3E%3Cpath d='M152 34H112v42h40'/%3E%3Cpath d='M40 152v-40h44'/%3E%3Cpath d='M8 120h30v32'/%3E%3Cpath d='M152 104h-28'/%3E%3C/g%3E%3Cg fill='%23c0362f'%3E%3Ccircle cx='8' cy='8' r='3.4'/%3E%3Ccircle cx='52' cy='52' r='3.4'/%3E%3Ccircle cx='96' cy='52' r='3.4'/%3E%3Ccircle cx='112' cy='76' r='3.4'/%3E%3Ccircle cx='40' cy='112' r='3.4'/%3E%3Ccircle cx='38' cy='120' r='3.4'/%3E%3Ccircle cx='124' cy='104' r='3.4'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 160px 160px;
+    opacity: .07;
+    -webkit-mask-image: radial-gradient(ellipse 80% 75% at 65% 35%, #000 30%, transparent 78%);
+    mask-image: radial-gradient(ellipse 80% 75% at 65% 35%, #000 30%, transparent 78%);
+  }
+  /* keep hero content above the circuit layer */
+  .rsp-brand .rsp-hero > *:not(.rsp-hero-backdrop):not(.rsp-circuit) { z-index: 1; }
+`;

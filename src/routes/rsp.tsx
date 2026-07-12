@@ -846,26 +846,17 @@ const css = `
 
 // ─── Area switcher (3 main site areas) ───────────────────────────────────────
 
-const areas = [
-  { to: "/", label: "Love Key Link", match: (p: string) => p === "/" },
-  {
-    to: "/rsp/avatars",
-    label: "Identity Avatars",
-    match: (p: string) =>
-      ["/rsp/avatars", "/rsp/how-it-works", "/rsp/dimensions", "/rsp/checklist", "/rsp/faq"].some(
-        (a) => p === a || p.startsWith(`${a}/`),
-      ),
-  },
-  {
-    to: "/rsp",
-    label: "RSP",
-    match: (p: string) => false, // computed as fallback below
-  },
-] as const;
+const AVATAR_PATHS = [
+  "/rsp/avatars",
+  "/rsp/how-it-works",
+  "/rsp/dimensions",
+  "/rsp/checklist",
+  "/rsp/faq",
+];
 
 function AreaSwitcher() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isAvatars = areas[1].match(pathname);
+  const isAvatars = AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
   const isHome = pathname === "/";
   return (
     <div className="rsp-areabar">

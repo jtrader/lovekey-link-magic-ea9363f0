@@ -842,7 +842,21 @@ const css = `
     .rsp-areabar-inner { padding: 8px 1rem; gap: 4px; }
     .rsp-area { padding: 6px 12px; font-size: .74rem; }
   }
+
+  /* BREADCRUMB */
+  .rsp-crumbs {
+    max-width: 1100px; margin: auto;
+    display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+    padding: 12px 2rem 0;
+    font-size: .78rem; color: var(--rsp-text-muted);
+  }
+  .rsp-crumb { color: var(--rsp-text-muted); text-decoration: none; transition: color .2s var(--rsp-ease); }
+  .rsp-crumb:hover { color: var(--rsp-primary); }
+  .rsp-crumb-current { color: var(--rsp-text); font-weight: 600; }
+  .rsp-crumb-sep { color: var(--rsp-text-soft); opacity: .7; }
+  @media (max-width: 600px) { .rsp-crumbs { padding: 10px 1.2rem 0; font-size: .72rem; } }
 `;
+
 
 // ─── Area switcher (3 main site areas) ───────────────────────────────────────
 

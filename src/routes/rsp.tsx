@@ -1456,28 +1456,73 @@ function RSPPage() {
           {[
             {
               label: "Claim",
+              anchor: "avatar-claim",
               desc: "Your avatar — name, likeness, voice or AI stand-in — is bound to you as a represented self you own.",
             },
             {
               label: "Grant",
+              anchor: "avatar-grant",
               desc: "You allow a specific context to project that avatar, scoped to where, how and for how long it applies.",
             },
             {
               label: "Project",
+              anchor: "avatar-project",
               desc: "RSP renders only what you permitted — presence signals show you live without exposing more than agreed.",
             },
             {
               label: "Revoke",
+              anchor: "avatar-revoke",
               desc: "Withdraw consent and the projection stops everywhere it reached, the same as any other RSP grant.",
             },
           ].map((s, i) => (
-            <div className="rsp-step" key={s.label}>
+            <a className="rsp-step" href={`#${s.anchor}`} key={s.label}>
               <div className="rsp-step-num">{i + 1}</div>
-              <div className="rsp-step-label">{s.label}</div>
+              <div className="rsp-step-label">
+                {s.label}
+                <span className="rsp-step-more">More detail →</span>
+              </div>
               <div className="rsp-step-desc">{s.desc}</div>
+            </a>
+          ))}
+        </div>
+
+        <div className="rsp-avatar-details">
+          {[
+            {
+              id: "avatar-claim",
+              step: "01",
+              title: "Claim — binding your represented self",
+              body: "Claiming establishes that a given avatar is yours. Your display name, picture, likeness, recorded voice and any AI stand-in are linked to your core identity in the RSP model, so every later grant references one owner. Nothing is shared at this stage — claiming is about ownership, not exposure. This is the identity-context layer described under Consent modules, applied to representation rather than raw account data.",
+            },
+            {
+              id: "avatar-grant",
+              step: "02",
+              title: "Grant — scoped, revocable permission",
+              body: "A grant lets a specific context project part of your avatar. Each grant is scoped by where it applies (which hub or product), how it may be used (view-only likeness, live voice, an acting AI twin), and for how long (a single session, a fixed window, or until revoked). Grants are additive and never permanent — likeness and voice are always time- or session-bounded rather than a blanket hand-over.",
+            },
+            {
+              id: "avatar-project",
+              step: "03",
+              title: "Project — rendering only what you allowed",
+              body: "When others encounter you, RSP renders only the facets your active grants permit. Presence signals control how your avatar appears live — available, busy, quiet — so being seen never means being surveilled. Identity-exposure protection guards against unwanted visual or voice similarity, keeping an AI representation clearly tied to, and bounded by, your consent.",
+            },
+            {
+              id: "avatar-revoke",
+              step: "04",
+              title: "Revoke — withdrawing a represented self",
+              body: "Revocation withdraws a grant the same way it withdraws any other RSP permission. The projection stops everywhere the grant reached, AI stand-ins lose the authority to act or speak for you, and the change is recorded in the consent ledger without becoming a surveillance dashboard. Consent is a living state you can end at any time, not a one-time checkbox.",
+            },
+          ].map((d) => (
+            <div className="rsp-avatar-detail" id={d.id} key={d.id}>
+              <div className="rsp-avatar-detail-step">{d.step}</div>
+              <div>
+                <h3 className="rsp-avatar-detail-title">{d.title}</h3>
+                <p className="rsp-avatar-detail-body">{d.body}</p>
+              </div>
             </div>
           ))}
         </div>
+
 
         <div className="rsp-eyebrow" style={{ textAlign: "center", marginTop: 64 }}>
           Avatar FAQ

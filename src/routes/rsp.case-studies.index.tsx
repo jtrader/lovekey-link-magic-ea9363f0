@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { caseStudies } from "@/lib/case-studies";
 
-export const Route = createFileRoute("/rsp/case-studies")({
+export const Route = createFileRoute("/rsp/case-studies/")({
   head: () => ({
     meta: [
       { title: "RSP Case Studies — RSP in production · Love Key Link" },

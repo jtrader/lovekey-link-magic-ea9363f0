@@ -857,6 +857,7 @@ const css = `
   @media (max-width: 600px) { .rsp-crumbs { padding: 10px 1.2rem 0; font-size: .72rem; } }
 
   /* DROPDOWN MENUS (Love Key Link · RSP · Identity Avatars) */
+  .rsp-menus-wrap { display: flex; align-items: center; gap: 1.5rem; }
   .rsp-menus { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
   .rsp-menu { position: relative; }
   .rsp-menu-trigger {

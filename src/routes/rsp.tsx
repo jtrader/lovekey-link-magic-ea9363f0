@@ -1085,7 +1085,62 @@ function Breadcrumbs() {
 
 
 
+// ─── Prev / Next pager (within RSP & Identity Avatars clusters) ──────────────
+
+function ClusterPager({ variant }: { variant: "header" | "footer" }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  // Only page within the multi-page clusters (RSP, Identity Avatars).
+  const cluster = areaMenus.find(
+    (m) => m.links.length > 1 && m.links.some((l) => l.to === pathname),
+  );
+  if (!cluster) return null;
+
+  const idx = cluster.links.findIndex((l) => l.to === pathname);
+  const prev = idx > 0 ? cluster.links[idx - 1] : null;
+  const next = idx < cluster.links.length - 1 ? cluster.links[idx + 1] : null;
+  if (!prev && !next) return null;
+
+  return (
+    <nav
+      className={`rsp-pager rsp-pager-${variant}`}
+      aria-label={`${cluster.label} pagination`}
+    >
+      {prev ? (
+        <Link to={prev.to} className="rsp-pager-btn rsp-pager-prev">
+          <span className="rsp-pager-arrow" aria-hidden="true">←</span>
+          <span className="rsp-pager-text">
+            <span className="rsp-pager-dir">Previous</span>
+            <span className="rsp-pager-label">{prev.label}</span>
+          </span>
+        </Link>
+      ) : (
+        <span className="rsp-pager-spacer" />
+      )}
+
+      {variant === "footer" && (
+        <span className="rsp-pager-cluster">{cluster.label}</span>
+      )}
+
+      {next ? (
+        <Link to={next.to} className="rsp-pager-btn rsp-pager-next">
+          <span className="rsp-pager-text">
+            <span className="rsp-pager-dir">Next</span>
+            <span className="rsp-pager-label">{next.label}</span>
+          </span>
+          <span className="rsp-pager-arrow" aria-hidden="true">→</span>
+        </Link>
+      ) : (
+        <span className="rsp-pager-spacer" />
+      )}
+    </nav>
+  );
+}
+
+
 // ─── Layout shell ────────────────────────────────────────────────────────────
+
+
 
 
 function RspLayout() {

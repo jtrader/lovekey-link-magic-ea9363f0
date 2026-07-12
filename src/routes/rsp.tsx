@@ -1275,7 +1275,13 @@ function RSPPage() {
             title="Portable across systems"
             body="The same protocol applies to humans, AI agents, and hybrid systems wherever coordination meets privacy."
           />
+          <PrincipleCard
+            icon={<IconShield />}
+            title="Avatar sovereignty"
+            body="Your represented self — likeness, voice and AI stand-ins — is projected only with active, revocable consent, never treated as a platform's to reuse."
+          />
         </div>
+
       </section>
 
       {/* USER JOURNEY INTEGRATION */}

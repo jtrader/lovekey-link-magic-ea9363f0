@@ -1248,8 +1248,11 @@ function RSPPage() {
           <h2 className="rsp-h2">Built on respectful coordination</h2>
           <p className="rsp-lead">
             RSP defines how an application observes, interprets, and forgets — without surveilling,
-            profiling, or coercing anyone.
+            profiling, or coercing anyone. In an online ecosystem where people are experienced
+            through avatars, likeness and AI stand-ins, those same principles govern the represented
+            self as much as the raw data behind it.
           </p>
+
         </div>
         <div className="rsp-principle-grid">
           <PrincipleCard

@@ -309,9 +309,28 @@ function Index() {
               >
                 Privacy
               </a>
-              <a href="/rsp" onClick={() => setMenuOpen(false)} className="hover:text-foreground">
-                RSP
-              </a>
+              <div className="mt-1 flex flex-col gap-2 border-t border-border/60 pt-3">
+                <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground/70">
+                  Explore
+                </span>
+                <span className="w-fit rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
+                  Love Key Link
+                </span>
+                <a
+                  href="/rsp"
+                  onClick={() => setMenuOpen(false)}
+                  className="hover:text-foreground"
+                >
+                  RSP
+                </a>
+                <a
+                  href="/rsp/avatars"
+                  onClick={() => setMenuOpen(false)}
+                  className="hover:text-foreground"
+                >
+                  Identity Avatars
+                </a>
+              </div>
 
               <a
                 href="/login"

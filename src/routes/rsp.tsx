@@ -1113,7 +1113,11 @@ function Breadcrumbs() {
     }
   } else {
     crumbs.push({ label: "RSP", to: "/rsp" });
-    if (pathname !== "/rsp") {
+    if (pathname.startsWith("/rsp/case-studies/")) {
+      crumbs.push({ label: "Case Studies", to: "/rsp/case-studies" });
+      const cs = getCaseStudy(pathname.split("/")[3] ?? "");
+      crumbs.push({ label: cs?.product ?? "Case study" });
+    } else if (pathname !== "/rsp") {
       crumbs.push({ label: PAGE_LABELS[pathname] ?? "Page" });
     }
   }

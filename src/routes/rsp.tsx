@@ -917,30 +917,107 @@ const AVATAR_PATHS = [
   "/rsp/faq",
 ];
 
-function AreaSwitcher() {
+function isAvatarPath(pathname: string) {
+  return AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
+}
+
+type AreaLink = { to: string; label: string; exact?: boolean };
+type AreaMenu = {
+  label: string;
+  to: string;
+  match: (pathname: string) => boolean;
+  links: AreaLink[];
+};
+
+const areaMenus: AreaMenu[] = [
+  {
+    label: "Love Key Link",
+    to: "/",
+    match: (p) => p === "/",
+    links: [{ to: "/", label: "Home", exact: true }],
+  },
+  {
+    label: "RSP",
+    to: "/rsp",
+    match: (p) => p !== "/" && !isAvatarPath(p),
+    links: [
+      { to: "/rsp", label: "Overview", exact: true },
+      { to: "/rsp/principles", label: "Principles" },
+      { to: "/rsp/implementations", label: "Implementations" },
+      { to: "/rsp/event-token", label: "Event Token" },
+      { to: "/rsp/for-developers", label: "Developers" },
+      { to: "/rsp/governance", label: "Governance" },
+    ],
+  },
+  {
+    label: "Identity Avatars",
+    to: "/rsp/avatars",
+    match: isAvatarPath,
+    links: [
+      { to: "/rsp/avatars", label: "Overview", exact: true },
+      { to: "/rsp/how-it-works", label: "How it works" },
+      { to: "/rsp/dimensions", label: "Dimensions" },
+      { to: "/rsp/checklist", label: "Checklist" },
+      { to: "/rsp/faq", label: "FAQ" },
+    ],
+  },
+];
+
+function AreaMenus() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isAvatars = AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
-  const isHome = pathname === "/";
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
   return (
-    <div className="rsp-areabar">
-      <div className="rsp-areabar-inner">
-        <Link to="/" className={`rsp-area${isHome ? " rsp-area-active" : ""}`}>
-          Love Key Link
-        </Link>
-        <Link
-          to="/rsp"
-          className={`rsp-area${!isHome && !isAvatars ? " rsp-area-active" : ""}`}
-        >
-          RSP
-        </Link>
-        <Link
-          to="/rsp/avatars"
-          className={`rsp-area${isAvatars ? " rsp-area-active" : ""}`}
-        >
-          Identity Avatars
-        </Link>
-      </div>
-    </div>
+    <ul className="rsp-menus" onMouseLeave={() => setOpenIdx(null)}>
+      {areaMenus.map((menu, i) => {
+        const current = menu.match(pathname);
+        const single = menu.links.length <= 1;
+        return (
+          <li
+            key={menu.label}
+            className="rsp-menu"
+            data-open={openIdx === i}
+            onMouseEnter={() => setOpenIdx(i)}
+          >
+            {single ? (
+              <Link
+                to={menu.to}
+                className={`rsp-menu-trigger${current ? " rsp-menu-current" : ""}`}
+              >
+                {menu.label}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                className={`rsp-menu-trigger${current ? " rsp-menu-current" : ""}`}
+                aria-expanded={openIdx === i}
+                onClick={() => setOpenIdx((o) => (o === i ? null : i))}
+              >
+                {menu.label}
+                <span className="rsp-menu-caret" aria-hidden="true" />
+              </button>
+            )}
+            {!single && openIdx === i && (
+              <div className="rsp-menu-panel" role="menu">
+                {menu.links.map((l) => (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    role="menuitem"
+                    className="rsp-menu-item"
+                    activeProps={{ className: "rsp-menu-item rsp-nav-active" }}
+                    activeOptions={{ exact: l.exact }}
+                    onClick={() => setOpenIdx(null)}
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

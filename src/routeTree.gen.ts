@@ -20,6 +20,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as RspIndexRouteImport } from './routes/rsp.index'
 import { Route as RspPrinciplesRouteImport } from './routes/rsp.principles'
 import { Route as RspHowItWorksRouteImport } from './routes/rsp.how-it-works'
+import { Route as RspDimensionsRouteImport } from './routes/rsp.dimensions'
 import { Route as RTokenRouteImport } from './routes/r.$token'
 import { Route as QuizAdminRouteImport } from './routes/quiz_.admin'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
@@ -82,6 +83,11 @@ const RspHowItWorksRoute = RspHowItWorksRouteImport.update({
   path: '/how-it-works',
   getParentRoute: () => RspRoute,
 } as any)
+const RspDimensionsRoute = RspDimensionsRouteImport.update({
+  id: '/dimensions',
+  path: '/dimensions',
+  getParentRoute: () => RspRoute,
+} as any)
 const RTokenRoute = RTokenRouteImport.update({
   id: '/r/$token',
   path: '/r/$token',
@@ -132,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/dimensions': typeof RspDimensionsRoute
   '/rsp/how-it-works': typeof RspHowItWorksRoute
   '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp/': typeof RspIndexRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/dimensions': typeof RspDimensionsRoute
   '/rsp/how-it-works': typeof RspHowItWorksRoute
   '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp': typeof RspIndexRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz_/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/dimensions': typeof RspDimensionsRoute
   '/rsp/how-it-works': typeof RspHowItWorksRoute
   '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp/': typeof RspIndexRoute
@@ -192,6 +201,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp/dimensions'
     | '/rsp/how-it-works'
     | '/rsp/principles'
     | '/rsp/'
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp/dimensions'
     | '/rsp/how-it-works'
     | '/rsp/principles'
     | '/rsp'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz_/admin'
     | '/r/$token'
+    | '/rsp/dimensions'
     | '/rsp/how-it-works'
     | '/rsp/principles'
     | '/rsp/'
@@ -332,6 +344,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspHowItWorksRouteImport
       parentRoute: typeof RspRoute
     }
+    '/rsp/dimensions': {
+      id: '/rsp/dimensions'
+      path: '/dimensions'
+      fullPath: '/rsp/dimensions'
+      preLoaderRoute: typeof RspDimensionsRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/r/$token': {
       id: '/r/$token'
       path: '/r/$token'
@@ -399,12 +418,14 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface RspRouteChildren {
+  RspDimensionsRoute: typeof RspDimensionsRoute
   RspHowItWorksRoute: typeof RspHowItWorksRoute
   RspPrinciplesRoute: typeof RspPrinciplesRoute
   RspIndexRoute: typeof RspIndexRoute
 }
 
 const RspRouteChildren: RspRouteChildren = {
+  RspDimensionsRoute: RspDimensionsRoute,
   RspHowItWorksRoute: RspHowItWorksRoute,
   RspPrinciplesRoute: RspPrinciplesRoute,
   RspIndexRoute: RspIndexRoute,

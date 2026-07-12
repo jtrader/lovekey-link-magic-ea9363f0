@@ -22,6 +22,11 @@ export const Route = createFileRoute("/rsp/avatars")({
 
 const avatarPages = [
   {
+    to: "/rsp/avatar-creator",
+    label: "Avatar Creator",
+    desc: "Upload or snap a photo and generate a stylized AI profile picture — with a likeness gauge to dial how closely it resembles you.",
+  },
+  {
     to: "/rsp/how-it-works",
     label: "How it works",
     desc: "Walk your represented self from Claim to Revoke — bind it, grant it, project it, withdraw it.",

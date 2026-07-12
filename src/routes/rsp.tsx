@@ -1105,24 +1105,16 @@ function RspLayout() {
               <span className="rsp-nav-logo-sub">/ RSP</span>
             </span>
           </Link>
-          <ul className="rsp-nav-links">
-            {navLinks.map((l) => (
-              <li key={l.to}>
-                <Link
-                  to={l.to}
-                  activeProps={{ className: "rsp-nav-active" }}
-                  activeOptions={{ exact: l.exact }}
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf">
-                White Paper
-              </a>
-            </li>
-          </ul>
+          <div className="rsp-menus-wrap">
+            <AreaMenus />
+            <a
+              className="rsp-nav-cta"
+              href={whitepaperAsset.url}
+              download="rsp-whitepaper.pdf"
+            >
+              White Paper
+            </a>
+          </div>
 
           <button
             type="button"

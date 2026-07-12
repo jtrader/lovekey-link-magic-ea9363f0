@@ -36,6 +36,8 @@ import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as ApiAvatarGenerateRouteImport } from './routes/api/avatar-generate'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
+import { Route as RspCaseStudiesIndexRouteImport } from './routes/rsp.case-studies.index'
+import { Route as RspCaseStudiesSlugRouteImport } from './routes/rsp.case-studies.$slug'
 import { Route as ApiPublicQuizSubmitRouteImport } from './routes/api/public/quiz-submit'
 import { Route as ApiPublicQuizResultTokenRouteImport } from './routes/api/public/quiz-result.$token'
 import { Route as ApiPublicHooksAvatarCleanupRouteImport } from './routes/api/public/hooks/avatar-cleanup'
@@ -174,6 +176,16 @@ const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   path: '/app',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const RspCaseStudiesIndexRoute = RspCaseStudiesIndexRouteImport.update({
+  id: '/case-studies/',
+  path: '/case-studies/',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspCaseStudiesSlugRoute = RspCaseStudiesSlugRouteImport.update({
+  id: '/case-studies/$slug',
+  path: '/case-studies/$slug',
+  getParentRoute: () => RspRoute,
+} as any)
 const ApiPublicQuizSubmitRoute = ApiPublicQuizSubmitRouteImport.update({
   id: '/api/public/quiz-submit',
   path: '/api/public/quiz-submit',
@@ -220,6 +232,8 @@ export interface FileRoutesByFullPath {
   '/rsp/spec-check': typeof RspSpecCheckRoute
   '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
+  '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/case-studies/': typeof RspCaseStudiesIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
@@ -250,6 +264,8 @@ export interface FileRoutesByTo {
   '/rsp/spec-check': typeof RspSpecCheckRoute
   '/rsp': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
+  '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/case-studies': typeof RspCaseStudiesIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
@@ -283,6 +299,8 @@ export interface FileRoutesById {
   '/rsp/spec-check': typeof RspSpecCheckRoute
   '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
+  '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/case-studies/': typeof RspCaseStudiesIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
@@ -316,6 +334,8 @@ export interface FileRouteTypes {
     | '/rsp/spec-check'
     | '/rsp/'
     | '/api/public/quiz-submit'
+    | '/rsp/case-studies/$slug'
+    | '/rsp/case-studies/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
   fileRoutesByTo: FileRoutesByTo
@@ -346,6 +366,8 @@ export interface FileRouteTypes {
     | '/rsp/spec-check'
     | '/rsp'
     | '/api/public/quiz-submit'
+    | '/rsp/case-studies/$slug'
+    | '/rsp/case-studies'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
   id:
@@ -378,6 +400,8 @@ export interface FileRouteTypes {
     | '/rsp/spec-check'
     | '/rsp/'
     | '/api/public/quiz-submit'
+    | '/rsp/case-studies/$slug'
+    | '/rsp/case-studies/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
   fileRoutesById: FileRoutesById
@@ -591,6 +615,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/rsp/case-studies/': {
+      id: '/rsp/case-studies/'
+      path: '/case-studies'
+      fullPath: '/rsp/case-studies/'
+      preLoaderRoute: typeof RspCaseStudiesIndexRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/case-studies/$slug': {
+      id: '/rsp/case-studies/$slug'
+      path: '/case-studies/$slug'
+      fullPath: '/rsp/case-studies/$slug'
+      preLoaderRoute: typeof RspCaseStudiesSlugRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/api/public/quiz-submit': {
       id: '/api/public/quiz-submit'
       path: '/api/public/quiz-submit'
@@ -643,6 +681,8 @@ interface RspRouteChildren {
   RspPrinciplesRoute: typeof RspPrinciplesRoute
   RspSpecCheckRoute: typeof RspSpecCheckRoute
   RspIndexRoute: typeof RspIndexRoute
+  RspCaseStudiesSlugRoute: typeof RspCaseStudiesSlugRoute
+  RspCaseStudiesIndexRoute: typeof RspCaseStudiesIndexRoute
 }
 
 const RspRouteChildren: RspRouteChildren = {
@@ -659,6 +699,8 @@ const RspRouteChildren: RspRouteChildren = {
   RspPrinciplesRoute: RspPrinciplesRoute,
   RspSpecCheckRoute: RspSpecCheckRoute,
   RspIndexRoute: RspIndexRoute,
+  RspCaseStudiesSlugRoute: RspCaseStudiesSlugRoute,
+  RspCaseStudiesIndexRoute: RspCaseStudiesIndexRoute,
 }
 
 const RspRouteWithChildren = RspRoute._addFileChildren(RspRouteChildren)
@@ -683,13 +725,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

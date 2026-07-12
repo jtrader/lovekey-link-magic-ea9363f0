@@ -3,6 +3,7 @@ import { useState } from "react";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import { trackEvent } from "@/lib/analytics";
+import { getCaseStudy } from "@/lib/case-studies";
 
 export const Route = createFileRoute("/rsp")({
   head: () => ({
@@ -1000,6 +1001,7 @@ const areaMenus: AreaMenu[] = [
       { to: "/rsp", label: "Overview", exact: true },
       { to: "/rsp/principles", label: "Principles" },
       { to: "/rsp/implementations", label: "Implementations" },
+      { to: "/rsp/case-studies", label: "Case Studies" },
       { to: "/rsp/event-token", label: "Event Token" },
       { to: "/rsp/for-developers", label: "Developers" },
       { to: "/rsp/governance", label: "Governance" },
@@ -1087,6 +1089,7 @@ const PAGE_LABELS: Record<string, string> = {
   "/rsp/dimensions": "Dimensions",
   "/rsp/checklist": "Identity checklist",
   "/rsp/implementations": "Implementations",
+  "/rsp/case-studies": "Case Studies",
   "/rsp/event-token": "Event Token",
   "/rsp/for-developers": "For developers",
   "/rsp/governance": "Governance",
@@ -1111,7 +1114,11 @@ function Breadcrumbs() {
     }
   } else {
     crumbs.push({ label: "RSP", to: "/rsp" });
-    if (pathname !== "/rsp") {
+    if (pathname.startsWith("/rsp/case-studies/")) {
+      crumbs.push({ label: "Case Studies", to: "/rsp/case-studies" });
+      const cs = getCaseStudy(pathname.split("/")[3] ?? "");
+      crumbs.push({ label: cs?.product ?? "Case study" });
+    } else if (pathname !== "/rsp") {
       crumbs.push({ label: PAGE_LABELS[pathname] ?? "Page" });
     }
   }

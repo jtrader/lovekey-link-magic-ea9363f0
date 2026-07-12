@@ -1130,29 +1130,35 @@ function RspLayout() {
         </div>
         {menuOpen && (
           <div className="rsp-nav-mobile">
-            {navLinks.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                activeProps={{ className: "rsp-nav-active" }}
-                activeOptions={{ exact: l.exact }}
+            {areaMenus.map((menu) => (
+              <div key={menu.label} className="rsp-mobile-group">
+                <div className="rsp-mobile-group-label">{menu.label}</div>
+                {menu.links.map((l) => (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    activeProps={{ className: "rsp-nav-active" }}
+                    activeOptions={{ exact: l.exact }}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            ))}
+            <div className="rsp-mobile-group">
+              <a
+                href={whitepaperAsset.url}
+                download="rsp-whitepaper.pdf"
                 onClick={() => setMenuOpen(false)}
               >
-                {l.label}
-              </Link>
-            ))}
-            <a
-              href={whitepaperAsset.url}
-              download="rsp-whitepaper.pdf"
-              onClick={() => setMenuOpen(false)}
-            >
-              White Paper
-            </a>
+                White Paper
+              </a>
+            </div>
           </div>
         )}
       </nav>
 
-      <AreaSwitcher />
       <Breadcrumbs />
 
       <Outlet />

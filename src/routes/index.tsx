@@ -253,9 +253,23 @@ function Index() {
             >
               Privacy
             </a>
-            <a href="/rsp" className="hover:text-foreground">
-              RSP
-            </a>
+            <div className="ml-2 flex items-center gap-1 rounded-full border border-border/70 bg-muted/40 p-1">
+              <span className="rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
+                Love Key Link
+              </span>
+              <a
+                href="/rsp"
+                className="rounded-full px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
+              >
+                RSP
+              </a>
+              <a
+                href="/rsp/avatars"
+                className="rounded-full px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
+              >
+                Identity Avatars
+              </a>
+            </div>
           </nav>
           <div className="flex items-center gap-2">
             <a

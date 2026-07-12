@@ -971,6 +971,8 @@ function RspLayout() {
         )}
       </nav>
 
+      <AreaSwitcher />
+
       <Outlet />
 
       {/* FOOTER */}

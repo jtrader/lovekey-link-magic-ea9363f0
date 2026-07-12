@@ -21,6 +21,7 @@ import { Route as RspIndexRouteImport } from './routes/rsp.index'
 import { Route as RspPrinciplesRouteImport } from './routes/rsp.principles'
 import { Route as RspImplementationsRouteImport } from './routes/rsp.implementations'
 import { Route as RspHowItWorksRouteImport } from './routes/rsp.how-it-works'
+import { Route as RspForDevelopersRouteImport } from './routes/rsp.for-developers'
 import { Route as RspEventTokenRouteImport } from './routes/rsp.event-token'
 import { Route as RspDimensionsRouteImport } from './routes/rsp.dimensions'
 import { Route as RTokenRouteImport } from './routes/r.$token'
@@ -90,6 +91,11 @@ const RspHowItWorksRoute = RspHowItWorksRouteImport.update({
   path: '/how-it-works',
   getParentRoute: () => RspRoute,
 } as any)
+const RspForDevelopersRoute = RspForDevelopersRouteImport.update({
+  id: '/for-developers',
+  path: '/for-developers',
+  getParentRoute: () => RspRoute,
+} as any)
 const RspEventTokenRoute = RspEventTokenRouteImport.update({
   id: '/event-token',
   path: '/event-token',
@@ -152,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/r/$token': typeof RTokenRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
   '/rsp/event-token': typeof RspEventTokenRoute
+  '/rsp/for-developers': typeof RspForDevelopersRoute
   '/rsp/how-it-works': typeof RspHowItWorksRoute
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/r/$token': typeof RTokenRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
   '/rsp/event-token': typeof RspEventTokenRoute
+  '/rsp/for-developers': typeof RspForDevelopersRoute
   '/rsp/how-it-works': typeof RspHowItWorksRoute
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/r/$token': typeof RTokenRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
   '/rsp/event-token': typeof RspEventTokenRoute
+  '/rsp/for-developers': typeof RspForDevelopersRoute
   '/rsp/how-it-works': typeof RspHowItWorksRoute
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
@@ -221,6 +230,7 @@ export interface FileRouteTypes {
     | '/r/$token'
     | '/rsp/dimensions'
     | '/rsp/event-token'
+    | '/rsp/for-developers'
     | '/rsp/how-it-works'
     | '/rsp/implementations'
     | '/rsp/principles'
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/r/$token'
     | '/rsp/dimensions'
     | '/rsp/event-token'
+    | '/rsp/for-developers'
     | '/rsp/how-it-works'
     | '/rsp/implementations'
     | '/rsp/principles'
@@ -265,6 +276,7 @@ export interface FileRouteTypes {
     | '/r/$token'
     | '/rsp/dimensions'
     | '/rsp/event-token'
+    | '/rsp/for-developers'
     | '/rsp/how-it-works'
     | '/rsp/implementations'
     | '/rsp/principles'
@@ -375,6 +387,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspHowItWorksRouteImport
       parentRoute: typeof RspRoute
     }
+    '/rsp/for-developers': {
+      id: '/rsp/for-developers'
+      path: '/for-developers'
+      fullPath: '/rsp/for-developers'
+      preLoaderRoute: typeof RspForDevelopersRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/rsp/event-token': {
       id: '/rsp/event-token'
       path: '/event-token'
@@ -458,6 +477,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 interface RspRouteChildren {
   RspDimensionsRoute: typeof RspDimensionsRoute
   RspEventTokenRoute: typeof RspEventTokenRoute
+  RspForDevelopersRoute: typeof RspForDevelopersRoute
   RspHowItWorksRoute: typeof RspHowItWorksRoute
   RspImplementationsRoute: typeof RspImplementationsRoute
   RspPrinciplesRoute: typeof RspPrinciplesRoute
@@ -467,6 +487,7 @@ interface RspRouteChildren {
 const RspRouteChildren: RspRouteChildren = {
   RspDimensionsRoute: RspDimensionsRoute,
   RspEventTokenRoute: RspEventTokenRoute,
+  RspForDevelopersRoute: RspForDevelopersRoute,
   RspHowItWorksRoute: RspHowItWorksRoute,
   RspImplementationsRoute: RspImplementationsRoute,
   RspPrinciplesRoute: RspPrinciplesRoute,

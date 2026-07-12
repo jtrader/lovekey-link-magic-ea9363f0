@@ -167,7 +167,40 @@ function RspLanding() {
         </p>
       </div>
 
-      {/* EVENT TOKEN SUB-HERO */}
+      {/* WHAT RSP IS / IS NOT — TRUST SECTION */}
+      <section className="rsp-section" id="what-rsp-is">
+        <style dangerouslySetInnerHTML={{ __html: trustCss }} />
+        <div className="rsp-section-header">
+          <div className="rsp-eyebrow">A trust document, not just a spec</div>
+          <h2 className="rsp-h2">What RSP is — and what it is not.</h2>
+          <p className="rsp-lead">
+            RSP is the consent and coordination layer that governs how personal data, identity and
+            permissions move between people and products across the Love Key ecosystem. Being clear
+            about what it refuses to do matters as much as what it does.
+          </p>
+        </div>
+        <div className="rsp-trust-grid">
+          <div className="rsp-trust-col rsp-trust-is">
+            <div className="rsp-trust-head">RSP is</div>
+            <ul>
+              <li>A consent layer — one profile, many hubs, presence without surveillance.</li>
+              <li>Synchronisation without coercion, with minimisation on by default.</li>
+              <li>Consent as a living, revocable state — never a one-time checkbox.</li>
+              <li>Transparent about what moves between people and products, and why.</li>
+            </ul>
+          </div>
+          <div className="rsp-trust-col rsp-trust-isnot">
+            <div className="rsp-trust-head">RSP is not</div>
+            <ul>
+              <li>Not a surveillance system — it translates behaviour into signals, then burns the source.</li>
+              <li>Not a data-selling mechanism — your data is not a product.</li>
+              <li>Not something that operates without your knowledge or consent.</li>
+              <li>Not a replacement for a product's privacy policy — it is the mechanism, not the legal document.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section className="rsp-subhero">
         <div className="rsp-subhero-inner">
           <div>

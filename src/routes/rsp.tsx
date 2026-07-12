@@ -895,6 +895,67 @@ function AreaSwitcher() {
   );
 }
 
+// ─── Breadcrumb trail ────────────────────────────────────────────────────────
+
+const PAGE_LABELS: Record<string, string> = {
+  "/rsp": "Overview",
+  "/rsp/principles": "Principles",
+  "/rsp/how-it-works": "How it works",
+  "/rsp/dimensions": "Dimensions",
+  "/rsp/checklist": "Identity checklist",
+  "/rsp/implementations": "Implementations",
+  "/rsp/event-token": "Event Token",
+  "/rsp/for-developers": "For developers",
+  "/rsp/governance": "Governance",
+  "/rsp/faq": "FAQ",
+  "/rsp/avatars": "Overview",
+};
+
+function Breadcrumbs() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAvatars = AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
+
+  const crumbs: { label: string; to?: string }[] = [
+    { label: "Love Key Link", to: "/" },
+  ];
+
+  if (isAvatars) {
+    crumbs.push({ label: "Identity Avatars", to: "/rsp/avatars" });
+    if (pathname !== "/rsp/avatars") {
+      crumbs.push({ label: PAGE_LABELS[pathname] ?? "Page" });
+    }
+  } else {
+    crumbs.push({ label: "RSP", to: "/rsp" });
+    if (pathname !== "/rsp") {
+      crumbs.push({ label: PAGE_LABELS[pathname] ?? "Page" });
+    }
+  }
+
+  // Mark the final crumb as current (no link).
+  const last = crumbs.length - 1;
+
+  return (
+    <nav className="rsp-crumbs" aria-label="Breadcrumb">
+      {crumbs.map((c, i) => (
+        <span key={`${c.label}-${i}`} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+          {i > 0 && <span className="rsp-crumb-sep" aria-hidden="true">/</span>}
+          {i === last || !c.to ? (
+            <span className="rsp-crumb-current" aria-current="page">
+              {c.label}
+            </span>
+          ) : (
+            <Link to={c.to} className="rsp-crumb">
+              {c.label}
+            </Link>
+          )}
+        </span>
+      ))}
+    </nav>
+  );
+}
+
+
+
 
 const navLinks = [
   { to: "/rsp", label: "Overview", exact: true },

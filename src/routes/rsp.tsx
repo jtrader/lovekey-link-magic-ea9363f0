@@ -1083,20 +1083,8 @@ function Breadcrumbs() {
 
 
 
-const navLinks = [
-  { to: "/rsp", label: "Overview", exact: true },
-  { to: "/rsp/principles", label: "Principles", exact: false },
-  { to: "/rsp/how-it-works", label: "How it works", exact: false },
-  { to: "/rsp/dimensions", label: "Dimensions", exact: false },
-  { to: "/rsp/checklist", label: "Checklist", exact: false },
-  { to: "/rsp/implementations", label: "Implementations", exact: false },
-  { to: "/rsp/event-token", label: "Event Token", exact: false },
-  { to: "/rsp/for-developers", label: "Developers", exact: false },
-  { to: "/rsp/governance", label: "Governance", exact: false },
-  { to: "/rsp/faq", label: "FAQ", exact: false },
-] as const;
-
 // ─── Layout shell ────────────────────────────────────────────────────────────
+
 
 function RspLayout() {
   const [menuOpen, setMenuOpen] = useState(false);

@@ -1416,7 +1416,38 @@ function RSPPage() {
             </div>
           ))}
         </div>
+
+        <div className="rsp-eyebrow" style={{ textAlign: "center", marginTop: 64 }}>
+          How it works
+        </div>
+        <div className="rsp-steps">
+          {[
+            {
+              label: "Claim",
+              desc: "Your avatar — name, likeness, voice or AI stand-in — is bound to you as a represented self you own.",
+            },
+            {
+              label: "Grant",
+              desc: "You allow a specific context to project that avatar, scoped to where, how and for how long it applies.",
+            },
+            {
+              label: "Project",
+              desc: "RSP renders only what you permitted — presence signals show you live without exposing more than agreed.",
+            },
+            {
+              label: "Revoke",
+              desc: "Withdraw consent and the projection stops everywhere it reached, the same as any other RSP grant.",
+            },
+          ].map((s, i) => (
+            <div className="rsp-step" key={s.label}>
+              <div className="rsp-step-num">{i + 1}</div>
+              <div className="rsp-step-label">{s.label}</div>
+              <div className="rsp-step-desc">{s.desc}</div>
+            </div>
+          ))}
+        </div>
       </section>
+
 
 
       <section className="rsp-section" id="install">

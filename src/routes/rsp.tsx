@@ -1543,6 +1543,46 @@ function RSPPage() {
           ))}
         </div>
 
+        <div className="rsp-eyebrow" style={{ textAlign: "center", marginTop: 64 }}>
+          Worked example
+        </div>
+        <div className="rsp-example">
+          <p className="rsp-example-intro">
+            Maya is a recovery coach who records short encouragement clips. Here is how her
+            represented self moves through RSP — from claiming her avatar to revoking it.
+          </p>
+          <ol className="rsp-example-flow">
+            {[
+              {
+                tag: "Claim",
+                body: "Maya links her name, photo, recorded voice and a permitted AI voice model to her core identity. Nothing is shared yet — she simply owns her represented self.",
+              },
+              {
+                tag: "Grant",
+                body: "She grants the Recovery Circle hub a session-scoped voice grant so her AI stand-in can read new encouragement messages aloud during evening check-ins only.",
+              },
+              {
+                tag: "Project",
+                body: "During check-in, members hear Maya's voice on today's message and see her presence as available. They cannot access her likeness elsewhere or generate new clips — RSP renders only what she allowed.",
+              },
+              {
+                tag: "Revoke",
+                body: "When Maya pauses coaching, she revokes the grant. The AI voice can no longer speak for her, past projections stop, and the change is logged in her consent ledger.",
+              },
+            ].map((e, i) => (
+              <li className="rsp-example-item" key={e.tag}>
+                <span className="rsp-example-num">{i + 1}</span>
+                <div>
+                  <span className="rsp-example-tag">{e.tag}</span>
+                  <p className="rsp-example-body">{e.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+
+
 
         <div className="rsp-eyebrow" style={{ textAlign: "center", marginTop: 64 }}>
           Avatar FAQ

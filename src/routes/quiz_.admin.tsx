@@ -6,6 +6,15 @@ import { Button } from "@/components/ui/button";
 
 
 export const Route = createFileRoute("/quiz_/admin")({
+  head: () => ({
+    meta: [
+      { title: "Quiz Attempts · Admin" },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
+  component: QuizAdminPage,
+});
+
 function QuizAdminPage() {
   const fetchAttempts = useServerFn(getQuizAttempts);
 

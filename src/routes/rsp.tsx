@@ -829,10 +829,157 @@ const css = `
   }
 `;
 
-// ─── Icons ────────────────────────────────────────────────────────────────
+// ─── Nav links (cross-route menu) ───────────────────────────────────────────
 
-const stroke = {
-  fill: "none",
+const navLinks = [
+  { to: "/rsp", label: "Overview", exact: true },
+  { to: "/rsp/principles", label: "Principles", exact: false },
+  { to: "/rsp/how-it-works", label: "How it works", exact: false },
+  { to: "/rsp/dimensions", label: "Dimensions", exact: false },
+  { to: "/rsp/implementations", label: "Implementations", exact: false },
+  { to: "/rsp/event-token", label: "Event Token", exact: false },
+  { to: "/rsp/for-developers", label: "Developers", exact: false },
+  { to: "/rsp/governance", label: "Governance", exact: false },
+  { to: "/rsp/faq", label: "FAQ", exact: false },
+] as const;
+
+// ─── Layout shell ────────────────────────────────────────────────────────────
+
+function RspLayout() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <div className="rsp-root">
+      <style dangerouslySetInnerHTML={{ __html: css }} />
+
+      {/* NAV */}
+      <nav className="rsp-nav">
+        <div className="rsp-nav-inner">
+          <Link to="/" className="rsp-nav-logo">
+            <span className="rsp-nav-logo-mark">
+              <img src={lovekeyMark} alt="Love Key Link" />
+            </span>
+            <span>
+              <span className="rsp-nav-logo-name">Love Key Link</span>
+              <span className="rsp-nav-logo-sub">/ RSP</span>
+            </span>
+          </Link>
+          <ul className="rsp-nav-links">
+            {navLinks.map((l) => (
+              <li key={l.to}>
+                <Link
+                  to={l.to}
+                  activeProps={{ className: "rsp-nav-active" }}
+                  activeOptions={{ exact: l.exact }}
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf">
+                White Paper
+              </a>
+            </li>
+          </ul>
+
+          <button
+            type="button"
+            className="rsp-nav-burger"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span className={`rsp-burger-bar${menuOpen ? " open-1" : ""}`} />
+            <span className={`rsp-burger-bar${menuOpen ? " open-2" : ""}`} />
+            <span className={`rsp-burger-bar${menuOpen ? " open-3" : ""}`} />
+          </button>
+        </div>
+        {menuOpen && (
+          <div className="rsp-nav-mobile">
+            {navLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                activeProps={{ className: "rsp-nav-active" }}
+                activeOptions={{ exact: l.exact }}
+                onClick={() => setMenuOpen(false)}
+              >
+                {l.label}
+              </Link>
+            ))}
+            <a
+              href={whitepaperAsset.url}
+              download="rsp-whitepaper.pdf"
+              onClick={() => setMenuOpen(false)}
+            >
+              White Paper
+            </a>
+          </div>
+        )}
+      </nav>
+
+      <Outlet />
+
+      {/* FOOTER */}
+      <footer className="rsp-footer">
+        <div className="rsp-help">
+          <h2 className="rsp-help-title">Love Key Help Network</h2>
+          <div className="rsp-help-grid">
+            {helpNetwork.map((tile) => (
+              <a
+                key={tile.title}
+                href={tile.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent("help_network_tile_click", {
+                    tile: tile.title,
+                    tag: tile.tag,
+                    location: "rsp_footer",
+                  })
+                }
+                className="rsp-help-tile"
+              >
+                <div className="rsp-help-head">
+                  <span className="rsp-help-name">{tile.title}</span>
+                  <span className="rsp-help-tag">{tile.tag}</span>
+                </div>
+                <p className="rsp-help-body">{tile.body}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+        <div className="rsp-footer-inner">
+          <img
+            src={lovekeyMark}
+            alt="Love Key Link"
+            style={{ width: 96, height: 96, objectFit: "contain" }}
+          />
+          <div className="rsp-footer-left">
+            <strong>Love Key Link / RSP</strong> · Respectful Synchronised Protocol v1.6 · Part of
+            the{" "}
+            <a
+              href="https://lovekeyring.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "var(--rsp-primary)" }}
+            >
+              Love Key Help Network
+            </a>{" "}
+            · Copyright © 2026 Jack Oswald. All rights reserved unless otherwise licensed in
+            writing.
+          </div>
+          <div className="rsp-footer-right">
+            RSP NFTs are utility, provenance, access, participation, and certification tokens. Not
+            investment products.
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
   stroke: "currentColor",
   strokeWidth: 1.8,
   strokeLinecap: "round" as const,

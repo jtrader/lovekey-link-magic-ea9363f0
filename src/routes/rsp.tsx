@@ -856,6 +856,7 @@ function RSPPage() {
       "protocol",
       "journey",
       "consent",
+      "avatars",
       "install",
       "burn",
       "verticals",

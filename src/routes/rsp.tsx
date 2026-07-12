@@ -1,29 +1,18 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { useState } from "react";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
-import chapterPdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
-import rspLogo from "@/assets/rsp-logo.png.asset.json";
 import { trackEvent } from "@/lib/analytics";
 
 export const Route = createFileRoute("/rsp")({
   head: () => ({
     meta: [
-      { title: "RSP — Respectful Synchronisation Protocol · Love Key Link" },
-      {
-        name: "description",
-        content:
-          "RSP is a privacy-first coordination framework built into Love Key Link. Translate behaviour into weighted signals, synchronise the state, burn the identifiable source.",
-      },
-      { property: "og:title", content: "RSP — Respectful Synchronisation Protocol" },
-      {
-        property: "og:description",
-        content:
-          "A privacy-first coordination framework. Translate behaviour. Synchronise the signal. Burn the identifiable source.",
-      },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Love Key Link / RSP" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: RSPPage,
+  component: RspLayout,
 });
 
 const helpNetwork = [

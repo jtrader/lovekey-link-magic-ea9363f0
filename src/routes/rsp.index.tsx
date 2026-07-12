@@ -273,3 +273,30 @@ function RspLanding() {
     </>
   );
 }
+
+const trustCss = `
+  .rsp-trust-grid {
+    max-width: 1000px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  .rsp-trust-col {
+    border: 1px solid var(--rsp-border); border-radius: var(--rsp-radius);
+    background: var(--rsp-surface); padding: 24px 26px;
+  }
+  .rsp-trust-is { border-top: 3px solid oklch(62% .17 160); }
+  .rsp-trust-isnot { border-top: 3px solid var(--rsp-primary); }
+  .rsp-trust-head {
+    font-size: .78rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    margin-bottom: 14px; color: var(--rsp-text);
+  }
+  .rsp-trust-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .rsp-trust-col li {
+    position: relative; padding-left: 26px; font-size: .9rem; line-height: 1.55; color: var(--rsp-text-muted);
+  }
+  .rsp-trust-col li::before {
+    position: absolute; left: 0; top: -1px; font-size: 1rem; font-weight: 700;
+  }
+  .rsp-trust-is li::before { content: '✓'; color: oklch(55% .15 160); }
+  .rsp-trust-isnot li::before { content: '✕'; color: var(--rsp-primary); }
+  @media (max-width: 700px) { .rsp-trust-grid { grid-template-columns: 1fr; } }
+`;

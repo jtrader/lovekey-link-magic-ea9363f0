@@ -17,6 +17,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RspIndexRouteImport } from './routes/rsp.index'
 import { Route as RTokenRouteImport } from './routes/r.$token'
 import { Route as QuizAdminRouteImport } from './routes/quiz_.admin'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
@@ -64,6 +65,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RspIndexRoute = RspIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RspRoute,
+} as any)
 const RTokenRoute = RTokenRouteImport.update({
   id: '/r/$token',
   path: '/r/$token',
@@ -106,7 +112,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
-  '/rsp': typeof RspRoute
+  '/rsp': typeof RspRouteWithChildren
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app': typeof AuthenticatedAppRoute
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
@@ -122,7 +129,6 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
-  '/rsp': typeof RspRoute
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app': typeof AuthenticatedAppRoute
@@ -130,6 +136,7 @@ export interface FileRoutesByTo {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
@@ -140,7 +147,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
-  '/rsp': typeof RspRoute
+  '/rsp': typeof RspRouteWithChildren
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
@@ -148,6 +155,7 @@ export interface FileRoutesById {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz_/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
@@ -166,6 +174,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp/'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
   fileRoutesByTo: FileRoutesByTo
@@ -174,7 +183,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/quiz'
-    | '/rsp'
     | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/app'
@@ -182,6 +190,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
   id:
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz_/admin'
     | '/r/$token'
+    | '/rsp/'
     | '/api/public/quiz-submit'
     | '/api/public/quiz-result/$token'
   fileRoutesById: FileRoutesById
@@ -209,7 +219,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   LoginRoute: typeof LoginRoute
   QuizRoute: typeof QuizRoute
-  RspRoute: typeof RspRoute
+  RspRoute: typeof RspRouteWithChildren
   SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   InviteTokenRoute: typeof InviteTokenRoute
@@ -277,6 +287,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp/': {
+      id: '/rsp/'
+      path: '/'
+      fullPath: '/rsp/'
+      preLoaderRoute: typeof RspIndexRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/r/$token': {
       id: '/r/$token'
       path: '/r/$token'
@@ -343,13 +360,23 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface RspRouteChildren {
+  RspIndexRoute: typeof RspIndexRoute
+}
+
+const RspRouteChildren: RspRouteChildren = {
+  RspIndexRoute: RspIndexRoute,
+}
+
+const RspRouteWithChildren = RspRoute._addFileChildren(RspRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AdminRoute: AdminRoute,
   LoginRoute: LoginRoute,
   QuizRoute: QuizRoute,
-  RspRoute: RspRoute,
+  RspRoute: RspRouteWithChildren,
   SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   InviteTokenRoute: InviteTokenRoute,

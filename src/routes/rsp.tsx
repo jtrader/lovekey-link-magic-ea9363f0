@@ -905,6 +905,60 @@ const css = `
   }
   .rsp-mobile-group a:hover { color: var(--rsp-text); }
   @media (max-width: 800px) { .rsp-menus { display: none; } }
+
+  /* PREV / NEXT PAGER */
+  .rsp-pager {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: stretch; gap: 12px;
+  }
+  .rsp-pager-header {
+    padding: 14px 2rem 0; justify-content: space-between;
+  }
+  .rsp-pager-footer {
+    padding: 8px 2rem 40px; align-items: center; justify-content: space-between;
+  }
+  .rsp-pager-btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--rsp-text);
+    border: 1px solid var(--rsp-border); border-radius: var(--rsp-radius);
+    background: var(--rsp-surface); padding: 10px 16px;
+    transition: border-color .2s var(--rsp-ease), box-shadow .2s var(--rsp-ease), transform .2s var(--rsp-ease);
+    max-width: 46%;
+  }
+  .rsp-pager-btn:hover {
+    border-color: var(--rsp-border-strong);
+    box-shadow: 0 6px 20px oklch(18% .02 20 / .08);
+    transform: translateY(-1px);
+  }
+  .rsp-pager-next { text-align: right; }
+  .rsp-pager-arrow {
+    font-size: 1.1rem; color: var(--rsp-primary); flex: none; line-height: 1;
+  }
+  .rsp-pager-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .rsp-pager-next .rsp-pager-text { align-items: flex-end; }
+  .rsp-pager-dir {
+    font-size: .68rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--rsp-text-soft);
+  }
+  .rsp-pager-label {
+    font-size: .9rem; font-weight: 500; color: var(--rsp-text);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+  }
+  .rsp-pager-cluster {
+    font-size: .74rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--rsp-text-soft); text-align: center; flex: none;
+  }
+  .rsp-pager-spacer { flex: 1; }
+  /* header pager: compact, arrows only + short label */
+  .rsp-pager-header .rsp-pager-btn { padding: 7px 14px; }
+  .rsp-pager-header .rsp-pager-dir { display: none; }
+  @media (max-width: 600px) {
+    .rsp-pager-header { padding: 12px 1.2rem 0; }
+    .rsp-pager-footer { padding: 8px 1.2rem 32px; }
+    .rsp-pager-cluster { display: none; }
+    .rsp-pager-btn { max-width: 48%; }
+    .rsp-pager-footer .rsp-pager-dir { display: none; }
+  }
 `;
 
 

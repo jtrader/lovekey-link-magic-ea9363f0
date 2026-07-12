@@ -1008,6 +1008,9 @@ function RSPPage() {
             <a href="#consent" className={navActive("consent")} onClick={() => setMenuOpen(false)}>
               Consent
             </a>
+            <a href="#avatars" className={navActive("avatars")} onClick={() => setMenuOpen(false)}>
+              Avatars
+            </a>
             <a href="#burn" className={navActive("burn")} onClick={() => setMenuOpen(false)}>
               Burn Clause
             </a>

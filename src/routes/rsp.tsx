@@ -966,6 +966,7 @@ const css = `
 
 const AVATAR_PATHS = [
   "/rsp/avatars",
+  "/rsp/avatar-creator",
   "/rsp/how-it-works",
   "/rsp/dimensions",
   "/rsp/checklist",
@@ -1010,6 +1011,7 @@ const areaMenus: AreaMenu[] = [
     match: isAvatarPath,
     links: [
       { to: "/rsp/avatars", label: "Overview", exact: true },
+      { to: "/rsp/avatar-creator", label: "Avatar Creator" },
       { to: "/rsp/how-it-works", label: "How it works" },
       { to: "/rsp/dimensions", label: "Dimensions" },
       { to: "/rsp/checklist", label: "Checklist" },
@@ -1090,6 +1092,7 @@ const PAGE_LABELS: Record<string, string> = {
   "/rsp/governance": "Governance",
   "/rsp/faq": "FAQ",
   "/rsp/avatars": "Overview",
+  "/rsp/avatar-creator": "Avatar Creator",
   "/rsp/spec-check": "Spec checklist",
 };
 

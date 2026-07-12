@@ -331,6 +331,26 @@ const css = `
   }
   .rsp-step-label { font-size: .92rem; font-weight: 600; color: var(--rsp-text); letter-spacing: -.01em; margin-bottom: 6px; }
   .rsp-step-desc { font-size: .82rem; line-height: 1.5; color: var(--rsp-text-muted); }
+  a.rsp-step { text-decoration: none; transition: background .2s var(--rsp-ease), border-color .2s var(--rsp-ease); }
+  a.rsp-step:hover { background: var(--rsp-bg-warm); border-color: var(--rsp-border-strong); }
+  .rsp-step-more { display: block; font-size: .72rem; font-weight: 500; color: var(--rsp-primary); margin-top: 3px; opacity: 0; transition: opacity .2s var(--rsp-ease); }
+  a.rsp-step:hover .rsp-step-more, a.rsp-step:focus-visible .rsp-step-more { opacity: 1; }
+
+  /* AVATAR STEP DETAILS */
+  .rsp-avatar-details { max-width: 820px; margin: 48px auto 0; display: flex; flex-direction: column; gap: 14px; }
+  .rsp-avatar-detail {
+    display: flex; gap: 20px; padding: 24px;
+    background: var(--rsp-surface); border: 1px solid var(--rsp-border);
+    border-radius: var(--rsp-radius); scroll-margin-top: 100px;
+  }
+  .rsp-avatar-detail:target { border-color: var(--rsp-primary); background: var(--rsp-bg-warm); }
+  .rsp-avatar-detail-step {
+    font-family: 'DM Serif Display', serif; font-size: 1.6rem;
+    color: var(--rsp-primary); line-height: 1; flex-shrink: 0; opacity: .8;
+  }
+  .rsp-avatar-detail-title { font-size: 1rem; font-weight: 600; color: var(--rsp-text); letter-spacing: -.01em; margin: 0 0 8px; }
+  .rsp-avatar-detail-body { font-size: .88rem; line-height: 1.6; color: var(--rsp-text-muted); margin: 0; }
+
   @media (max-width: 860px) {
     .rsp-steps { grid-template-columns: 1fr; }
     .rsp-step { border-right: 1px solid var(--rsp-border); border-bottom: none; }

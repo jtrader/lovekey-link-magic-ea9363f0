@@ -27,6 +27,7 @@ import { Route as RspFaqRouteImport } from './routes/rsp.faq'
 import { Route as RspEventTokenRouteImport } from './routes/rsp.event-token'
 import { Route as RspDimensionsRouteImport } from './routes/rsp.dimensions'
 import { Route as RspChecklistRouteImport } from './routes/rsp.checklist'
+import { Route as RspAvatarsRouteImport } from './routes/rsp.avatars'
 import { Route as RTokenRouteImport } from './routes/r.$token'
 import { Route as QuizAdminRouteImport } from './routes/quiz_.admin'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
@@ -124,6 +125,11 @@ const RspChecklistRoute = RspChecklistRouteImport.update({
   path: '/checklist',
   getParentRoute: () => RspRoute,
 } as any)
+const RspAvatarsRoute = RspAvatarsRouteImport.update({
+  id: '/avatars',
+  path: '/avatars',
+  getParentRoute: () => RspRoute,
+} as any)
 const RTokenRoute = RTokenRouteImport.update({
   id: '/r/$token',
   path: '/r/$token',
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/avatars': typeof RspAvatarsRoute
   '/rsp/checklist': typeof RspChecklistRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
   '/rsp/event-token': typeof RspEventTokenRoute
@@ -199,6 +206,7 @@ export interface FileRoutesByTo {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/avatars': typeof RspAvatarsRoute
   '/rsp/checklist': typeof RspChecklistRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
   '/rsp/event-token': typeof RspEventTokenRoute
@@ -227,6 +235,7 @@ export interface FileRoutesById {
   '/invite/$token': typeof InviteTokenRoute
   '/quiz_/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/avatars': typeof RspAvatarsRoute
   '/rsp/checklist': typeof RspChecklistRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
   '/rsp/event-token': typeof RspEventTokenRoute
@@ -255,6 +264,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp/avatars'
     | '/rsp/checklist'
     | '/rsp/dimensions'
     | '/rsp/event-token'
@@ -280,6 +290,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp/avatars'
     | '/rsp/checklist'
     | '/rsp/dimensions'
     | '/rsp/event-token'
@@ -307,6 +318,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/quiz_/admin'
     | '/r/$token'
+    | '/rsp/avatars'
     | '/rsp/checklist'
     | '/rsp/dimensions'
     | '/rsp/event-token'
@@ -465,6 +477,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspChecklistRouteImport
       parentRoute: typeof RspRoute
     }
+    '/rsp/avatars': {
+      id: '/rsp/avatars'
+      path: '/avatars'
+      fullPath: '/rsp/avatars'
+      preLoaderRoute: typeof RspAvatarsRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/r/$token': {
       id: '/r/$token'
       path: '/r/$token'
@@ -532,6 +551,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface RspRouteChildren {
+  RspAvatarsRoute: typeof RspAvatarsRoute
   RspChecklistRoute: typeof RspChecklistRoute
   RspDimensionsRoute: typeof RspDimensionsRoute
   RspEventTokenRoute: typeof RspEventTokenRoute
@@ -545,6 +565,7 @@ interface RspRouteChildren {
 }
 
 const RspRouteChildren: RspRouteChildren = {
+  RspAvatarsRoute: RspAvatarsRoute,
   RspChecklistRoute: RspChecklistRoute,
   RspDimensionsRoute: RspDimensionsRoute,
   RspEventTokenRoute: RspEventTokenRoute,

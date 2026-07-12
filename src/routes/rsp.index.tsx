@@ -44,6 +44,11 @@ const sections = [
     desc: "The consent dimensions RSP tracks, including avatars.",
   },
   {
+    to: "/rsp/checklist",
+    label: "Identity checklist",
+    desc: "Interactively secure your avatar: claim, grant, project, revoke.",
+  },
+  {
     to: "/rsp/implementations",
     label: "Implementations",
     desc: "Where RSP is deployed and what it governs.",

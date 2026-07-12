@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 import { saveAvatar, listMyAvatars, deleteAvatar } from "@/lib/avatar.functions";
 
 export const Route = createFileRoute("/rsp/avatar-creator")({
@@ -26,6 +27,8 @@ export const Route = createFileRoute("/rsp/avatar-creator")({
 
 // ─── Config ──────────────────────────────────────────────────────────────
 type SourceType = "uploaded" | "live_capture";
+type FacingMode = "user" | "environment";
+type Box = { x: number; y: number; width: number; height: number };
 
 const STYLES = [
   { id: "illustrated", label: "Illustrated", desc: "Bold, flat digital illustration" },
@@ -39,14 +42,25 @@ const STYLES = [
 const LIKENESS_STEPS = [10, 30, 50, 70, 90];
 const STEP_LABELS = ["Very stylized", "Stylized", "Balanced", "Recognizable", "Realistic"];
 
-const EXPORT_SIZES = [
-  { label: "Full", size: 0 },
-  { label: "1024px", size: 1024 },
-  { label: "512px", size: 512 },
-  { label: "400px", size: 400 },
+const PLATFORM_PRESETS: { label: string; size: number }[] = [
+  { label: "Full quality", size: 0 },
+  { label: "LinkedIn · 400", size: 400 },
+  { label: "Instagram · 320", size: 320 },
+  { label: "X / Twitter · 400", size: 400 },
+  { label: "Facebook · 500", size: 500 },
+  { label: "Discord · 512", size: 512 },
+  { label: "WhatsApp · 640", size: 640 },
+  { label: "Slack · 512", size: 512 },
 ];
 
-type Screen = "input" | "style" | "result";
+const FORMATS = [
+  { id: "png", label: "PNG", mime: "image/png" },
+  { id: "jpeg", label: "JPG", mime: "image/jpeg" },
+  { id: "webp", label: "WebP", mime: "image/webp" },
+] as const;
+type FormatId = (typeof FORMATS)[number]["id"];
+
+type Screen = "input" | "faces" | "style" | "result";
 
 // ─── Image helpers ─────────────────────────────────────────────────────────
 function loadImage(src: string): Promise<HTMLImageElement> {
@@ -58,8 +72,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-// Center-crop to square and downscale.
-async function toSquareDataUrl(src: string, max = 1024): Promise<{ url: string; w: number; h: number }> {
+async function toSquareDataUrl(src: string, max = 1024): Promise<string> {
   const img = await loadImage(src);
   const side = Math.min(img.naturalWidth, img.naturalHeight);
   const out = Math.min(side, max);
@@ -70,18 +83,94 @@ async function toSquareDataUrl(src: string, max = 1024): Promise<{ url: string; 
   const sx = (img.naturalWidth - side) / 2;
   const sy = (img.naturalHeight - side) / 2;
   ctx.drawImage(img, sx, sy, side, side, 0, 0, out, out);
-  return { url: canvas.toDataURL("image/jpeg", 0.92), w: img.naturalWidth, h: img.naturalHeight };
+  return canvas.toDataURL("image/jpeg", 0.92);
 }
 
-async function resizeDataUrl(src: string, size: number): Promise<string> {
-  if (!size) return src;
+// Crop a square around a detected face box (with padding), then downscale.
+async function cropFaceToSquare(src: string, box: Box, max = 1024): Promise<string> {
   const img = await loadImage(src);
+  const cx = box.x + box.width / 2;
+  const cy = box.y + box.height / 2;
+  let side = Math.max(box.width, box.height) * 1.8;
+  side = Math.min(side, img.naturalWidth, img.naturalHeight);
+  let sx = cx - side / 2;
+  let sy = cy - side / 2;
+  sx = Math.max(0, Math.min(sx, img.naturalWidth - side));
+  sy = Math.max(0, Math.min(sy, img.naturalHeight - side));
+  const out = Math.min(side, max);
   const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
+  canvas.width = out;
+  canvas.height = out;
   const ctx = canvas.getContext("2d")!;
-  ctx.drawImage(img, 0, 0, size, size);
-  return canvas.toDataURL("image/png");
+  ctx.drawImage(img, sx, sy, side, side, 0, 0, out, out);
+  return canvas.toDataURL("image/jpeg", 0.92);
+}
+
+// Remove a plain background by flood-filling from the edges (best-effort).
+function floodTransparent(ctx: CanvasRenderingContext2D, w: number, h: number, tol = 36) {
+  const data = ctx.getImageData(0, 0, w, h);
+  const p = data.data;
+  const corners = [0, (w - 1) * 4, (h - 1) * w * 4, ((h - 1) * w + (w - 1)) * 4];
+  let r = 0, g = 0, b = 0;
+  corners.forEach((i) => {
+    r += p[i];
+    g += p[i + 1];
+    b += p[i + 2];
+  });
+  r /= 4;
+  g /= 4;
+  b /= 4;
+  const visited = new Uint8Array(w * h);
+  const stack: number[] = [];
+  const push = (x: number, y: number) => {
+    if (x < 0 || y < 0 || x >= w || y >= h) return;
+    const idx = y * w + x;
+    if (visited[idx]) return;
+    visited[idx] = 1;
+    stack.push(idx);
+  };
+  for (let x = 0; x < w; x++) {
+    push(x, 0);
+    push(x, h - 1);
+  }
+  for (let y = 0; y < h; y++) {
+    push(0, y);
+    push(w - 1, y);
+  }
+  const tol2 = tol * tol;
+  while (stack.length) {
+    const idx = stack.pop()!;
+    const i = idx * 4;
+    const dr = p[i] - r, dg = p[i + 1] - g, db = p[i + 2] - b;
+    if (dr * dr + dg * dg + db * db <= tol2) {
+      p[i + 3] = 0;
+      const x = idx % w;
+      const y = (idx / w) | 0;
+      push(x + 1, y);
+      push(x - 1, y);
+      push(x, y + 1);
+      push(x, y - 1);
+    }
+  }
+  ctx.putImageData(data, 0, 0);
+}
+
+async function exportImage(
+  src: string,
+  opts: { size: number; format: FormatId; transparent: boolean },
+): Promise<string> {
+  const img = await loadImage(src);
+  const target = opts.size || img.naturalWidth;
+  const canvas = document.createElement("canvas");
+  canvas.width = target;
+  canvas.height = target;
+  const ctx = canvas.getContext("2d")!;
+  ctx.drawImage(img, 0, 0, target, target);
+  if (opts.transparent && opts.format === "png") {
+    floodTransparent(ctx, target, target);
+  }
+  const mime = FORMATS.find((f) => f.id === opts.format)!.mime;
+  return canvas.toDataURL(mime, 0.92);
 }
 
 function download(dataUrl: string, name: string) {
@@ -93,28 +182,24 @@ function download(dataUrl: string, name: string) {
   a.remove();
 }
 
-// Best-effort face validation. Uses the browser FaceDetector where available.
-async function validateFace(src: string): Promise<string | null> {
-  const img = await loadImage(src);
-  if (Math.min(img.naturalWidth, img.naturalHeight) < 256) {
-    return "That image is a bit small. Please use a photo at least 256×256 pixels.";
-  }
+// Detect faces. Returns boxes in the image's natural pixel coordinates, or null
+// when the browser has no FaceDetector (we can't validate — allow through).
+async function detectFaces(src: string): Promise<Box[] | null> {
   const FD = (window as any).FaceDetector;
-  if (typeof FD === "function") {
-    try {
-      const detector = new FD({ fastMode: true, maxDetectedFaces: 5 });
-      const faces = await detector.detect(img);
-      if (!faces || faces.length === 0) {
-        return "We couldn't find a face in that photo. Please use a clear, front-facing portrait.";
-      }
-      if (faces.length > 1) {
-        return "We found more than one face. Please use a photo with just you, or crop to one face.";
-      }
-    } catch {
-      /* detector unavailable — fall through to allow */
-    }
+  if (typeof FD !== "function") return null;
+  try {
+    const img = await loadImage(src);
+    const detector = new FD({ fastMode: true, maxDetectedFaces: 10 });
+    const faces = await detector.detect(img);
+    return (faces ?? []).map((f: any) => ({
+      x: f.boundingBox.x,
+      y: f.boundingBox.y,
+      width: f.boundingBox.width,
+      height: f.boundingBox.height,
+    }));
+  } catch {
+    return null;
   }
-  return null;
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -132,6 +217,11 @@ function AvatarCreator() {
   const [inputError, setInputError] = useState<string | null>(null);
   const [validating, setValidating] = useState(false);
 
+  // Face selection
+  const [pendingRaw, setPendingRaw] = useState<string | null>(null);
+  const [faceBoxes, setFaceBoxes] = useState<Box[]>([]);
+  const [naturalSize, setNaturalSize] = useState<{ w: number; h: number }>({ w: 1, h: 1 });
+
   const [generating, setGenerating] = useState(false);
   const [genError, setGenError] = useState<string | null>(null);
   const [compare, setCompare] = useState(false);
@@ -140,7 +230,13 @@ function AvatarCreator() {
 
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
-  const [exportSize, setExportSize] = useState(0);
+
+  // Export
+  const [presetIdx, setPresetIdx] = useState(0);
+  const [format, setFormat] = useState<FormatId>("png");
+  const [transparent, setTransparent] = useState(false);
+  const [customSize, setCustomSize] = useState<string>("");
+  const [exporting, setExporting] = useState(false);
 
   const likeness = LIKENESS_STEPS[stepIdx];
   const cacheKey = (s: string, l: number) => `${s}:${l}`;
@@ -149,6 +245,10 @@ function AvatarCreator() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [cameraOn, setCameraOn] = useState(false);
+  const [facingMode, setFacingMode] = useState<FacingMode>("user");
+  const [multiCamera, setMultiCamera] = useState(false);
+  const [permissionState, setPermissionState] = useState<"idle" | "denied" | "unavailable" | "error">("idle");
+  const [captured, setCaptured] = useState<string | null>(null);
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -158,41 +258,94 @@ function AvatarCreator() {
 
   useEffect(() => () => stopCamera(), [stopCamera]);
 
-  async function startCamera() {
+  const attachStream = useCallback((stream: MediaStream) => {
+    streamRef.current = stream;
+    setCameraOn(true);
+    setPermissionState("idle");
+    queueMicrotask(() => {
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play().catch(() => {});
+      }
+    });
+  }, []);
+
+  async function startCamera(mode: FacingMode) {
     setInputError(null);
+    setCaptured(null);
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setPermissionState("unavailable");
+      setCameraOn(true);
+      return;
+    }
+    // Stop any prior stream so switching cameras releases the device.
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+    setSourceType("live_capture");
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 1280 } },
+        video: { facingMode: { ideal: mode }, width: { ideal: 1280 }, height: { ideal: 1280 } },
         audio: false,
       });
-      streamRef.current = stream;
+      setFacingMode(mode);
+      attachStream(stream);
+      // Detect if a second camera exists to offer a toggle.
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        setMultiCamera(devices.filter((d) => d.kind === "videoinput").length > 1);
+      } catch {
+        /* ignore */
+      }
+    } catch (err) {
       setCameraOn(true);
-      setSourceType("live_capture");
-      queueMicrotask(() => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play().catch(() => {});
-        }
-      });
-    } catch {
-      setInputError("We couldn't access your camera. Check permissions, or upload a photo instead.");
+      const name = (err as DOMException)?.name;
+      if (name === "NotAllowedError" || name === "SecurityError") setPermissionState("denied");
+      else if (name === "NotFoundError" || name === "DevicesNotFoundError")
+        setPermissionState("unavailable");
+      else setPermissionState("error");
     }
   }
 
-  async function capture() {
+  function switchCamera() {
+    startCamera(facingMode === "user" ? "environment" : "user");
+  }
+
+  function capture() {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !video.videoWidth) return;
     const canvas = document.createElement("canvas");
     const side = Math.min(video.videoWidth, video.videoHeight);
     canvas.width = side;
     canvas.height = side;
     const ctx = canvas.getContext("2d")!;
+    if (facingMode === "user") {
+      // Mirror to match the preview the user sees.
+      ctx.translate(side, 0);
+      ctx.scale(-1, 1);
+    }
     const sx = (video.videoWidth - side) / 2;
     const sy = (video.videoHeight - side) / 2;
     ctx.drawImage(video, sx, sy, side, side, 0, 0, side, side);
-    const raw = canvas.toDataURL("image/jpeg", 0.92);
+    setCaptured(canvas.toDataURL("image/jpeg", 0.92));
+    // Freeze the frame; keep the stream so "Retake" is instant.
+  }
+
+  function retake() {
+    setCaptured(null);
+  }
+
+  async function confirmCapture() {
+    if (!captured) return;
+    const raw = captured;
     stopCamera();
+    setCaptured(null);
     await acceptImage(raw, "live_capture");
+  }
+
+  function closeCamera() {
+    stopCamera();
+    setCaptured(null);
+    setPermissionState("idle");
   }
 
   async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -213,19 +366,53 @@ function AvatarCreator() {
     setInputError(null);
     setValidating(true);
     try {
-      const err = await validateFace(raw);
-      if (err) {
-        setInputError(err);
+      const img = await loadImage(raw);
+      if (Math.min(img.naturalWidth, img.naturalHeight) < 256) {
+        setInputError("That image is a bit small. Please use a photo at least 256×256 pixels.");
         return;
       }
-      const { url } = await toSquareDataUrl(raw, 1024);
-      cacheRef.current.clear();
-      setOriginal(url);
-      setResult(null);
       setSourceType(type);
+      const faces = await detectFaces(raw);
+      if (faces && faces.length === 0) {
+        setInputError("We couldn't find a face in that photo. Please use a clear, front-facing portrait.");
+        return;
+      }
+      if (faces && faces.length > 1) {
+        // Offer face selection instead of forcing a re-take.
+        setPendingRaw(raw);
+        setFaceBoxes(faces);
+        setNaturalSize({ w: img.naturalWidth, h: img.naturalHeight });
+        setScreen("faces");
+        return;
+      }
+      let squared: string;
+      if (faces && faces.length === 1) {
+        squared = await cropFaceToSquare(raw, faces[0]);
+      } else {
+        squared = await toSquareDataUrl(raw);
+      }
+      cacheRef.current.clear();
+      setOriginal(squared);
+      setResult(null);
       setScreen("style");
     } catch (e) {
       setInputError(e instanceof Error ? e.message : "Something went wrong reading that image.");
+    } finally {
+      setValidating(false);
+    }
+  }
+
+  async function pickFace(box: Box) {
+    if (!pendingRaw) return;
+    setValidating(true);
+    try {
+      const squared = await cropFaceToSquare(pendingRaw, box);
+      cacheRef.current.clear();
+      setOriginal(squared);
+      setResult(null);
+      setPendingRaw(null);
+      setFaceBoxes([]);
+      setScreen("style");
     } finally {
       setValidating(false);
     }
@@ -244,10 +431,13 @@ function AvatarCreator() {
       setGenerating(true);
       setGenError(null);
       try {
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        const { data: sess } = await supabase.auth.getSession();
+        if (sess.session?.access_token) headers.Authorization = `Bearer ${sess.session.access_token}`;
         const res = await fetch("/api/avatar-generate", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ image: original, style: s, likeness: l }),
+          headers,
+          body: JSON.stringify({ image: original, style: s, likeness: l, sourceType }),
         });
         const body = (await res.json().catch(() => ({}))) as { image?: string; error?: string };
         if (!res.ok || !body.image) {
@@ -262,10 +452,9 @@ function AvatarCreator() {
         setGenerating(false);
       }
     },
-    [original],
+    [original, sourceType],
   );
 
-  // Start first generation when entering the result screen.
   async function startGeneration() {
     setScreen("result");
     setSaveState("idle");
@@ -298,6 +487,7 @@ function AvatarCreator() {
     cacheRef.current.clear();
     setOriginal(null);
     setResult(null);
+    setPendingRaw(null);
     setInputError(null);
     setSaveState("idle");
     setScreen("input");
@@ -305,13 +495,20 @@ function AvatarCreator() {
 
   async function handleExport() {
     if (!result) return;
-    const sized = await resizeDataUrl(result, exportSize);
-    download(sized, `avatar-${style}-${likeness}${exportSize ? `-${exportSize}` : ""}.png`);
+    setExporting(true);
+    try {
+      const custom = parseInt(customSize, 10);
+      const size = Number.isFinite(custom) && custom > 0 ? Math.min(custom, 2048) : PLATFORM_PRESETS[presetIdx].size;
+      const out = await exportImage(result, { size, format, transparent });
+      const px = size || "full";
+      download(out, `avatar-${style}-${likeness}-${px}.${format === "jpeg" ? "jpg" : format}`);
+    } finally {
+      setExporting(false);
+    }
   }
 
   async function handleSave() {
-    if (!result || !original) return;
-    if (!user) return;
+    if (!result || !original || !user) return;
     setSaveState("saving");
     setSaveMsg(null);
     try {
@@ -363,10 +560,12 @@ function AvatarCreator() {
           </p>
         </div>
 
-        {/* Stepper */}
         <ol className="avc-steps" aria-label="Progress">
-          {(["input", "style", "result"] as Screen[]).map((s, i) => (
-            <li key={s} className={`avc-step ${screen === s ? "is-active" : ""}`}>
+          {(["input", "style", "result"] as const).map((s, i) => (
+            <li
+              key={s}
+              className={`avc-step ${screen === s || (s === "input" && screen === "faces") ? "is-active" : ""}`}
+            >
               <span className="avc-step-num">{i + 1}</span>
               <span>{s === "input" ? "Photo" : s === "style" ? "Style" : "Generate"}</span>
             </li>
@@ -390,10 +589,10 @@ function AvatarCreator() {
                     <span className="avc-drop-title">Upload a photo</span>
                     <span className="avc-drop-sub">JPG, PNG or HEIC</span>
                   </label>
-                  <button type="button" className="avc-drop avc-drop-btn" onClick={startCamera}>
+                  <button type="button" className="avc-drop avc-drop-btn" onClick={() => startCamera("user")}>
                     <span className="avc-drop-icon" aria-hidden>◉</span>
                     <span className="avc-drop-title">Use your camera</span>
-                    <span className="avc-drop-sub">Front-facing selfie</span>
+                    <span className="avc-drop-sub">We’ll ask for camera permission</span>
                   </button>
                 </div>
 
@@ -408,24 +607,132 @@ function AvatarCreator() {
                   <strong>Your photo, handled with care.</strong> When you generate, your photo is
                   sent once to our AI provider to create the avatar. It is <strong>not stored</strong>{" "}
                   by this app unless you choose “Save to my account”. If you do save, both your photo
-                  and the avatar are kept privately in your account until you delete them — you can
-                  remove them any time below. We never use your photo for anything other than
-                  generating your avatar.
+                  and the avatar are kept privately in your account until you delete them — and any
+                  unsaved photo is automatically purged within 7 days. We never use your photo for
+                  anything other than generating your avatar.
                 </div>
               </>
             ) : (
               <div className="avc-camera">
-                <video ref={videoRef} className="avc-video" playsInline muted aria-label="Camera preview" />
-                <div className="avc-actions">
-                  <button type="button" className="rsp-btn-primary" onClick={capture}>
-                    Capture
-                  </button>
-                  <button type="button" className="avc-btn-ghost" onClick={stopCamera}>
-                    Cancel
-                  </button>
-                </div>
+                {permissionState === "idle" && !captured && (
+                  <>
+                    <div className="avc-video-wrap">
+                      <video
+                        ref={videoRef}
+                        className={`avc-video ${facingMode === "user" ? "is-mirror" : ""}`}
+                        playsInline
+                        muted
+                        aria-label="Camera preview"
+                      />
+                      {multiCamera && (
+                        <button
+                          type="button"
+                          className="avc-cam-flip"
+                          onClick={switchCamera}
+                          aria-label="Switch camera"
+                          title="Switch camera"
+                        >
+                          ⇄
+                        </button>
+                      )}
+                    </div>
+                    <p className="avc-cam-hint">
+                      {facingMode === "user" ? "Front camera" : "Back camera"} · Line up your face and
+                      capture.
+                    </p>
+                    <div className="avc-actions">
+                      <button type="button" className="rsp-btn-primary" onClick={capture}>
+                        Capture
+                      </button>
+                      <button type="button" className="avc-btn-ghost" onClick={closeCamera}>
+                        Cancel
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {captured && (
+                  <>
+                    <div className="avc-video-wrap">
+                      <img src={captured} alt="Captured photo preview" className="avc-video" />
+                    </div>
+                    <p className="avc-cam-hint">Happy with this shot?</p>
+                    <div className="avc-actions">
+                      <button type="button" className="rsp-btn-primary" onClick={confirmCapture}>
+                        Use this photo
+                      </button>
+                      <button type="button" className="avc-btn-outline" onClick={retake}>
+                        Retake
+                      </button>
+                      <button type="button" className="avc-btn-ghost" onClick={closeCamera}>
+                        Cancel
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {permissionState !== "idle" && (
+                  <div className="avc-perm">
+                    <p className="avc-note avc-error" role="alert">
+                      {permissionState === "denied" &&
+                        "Camera access was blocked. Allow camera access in your browser’s address-bar or site settings, then try again."}
+                      {permissionState === "unavailable" &&
+                        "No camera is available on this device. You can upload a photo instead."}
+                      {permissionState === "error" &&
+                        "Something went wrong opening the camera. Try again, or upload a photo instead."}
+                    </p>
+                    <div className="avc-actions">
+                      {permissionState !== "unavailable" && (
+                        <button type="button" className="rsp-btn-primary" onClick={() => startCamera(facingMode)}>
+                          Try again
+                        </button>
+                      )}
+                      <button type="button" className="avc-btn-ghost" onClick={closeCamera}>
+                        Back to upload
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
+          </div>
+        )}
+
+        {/* ── Screen: face selection ── */}
+        {screen === "faces" && pendingRaw && (
+          <div className="avc-card">
+            <h3 className="avc-h3">We found more than one face</h3>
+            <p className="avc-muted" style={{ marginBottom: 16 }}>
+              Tap the face you want to turn into an avatar.
+            </p>
+            <div
+              className="avc-face-stage"
+              style={{ aspectRatio: `${naturalSize.w} / ${naturalSize.h}` }}
+            >
+              <img src={pendingRaw} alt="Your photo with detected faces" className="avc-face-img" />
+              {faceBoxes.map((b, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className="avc-face-box"
+                  onClick={() => pickFace(b)}
+                  aria-label={`Choose face ${i + 1}`}
+                  style={{
+                    left: `${(b.x / naturalSize.w) * 100}%`,
+                    top: `${(b.y / naturalSize.h) * 100}%`,
+                    width: `${(b.width / naturalSize.w) * 100}%`,
+                    height: `${(b.height / naturalSize.h) * 100}%`,
+                  }}
+                >
+                  <span className="avc-face-num">{i + 1}</span>
+                </button>
+              ))}
+            </div>
+            <div className="avc-actions">
+              <button type="button" className="avc-btn-ghost" onClick={newPhoto}>
+                Use a different photo
+              </button>
+            </div>
           </div>
         )}
 
@@ -433,7 +740,7 @@ function AvatarCreator() {
         {screen === "style" && original && (
           <div className="avc-card">
             <div className="avc-style-head">
-              <img src={original} alt="Your uploaded photo" className="avc-thumb" />
+              <img src={original} alt="Your selected photo" className="avc-thumb" />
               <div>
                 <h3 className="avc-h3">Pick a starting style</h3>
                 <p className="avc-muted">
@@ -561,30 +868,82 @@ function AvatarCreator() {
                   </p>
                 )}
 
-                <div className="avc-field">
-                  <span className="avc-field-label">Export size</span>
-                  <div className="avc-chip-row">
-                    {EXPORT_SIZES.map((sz) => (
-                      <button
-                        key={sz.label}
-                        type="button"
-                        className={`avc-chip ${exportSize === sz.size ? "is-sel" : ""}`}
-                        onClick={() => setExportSize(sz.size)}
-                      >
-                        {sz.label}
-                      </button>
-                    ))}
+                <details className="avc-export">
+                  <summary>Export options</summary>
+                  <div className="avc-field">
+                    <span className="avc-field-label">Size preset</span>
+                    <div className="avc-chip-row">
+                      {PLATFORM_PRESETS.map((p, i) => (
+                        <button
+                          key={p.label}
+                          type="button"
+                          className={`avc-chip ${presetIdx === i && !customSize ? "is-sel" : ""}`}
+                          onClick={() => {
+                            setPresetIdx(i);
+                            setCustomSize("");
+                          }}
+                        >
+                          {p.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                  <div className="avc-field">
+                    <label className="avc-field-label" htmlFor="avc-custom">
+                      Custom square size (px)
+                    </label>
+                    <input
+                      id="avc-custom"
+                      type="number"
+                      min={64}
+                      max={2048}
+                      placeholder="e.g. 800"
+                      className="avc-num"
+                      value={customSize}
+                      onChange={(e) => setCustomSize(e.target.value)}
+                    />
+                  </div>
+                  <div className="avc-field">
+                    <span className="avc-field-label">Format</span>
+                    <div className="avc-chip-row">
+                      {FORMATS.map((f) => (
+                        <button
+                          key={f.id}
+                          type="button"
+                          className={`avc-chip ${format === f.id ? "is-sel" : ""}`}
+                          onClick={() => {
+                            setFormat(f.id);
+                            if (f.id !== "png") setTransparent(false);
+                          }}
+                        >
+                          {f.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <label className={`avc-toggle ${format !== "png" ? "is-disabled" : ""}`}>
+                    <input
+                      type="checkbox"
+                      checked={transparent}
+                      disabled={format !== "png"}
+                      onChange={(e) => setTransparent(e.target.checked)}
+                    />
+                    Transparent background (PNG)
+                  </label>
+                  <p className="avc-hint-sm">
+                    Transparency removes a plain, single-color background. Works best with the Line
+                    art, Illustrated and 3D styles.
+                  </p>
+                </details>
 
                 <div className="avc-actions avc-actions-wrap">
                   <button
                     type="button"
                     className="rsp-btn-primary"
                     onClick={handleExport}
-                    disabled={!result || generating}
+                    disabled={!result || generating || exporting}
                   >
-                    Download
+                    {exporting ? "Preparing…" : "Download"}
                   </button>
                   {user ? (
                     <button
@@ -675,11 +1034,23 @@ const css = `
   .avc-privacy { margin-top:20px; font-size:.82rem; line-height:1.6; color:var(--rsp-text-muted); background:var(--rsp-bg-warm,#faf7f5); border:1px solid var(--avc-line); border-radius:12px; padding:14px 16px; }
   .avc-privacy strong { color:var(--rsp-text); }
 
-  .avc-camera { display:flex; flex-direction:column; align-items:center; gap:16px; }
-  .avc-video { width:100%; max-width:420px; aspect-ratio:1/1; object-fit:cover; border-radius:14px; transform:scaleX(-1); background:#000; }
+  .avc-camera { display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .avc-video-wrap { position:relative; width:100%; max-width:420px; }
+  .avc-video { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:14px; background:#000; display:block; }
+  .avc-video.is-mirror { transform:scaleX(-1); }
+  .avc-cam-flip { position:absolute; top:10px; right:10px; width:40px; height:40px; border-radius:50%; border:none; background:rgba(0,0,0,.55); color:#fff; font-size:1.2rem; cursor:pointer; display:grid; place-items:center; }
+  .avc-cam-flip:hover { background:rgba(0,0,0,.75); }
+  .avc-cam-hint { font-size:.82rem; color:var(--rsp-text-muted); margin:0; text-align:center; }
+  .avc-perm { width:100%; max-width:420px; }
 
-  .avc-actions { display:flex; gap:12px; align-items:center; margin-top:22px; flex-wrap:wrap; }
-  .avc-actions-wrap { margin-top:8px; }
+  .avc-face-stage { position:relative; width:100%; max-width:520px; margin:0 auto; border-radius:14px; overflow:hidden; border:1px solid var(--avc-line); }
+  .avc-face-img { width:100%; display:block; }
+  .avc-face-box { position:absolute; border:2.5px solid var(--rsp-primary); background:oklch(60% .22 25 / .12); border-radius:8px; cursor:pointer; transition:background .15s; padding:0; }
+  .avc-face-box:hover { background:oklch(60% .22 25 / .3); }
+  .avc-face-num { position:absolute; top:-10px; left:-10px; width:24px; height:24px; border-radius:50%; background:var(--rsp-primary); color:#fff; font-size:.75rem; font-weight:700; display:grid; place-items:center; }
+
+  .avc-actions { display:flex; gap:12px; align-items:center; margin-top:22px; flex-wrap:wrap; justify-content:center; }
+  .avc-actions-wrap { margin-top:8px; justify-content:flex-start; }
   .avc-btn-ghost { background:none; border:none; color:var(--rsp-text-muted); font:inherit; font-size:.85rem; cursor:pointer; text-decoration:underline; }
   .avc-btn-ghost:hover { color:var(--rsp-text); }
   .avc-btn-outline { display:inline-flex; align-items:center; font:inherit; font-size:.85rem; font-weight:600; padding:9px 18px; border-radius:999px; border:1px solid var(--rsp-primary); color:var(--rsp-primary); background:transparent; cursor:pointer; text-decoration:none; }
@@ -711,6 +1082,7 @@ const css = `
   @keyframes avc-spin { to { transform:rotate(360deg); } }
   .avc-stage-tools { display:flex; justify-content:flex-end; }
   .avc-toggle { display:inline-flex; gap:8px; align-items:center; font-size:.82rem; color:var(--rsp-text-muted); cursor:pointer; }
+  .avc-toggle.is-disabled { opacity:.5; cursor:not-allowed; }
 
   .avc-controls { display:flex; flex-direction:column; gap:20px; }
   .avc-gauge-head { display:flex; justify-content:space-between; align-items:baseline; }
@@ -723,6 +1095,11 @@ const css = `
   .avc-chip:hover:not(:disabled) { border-color:var(--rsp-primary); color:var(--rsp-text); }
   .avc-chip.is-sel { background:var(--rsp-primary); border-color:var(--rsp-primary); color:#fff; }
   .avc-chip:disabled { opacity:.5; cursor:not-allowed; }
+  .avc-num { width:140px; font:inherit; font-size:.85rem; padding:8px 10px; border-radius:10px; border:1px solid var(--avc-line); background:var(--rsp-surface,#fff); color:var(--rsp-text); }
+  .avc-export { border:1px solid var(--avc-line); border-radius:12px; padding:6px 14px 14px; }
+  .avc-export summary { cursor:pointer; font-size:.85rem; font-weight:600; color:var(--rsp-text); padding:8px 0; }
+  .avc-export .avc-field { margin-top:12px; }
+  .avc-hint-sm { font-size:.74rem; color:var(--rsp-text-muted); margin:8px 0 0; line-height:1.5; }
 
   .avc-gallery { max-width:900px; margin:36px auto 0; }
   .avc-gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:14px; margin-top:14px; }

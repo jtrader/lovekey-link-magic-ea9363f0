@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      avatar_activity_log: {
+        Row: {
+          action: string
+          created_at: string
+          error_detail: string | null
+          id: string
+          likeness_level: number | null
+          source_type: string | null
+          status: string
+          style_preset: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          error_detail?: string | null
+          id?: string
+          likeness_level?: number | null
+          source_type?: string | null
+          status?: string
+          style_preset?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          error_detail?: string | null
+          id?: string
+          likeness_level?: number | null
+          source_type?: string | null
+          status?: string
+          style_preset?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       avatar_results: {
         Row: {
           avatar_source_id: string
@@ -1294,6 +1330,27 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       customer_balances: {
@@ -1334,6 +1391,13 @@ export type Database = {
           id: string
           used_at: string
         }[]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
       }
       is_family_member: {
         Args: { _family_id: string; _user_id: string }
@@ -1378,7 +1442,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1505,6 +1569,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const

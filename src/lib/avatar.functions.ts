@@ -79,6 +79,21 @@ export const saveAvatar = createServerFn({ method: "POST" })
       .single();
     if (insResult.error) throw new Error(insResult.error.message);
 
+    // Admin-safe activity log (no photo data).
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      await supabaseAdmin.from("avatar_activity_log").insert({
+        user_id: userId,
+        action: "save",
+        style_preset: data.style,
+        likeness_level: data.likeness,
+        source_type: data.sourceType,
+        status: "success",
+      });
+    } catch {
+      /* never block a save on logging */
+    }
+
     return {
       id: insResult.data.id,
       style: insResult.data.style_preset,
@@ -87,6 +102,25 @@ export const saveAvatar = createServerFn({ method: "POST" })
       url: await signed(supabase, resultPath),
     };
   });
+
+export const listActivityLog = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { data: isAdmin } = await supabase.rpc("has_role", {
+      _user_id: userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Forbidden");
+    const { data, error } = await supabase
+      .from("avatar_activity_log")
+      .select("id, user_id, action, style_preset, likeness_level, source_type, status, error_detail, created_at")
+      .order("created_at", { ascending: false })
+      .limit(200);
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
 
 export const listMyAvatars = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])

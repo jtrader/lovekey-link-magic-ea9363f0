@@ -1,5 +1,47 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
+import {
+  IconChart,
+  IconClose,
+  IconGauge,
+  IconPulse,
+  IconRotate,
+  IconScales,
+  IconShieldCheck,
+  IconSigma,
+  IconUsers,
+  MacroBullet,
+  MacroFlow,
+  MacroIconBadge,
+  type MacroTone,
+} from "@/components/rsp-macro/MacroVisuals";
+
+const flowSteps = [
+  {
+    tone: "emerald" as MacroTone,
+    icon: <IconUsers />,
+    label: "Pooled intent",
+    desc: "Anonymous demand aggregated per vertical; raw identifiers burned on write.",
+  },
+  {
+    tone: "amber" as MacroTone,
+    icon: <IconPulse />,
+    label: "Capacity telemetry",
+    desc: "Workforce stress, financial velocity and consumer experience sampled.",
+  },
+  {
+    tone: "cyan" as MacroTone,
+    icon: <IconSigma />,
+    label: "VES scoring",
+    desc: "f(Relevance) × (CX / S) × (VT / VA) resolves a live equilibrium score.",
+  },
+  {
+    tone: "purple" as MacroTone,
+    icon: <IconRotate />,
+    label: "Rotational exposure",
+    desc: "Prominence rotates toward operators with real headroom to serve.",
+  },
+] as const;
 
 export const Route = createFileRoute("/rsp_/macro/overview")({
   head: () => ({

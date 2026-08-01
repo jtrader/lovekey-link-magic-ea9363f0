@@ -89,7 +89,7 @@ function EthicalAuctionIndex() {
         id="score"
         eyebrow="The new pillar"
         title="A Respectful Intent Score sitting beside Quality Score."
-        lead="Ad Rank today is roughly bid amount multiplied by quality score, and organic position is roughly relevance multiplied by authority. Vertical Equilibrium Optimization adds one term that no amount of budget or backlink history can buy — whether the destination behaves respectfully and can serve the person on the other side — and applies it to both surfaces."
+        lead="Ad Rank today is roughly bid amount multiplied by quality score, and organic position is roughly relevance multiplied by authority — which is why free organic prominence accrues to whoever ranked yesterday, and why everyone else has to buy their way in. Vertical Equilibrium Optimization adds one term that no amount of budget or backlink history can buy — whether the destination behaves respectfully and can serve the person on the other side — and applies it to both surfaces."
       >
         <div className="ea-formula">
           <div className="ea-formula-label">Proposed ranking terms — paid and organic</div>

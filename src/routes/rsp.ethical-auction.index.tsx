@@ -3,6 +3,7 @@ import { EaCards, EaSection } from "@/components/rsp-ethical-auction";
 import { EaRef, EaNotesList } from "@/components/rsp-ea-notes";
 import {
   EaAsymmetryFaq,
+  EaSeoSemCallout,
   EaCapacitySim,
   EaChannelMetrics,
   EaPairedFormula,
@@ -95,6 +96,8 @@ function EthicalAuctionIndex() {
           </div>
         </div>
       </EaSection>
+
+      <EaSeoSemCallout />
 
       <EaSection
         id="score"

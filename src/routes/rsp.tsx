@@ -892,6 +892,11 @@ const css = `
   }
   .rsp-menu-item:hover { background: var(--rsp-bg-warm); color: var(--rsp-text); }
   .rsp-menu-subitem { padding-left: 26px; font-size: .8rem; }
+  .rsp-menu-branch { display: flex; align-items: center; }
+  .rsp-menu-branch > a { flex: 1; }
+  .rsp-menu-expand { background: none; border: 0; cursor: pointer; color: var(--rsp-muted, #64748b);
+    font-size: .95rem; line-height: 1; padding: 4px 10px; }
+  .rsp-menu-expand:hover { color: var(--rsp-primary); }
   .rsp-menu-subitem.rsp-nav-active { box-shadow: inset 3px 0 0 var(--rsp-primary); }
   .rsp-mobile-subitem { padding-left: 18px; font-size: .85rem; }
   .rsp-mobile-subitem.rsp-nav-active { box-shadow: inset 3px 0 0 var(--rsp-primary); }
@@ -1082,6 +1087,78 @@ const areaMenus: AreaMenu[] = [
     ],
   },
 ];
+
+function MenuBranch({
+  link,
+  pathname,
+  variant,
+  onNavigate,
+}: {
+  link: AreaLink;
+  pathname: string;
+  variant: "desktop" | "mobile";
+  onNavigate: () => void;
+}) {
+  const hasChildren = !!link.children?.length;
+  const childActive = hasChildren ? menuHasActive(pathname, link.children!) : false;
+  const [expanded, setExpanded] = useState(childActive);
+  useEffect(() => {
+    if (childActive) setExpanded(true);
+  }, [childActive]);
+
+  const active = linkIsActive(pathname, link);
+  const itemClass =
+    variant === "desktop"
+      ? `rsp-menu-item${active ? " rsp-nav-active" : ""}`
+      : active
+        ? "rsp-nav-active"
+        : undefined;
+  const subClass = variant === "desktop" ? "rsp-menu-item rsp-menu-subitem" : "rsp-mobile-subitem";
+
+  return (
+    <Fragment>
+      <div className="rsp-menu-branch">
+        <Link
+          to={link.to}
+          role={variant === "desktop" ? "menuitem" : undefined}
+          className={itemClass}
+          aria-current={active ? "page" : undefined}
+          onClick={onNavigate}
+        >
+          {link.label}
+        </Link>
+        {hasChildren && (
+          <button
+            type="button"
+            className="rsp-menu-expand"
+            aria-expanded={expanded}
+            aria-label={`${expanded ? "Collapse" : "Expand"} ${link.label} links`}
+            onClick={(e) => {
+              e.preventDefault();
+              setExpanded((v) => !v);
+            }}
+          >
+            <span aria-hidden="true">{expanded ? "\u2212" : "+"}</span>
+          </button>
+        )}
+      </div>
+      {hasChildren &&
+        expanded &&
+        link.children!.map((c) => (
+          <Link
+            key={c.to}
+            to={c.to}
+            role={variant === "desktop" ? "menuitem" : undefined}
+            className={`${subClass}${linkIsActive(pathname, c) ? " rsp-nav-active" : ""}`}
+            aria-current={linkIsActive(pathname, c) ? "page" : undefined}
+            onClick={onNavigate}
+          >
+            {c.label}
+          </Link>
+        ))}
+    </Fragment>
+  );
+}
 
 function AreaMenus() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -1325,29 +1402,13 @@ function RspLayout() {
               <div key={menu.label} className="rsp-mobile-group">
                 <div className="rsp-mobile-group-label">{menu.label}</div>
                 {menu.links.map((l) => (
-                  <Fragment key={l.to}>
-                    <Link
-                      to={l.to}
-                      className={linkIsActive(pathname, l) ? "rsp-nav-active" : undefined}
-                      aria-current={linkIsActive(pathname, l) ? "page" : undefined}
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {l.label}
-                    </Link>
-                    {l.children?.map((c) => (
-                      <Link
-                        key={c.to}
-                        to={c.to}
-                        className={`rsp-mobile-subitem${
-                          linkIsActive(pathname, c) ? " rsp-nav-active" : ""
-                        }`}
-                        aria-current={linkIsActive(pathname, c) ? "page" : undefined}
-                        onClick={() => setMenuOpen(false)}
-                      >
-                        {c.label}
-                      </Link>
-                    ))}
-                  </Fragment>
+                  <MenuBranch
+                    key={l.to}
+                    link={l}
+                    pathname={pathname}
+                    variant="mobile"
+                    onNavigate={() => setMenuOpen(false)}
+                  />
                 ))}
               </div>
             ))}

@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import { trackEvent } from "@/lib/analytics";
@@ -891,6 +891,7 @@ const css = `
     white-space: nowrap;
   }
   .rsp-menu-item:hover { background: var(--rsp-bg-warm); color: var(--rsp-text); }
+  .rsp-menu-subitem { padding-left: 26px; font-size: .8rem; }
   .rsp-menu-item.rsp-nav-active { color: var(--rsp-primary); font-weight: 600; background: var(--rsp-primary-light); }
 
   /* Mobile grouped menu */
@@ -905,6 +906,8 @@ const css = `
     text-decoration: none; padding: 8px 14px; transition: color .2s;
   }
   .rsp-mobile-group a:hover { color: var(--rsp-text); }
+  .rsp-mobile-group a.rsp-mobile-subitem { padding-left: 28px; font-size: .84rem; }
+  .rsp-mobile-group a.rsp-nav-active { color: var(--rsp-primary); font-weight: 600; }
   @media (max-width: 800px) { .rsp-menus { display: none; } }
 
   /* PREV / NEXT PAGER */
@@ -978,7 +981,12 @@ function isAvatarPath(pathname: string) {
   return AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
 }
 
-type AreaLink = { to: string; label: string; exact?: boolean };
+type AreaLink = { to: string; label: string; exact?: boolean; children?: AreaLink[] };
+
+function linkIsActive(pathname: string, l: AreaLink) {
+  const path = pathname.length > 1 && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
+  return l.exact ? path === l.to : path === l.to || path.startsWith(`${l.to}/`);
+}
 type AreaMenu = {
   label: string;
   to: string;
@@ -1004,7 +1012,18 @@ const areaMenus: AreaMenu[] = [
       { to: "/rsp/case-studies", label: "Case Studies" },
       { to: "/rsp/event-token", label: "Event Token" },
       { to: "/rsp/for-developers", label: "Developers" },
-      { to: "/rsp/macro", label: "Macro Equilibrium" },
+      {
+        to: "/rsp/macro",
+        label: "Macro Equilibrium",
+        children: [
+          { to: "/rsp/macro", label: "Index", exact: true },
+          { to: "/rsp/macro/overview", label: "Overview" },
+          { to: "/rsp/macro/telemetry", label: "Telemetry" },
+          { to: "/rsp/macro/ves-formula", label: "VES Formula" },
+          { to: "/rsp/macro/calibration", label: "Calibration" },
+          { to: "/rsp/macro/governance", label: "Governance" },
+        ],
+      },
       { to: "/rsp/governance", label: "Governance" },
     ],
   },
@@ -1060,17 +1079,31 @@ function AreaMenus() {
             {!single && openIdx === i && (
               <div className="rsp-menu-panel" role="menu">
                 {menu.links.map((l) => (
-                  <Link
-                    key={l.to}
-                    to={l.to}
-                    role="menuitem"
-                    className="rsp-menu-item"
-                    activeProps={{ className: "rsp-menu-item rsp-nav-active" }}
-                    activeOptions={{ exact: l.exact }}
-                    onClick={() => setOpenIdx(null)}
-                  >
-                    {l.label}
-                  </Link>
+                  <Fragment key={l.to}>
+                    <Link
+                      to={l.to}
+                      role="menuitem"
+                      className={`rsp-menu-item${linkIsActive(pathname, l) ? " rsp-nav-active" : ""}`}
+                      aria-current={linkIsActive(pathname, l) ? "page" : undefined}
+                      onClick={() => setOpenIdx(null)}
+                    >
+                      {l.label}
+                    </Link>
+                    {l.children?.map((c) => (
+                      <Link
+                        key={c.to}
+                        to={c.to}
+                        role="menuitem"
+                        className={`rsp-menu-item rsp-menu-subitem${
+                          linkIsActive(pathname, c) ? " rsp-nav-active" : ""
+                        }`}
+                        aria-current={linkIsActive(pathname, c) ? "page" : undefined}
+                        onClick={() => setOpenIdx(null)}
+                      >
+                        {c.label}
+                      </Link>
+                    ))}
+                  </Fragment>
                 ))}
               </div>
             )}
@@ -1210,6 +1243,7 @@ function ClusterPager({ variant }: { variant: "header" | "footer" }) {
 
 function RspLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <div className="rsp-root">
@@ -1256,15 +1290,29 @@ function RspLayout() {
               <div key={menu.label} className="rsp-mobile-group">
                 <div className="rsp-mobile-group-label">{menu.label}</div>
                 {menu.links.map((l) => (
-                  <Link
-                    key={l.to}
-                    to={l.to}
-                    activeProps={{ className: "rsp-nav-active" }}
-                    activeOptions={{ exact: l.exact }}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {l.label}
-                  </Link>
+                  <Fragment key={l.to}>
+                    <Link
+                      to={l.to}
+                      className={linkIsActive(pathname, l) ? "rsp-nav-active" : undefined}
+                      aria-current={linkIsActive(pathname, l) ? "page" : undefined}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {l.label}
+                    </Link>
+                    {l.children?.map((c) => (
+                      <Link
+                        key={c.to}
+                        to={c.to}
+                        className={`rsp-mobile-subitem${
+                          linkIsActive(pathname, c) ? " rsp-nav-active" : ""
+                        }`}
+                        aria-current={linkIsActive(pathname, c) ? "page" : undefined}
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {c.label}
+                      </Link>
+                    ))}
+                  </Fragment>
                 ))}
               </div>
             ))}

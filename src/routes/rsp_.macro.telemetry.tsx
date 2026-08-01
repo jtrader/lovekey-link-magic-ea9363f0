@@ -1,5 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
+import {
+  IconChart,
+  IconPulse,
+  IconUsers,
+  MacroIconBadge,
+} from "@/components/rsp-macro/MacroVisuals";
 
 export const Route = createFileRoute("/rsp_/macro/telemetry")({
   head: () => ({
@@ -43,7 +49,10 @@ function TelemetryPage() {
       <div className="space-y-6">
         <section className="rounded-2xl border border-amber-500/30 bg-[#FFFFFF] p-6">
           <div className="mb-3 flex items-center justify-between gap-3">
-            <h2 className="text-xl font-semibold text-amber-700">
+            <h2 className="flex items-center gap-3 text-xl font-semibold text-amber-700">
+              <MacroIconBadge tone="amber" size="sm">
+                <IconUsers />
+              </MacroIconBadge>
               1. Workforce Capacity Index (S)
             </h2>
             <span className="rounded border border-amber-500/40 bg-amber-50 px-2.5 py-1 font-mono text-xs text-amber-700">
@@ -55,20 +64,23 @@ function TelemetryPage() {
           </p>
           <ul className="grid gap-3 font-mono text-xs text-slate-500 sm:grid-cols-3">
             <li className="rounded-lg border border-slate-200 bg-[#F5F7FB] p-3">
-              • Work Hour Variance
+              ▸ Work Hour Variance
             </li>
             <li className="rounded-lg border border-slate-200 bg-[#F5F7FB] p-3">
-              • Leave Spike Anomaly
+              ▸ Leave Spike Anomaly
             </li>
             <li className="rounded-lg border border-slate-200 bg-[#F5F7FB] p-3">
-              • Shift Friction Rate
+              ▸ Shift Friction Rate
             </li>
           </ul>
         </section>
 
         <section className="rounded-2xl border border-cyan-500/30 bg-[#FFFFFF] p-6">
           <div className="mb-3 flex items-center justify-between gap-3">
-            <h2 className="text-xl font-semibold text-cyan-700">
+            <h2 className="flex items-center gap-3 text-xl font-semibold text-cyan-700">
+              <MacroIconBadge tone="cyan" size="sm">
+                <IconChart />
+              </MacroIconBadge>
               2. Financial Velocity Ratio (VA / VT)
             </h2>
             <span className="rounded border border-cyan-500/40 bg-cyan-50 px-2.5 py-1 font-mono text-xs text-cyan-700">
@@ -80,17 +92,20 @@ function TelemetryPage() {
           </p>
           <ul className="grid gap-3 font-mono text-xs text-slate-500 sm:grid-cols-2">
             <li className="rounded-lg border border-slate-200 bg-[#F5F7FB] p-3">
-              • VA: Actual Rolling 90-Day Revenue Velocity
+              ▸ VA: Actual Rolling 90-Day Revenue Velocity
             </li>
             <li className="rounded-lg border border-slate-200 bg-[#F5F7FB] p-3">
-              • VT: Target Baseline Growth & Survival Pace
+              ▸ VT: Target Baseline Growth & Survival Pace
             </li>
           </ul>
         </section>
 
         <section className="rounded-2xl border border-emerald-500/30 bg-[#FFFFFF] p-6">
           <div className="mb-3 flex items-center justify-between gap-3">
-            <h2 className="text-xl font-semibold text-emerald-700">
+            <h2 className="flex items-center gap-3 text-xl font-semibold text-emerald-700">
+              <MacroIconBadge tone="emerald" size="sm">
+                <IconPulse />
+              </MacroIconBadge>
               3. Consumer Experience Index (CX)
             </h2>
             <span className="rounded border border-emerald-500/40 bg-emerald-50 px-2.5 py-1 font-mono text-xs text-emerald-700">
@@ -103,13 +118,13 @@ function TelemetryPage() {
           </p>
           <ul className="grid gap-3 font-mono text-xs text-slate-500 sm:grid-cols-3">
             <li className="rounded-lg border border-slate-200 bg-[#F5F7FB] p-3">
-              • Call Queue Metadata
+              ▸ Call Queue Metadata
             </li>
             <li className="rounded-lg border border-slate-200 bg-[#F5F7FB] p-3">
-              • 1-Tap Micro-Surveys
+              ▸ 1-Tap Micro-Surveys
             </li>
             <li className="rounded-lg border border-slate-200 bg-[#F5F7FB] p-3">
-              • Job Resolution Speed
+              ▸ Job Resolution Speed
             </li>
           </ul>
         </section>

@@ -1,5 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
+import {
+  IconFlask,
+  IconGauge,
+  IconRotate,
+  MacroIconBadge,
+  type MacroTone,
+} from "@/components/rsp-macro/MacroVisuals";
 
 export const Route = createFileRoute("/rsp_/macro/calibration")({
   head: () => ({
@@ -29,6 +36,8 @@ export const Route = createFileRoute("/rsp_/macro/calibration")({
 const months = [
   {
     tag: "Month 1",
+    tone: "slate" as MacroTone,
+    icon: <IconFlask />,
     tagClass: "bg-slate-200 text-slate-600",
     border: "border-slate-200",
     title: "Equal Exposure Sandbox",
@@ -36,6 +45,8 @@ const months = [
   },
   {
     tag: "Month 2",
+    tone: "amber" as MacroTone,
+    icon: <IconGauge />,
     tagClass: "border border-amber-500/40 bg-amber-50 text-amber-700",
     border: "border-amber-500/30",
     title: "UI/UX Remediation",
@@ -43,6 +54,8 @@ const months = [
   },
   {
     tag: "Month 3",
+    tone: "emerald" as MacroTone,
+    icon: <IconRotate />,
     tagClass: "border border-emerald-500/40 bg-emerald-50 text-emerald-700",
     border: "border-emerald-500/30",
     title: "Telemetry Sync & Launch",
@@ -65,8 +78,20 @@ function CalibrationPage() {
       </p>
 
       <div className="my-8 grid gap-6 md:grid-cols-3">
-        {months.map((m) => (
-          <div key={m.tag} className={`rounded-2xl border bg-[#FFFFFF] p-6 ${m.border}`}>
+        {months.map((m, idx) => (
+          <div key={m.tag} className={`relative rounded-2xl border bg-[#FFFFFF] p-6 ${m.border}`}>
+            {idx < months.length - 1 && (
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 font-mono text-xs text-slate-400 md:-right-4 md:bottom-auto md:left-auto md:top-1/2 md:-translate-y-1/2 md:translate-x-0"
+              >
+                <span className="md:hidden">↓</span>
+                <span className="hidden md:inline">→</span>
+              </span>
+            )}
+            <div className="mb-4">
+              <MacroIconBadge tone={m.tone}>{m.icon}</MacroIconBadge>
+            </div>
             <span
               className={`mb-4 inline-block rounded px-2.5 py-1 font-mono text-xs ${m.tagClass}`}
             >

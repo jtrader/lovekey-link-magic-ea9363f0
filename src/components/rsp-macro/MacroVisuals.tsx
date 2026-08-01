@@ -60,6 +60,13 @@ export const IconShieldCheck = ({ className }: IconProps) => (
   </svg>
 );
 
+export const IconLayersFlow = ({ className }: IconProps) => (
+  <svg {...svgProps(className)}>
+    <path d="M12 3 3 8l9 5 9-5-9-5Z" />
+    <path d="M3 13l9 5 9-5M3 16.5 12 21l9-4.5" />
+  </svg>
+);
+
 export const IconSigma = ({ className }: IconProps) => (
   <svg {...svgProps(className)}>
     <path d="M17 5H7l5 7-5 7h10" />

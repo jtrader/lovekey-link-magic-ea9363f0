@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
+import { IconSigma, MacroIconBadge } from "@/components/rsp-macro/MacroVisuals";
 
 export const Route = createFileRoute("/rsp_/macro/ves-formula")({
   head: () => ({
@@ -64,6 +65,11 @@ function VESFormulaPage() {
       </h1>
 
       <div className="my-8 rounded-2xl border border-cyan-500/30 bg-[#FFFFFF] p-8 text-center shadow-2xl">
+        <div className="mb-3 flex items-center justify-center">
+          <MacroIconBadge tone="cyan">
+            <IconSigma />
+          </MacroIconBadge>
+        </div>
         <div className="mb-2 font-mono text-xs uppercase tracking-widest text-cyan-700">
           Algorithmic Ad Rank & Prominence Formula
         </div>

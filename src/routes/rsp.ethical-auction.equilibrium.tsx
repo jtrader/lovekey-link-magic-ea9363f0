@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { EaCards, EaSection } from "@/components/rsp-ethical-auction";
+import { EaNotesList } from "@/components/rsp-ea-notes";
 
 export const Route = createFileRoute("/rsp/ethical-auction/equilibrium")({
   head: () => ({
@@ -171,6 +172,10 @@ function EquilibriumPage() {
           The formal macro-economic write-up of this model, including the open specification
           document, lives at <Link to="/rsp/macro/ves-formula">@rsp/macro · VES Formula</Link>.
         </p>
+      </EaSection>
+
+      <EaSection eyebrow="Grounding" title="Notes, sources and definitions.">
+        <EaNotesList only={["ves", "adrank", "organic", "ris", "rotational"]} heading="Notes & sources for this page" />
       </EaSection>
 
       <EaSection eyebrow="Keep reading" title="Continue through the specification.">

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { EaCards, EaSection } from "@/components/rsp-ethical-auction";
+import { EaNotesList } from "@/components/rsp-ea-notes";
 
 export const Route = createFileRoute("/rsp/ethical-auction/adoption")({
   head: () => ({
@@ -158,6 +159,10 @@ function AdoptionPage() {
             <p>The core protocol every rule on this page inherits from.</p>
           </Link>
         </div>
+      </EaSection>
+
+      <EaSection eyebrow="Grounding" title="Notes, sources and definitions.">
+        <EaNotesList only={["calibration", "telemetry", "rotational", "asymmetry"]} heading="Notes & sources for this page" />
       </EaSection>
 
       <EaSection eyebrow="Start over" title="Back through the specification.">

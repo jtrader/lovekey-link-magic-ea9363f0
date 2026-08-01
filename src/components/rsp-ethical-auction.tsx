@@ -174,6 +174,166 @@ export const eaCss = `
   }
   .ea-card h3 { font-size: 1rem; font-weight: 600; margin: 0 0 6px; }
   .ea-card p { font-size: .85rem; color: var(--rsp-text-muted); margin: 0; line-height: 1.55; }
+/* ── Citations & footnotes ─────────────────────────────────────────── */
+  .ea-ref a {
+    color: var(--rsp-primary); text-decoration: none; font-size: .68em;
+    padding: 0 1px; font-weight: 600;
+  }
+  .ea-ref a:hover { text-decoration: underline; }
+  .ea-notes {
+    max-width: 1000px; margin: 34px auto 0; background: var(--rsp-bg-warm);
+    border: 1px solid var(--rsp-border); border-radius: var(--rsp-radius); padding: 22px 24px;
+  }
+  .ea-notes-head {
+    font-size: .7rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--rsp-text-soft); margin-bottom: 8px;
+  }
+  .ea-notes-intro { margin: 0 0 12px; font-size: .85rem; color: var(--rsp-text-muted); }
+  .ea-notes-list { margin: 0; padding-left: 20px; }
+  .ea-notes-list li {
+    font-size: .82rem; line-height: 1.6; color: var(--rsp-text-muted); margin-bottom: 10px;
+  }
+  .ea-notes-list li:target { background: var(--rsp-primary-light); border-radius: 6px; padding: 4px 6px; }
+  .ea-notes-list strong { color: var(--rsp-text); }
+
+  /* ── SEO + SEM callout ─────────────────────────────────────────────── */
+  .ea-dual {
+    max-width: 1000px; margin: 16px auto 0; padding: 16px 20px;
+    background: var(--rsp-surface); border: 1px solid var(--rsp-border);
+    border-left: 3px solid var(--rsp-primary); border-radius: var(--rsp-radius);
+  }
+  .ea-dual-tag {
+    font-size: .7rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--rsp-primary); margin-bottom: 6px;
+  }
+  .ea-dual p { margin: 0; font-size: .88rem; line-height: 1.65; color: var(--rsp-text-muted); }
+  .ea-dual strong { color: var(--rsp-text); }
+
+  /* ── Formula term tooltips ─────────────────────────────────────────── */
+  .ea-tt {
+    position: relative; cursor: help;
+    border-bottom: 1px dashed var(--rsp-border-strong, var(--rsp-border));
+  }
+  .ea-tt-pop {
+    position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%);
+    width: min(260px, 70vw); background: var(--rsp-text); color: var(--rsp-surface);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif; font-style: normal;
+    font-size: .74rem; line-height: 1.5; text-align: left; padding: 9px 11px;
+    border-radius: 8px; opacity: 0; visibility: hidden; transition: opacity .15s var(--rsp-ease);
+    z-index: 40; pointer-events: none;
+  }
+  .ea-tt:hover .ea-tt-pop, .ea-tt:focus .ea-tt-pop, .ea-tt:focus-visible .ea-tt-pop {
+    opacity: 1; visibility: visible;
+  }
+  .ea-formula-swap {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; text-align: left;
+  }
+  @media (max-width: 700px) { .ea-formula-swap { grid-template-columns: 1fr; } }
+  .ea-formula-swap > div {
+    background: var(--rsp-surface); border: 1px solid var(--rsp-border);
+    border-radius: var(--rsp-radius); padding: 14px 16px;
+  }
+  .ea-formula-swap span {
+    display: block; font-size: .68rem; font-weight: 600; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--rsp-text-soft); margin-bottom: 6px;
+  }
+  .ea-formula-swap p { margin: 0; font-size: .84rem; line-height: 1.6; color: var(--rsp-text-muted); }
+
+  /* ── SEO vs SEM side-by-side metrics ───────────────────────────────── */
+  .ea-channels { max-width: 1000px; margin: 0 auto; display: grid; gap: 10px; }
+  .ea-channels-head, .ea-channels-row {
+    display: grid; grid-template-columns: 1fr 1.4fr 1.4fr; gap: 12px;
+  }
+  .ea-channels-head > div {
+    font-size: .68rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--rsp-text-soft); padding: 0 4px;
+  }
+  .ea-channels-row {
+    background: var(--rsp-surface); border: 1px solid var(--rsp-border);
+    border-radius: var(--rsp-radius); padding: 14px 16px; align-items: start;
+  }
+  .ea-channels-outcome { font-size: .88rem; font-weight: 600; color: var(--rsp-text); }
+  .ea-channels-cell { font-size: .85rem; line-height: 1.6; color: var(--rsp-text-muted); }
+  .ea-chan-tag {
+    display: inline-block; margin-right: 6px; font-size: .62rem; font-weight: 700;
+    letter-spacing: .08em; padding: 2px 6px; border-radius: 4px; vertical-align: 1px;
+  }
+  .ea-chan-tag.is-seo { background: oklch(94% .05 160); color: oklch(45% .12 160); }
+  .ea-chan-tag.is-sem { background: oklch(94% .05 250); color: oklch(45% .12 265); }
+  @media (max-width: 760px) {
+    .ea-channels-head { display: none; }
+    .ea-channels-row { grid-template-columns: 1fr; gap: 8px; }
+  }
+
+  /* ── Interactive capacity simulator ────────────────────────────────── */
+  .ea-sim { max-width: 1000px; margin: 0 auto; }
+  .ea-sim-controls {
+    background: var(--rsp-bg-warm); border: 1px solid var(--rsp-border);
+    border-radius: var(--rsp-radius); padding: 20px; margin-bottom: 18px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+  }
+  @media (max-width: 760px) { .ea-sim-controls { grid-template-columns: 1fr; } }
+  .ea-sim-controls label { display: block; }
+  .ea-sim-controls label > span {
+    display: flex; justify-content: space-between; gap: 10px; align-items: baseline;
+    font-size: .82rem; font-weight: 600; color: var(--rsp-text); margin-bottom: 8px;
+  }
+  .ea-sim-controls label > span strong { color: var(--rsp-primary); font-size: .95rem; }
+  .ea-sim-controls input[type=range] { width: 100%; accent-color: var(--rsp-primary); }
+  .ea-sim-controls small {
+    display: block; margin-top: 6px; font-size: .74rem; line-height: 1.5; color: var(--rsp-text-soft);
+  }
+  .ea-sim-basis {
+    grid-column: 1 / -1; margin: 0; font-size: .74rem; line-height: 1.55; color: var(--rsp-text-soft);
+    border-top: 1px solid var(--rsp-border); padding-top: 12px;
+  }
+  .ea-sim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .ea-sim-grid { grid-template-columns: 1fr; } }
+  .ea-sim-panel {
+    background: var(--rsp-surface); border: 1px solid var(--rsp-border);
+    border-radius: var(--rsp-radius); padding: 20px;
+  }
+  .ea-sim-panel.is-good { border-color: oklch(80% .09 160); background: oklch(99% .012 160); }
+  .ea-sim-panel-tag {
+    font-size: .7rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--rsp-text-soft); margin-bottom: 14px;
+  }
+  .ea-sim-panel.is-good .ea-sim-panel-tag { color: oklch(48% .12 160); }
+  .ea-sim-metric {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    font-size: .84rem; color: var(--rsp-text-muted); margin-top: 12px;
+  }
+  .ea-sim-metric strong { font-size: 1rem; color: var(--rsp-text); font-variant-numeric: tabular-nums; }
+  .ea-sim-metric strong.is-bad { color: oklch(55% .17 28); }
+  .ea-sim-metric strong.is-good { color: oklch(48% .12 160); }
+  .ea-sim-bar {
+    height: 7px; border-radius: 999px; background: var(--rsp-border);
+    overflow: hidden; margin-top: 6px;
+  }
+  .ea-sim-bar-fill { height: 100%; border-radius: 999px; transition: width .25s var(--rsp-ease); }
+  .ea-sim-verdict {
+    margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--rsp-border);
+    font-size: .82rem; line-height: 1.6; color: var(--rsp-text-muted);
+  }
+
+  /* ── Asymmetry FAQ ─────────────────────────────────────────────────── */
+  .ea-faq { max-width: 860px; margin: 0 auto; display: grid; gap: 10px; }
+  .ea-faq-item {
+    background: var(--rsp-surface); border: 1px solid var(--rsp-border);
+    border-radius: var(--rsp-radius); padding: 0 18px;
+  }
+  .ea-faq-item summary {
+    cursor: pointer; list-style: none; padding: 15px 0; font-size: .92rem; font-weight: 600;
+    color: var(--rsp-text); display: flex; justify-content: space-between; gap: 12px; align-items: center;
+  }
+  .ea-faq-item summary::-webkit-details-marker { display: none; }
+  .ea-faq-item summary::after { content: '+'; color: var(--rsp-primary); font-size: 1.15rem; }
+  .ea-faq-item[open] summary::after { content: '–'; }
+  .ea-faq-body {
+    padding: 0 0 16px; font-size: .87rem; line-height: 1.7; color: var(--rsp-text-muted);
+    border-top: 1px solid var(--rsp-border); padding-top: 12px;
+  }
+  .ea-faq-body strong { color: var(--rsp-text); }
 `;
 
 export function EaStyles() {

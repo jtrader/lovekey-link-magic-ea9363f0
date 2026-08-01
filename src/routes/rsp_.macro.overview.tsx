@@ -125,47 +125,58 @@ function MacroOverview() {
 
       <div className="my-10 grid gap-6 md:grid-cols-2">
         <div className="rounded-2xl border border-slate-200 bg-[#FFFFFF] p-6 shadow-lg">
-          <div className="mb-2 font-mono text-xs uppercase tracking-wider text-red-700">
-            The Legacy Model
+          <div className="mb-4 flex items-center gap-3">
+            <MacroIconBadge tone="red">
+              <IconChart />
+            </MacroIconBadge>
+            <div className="font-mono text-xs uppercase tracking-wider text-red-700">
+              The Legacy Model
+            </div>
           </div>
           <h2 className="mb-3 text-xl font-semibold text-slate-900">Monopolistic Extraction</h2>
           <ul className="space-y-3 text-sm text-slate-500">
-            <li className="flex items-start gap-2">
-              <span className="font-bold text-red-700">•</span> Permanent user profiling &
-              predatory retargeting.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold text-red-700">•</span> Top 1–3 players capture 80% of
-              volume regardless of capacity.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold text-red-700">•</span> Overworked staff, customer
-              bottlenecks, and wasted ad spend.
-            </li>
+            <MacroBullet tone="red" icon={<IconClose />}>
+              Permanent user profiling & predatory retargeting.
+            </MacroBullet>
+            <MacroBullet tone="red" icon={<IconClose />}>
+              Top 1–3 players capture 80% of volume regardless of capacity.
+            </MacroBullet>
+            <MacroBullet tone="red" icon={<IconClose />}>
+              Overworked staff, customer bottlenecks, and wasted ad spend.
+            </MacroBullet>
           </ul>
         </div>
 
         <div className="rounded-2xl border border-emerald-500/30 bg-[#FFFFFF] p-6 shadow-lg">
-          <div className="mb-2 font-mono text-xs uppercase tracking-wider text-emerald-700">
-            The @rsp/macro Model
+          <div className="mb-4 flex items-center gap-3">
+            <MacroIconBadge tone="emerald">
+              <IconScales />
+            </MacroIconBadge>
+            <div className="font-mono text-xs uppercase tracking-wider text-emerald-700">
+              The @rsp/macro Model
+            </div>
           </div>
           <h2 className="mb-3 text-xl font-semibold text-slate-900">Synchronised Equilibrium</h2>
           <ul className="space-y-3 text-sm text-slate-600">
-            <li className="flex items-start gap-2">
-              <span className="font-bold text-emerald-700">•</span> Pooled intent with zero
-              persistent tracking; raw events burned on write.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold text-emerald-700">•</span> Rotational exposure based on
-              real-time operational capacity.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold text-emerald-700">•</span> Industry equilibrium protecting
-              workforce health & capital efficiency.
-            </li>
+            <MacroBullet tone="emerald">
+              Pooled intent with zero persistent tracking; raw events burned on write.
+            </MacroBullet>
+            <MacroBullet tone="emerald">
+              Rotational exposure based on real-time operational capacity.
+            </MacroBullet>
+            <MacroBullet tone="emerald">
+              Industry equilibrium protecting workforce health & capital efficiency.
+            </MacroBullet>
           </ul>
         </div>
       </div>
+
+      <section className="my-12">
+        <div className="mb-4 font-mono text-xs uppercase tracking-widest text-slate-500">
+          Signal flow
+        </div>
+        <MacroFlow steps={flowSteps} />
+      </section>
 
       <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => (
@@ -174,6 +185,11 @@ function MacroOverview() {
             to={c.to}
             className="rounded-xl border border-slate-200 bg-[#FFFFFF] p-5 transition-all hover:border-emerald-500/50"
           >
+            <span className="mb-3 block">
+              <MacroIconBadge tone={c.tone} size="sm">
+                {c.icon}
+              </MacroIconBadge>
+            </span>
             <span className={`mb-1 block font-mono text-xs ${c.accent}`}>{c.section}</span>
             <h3 className="mb-1 font-semibold text-slate-900">{c.title}</h3>
             <p className="text-xs text-slate-500">{c.desc}</p>

@@ -30,7 +30,7 @@ export const rspCss = `
 
   /* NAV */
   .rsp-nav {
-    position: sticky; top: 0; z-index: 50;
+    position: sticky; top: 0; z-index: 80;
     background: rgba(255,255,255,.88);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--rsp-border);

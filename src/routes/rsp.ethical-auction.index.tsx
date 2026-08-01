@@ -95,7 +95,16 @@ function EthicalAuctionIndex() {
             </ul>
           </div>
         </div>
+        <a
+          className="ea-pdf-download"
+          href={veoSummaryPdf.url}
+          download="veo-branch-summary.pdf"
+        >
+          <span aria-hidden="true">↓</span>
+          Download the VEO one-page summary (PDF)
+        </a>
       </EaSection>
+
 
       <EaSeoSemCallout />
 

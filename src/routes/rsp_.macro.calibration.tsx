@@ -18,7 +18,10 @@ export const Route = createFileRoute("/rsp_/macro/calibration")({
       },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "https://lovekeylink.com/rsp/macro/calibration" },
+      { property: "og:site_name", content: "Love Key Link" },
     ],
+    links: [{ rel: "canonical", href: "https://lovekeylink.com/rsp/macro/calibration" }],
   }),
   component: CalibrationPage,
 });

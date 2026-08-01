@@ -9,8 +9,20 @@ const navItems = [
   { href: "/rsp/macro/governance", label: "05. Governance" },
 ] as const;
 
+function normalize(p: string) {
+  return p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p;
+}
+
+export function useMacroActive() {
+  const pathname = useRouterState({ select: (s) => normalize(s.location.pathname) });
+  const active =
+    navItems.find((i) => i.href !== "/rsp/macro" && pathname.startsWith(i.href)) ??
+    navItems[0];
+  return { pathname, active };
+}
+
 export function MacroNav() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { pathname, active } = useMacroActive();
 
   return (
     <nav className="sticky top-0 z-50 border-b border-slate-800 bg-[#0B0F17]/90 px-6 py-4 backdrop-blur">
@@ -24,18 +36,22 @@ export function MacroNav() {
             / <span className="text-emerald-400">@rsp/macro</span>
           </span>
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2">
+        {/* Mobile: show which section you are on */}
+        <div className="w-full font-mono text-[0.7rem] uppercase tracking-widest text-emerald-400 sm:hidden">
+          You are here: {active.label}
+        </div>
+        <div className="-mx-6 flex w-[calc(100%+3rem)] snap-x items-center gap-1 overflow-x-auto px-6 sm:mx-0 sm:w-auto sm:flex-wrap sm:justify-center sm:gap-2 sm:overflow-visible sm:px-0">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname === item.href || item.href === active.href;
             return (
               <Link
                 key={item.href}
                 to={item.href}
                 aria-current={isActive ? "page" : undefined}
-                className={`rounded-lg px-3 py-1.5 font-mono text-xs transition-all ${
+                className={`shrink-0 snap-start rounded-lg px-3 py-1.5 font-mono text-xs transition-all ${
                   isActive
                     ? "border border-emerald-500/40 bg-emerald-950/80 text-emerald-300"
-                    : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+                    : "border border-transparent text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
                 }`}
               >
                 {item.label}
@@ -49,6 +65,8 @@ export function MacroNav() {
 }
 
 function MacroBreadcrumbs() {
+  const { pathname, active } = useMacroActive();
+  const onIndex = pathname === "/rsp/macro";
   return (
     <nav
       aria-label="Breadcrumb"
@@ -62,9 +80,21 @@ function MacroBreadcrumbs() {
         RSP
       </Link>
       <span aria-hidden="true">/</span>
-      <span className="text-emerald-400" aria-current="page">
-        @rsp/macro
-      </span>
+      {onIndex ? (
+        <span className="text-emerald-400" aria-current="page">
+          @rsp/macro
+        </span>
+      ) : (
+        <>
+          <Link to="/rsp/macro" className="hover:text-slate-300">
+            @rsp/macro
+          </Link>
+          <span aria-hidden="true">/</span>
+          <span className="text-emerald-400" aria-current="page">
+            {active.label.replace(/^\d+\.\s*/, "")}
+          </span>
+        </>
+      )}
     </nav>
   );
 }

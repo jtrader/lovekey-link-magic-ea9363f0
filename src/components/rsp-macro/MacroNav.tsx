@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { GlossarySheetProvider } from "@/components/rsp-macro/MacroGlossary";
+import { MacroKeyTerms } from "@/components/rsp-macro/MacroKeyTerms";
 import { Link, useRouterState } from "@tanstack/react-router";
 
 const navItems = [

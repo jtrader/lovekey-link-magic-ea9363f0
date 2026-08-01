@@ -85,7 +85,7 @@ function VESFormulaPage() {
               <th className="px-4 py-4">Algorithm Impact</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 text-sm">
+          <tbody className="divide-y divide-slate-200 text-sm">
             {rows.map((r) => (
               <tr key={r.v}>
                 <td className={`px-4 py-4 font-mono font-bold ${r.vClass}`}>{r.v}</td>

@@ -287,6 +287,22 @@ export const eaCss = `
     grid-column: 1 / -1; margin: 0; font-size: .74rem; line-height: 1.55; color: var(--rsp-text-soft);
     border-top: 1px solid var(--rsp-border); padding-top: 12px;
   }
+  .ea-sim-share {
+    grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  }
+  .ea-sim-share-btn, .ea-sim-reset-btn {
+    font: inherit; font-size: .78rem; font-weight: 600; cursor: pointer;
+    border-radius: 999px; padding: 8px 16px; border: 1px solid var(--rsp-border);
+    background: var(--rsp-surface); color: var(--rsp-text);
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .ea-sim-share-btn { border-color: oklch(72% .12 250); }
+  .ea-sim-share-btn:hover, .ea-sim-reset-btn:hover { background: var(--rsp-surface-2, oklch(97% .01 250)); }
+  .ea-sim-share small, .ea-sim-share > small {
+    flex: 1 1 260px; font-size: .72rem; line-height: 1.5; color: var(--rsp-text-soft);
+  }
+  .ea-sim-share code { font-size: .7rem; word-break: break-all; }
+
   .ea-sim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 760px) { .ea-sim-grid { grid-template-columns: 1fr; } }
   .ea-sim-panel {

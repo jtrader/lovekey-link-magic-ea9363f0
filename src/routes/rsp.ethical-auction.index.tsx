@@ -65,9 +65,10 @@ function EthicalAuctionIndex() {
             <h3>Monopolistic extraction</h3>
             <ul>
               <li>Real-time intent is welded to a permanent profile that follows the person around the web.</li>
-              <li>The top one to three players capture the bulk of regional traffic on ad budget and legacy organic authority alone.</li>
-              <li>Leads land on businesses with no bandwidth left — arriving through both paid placements and top organic listings — met by burnt-out staff, slow replies, poor reviews.</li>
-              <li>Capable competitors starve while dominant players pay for clicks and receive organic traffic they cannot service.</li>
+              <li>The top one to three players hold the organic results for free on legacy domain authority, capturing the bulk of regional demand at zero marginal cost.</li>
+              <li>That free traffic lands on businesses with no bandwidth left — met by burnt-out staff, slow replies, poor reviews — while the same names still buy the paid slots above it.</li>
+              <li>The asymmetry is inverted: dominant vertical players are ranked organically for traffic they cannot serve, while capable competitors with real availability must pay for every click just to be seen at all.</li>
+
             </ul>
           </div>
           <div className="ea-compare-card is-good">

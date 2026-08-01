@@ -119,9 +119,10 @@ function IntentPage() {
                 },
                 {
                   q: "Can a small operator see demand fairly?",
-                  s: "Only by outbidding the incumbents or out-aging their domain authority.",
-                  e: "Yes. Pool visibility is a shared vertical resource across organic and paid results alike.",
+                  s: "No. Incumbents are ranked organically for free on domain age, so the capable newcomer has to pay for clicks just to be visible.",
+                  e: "Yes. Pool visibility is a shared vertical resource, and real capacity earns organic prominence directly — there is no pay-to-be-seen tax on being able to serve.",
                 },
+
               ].map((r) => (
                 <tr key={r.q}>
                   <td data-label="Question">

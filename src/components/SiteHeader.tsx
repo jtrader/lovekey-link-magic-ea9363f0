@@ -19,7 +19,7 @@ function isAvatarPath(pathname: string) {
   return AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
 }
 
-function isAuctionPath(pathname: string) {
+export function isAuctionPath(pathname: string) {
   return (
     pathname === "/rsp/ethical-auction" || pathname.startsWith("/rsp/ethical-auction/")
   );
@@ -45,7 +45,7 @@ type AreaMenu = {
   links: AreaLink[];
 };
 
-const areaMenus: AreaMenu[] = [
+export const areaMenus: AreaMenu[] = [
   {
     label: "Love Key Link",
     to: "/",

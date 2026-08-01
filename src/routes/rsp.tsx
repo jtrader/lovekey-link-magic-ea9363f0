@@ -205,71 +205,7 @@ function RspLayout() {
 
   return (
     <div className="rsp-root">
-      <style dangerouslySetInnerHTML={{ __html: css }} />
-
-      {/* NAV */}
-      <nav className="rsp-nav">
-        <div className="rsp-nav-inner">
-          <Link to="/" className="rsp-nav-logo">
-            <span className="rsp-nav-logo-mark">
-              <img src={lovekeyMark} alt="Love Key Link" />
-            </span>
-            <span>
-              <span className="rsp-nav-logo-name">Love Key Link</span>
-              <span className="rsp-nav-logo-sub">/ RSP</span>
-            </span>
-          </Link>
-          <div className="rsp-menus-wrap">
-            <AreaMenus />
-            <a
-              className="rsp-nav-cta"
-              href={whitepaperAsset.url}
-              download="rsp-whitepaper.pdf"
-            >
-              White Paper
-            </a>
-          </div>
-
-          <button
-            type="button"
-            className="rsp-nav-burger"
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((o) => !o)}
-          >
-            <span className={`rsp-burger-bar${menuOpen ? " open-1" : ""}`} />
-            <span className={`rsp-burger-bar${menuOpen ? " open-2" : ""}`} />
-            <span className={`rsp-burger-bar${menuOpen ? " open-3" : ""}`} />
-          </button>
-        </div>
-        {menuOpen && (
-          <div className="rsp-nav-mobile">
-            {areaMenus.map((menu) => (
-              <div key={menu.label} className="rsp-mobile-group">
-                <div className="rsp-mobile-group-label">{menu.label}</div>
-                {menu.links.map((l) => (
-                  <MenuBranch
-                    key={l.to}
-                    link={l}
-                    pathname={pathname}
-                    variant="mobile"
-                    onNavigate={() => setMenuOpen(false)}
-                  />
-                ))}
-              </div>
-            ))}
-            <div className="rsp-mobile-group">
-              <a
-                href={whitepaperAsset.url}
-                download="rsp-whitepaper.pdf"
-                onClick={() => setMenuOpen(false)}
-              >
-                White Paper
-              </a>
-            </div>
-          </div>
-        )}
-      </nav>
+      <SiteHeader />
 
       <Breadcrumbs />
       <ClusterPager variant="header" />

@@ -48,11 +48,63 @@ export function MacroNav() {
   );
 }
 
+function MacroBreadcrumbs() {
+  return (
+    <nav
+      aria-label="Breadcrumb"
+      className="mx-auto flex max-w-5xl flex-wrap items-center gap-2 px-6 pt-6 font-mono text-xs text-slate-500"
+    >
+      <Link to="/" className="hover:text-slate-300">
+        Love Key Link
+      </Link>
+      <span aria-hidden="true">/</span>
+      <Link to="/rsp" className="hover:text-slate-300">
+        RSP
+      </Link>
+      <span aria-hidden="true">/</span>
+      <span className="text-emerald-400" aria-current="page">
+        @rsp/macro
+      </span>
+    </nav>
+  );
+}
+
+function MacroFooter() {
+  return (
+    <footer className="mt-16 border-t border-slate-800">
+      <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-3 px-6 py-8 font-mono text-xs text-slate-500">
+        <span className="uppercase tracking-widest">Elsewhere on Love Key Link</span>
+        <Link to="/" className="hover:text-slate-300">
+          Home
+        </Link>
+        <Link to="/rsp" className="hover:text-slate-300">
+          RSP overview
+        </Link>
+        <Link to="/rsp/principles" className="hover:text-slate-300">
+          Principles
+        </Link>
+        <Link to="/rsp/for-developers" className="hover:text-slate-300">
+          Developers
+        </Link>
+        <Link to="/rsp/governance" className="hover:text-slate-300">
+          Governance
+        </Link>
+        <Link to="/rsp/avatars" className="hover:text-slate-300">
+          Identity Avatars
+        </Link>
+      </div>
+    </footer>
+  );
+}
+
 export function MacroShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#0B0F17] font-sans text-slate-200">
       <MacroNav />
-      <main className="mx-auto max-w-5xl px-6 py-12">{children}</main>
+      <MacroBreadcrumbs />
+      <main className="mx-auto max-w-5xl px-6 pb-12 pt-6">{children}</main>
+      <MacroFooter />
     </div>
   );
 }
+

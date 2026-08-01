@@ -11,7 +11,7 @@ export const Route = createFileRoute("/rsp/ethical-auction/")({
       {
         name: "description",
         content:
-          "Vertical Equilibrium Optimization is the natural successor to SEO & SEM: Ethical Auction Theory for search engines, ranking on pooled intent and real capacity to serve instead of bid size.",
+          "Vertical Equilibrium Optimization is the natural successor to SEO & SEM: Ethical Auction Theory governing organic ranking and paid auctions alike, on pooled intent and real capacity to serve instead of bid size or legacy authority.",
       },
       {
         property: "og:title",
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/rsp/ethical-auction/")({
       {
         property: "og:description",
         content:
-          "The natural successor to SEO & SEM: pooled intent, burned identifiers, and rotational exposure that follows a business's real serviceability.",
+          "The natural successor to SEO & SEM: pooled intent, burned identifiers, and rotational exposure across organic and paid results that follows a business's real serviceability.",
       },
 
       { property: "og:type", content: "website" },

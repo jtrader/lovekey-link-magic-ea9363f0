@@ -277,7 +277,9 @@ function EthicalAuctionIndex() {
           The macro-economic specification that grew out of this work lives at{" "}
           <Link to="/rsp/macro">@rsp/macro</Link>.
         </p>
+        <EaNotesList />
       </EaSection>
+
     </>
   );
 }

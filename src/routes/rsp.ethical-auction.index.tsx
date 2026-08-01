@@ -9,6 +9,7 @@ import {
   EaPairedFormula,
   validateSimSearch,
 } from "@/components/rsp-ea-interactive";
+import veoSummaryPdf from "@/assets/veo-branch-summary.pdf.asset.json";
 
 
 export const Route = createFileRoute("/rsp/ethical-auction/")({
@@ -95,7 +96,16 @@ function EthicalAuctionIndex() {
             </ul>
           </div>
         </div>
+        <a
+          className="ea-pdf-download"
+          href={veoSummaryPdf.url}
+          download="veo-branch-summary.pdf"
+        >
+          <span aria-hidden="true">↓</span>
+          Download the VEO one-page summary (PDF)
+        </a>
       </EaSection>
+
 
       <EaSeoSemCallout />
 

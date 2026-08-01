@@ -65,18 +65,18 @@ function EthicalAuctionIndex() {
             <h3>Monopolistic extraction</h3>
             <ul>
               <li>Real-time intent is welded to a permanent profile that follows the person around the web.</li>
-              <li>The top one to three players capture the bulk of regional traffic on budget and legacy authority alone.</li>
-              <li>Leads land on businesses with no bandwidth left — burnt-out staff, slow replies, poor reviews.</li>
-              <li>Capable competitors starve while dominant players pay for clicks they cannot service.</li>
+              <li>The top one to three players capture the bulk of regional traffic on ad budget and legacy organic authority alone.</li>
+              <li>Leads land on businesses with no bandwidth left — arriving through both paid placements and top organic listings — met by burnt-out staff, slow replies, poor reviews.</li>
+              <li>Capable competitors starve while dominant players pay for clicks and receive organic traffic they cannot service.</li>
             </ul>
           </div>
           <div className="ea-compare-card is-good">
-            <span className="ea-compare-tag">The Ethical Auction</span>
+            <span className="ea-compare-tag">Vertical Equilibrium Optimization</span>
             <h3>Synchronised equilibrium</h3>
             <ul>
               <li>Intent is pooled at sector level and the identifiable source is burned on write.</li>
-              <li>Prominence rotates toward the operators with genuine capacity to fulfil the request.</li>
-              <li>Overloaded businesses are throttled gently, protecting staff and stopping wasted spend.</li>
+              <li>Prominence — organic ranking and paid placement alike — rotates toward the operators with genuine capacity to fulfil the request.</li>
+              <li>Overloaded businesses are throttled gently across both channels, protecting staff and stopping wasted spend.</li>
               <li>A vertical behaves like a coordinated service division rather than isolated gladiators.</li>
             </ul>
           </div>

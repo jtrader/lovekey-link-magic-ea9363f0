@@ -1,3 +1,4 @@
+import { SiteHeader } from "@/components/SiteHeader";
 import { GlossarySheetProvider } from "@/components/rsp-macro/MacroGlossary";
 import { Link, useRouterState } from "@tanstack/react-router";
 
@@ -132,6 +133,7 @@ export function MacroShell({ children }: { children: React.ReactNode }) {
   return (
     <GlossarySheetProvider>
       <div className="min-h-screen bg-[#F5F7FB] font-sans text-slate-700">
+        <SiteHeader variant="macro" />
         <MacroNav />
         <MacroBreadcrumbs />
         <main className="mx-auto max-w-5xl px-6 pb-24 pt-6 md:pb-12">{children}</main>

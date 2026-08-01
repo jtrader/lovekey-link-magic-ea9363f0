@@ -993,6 +993,13 @@ function linkIsActive(pathname: string, l: AreaLink) {
   const path = pathname.length > 1 && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
   return l.exact ? path === l.to : path === l.to || path.startsWith(`${l.to}/`);
 }
+
+function menuHasActive(pathname: string, links: AreaLink[]): boolean {
+  return links.some(
+    (l) => linkIsActive(pathname, l) || (l.children ? menuHasActive(pathname, l.children) : false),
+  );
+}
+
 type AreaMenu = {
   label: string;
   to: string;

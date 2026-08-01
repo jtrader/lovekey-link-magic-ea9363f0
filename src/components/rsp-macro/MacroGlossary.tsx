@@ -164,7 +164,7 @@ export function GlossarySheetProvider({
       <button
         type="button"
         onClick={() => api.open()}
-        className={`fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full border border-amber-500/40 bg-[#FFFFFF] px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-amber-700 shadow-lg ${hide}"
+        className={`fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full border border-amber-500/40 bg-[#FFFFFF] px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-amber-700 shadow-lg ${hide}`}
       >
         <span aria-hidden="true">?</span> Glossary
       </button>

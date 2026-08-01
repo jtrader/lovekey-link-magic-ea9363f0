@@ -18,7 +18,10 @@ export const Route = createFileRoute("/rsp_/macro/overview")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "https://lovekeylink.com/rsp/macro/overview" },
+      { property: "og:site_name", content: "Love Key Link" },
     ],
+    links: [{ rel: "canonical", href: "https://lovekeylink.com/rsp/macro/overview" }],
   }),
   component: MacroOverview,
 });

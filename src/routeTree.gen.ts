@@ -38,6 +38,7 @@ import { Route as ApiAvatarGenerateRouteImport } from './routes/api/avatar-gener
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
 import { Route as RspMacroIndexRouteImport } from './routes/rsp_.macro.index'
+import { Route as RspEthicalAuctionIndexRouteImport } from './routes/rsp.ethical-auction.index'
 import { Route as RspCaseStudiesIndexRouteImport } from './routes/rsp.case-studies.index'
 import { Route as RspMacroVesFormulaRouteImport } from './routes/rsp_.macro.ves-formula'
 import { Route as RspMacroTelemetryRouteImport } from './routes/rsp_.macro.telemetry'
@@ -193,6 +194,11 @@ const RspMacroIndexRoute = RspMacroIndexRouteImport.update({
   path: '/rsp/macro/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RspEthicalAuctionIndexRoute = RspEthicalAuctionIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RspEthicalAuctionRoute,
+} as any)
 const RspCaseStudiesIndexRoute = RspCaseStudiesIndexRouteImport.update({
   id: '/case-studies/',
   path: '/case-studies/',
@@ -264,7 +270,7 @@ export interface FileRoutesByFullPath {
   '/rsp/avatars': typeof RspAvatarsRoute
   '/rsp/checklist': typeof RspChecklistRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
-  '/rsp/ethical-auction': typeof RspEthicalAuctionRoute
+  '/rsp/ethical-auction': typeof RspEthicalAuctionRouteWithChildren
   '/rsp/event-token': typeof RspEventTokenRoute
   '/rsp/faq': typeof RspFaqRoute
   '/rsp/for-developers': typeof RspForDevelopersRoute
@@ -282,6 +288,7 @@ export interface FileRoutesByFullPath {
   '/rsp/macro/telemetry': typeof RspMacroTelemetryRoute
   '/rsp/macro/ves-formula': typeof RspMacroVesFormulaRoute
   '/rsp/case-studies/': typeof RspCaseStudiesIndexRoute
+  '/rsp/ethical-auction/': typeof RspEthicalAuctionIndexRoute
   '/rsp/macro/': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -303,7 +310,6 @@ export interface FileRoutesByTo {
   '/rsp/avatars': typeof RspAvatarsRoute
   '/rsp/checklist': typeof RspChecklistRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
-  '/rsp/ethical-auction': typeof RspEthicalAuctionRoute
   '/rsp/event-token': typeof RspEventTokenRoute
   '/rsp/faq': typeof RspFaqRoute
   '/rsp/for-developers': typeof RspForDevelopersRoute
@@ -321,6 +327,7 @@ export interface FileRoutesByTo {
   '/rsp/macro/telemetry': typeof RspMacroTelemetryRoute
   '/rsp/macro/ves-formula': typeof RspMacroVesFormulaRoute
   '/rsp/case-studies': typeof RspCaseStudiesIndexRoute
+  '/rsp/ethical-auction': typeof RspEthicalAuctionIndexRoute
   '/rsp/macro': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -345,7 +352,7 @@ export interface FileRoutesById {
   '/rsp/avatars': typeof RspAvatarsRoute
   '/rsp/checklist': typeof RspChecklistRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
-  '/rsp/ethical-auction': typeof RspEthicalAuctionRoute
+  '/rsp/ethical-auction': typeof RspEthicalAuctionRouteWithChildren
   '/rsp/event-token': typeof RspEventTokenRoute
   '/rsp/faq': typeof RspFaqRoute
   '/rsp/for-developers': typeof RspForDevelopersRoute
@@ -363,6 +370,7 @@ export interface FileRoutesById {
   '/rsp_/macro/telemetry': typeof RspMacroTelemetryRoute
   '/rsp_/macro/ves-formula': typeof RspMacroVesFormulaRoute
   '/rsp/case-studies/': typeof RspCaseStudiesIndexRoute
+  '/rsp/ethical-auction/': typeof RspEthicalAuctionIndexRoute
   '/rsp_/macro/': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -405,6 +413,7 @@ export interface FileRouteTypes {
     | '/rsp/macro/telemetry'
     | '/rsp/macro/ves-formula'
     | '/rsp/case-studies/'
+    | '/rsp/ethical-auction/'
     | '/rsp/macro/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
@@ -426,7 +435,6 @@ export interface FileRouteTypes {
     | '/rsp/avatars'
     | '/rsp/checklist'
     | '/rsp/dimensions'
-    | '/rsp/ethical-auction'
     | '/rsp/event-token'
     | '/rsp/faq'
     | '/rsp/for-developers'
@@ -444,6 +452,7 @@ export interface FileRouteTypes {
     | '/rsp/macro/telemetry'
     | '/rsp/macro/ves-formula'
     | '/rsp/case-studies'
+    | '/rsp/ethical-auction'
     | '/rsp/macro'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
@@ -485,6 +494,7 @@ export interface FileRouteTypes {
     | '/rsp_/macro/telemetry'
     | '/rsp_/macro/ves-formula'
     | '/rsp/case-studies/'
+    | '/rsp/ethical-auction/'
     | '/rsp_/macro/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
@@ -719,6 +729,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspMacroIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp/ethical-auction/': {
+      id: '/rsp/ethical-auction/'
+      path: '/'
+      fullPath: '/rsp/ethical-auction/'
+      preLoaderRoute: typeof RspEthicalAuctionIndexRouteImport
+      parentRoute: typeof RspEthicalAuctionRoute
+    }
     '/rsp/case-studies/': {
       id: '/rsp/case-studies/'
       path: '/case-studies'
@@ -806,12 +823,23 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface RspEthicalAuctionRouteChildren {
+  RspEthicalAuctionIndexRoute: typeof RspEthicalAuctionIndexRoute
+}
+
+const RspEthicalAuctionRouteChildren: RspEthicalAuctionRouteChildren = {
+  RspEthicalAuctionIndexRoute: RspEthicalAuctionIndexRoute,
+}
+
+const RspEthicalAuctionRouteWithChildren =
+  RspEthicalAuctionRoute._addFileChildren(RspEthicalAuctionRouteChildren)
+
 interface RspRouteChildren {
   RspAvatarCreatorRoute: typeof RspAvatarCreatorRoute
   RspAvatarsRoute: typeof RspAvatarsRoute
   RspChecklistRoute: typeof RspChecklistRoute
   RspDimensionsRoute: typeof RspDimensionsRoute
-  RspEthicalAuctionRoute: typeof RspEthicalAuctionRoute
+  RspEthicalAuctionRoute: typeof RspEthicalAuctionRouteWithChildren
   RspEventTokenRoute: typeof RspEventTokenRoute
   RspFaqRoute: typeof RspFaqRoute
   RspForDevelopersRoute: typeof RspForDevelopersRoute
@@ -830,7 +858,7 @@ const RspRouteChildren: RspRouteChildren = {
   RspAvatarsRoute: RspAvatarsRoute,
   RspChecklistRoute: RspChecklistRoute,
   RspDimensionsRoute: RspDimensionsRoute,
-  RspEthicalAuctionRoute: RspEthicalAuctionRoute,
+  RspEthicalAuctionRoute: RspEthicalAuctionRouteWithChildren,
   RspEventTokenRoute: RspEventTokenRoute,
   RspFaqRoute: RspFaqRoute,
   RspForDevelopersRoute: RspForDevelopersRoute,

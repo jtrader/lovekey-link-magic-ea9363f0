@@ -981,6 +981,12 @@ function isAvatarPath(pathname: string) {
   return AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
 }
 
+function isAuctionPath(pathname: string) {
+  return (
+    pathname === "/rsp/ethical-auction" || pathname.startsWith("/rsp/ethical-auction/")
+  );
+}
+
 type AreaLink = { to: string; label: string; exact?: boolean; children?: AreaLink[] };
 
 function linkIsActive(pathname: string, l: AreaLink) {
@@ -1004,7 +1010,7 @@ const areaMenus: AreaMenu[] = [
   {
     label: "RSP",
     to: "/rsp",
-    match: (p) => p !== "/" && !isAvatarPath(p),
+    match: (p) => p !== "/" && !isAvatarPath(p) && !isAuctionPath(p),
     links: [
       { to: "/rsp", label: "Overview", exact: true },
       { to: "/rsp/principles", label: "Principles" },
@@ -1025,6 +1031,19 @@ const areaMenus: AreaMenu[] = [
         ],
       },
       { to: "/rsp/governance", label: "Governance" },
+    ],
+  },
+  {
+    label: "Ethical Auction",
+    to: "/rsp/ethical-auction",
+    match: isAuctionPath,
+    links: [
+      { to: "/rsp/ethical-auction", label: "Overview", exact: true },
+      { to: "/rsp/ethical-auction/intent", label: "Pooled intent" },
+      { to: "/rsp/ethical-auction/capacity", label: "Capacity & workforce" },
+      { to: "/rsp/ethical-auction/experience", label: "Consumer experience" },
+      { to: "/rsp/ethical-auction/equilibrium", label: "Equilibrium score" },
+      { to: "/rsp/ethical-auction/adoption", label: "Calibration & adoption" },
     ],
   },
   {
@@ -1131,6 +1150,12 @@ const PAGE_LABELS: Record<string, string> = {
   "/rsp/avatars": "Overview",
   "/rsp/avatar-creator": "Avatar Creator",
   "/rsp/spec-check": "Spec checklist",
+  "/rsp/ethical-auction": "Overview",
+  "/rsp/ethical-auction/intent": "Pooled intent",
+  "/rsp/ethical-auction/capacity": "Capacity & workforce",
+  "/rsp/ethical-auction/experience": "Consumer experience",
+  "/rsp/ethical-auction/equilibrium": "Equilibrium score",
+  "/rsp/ethical-auction/adoption": "Calibration & adoption",
 };
 
 function Breadcrumbs() {
@@ -1141,7 +1166,12 @@ function Breadcrumbs() {
     { label: "Love Key Link", to: "/" },
   ];
 
-  if (isAvatars) {
+  if (isAuctionPath(pathname)) {
+    crumbs.push({ label: "Ethical Auction", to: "/rsp/ethical-auction" });
+    if (pathname !== "/rsp/ethical-auction") {
+      crumbs.push({ label: PAGE_LABELS[pathname] ?? "Page" });
+    }
+  } else if (isAvatars) {
     crumbs.push({ label: "Identity Avatars", to: "/rsp/avatars" });
     if (pathname !== "/rsp/avatars") {
       crumbs.push({ label: PAGE_LABELS[pathname] ?? "Page" });

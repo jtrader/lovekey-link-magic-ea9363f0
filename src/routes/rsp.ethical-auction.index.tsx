@@ -170,12 +170,12 @@ function EthicalAuctionIndex() {
           <div className="ea-flow-node">
             <div className="ea-flow-step">Match</div>
             <h4>Equilibrium engine</h4>
-            <p>The Vertical Equilibrium Score weighs relevance against real serviceability.</p>
+            <p>The Vertical Equilibrium Score weighs relevance against real serviceability, then applies to organic ranking and paid bids together.</p>
           </div>
           <div className="ea-flow-node">
             <div className="ea-flow-step">Result</div>
             <h4>Rotational exposure</h4>
-            <p>Prominence flows to whoever can serve the need without breaking their people.</p>
+            <p>Prominence across both organic results and paid placements flows to whoever can serve the need without breaking their people.</p>
           </div>
         </div>
       </EaSection>

@@ -103,8 +103,10 @@ function EthicalAuctionIndex() {
             The Respectful Intent Score is derived from the same RSP primitives used across Love Key
             Link — sensitivity tiers, low-resolution signals, signal decay and a deterministic next
             safe step. It multiplies into the paid auction and acts as an organic ranking modifier,
-            so a saturated business is throttled in both places at once.
+            so a saturated business loses its free organic position at the same moment its bids are
+            eased back — and a capable one earns organic exposure it would otherwise have had to buy.
           </p>
+
         </div>
 
         <div className="ea-table-wrap" style={{ marginTop: 28 }}>

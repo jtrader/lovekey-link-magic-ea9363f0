@@ -328,13 +328,13 @@ export const eaCss = `
   }
   .ea-faq-item summary::-webkit-details-marker { display: none; }
   .ea-faq-item summary::after { content: '+'; color: var(--rsp-primary); font-size: 1.15rem; }
-  .ea-faq-item[open] summary::after { content: '\2013'; }
+  .ea-faq-item[open] summary::after { content: '–'; }
   .ea-faq-body {
     padding: 0 0 16px; font-size: .87rem; line-height: 1.7; color: var(--rsp-text-muted);
     border-top: 1px solid var(--rsp-border); padding-top: 12px;
   }
   .ea-faq-body strong { color: var(--rsp-text); }
-
+`;
 
 export function EaStyles() {
   return <style dangerouslySetInnerHTML={{ __html: eaCss }} />;

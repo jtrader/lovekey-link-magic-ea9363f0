@@ -30,7 +30,25 @@ function EthicalAuctionIndex() {
     <>
       <EaSection
         id="intro"
-        eyebrow="Ethical Auction · an RSP branch"
+        eyebrow={
+          <>
+            <span style={{ display: "block" }}>
+              Vertical Equilibrium Optimization (The natural successor to SEO &amp; SEM)
+            </span>
+            <span
+              style={{
+                display: "block",
+                marginTop: 4,
+                textTransform: "none",
+                letterSpacing: "normal",
+                fontWeight: 400,
+                color: "var(--rsp-text-muted)",
+              }}
+            >
+              Ethical Auction Theory for Search Engines · an RSP branch
+            </span>
+          </>
+        }
         title="Coordination, not surveillance. Equilibrium, not extraction."
         lead="Search ranking and pay-per-click auctions decide who a market gets to meet. Today that decision is made almost entirely on bid size, historic click-through and behavioural profiling. The Ethical Auction applies RSP to that layer: measure intent richly, forget who it came from, and give prominence to whoever can actually serve the need right now."
       >

@@ -4,18 +4,25 @@ import { EaCards, EaSection } from "@/components/rsp-ethical-auction";
 export const Route = createFileRoute("/rsp/ethical-auction/")({
   head: () => ({
     meta: [
-      { title: "Ethical Auction — Respectful ranking & capacity-aware bidding · Love Key Link" },
+      {
+        title:
+          "Vertical Equilibrium Optimization (VEO) — Ethical Auction Theory for Search Engines · Love Key Link",
+      },
       {
         name: "description",
         content:
-          "An RSP branch for search ranking and ad auctions: pooled intent instead of surveillance, and rotational exposure based on a business's real capacity to serve.",
+          "Vertical Equilibrium Optimization is the natural successor to SEO & SEM: Ethical Auction Theory for search engines, ranking on pooled intent and real capacity to serve instead of bid size.",
       },
-      { property: "og:title", content: "Ethical Auction — Respectful ranking & capacity-aware bidding" },
+      {
+        property: "og:title",
+        content: "Vertical Equilibrium Optimization — Ethical Auction Theory for Search Engines",
+      },
       {
         property: "og:description",
         content:
-          "Replacing winner-take-all extraction with equilibrium: pooled intent, burned identifiers, and exposure that follows serviceability.",
+          "The natural successor to SEO & SEM: pooled intent, burned identifiers, and rotational exposure that follows a business's real serviceability.",
       },
+
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://lovekeylink.com/rsp/ethical-auction" },
       { name: "twitter:card", content: "summary_large_image" },

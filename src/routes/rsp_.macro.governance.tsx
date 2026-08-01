@@ -44,16 +44,16 @@ const items = [
 function GovernancePage() {
   return (
     <MacroShell>
-      <div className="mb-2 font-mono text-xs uppercase tracking-widest text-purple-400">
+      <div className="mb-2 font-mono text-xs uppercase tracking-widest text-purple-700">
         Section 05 / Governance
       </div>
-      <h1 className="mb-6 text-3xl font-bold text-white md:text-4xl">Privacy & RSP Safeguards</h1>
+      <h1 className="mb-6 text-3xl font-bold text-slate-900 md:text-4xl">Privacy & RSP Safeguards</h1>
 
       <div className="my-8 space-y-4">
         {items.map((i) => (
-          <section key={i.title} className="rounded-2xl border border-slate-800 bg-[#161B26] p-6">
-            <h2 className="mb-2 text-lg font-semibold text-purple-300">{i.title}</h2>
-            <p className="text-xs leading-relaxed text-slate-400">{i.desc}</p>
+          <section key={i.title} className="rounded-2xl border border-slate-200 bg-[#FFFFFF] p-6">
+            <h2 className="mb-2 text-lg font-semibold text-purple-700">{i.title}</h2>
+            <p className="text-xs leading-relaxed text-slate-500">{i.desc}</p>
           </section>
         ))}
       </div>

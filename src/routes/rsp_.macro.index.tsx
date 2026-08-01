@@ -30,7 +30,7 @@ const sections = [
   {
     to: "/rsp/macro/overview",
     num: "01",
-    accent: "text-emerald-400",
+    accent: "text-emerald-700",
     hover: "hover:border-emerald-500/50",
     title: "Overview",
     desc: "Why winner-take-all auctions break verticals, and what synchronised equilibrium replaces them with.",
@@ -39,7 +39,7 @@ const sections = [
   {
     to: "/rsp/macro/telemetry",
     num: "02",
-    accent: "text-amber-400",
+    accent: "text-amber-700",
     hover: "hover:border-amber-500/50",
     title: "Telemetry",
     desc: "The three anonymized operational signals that determine real-time serviceability.",
@@ -48,7 +48,7 @@ const sections = [
   {
     to: "/rsp/macro/ves-formula",
     num: "03",
-    accent: "text-cyan-400",
+    accent: "text-cyan-700",
     hover: "hover:border-cyan-500/50",
     title: "VES Formula",
     desc: "The mathematical specification for capacity-aware ad rank and prominence.",
@@ -57,7 +57,7 @@ const sections = [
   {
     to: "/rsp/macro/calibration",
     num: "04",
-    accent: "text-amber-300",
+    accent: "text-amber-700",
     hover: "hover:border-amber-400/50",
     title: "Calibration",
     desc: "The mandatory 90-day level-up sandbox before the equilibrium engine goes live.",
@@ -66,7 +66,7 @@ const sections = [
   {
     to: "/rsp/macro/governance",
     num: "05",
-    accent: "text-purple-400",
+    accent: "text-purple-700",
     hover: "hover:border-purple-500/50",
     title: "Governance",
     desc: "The safeguards that keep capacity-aware ranking from becoming surveillance.",
@@ -77,15 +77,15 @@ const sections = [
 function MacroIndex() {
   return (
     <MacroShell>
-      <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-950/60 px-3.5 py-1.5 font-mono text-xs text-emerald-400">
+      <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-50 px-3.5 py-1.5 font-mono text-xs text-emerald-700">
         <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
         @rsp/macro v1.0 Open Specification
       </div>
 
-      <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl">
+      <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-slate-900 md:text-5xl">
         @rsp/macro — Section index
       </h1>
-      <p className="mb-10 max-w-3xl text-xl font-light leading-relaxed text-slate-400">
+      <p className="mb-10 max-w-3xl text-xl font-light leading-relaxed text-slate-500">
         Five sections describe how search and ad auctions become capacity-aware equilibrium
         ecosystems. Start at the overview, or jump straight to the part you need.
       </p>
@@ -95,15 +95,15 @@ function MacroIndex() {
           <li key={s.to}>
             <Link
               to={s.to}
-              className={`flex h-full flex-col rounded-2xl border border-slate-800 bg-[#161B26] p-6 transition-all ${s.hover}`}
+              className={`flex h-full flex-col rounded-2xl border border-slate-200 bg-[#FFFFFF] p-6 transition-all ${s.hover}`}
             >
               <div className="mb-2 flex items-baseline gap-3">
                 <span className={`font-mono text-xs tracking-widest ${s.accent}`}>
                   SECTION {s.num}
                 </span>
               </div>
-              <h2 className="mb-2 text-xl font-semibold text-white">{s.title}</h2>
-              <p className="mb-4 text-sm leading-relaxed text-slate-400">{s.desc}</p>
+              <h2 className="mb-2 text-xl font-semibold text-slate-900">{s.title}</h2>
+              <p className="mb-4 text-sm leading-relaxed text-slate-500">{s.desc}</p>
               <ul className="mt-auto space-y-1.5 font-mono text-xs text-slate-500">
                 {s.points.map((p) => (
                   <li key={p} className="flex items-start gap-2">
@@ -118,7 +118,7 @@ function MacroIndex() {
         ))}
       </ol>
 
-      <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-slate-800 pt-8">
+      <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-8">
         <span className="font-mono text-xs uppercase tracking-widest text-slate-500">
           Quick links
         </span>
@@ -126,14 +126,14 @@ function MacroIndex() {
           <Link
             key={s.to}
             to={s.to}
-            className="rounded-lg border border-slate-800 px-3 py-1.5 font-mono text-xs text-slate-400 transition-all hover:border-slate-600 hover:text-slate-200"
+            className="rounded-lg border border-slate-200 px-3 py-1.5 font-mono text-xs text-slate-500 transition-all hover:border-slate-600 hover:text-slate-700"
           >
             {s.num}. {s.title}
           </Link>
         ))}
         <Link
           to="/rsp"
-          className="rounded-lg border border-slate-800 px-3 py-1.5 font-mono text-xs text-slate-400 transition-all hover:border-slate-600 hover:text-slate-200"
+          className="rounded-lg border border-slate-200 px-3 py-1.5 font-mono text-xs text-slate-500 transition-all hover:border-slate-600 hover:text-slate-700"
         >
           ← Back to RSP
         </Link>

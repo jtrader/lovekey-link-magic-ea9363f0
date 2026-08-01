@@ -76,8 +76,9 @@ function EthicalAuctionIndex() {
             <h3>Synchronised equilibrium</h3>
             <ul>
               <li>Intent is pooled at sector level and the identifiable source is burned on write.</li>
-              <li>Prominence — organic ranking and paid placement alike — rotates toward the operators with genuine capacity to fulfil the request.</li>
-              <li>Overloaded businesses are throttled gently across both channels, protecting staff and stopping wasted spend.</li>
+              <li>Organic prominence stops being a free incumbency annuity: it is re-earned each cycle by whoever has genuine capacity to fulfil the request.</li>
+              <li>Saturated businesses lose the unserviceable organic overflow first and have their bids eased back second, so capable operators no longer have to buy clicks to reach demand they can actually serve.</li>
+
               <li>A vertical behaves like a coordinated service division rather than isolated gladiators.</li>
             </ul>
           </div>

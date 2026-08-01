@@ -46,6 +46,7 @@ import { Route as RspMacroOverviewRouteImport } from './routes/rsp_.macro.overvi
 import { Route as RspMacroGovernanceRouteImport } from './routes/rsp_.macro.governance'
 import { Route as RspMacroCalibrationRouteImport } from './routes/rsp_.macro.calibration'
 import { Route as RspEthicalAuctionIntentRouteImport } from './routes/rsp.ethical-auction.intent'
+import { Route as RspEthicalAuctionCapacityRouteImport } from './routes/rsp.ethical-auction.capacity'
 import { Route as RspCaseStudiesSlugRouteImport } from './routes/rsp.case-studies.$slug'
 import { Route as ApiPublicQuizSubmitRouteImport } from './routes/api/public/quiz-submit'
 import { Route as ApiPublicQuizResultTokenRouteImport } from './routes/api/public/quiz-result.$token'
@@ -235,6 +236,12 @@ const RspEthicalAuctionIntentRoute = RspEthicalAuctionIntentRouteImport.update({
   path: '/intent',
   getParentRoute: () => RspEthicalAuctionRoute,
 } as any)
+const RspEthicalAuctionCapacityRoute =
+  RspEthicalAuctionCapacityRouteImport.update({
+    id: '/capacity',
+    path: '/capacity',
+    getParentRoute: () => RspEthicalAuctionRoute,
+  } as any)
 const RspCaseStudiesSlugRoute = RspCaseStudiesSlugRouteImport.update({
   id: '/case-studies/$slug',
   path: '/case-studies/$slug',
@@ -288,6 +295,7 @@ export interface FileRoutesByFullPath {
   '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/ethical-auction/capacity': typeof RspEthicalAuctionCapacityRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
@@ -328,6 +336,7 @@ export interface FileRoutesByTo {
   '/rsp': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/ethical-auction/capacity': typeof RspEthicalAuctionCapacityRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
@@ -372,6 +381,7 @@ export interface FileRoutesById {
   '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/ethical-auction/capacity': typeof RspEthicalAuctionCapacityRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
   '/rsp_/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp_/macro/governance': typeof RspMacroGovernanceRoute
@@ -416,6 +426,7 @@ export interface FileRouteTypes {
     | '/rsp/'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
+    | '/rsp/ethical-auction/capacity'
     | '/rsp/ethical-auction/intent'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
@@ -456,6 +467,7 @@ export interface FileRouteTypes {
     | '/rsp'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
+    | '/rsp/ethical-auction/capacity'
     | '/rsp/ethical-auction/intent'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
@@ -499,6 +511,7 @@ export interface FileRouteTypes {
     | '/rsp/'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
+    | '/rsp/ethical-auction/capacity'
     | '/rsp/ethical-auction/intent'
     | '/rsp_/macro/calibration'
     | '/rsp_/macro/governance'
@@ -797,6 +810,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspEthicalAuctionIntentRouteImport
       parentRoute: typeof RspEthicalAuctionRoute
     }
+    '/rsp/ethical-auction/capacity': {
+      id: '/rsp/ethical-auction/capacity'
+      path: '/capacity'
+      fullPath: '/rsp/ethical-auction/capacity'
+      preLoaderRoute: typeof RspEthicalAuctionCapacityRouteImport
+      parentRoute: typeof RspEthicalAuctionRoute
+    }
     '/rsp/case-studies/$slug': {
       id: '/rsp/case-studies/$slug'
       path: '/case-studies/$slug'
@@ -843,11 +863,13 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface RspEthicalAuctionRouteChildren {
+  RspEthicalAuctionCapacityRoute: typeof RspEthicalAuctionCapacityRoute
   RspEthicalAuctionIntentRoute: typeof RspEthicalAuctionIntentRoute
   RspEthicalAuctionIndexRoute: typeof RspEthicalAuctionIndexRoute
 }
 
 const RspEthicalAuctionRouteChildren: RspEthicalAuctionRouteChildren = {
+  RspEthicalAuctionCapacityRoute: RspEthicalAuctionCapacityRoute,
   RspEthicalAuctionIntentRoute: RspEthicalAuctionIntentRoute,
   RspEthicalAuctionIndexRoute: RspEthicalAuctionIndexRoute,
 }

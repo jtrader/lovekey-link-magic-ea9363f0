@@ -112,7 +112,15 @@ export function useGlossarySheet() {
  * Provides a mobile-friendly glossary bottom sheet. Tapping any <Term/> opens
  * it scrolled to that definition; a floating button opens the full list.
  */
-export function GlossarySheetProvider({ children }: { children: ReactNode }) {
+export function GlossarySheetProvider({
+  children,
+  showOnDesktop = false,
+}: {
+  children: ReactNode;
+  /** Also render the floating button + sheet above the md breakpoint. */
+  showOnDesktop?: boolean;
+}) {
+  const hide = showOnDesktop ? "" : "md:hidden";
   const [openId, setOpenId] = useState<GlossaryId | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const listRef = useRef<HTMLDivElement | null>(null);
@@ -156,7 +164,7 @@ export function GlossarySheetProvider({ children }: { children: ReactNode }) {
       <button
         type="button"
         onClick={() => api.open()}
-        className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full border border-amber-500/40 bg-[#FFFFFF] px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-amber-700 shadow-lg md:hidden"
+        className={`fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full border border-amber-500/40 bg-[#FFFFFF] px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-amber-700 shadow-lg ${hide}"
       >
         <span aria-hidden="true">?</span> Glossary
       </button>
@@ -165,7 +173,7 @@ export function GlossarySheetProvider({ children }: { children: ReactNode }) {
       <div
         onClick={() => setIsOpen(false)}
         aria-hidden="true"
-        className={`fixed inset-0 z-40 bg-slate-900/40 transition-opacity duration-200 md:hidden ${
+        className={`fixed inset-0 z-40 bg-slate-900/40 transition-opacity duration-200 ${hide} ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
@@ -176,7 +184,7 @@ export function GlossarySheetProvider({ children }: { children: ReactNode }) {
         aria-modal="true"
         aria-label="RSP Macro glossary"
         aria-hidden={!isOpen}
-        className={`fixed inset-x-0 bottom-0 z-50 max-h-[80vh] rounded-t-3xl border-t border-slate-200 bg-[#FFFFFF] shadow-2xl transition-transform duration-300 md:hidden ${
+        className={`fixed inset-x-0 bottom-0 z-50 max-h-[80vh] rounded-t-3xl border-t border-slate-200 bg-[#FFFFFF] shadow-2xl transition-transform duration-300 ${hide} ${
           isOpen ? "translate-y-0" : "pointer-events-none translate-y-full"
         }`}
       >

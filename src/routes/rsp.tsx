@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
-import { SiteHeader, areaMenus, isAuctionPath } from "@/components/SiteHeader";
+import { AVATAR_PATHS, SiteHeader, areaMenus, isAuctionPath } from "@/components/SiteHeader";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import { trackEvent } from "@/lib/analytics";
@@ -88,7 +88,7 @@ const PAGE_LABELS: Record<string, string> = {
 
 function Breadcrumbs() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isAvatars = AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
+  const isAvatars = AVATAR_PATHS.some((a: string) => pathname === a || pathname.startsWith(`${a}/`));
 
   const crumbs: { label: string; to?: string }[] = [
     { label: "Love Key Link", to: "/" },

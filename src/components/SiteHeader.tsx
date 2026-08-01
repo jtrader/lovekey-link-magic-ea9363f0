@@ -6,7 +6,7 @@ import { rspCss } from "@/components/rsp-css";
 
 // ─── Area switcher (3 main site areas) ───────────────────────────────────────
 
-const AVATAR_PATHS = [
+export const AVATAR_PATHS = [
   "/rsp/avatars",
   "/rsp/avatar-creator",
   "/rsp/how-it-works",

@@ -31,7 +31,7 @@ const meters = [
     state: "Throttle exposure",
     color: "oklch(60% .22 25)",
     width: "94%",
-    note: "Staff consistently over standard hours, unplanned leave spiking, queues backing up. Paid bids are dialled back and organic prominence rotates to a competitor with room.",
+    note: "Staff consistently over standard hours, unplanned leave spiking, queues backing up. Free organic prominence is withdrawn first and rotates to a competitor with room; paid bids are dialled back behind it.",
   },
   {
     name: "High friction",

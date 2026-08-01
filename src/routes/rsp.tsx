@@ -1004,6 +1004,7 @@ const areaMenus: AreaMenu[] = [
       { to: "/rsp/case-studies", label: "Case Studies" },
       { to: "/rsp/event-token", label: "Event Token" },
       { to: "/rsp/for-developers", label: "Developers" },
+      { to: "/rsp/macro", label: "Macro Equilibrium" },
       { to: "/rsp/governance", label: "Governance" },
     ],
   },

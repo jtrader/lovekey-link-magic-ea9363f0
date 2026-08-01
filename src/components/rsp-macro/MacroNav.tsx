@@ -65,6 +65,8 @@ export function MacroNav() {
 }
 
 function MacroBreadcrumbs() {
+  const { pathname, active } = useMacroActive();
+  const onIndex = pathname === "/rsp/macro";
   return (
     <nav
       aria-label="Breadcrumb"
@@ -78,9 +80,21 @@ function MacroBreadcrumbs() {
         RSP
       </Link>
       <span aria-hidden="true">/</span>
-      <span className="text-emerald-400" aria-current="page">
-        @rsp/macro
-      </span>
+      {onIndex ? (
+        <span className="text-emerald-400" aria-current="page">
+          @rsp/macro
+        </span>
+      ) : (
+        <>
+          <Link to="/rsp/macro" className="hover:text-slate-300">
+            @rsp/macro
+          </Link>
+          <span aria-hidden="true">/</span>
+          <span className="text-emerald-400" aria-current="page">
+            {active.label.replace(/^\d+\.\s*/, "")}
+          </span>
+        </>
+      )}
     </nav>
   );
 }

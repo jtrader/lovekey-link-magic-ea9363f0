@@ -87,17 +87,21 @@ function EthicalAuctionIndex() {
         id="score"
         eyebrow="The new pillar"
         title="A Respectful Intent Score sitting beside Quality Score."
-        lead="Ad Rank today is roughly bid amount multiplied by quality score. The Ethical Auction adds a third term that no amount of budget can buy: whether the destination behaves respectfully and can serve the person on the other side."
+        lead="Ad Rank today is roughly bid amount multiplied by quality score, and organic position is roughly relevance multiplied by authority. Vertical Equilibrium Optimization adds one term that no amount of budget or backlink history can buy — whether the destination behaves respectfully and can serve the person on the other side — and applies it to both surfaces."
       >
         <div className="ea-formula">
-          <div className="ea-formula-label">Proposed ad rank</div>
+          <div className="ea-formula-label">Proposed ranking terms — paid and organic</div>
           <div className="ea-formula-eq">
             Ad Rank = Bid Amount × Quality Score × <em>Respectful Intent Score</em>
+          </div>
+          <div className="ea-formula-eq" style={{ marginTop: 10 }}>
+            Organic Position = Relevance × Authority × <em>Respectful Intent Score</em>
           </div>
           <p className="ea-formula-note">
             The Respectful Intent Score is derived from the same RSP primitives used across Love Key
             Link — sensitivity tiers, low-resolution signals, signal decay and a deterministic next
-            safe step.
+            safe step. It multiplies into the paid auction and acts as an organic ranking modifier,
+            so a saturated business is throttled in both places at once.
           </p>
         </div>
 
@@ -107,7 +111,7 @@ function EthicalAuctionIndex() {
               <tr>
                 <th>RSP principle</th>
                 <th>What it means here</th>
-                <th>Auction / ranking effect</th>
+                <th>Organic (SEO) &amp; paid (SEM) effect</th>
               </tr>
             </thead>
             <tbody>
@@ -115,22 +119,22 @@ function EthicalAuctionIndex() {
                 {
                   p: "Sensitivity-aware monetisation",
                   m: "Commercial prompts are suppressed in distress, crisis and high-urgency contexts.",
-                  e: "Advertisers who lower commercial intensity on sensitive intent are rewarded; those bidding predatorily on crisis keywords are penalised.",
+                  e: "Advertisers who lower commercial intensity on sensitive intent are rewarded and pages that do the same rank higher organically; predatory bidding or crisis-keyword content is demoted on both surfaces.",
                 },
                 {
                   p: "Low-resolution intent",
                   m: "Action-based signals such as course_started, not profiles such as anxious_user.",
-                  e: "Landing pages that resolve intent without tracking walls or lead-capture traps score higher on experience.",
+                  e: "Landing pages that resolve intent without tracking walls or lead-capture traps score higher on experience, lifting both organic position and ad quality.",
                 },
                 {
                   p: "Signal decay & burn integrity",
                   m: "Time-based decay and raw event burning as standard practice.",
-                  e: "Sites that honour retention lifecycles earn an ethical trustworthiness lift.",
+                  e: "Sites that honour retention lifecycles earn an ethical trustworthiness lift carried into organic ranking and auction eligibility alike.",
                 },
                 {
                   p: "Deterministic next safe step",
                   m: "Always offer a contextual, safe onward route instead of a conversion trap.",
-                  e: "Non-coercive routing, clear disclosures and visible opt-outs outrank funnel lock-in.",
+                  e: "Non-coercive routing, clear disclosures and visible opt-outs outrank funnel lock-in in the organic index and win better placement in the auction.",
                 },
               ].map((r) => (
                 <tr key={r.p}>
@@ -138,7 +142,7 @@ function EthicalAuctionIndex() {
                     <strong>{r.p}</strong>
                   </td>
                   <td data-label="What it means here">{r.m}</td>
-                  <td data-label="Auction / ranking effect">{r.e}</td>
+                  <td data-label="Organic (SEO) & paid (SEM) effect">{r.e}</td>
                 </tr>
               ))}
             </tbody>

@@ -45,6 +45,7 @@ import { Route as RspMacroTelemetryRouteImport } from './routes/rsp_.macro.telem
 import { Route as RspMacroOverviewRouteImport } from './routes/rsp_.macro.overview'
 import { Route as RspMacroGovernanceRouteImport } from './routes/rsp_.macro.governance'
 import { Route as RspMacroCalibrationRouteImport } from './routes/rsp_.macro.calibration'
+import { Route as RspEthicalAuctionIntentRouteImport } from './routes/rsp.ethical-auction.intent'
 import { Route as RspCaseStudiesSlugRouteImport } from './routes/rsp.case-studies.$slug'
 import { Route as ApiPublicQuizSubmitRouteImport } from './routes/api/public/quiz-submit'
 import { Route as ApiPublicQuizResultTokenRouteImport } from './routes/api/public/quiz-result.$token'
@@ -229,6 +230,11 @@ const RspMacroCalibrationRoute = RspMacroCalibrationRouteImport.update({
   path: '/rsp/macro/calibration',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RspEthicalAuctionIntentRoute = RspEthicalAuctionIntentRouteImport.update({
+  id: '/intent',
+  path: '/intent',
+  getParentRoute: () => RspEthicalAuctionRoute,
+} as any)
 const RspCaseStudiesSlugRoute = RspCaseStudiesSlugRouteImport.update({
   id: '/case-studies/$slug',
   path: '/case-studies/$slug',
@@ -282,6 +288,7 @@ export interface FileRoutesByFullPath {
   '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp/macro/overview': typeof RspMacroOverviewRoute
@@ -321,6 +328,7 @@ export interface FileRoutesByTo {
   '/rsp': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp/macro/overview': typeof RspMacroOverviewRoute
@@ -364,6 +372,7 @@ export interface FileRoutesById {
   '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
   '/rsp_/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp_/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp_/macro/overview': typeof RspMacroOverviewRoute
@@ -407,6 +416,7 @@ export interface FileRouteTypes {
     | '/rsp/'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
+    | '/rsp/ethical-auction/intent'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
     | '/rsp/macro/overview'
@@ -446,6 +456,7 @@ export interface FileRouteTypes {
     | '/rsp'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
+    | '/rsp/ethical-auction/intent'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
     | '/rsp/macro/overview'
@@ -488,6 +499,7 @@ export interface FileRouteTypes {
     | '/rsp/'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
+    | '/rsp/ethical-auction/intent'
     | '/rsp_/macro/calibration'
     | '/rsp_/macro/governance'
     | '/rsp_/macro/overview'
@@ -778,6 +790,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspMacroCalibrationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp/ethical-auction/intent': {
+      id: '/rsp/ethical-auction/intent'
+      path: '/intent'
+      fullPath: '/rsp/ethical-auction/intent'
+      preLoaderRoute: typeof RspEthicalAuctionIntentRouteImport
+      parentRoute: typeof RspEthicalAuctionRoute
+    }
     '/rsp/case-studies/$slug': {
       id: '/rsp/case-studies/$slug'
       path: '/case-studies/$slug'
@@ -824,10 +843,12 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface RspEthicalAuctionRouteChildren {
+  RspEthicalAuctionIntentRoute: typeof RspEthicalAuctionIntentRoute
   RspEthicalAuctionIndexRoute: typeof RspEthicalAuctionIndexRoute
 }
 
 const RspEthicalAuctionRouteChildren: RspEthicalAuctionRouteChildren = {
+  RspEthicalAuctionIntentRoute: RspEthicalAuctionIntentRoute,
   RspEthicalAuctionIndexRoute: RspEthicalAuctionIndexRoute,
 }
 

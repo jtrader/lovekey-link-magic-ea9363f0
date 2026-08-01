@@ -29,21 +29,21 @@ export const Route = createFileRoute("/rsp_/macro/calibration")({
 const months = [
   {
     tag: "Month 1",
-    tagClass: "bg-slate-800 text-slate-300",
-    border: "border-slate-800",
+    tagClass: "bg-slate-200 text-slate-600",
+    border: "border-slate-200",
     title: "Equal Exposure Sandbox",
     desc: "All 10 participants receive equal traffic impressions. Diagnostic audit measures conversion friction & isolates UX weaknesses.",
   },
   {
     tag: "Month 2",
-    tagClass: "border border-amber-500/40 bg-amber-950/80 text-amber-300",
+    tagClass: "border border-amber-500/40 bg-amber-50 text-amber-700",
     border: "border-amber-500/30",
     title: "UI/UX Remediation",
     desc: "Businesses fix technical bottlenecks, core web vitals, and design flaws to align with the vertical mean conversion benchmark.",
   },
   {
     tag: "Month 3",
-    tagClass: "border border-emerald-500/40 bg-emerald-950/80 text-emerald-300",
+    tagClass: "border border-emerald-500/40 bg-emerald-50 text-emerald-700",
     border: "border-emerald-500/30",
     title: "Telemetry Sync & Launch",
     desc: "Accounting API and workforce stress baselines calibrate. Live Rotational Equilibrium Engine activates on Day 91.",
@@ -53,27 +53,27 @@ const months = [
 function CalibrationPage() {
   return (
     <MacroShell>
-      <div className="mb-2 font-mono text-xs uppercase tracking-widest text-amber-400">
+      <div className="mb-2 font-mono text-xs uppercase tracking-widest text-amber-700">
         Section 04 / Calibration
       </div>
-      <h1 className="mb-6 text-3xl font-bold text-white md:text-4xl">
+      <h1 className="mb-6 text-3xl font-bold text-slate-900 md:text-4xl">
         The 3-Month Level-Up Sandbox
       </h1>
-      <p className="mb-10 text-lg leading-relaxed text-slate-400">
+      <p className="mb-10 text-lg leading-relaxed text-slate-500">
         Participating 10-player vertical pools undergo a mandatory 90-day calibration phase to level
         up landing page design and establish normative operational baselines.
       </p>
 
       <div className="my-8 grid gap-6 md:grid-cols-3">
         {months.map((m) => (
-          <div key={m.tag} className={`rounded-2xl border bg-[#161B26] p-6 ${m.border}`}>
+          <div key={m.tag} className={`rounded-2xl border bg-[#FFFFFF] p-6 ${m.border}`}>
             <span
               className={`mb-4 inline-block rounded px-2.5 py-1 font-mono text-xs ${m.tagClass}`}
             >
               {m.tag}
             </span>
-            <h2 className="mb-2 text-lg font-semibold text-white">{m.title}</h2>
-            <p className="text-xs leading-relaxed text-slate-400">{m.desc}</p>
+            <h2 className="mb-2 text-lg font-semibold text-slate-900">{m.title}</h2>
+            <p className="text-xs leading-relaxed text-slate-500">{m.desc}</p>
           </div>
         ))}
       </div>

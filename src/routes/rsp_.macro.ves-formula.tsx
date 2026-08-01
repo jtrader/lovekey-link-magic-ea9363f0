@@ -29,68 +29,68 @@ export const Route = createFileRoute("/rsp_/macro/ves-formula")({
 const rows = [
   {
     v: "CX",
-    vClass: "text-emerald-400",
+    vClass: "text-emerald-700",
     dim: "Consumer Experience Index",
     src: "Call queue metadata & 1-tap resolution surveys",
     impact: "Lifts VES (High Quality)",
-    impactClass: "text-emerald-300",
+    impactClass: "text-emerald-700",
   },
   {
     v: "S",
-    vClass: "text-amber-400",
+    vClass: "text-amber-700",
     dim: "Workforce Capacity Index",
     src: "Anonymized shift hours, leave spikes, stress",
     impact: "Lowers VES (Throttles Stress)",
-    impactClass: "text-amber-300",
+    impactClass: "text-amber-700",
   },
   {
     v: "VT / VA",
-    vClass: "text-cyan-400",
+    vClass: "text-cyan-700",
     dim: "Target / Actual Financial Velocity",
     src: "Zero-knowledge accounting software API",
     impact: "Rotates Share when Target Met",
-    impactClass: "text-cyan-300",
+    impactClass: "text-cyan-700",
   },
 ] as const;
 
 function VESFormulaPage() {
   return (
     <MacroShell>
-      <div className="mb-2 font-mono text-xs uppercase tracking-widest text-cyan-400">
+      <div className="mb-2 font-mono text-xs uppercase tracking-widest text-cyan-700">
         Section 03 / Mathematical Specification
       </div>
-      <h1 className="mb-6 text-3xl font-bold text-white md:text-4xl">
+      <h1 className="mb-6 text-3xl font-bold text-slate-900 md:text-4xl">
         Vertical Equilibrium Score (VES)
       </h1>
 
-      <div className="my-8 rounded-2xl border border-cyan-500/30 bg-[#161B26] p-8 text-center shadow-2xl">
-        <div className="mb-2 font-mono text-xs uppercase tracking-widest text-cyan-400">
+      <div className="my-8 rounded-2xl border border-cyan-500/30 bg-[#FFFFFF] p-8 text-center shadow-2xl">
+        <div className="mb-2 font-mono text-xs uppercase tracking-widest text-cyan-700">
           Algorithmic Ad Rank & Prominence Formula
         </div>
-        <div className="my-4 rounded-xl border border-slate-800 bg-[#0B0F17] py-4 font-mono text-2xl text-white md:text-3xl">
+        <div className="my-4 rounded-xl border border-slate-200 bg-[#F5F7FB] py-4 font-mono text-2xl text-slate-900 md:text-3xl">
           VES = f(Relevance) × ( CX / S ) × ( VT / VA )
         </div>
-        <div className="font-mono text-xs text-slate-400">
+        <div className="font-mono text-xs text-slate-500">
           Equilibrium Ad Rank = (Bid Amount × Quality Score) × VES
         </div>
       </div>
 
       <div className="my-10 overflow-x-auto">
-        <table className="w-full border-collapse overflow-hidden rounded-xl border border-slate-800 bg-[#161B26] text-left">
+        <table className="w-full border-collapse overflow-hidden rounded-xl border border-slate-200 bg-[#FFFFFF] text-left">
           <thead>
-            <tr className="border-b border-slate-800 bg-[#0B0F17] font-mono text-xs uppercase text-slate-400">
+            <tr className="border-b border-slate-200 bg-[#F5F7FB] font-mono text-xs uppercase text-slate-500">
               <th className="px-4 py-4">Variable</th>
               <th className="px-4 py-4">Dimension</th>
               <th className="px-4 py-4">Source Telemetry</th>
               <th className="px-4 py-4">Algorithm Impact</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 text-sm">
+          <tbody className="divide-y divide-slate-200 text-sm">
             {rows.map((r) => (
               <tr key={r.v}>
                 <td className={`px-4 py-4 font-mono font-bold ${r.vClass}`}>{r.v}</td>
-                <td className="px-4 py-4 text-slate-200">{r.dim}</td>
-                <td className="px-4 py-4 text-xs text-slate-400">{r.src}</td>
+                <td className="px-4 py-4 text-slate-700">{r.dim}</td>
+                <td className="px-4 py-4 text-xs text-slate-500">{r.src}</td>
                 <td className={`px-4 py-4 text-xs ${r.impactClass}`}>{r.impact}</td>
               </tr>
             ))}

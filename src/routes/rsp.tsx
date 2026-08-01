@@ -1044,6 +1044,18 @@ const areaMenus: AreaMenu[] = [
       { to: "/rsp/ethical-auction/experience", label: "Consumer experience" },
       { to: "/rsp/ethical-auction/equilibrium", label: "Equilibrium score" },
       { to: "/rsp/ethical-auction/adoption", label: "Calibration & adoption" },
+      {
+        to: "/rsp/macro",
+        label: "Macro Equilibrium",
+        children: [
+          { to: "/rsp/macro", label: "Index", exact: true },
+          { to: "/rsp/macro/overview", label: "Overview" },
+          { to: "/rsp/macro/telemetry", label: "Telemetry" },
+          { to: "/rsp/macro/ves-formula", label: "VES Formula" },
+          { to: "/rsp/macro/calibration", label: "Calibration" },
+          { to: "/rsp/macro/governance", label: "Governance" },
+        ],
+      },
     ],
   },
   {

@@ -266,7 +266,50 @@ export function EaCapacitySim() {
           <EaRef id="organic" />; the VEO split is weighted by the Respectful Intent Score
           <EaRef id="ris" />.
         </p>
+        <div className="ea-sim-share">
+          <button
+            type="button"
+            className="ea-sim-share-btn"
+            onClick={async () => {
+              const url = typeof window !== "undefined" ? window.location.href : "";
+              const summary = [
+                `VEO worked example — incumbent capacity ${pct(incumbent)}, capable competitor ${pct(competitor)}.`,
+                `Today: ${Math.round(m.todayUnserved)} clicks/week unserved, competitor pays £${Math.round(m.todayCompSpend).toLocaleString()}.`,
+                `Under VEO: ${Math.round(m.veoUnserved)} unserved, competitor pays £${Math.round(m.veoCompSpend).toLocaleString()}.`,
+                url,
+              ].join("\n");
+              try {
+                await navigator.clipboard.writeText(summary);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2500);
+              } catch {
+                setCopied(false);
+              }
+            }}
+          >
+            {copied ? "Link + metrics copied" : "Copy shareable link"}
+          </button>
+          <button
+            type="button"
+            className="ea-sim-reset-btn"
+            onClick={() =>
+              navigate({
+                to: ".",
+                search: (prev: Record<string, unknown>) => ({ ...prev, ...SIM_DEFAULTS }),
+                replace: true,
+              })
+            }
+          >
+            Reset
+          </button>
+          <small>
+            The sliders live in the URL (<code>?inc={incumbent}&amp;comp={competitor}</code>), so anyone opening
+            your link sees exactly these settings and the same outcome metrics.
+          </small>
+        </div>
       </div>
+
+
 
       <div className="ea-sim-grid">
         <div className="ea-sim-panel">

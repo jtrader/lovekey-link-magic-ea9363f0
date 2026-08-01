@@ -91,23 +91,15 @@ function EthicalAuctionIndex() {
         title="A Respectful Intent Score sitting beside Quality Score."
         lead="Ad Rank today is roughly bid amount multiplied by quality score, and organic position is roughly relevance multiplied by authority — which is why free organic prominence accrues to whoever ranked yesterday, and why everyone else has to buy their way in. Vertical Equilibrium Optimization adds one term that no amount of budget or backlink history can buy — whether the destination behaves respectfully and can serve the person on the other side — and applies it to both surfaces."
       >
-        <div className="ea-formula">
-          <div className="ea-formula-label">Proposed ranking terms — paid and organic</div>
-          <div className="ea-formula-eq">
-            Ad Rank = Bid Amount × Quality Score × <em>Respectful Intent Score</em>
-          </div>
-          <div className="ea-formula-eq" style={{ marginTop: 10 }}>
-            Organic Position = Relevance × Authority × <em>Respectful Intent Score</em>
-          </div>
-          <p className="ea-formula-note">
-            The Respectful Intent Score is derived from the same RSP primitives used across Love Key
-            Link — sensitivity tiers, low-resolution signals, signal decay and a deterministic next
-            safe step. It multiplies into the paid auction and acts as an organic ranking modifier,
-            so a saturated business loses its free organic position at the same moment its bids are
-            eased back — and a capable one earns organic exposure it would otherwise have had to buy.
-          </p>
+        <EaPairedFormula />
+        <p className="ea-formula-note" style={{ maxWidth: 820, margin: "14px auto 0", textAlign: "center" }}>
+          The Respectful Intent Score<EaRef id="ris" /> is derived from the same RSP primitives used across
+          Love Key Link — sensitivity tiers, low-resolution signals, signal decay and a deterministic next
+          safe step. It multiplies into the paid auction and acts as an organic ranking modifier, so a
+          saturated business loses its free organic position at the same moment its bids are eased back —
+          and a capable one earns organic exposure it would otherwise have had to buy.
+        </p>
 
-        </div>
 
         <div className="ea-table-wrap" style={{ marginTop: 28 }}>
           <table className="ea-table">

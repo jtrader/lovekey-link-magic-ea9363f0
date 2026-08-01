@@ -148,9 +148,33 @@ function pct(n: number) {
   return `${Math.round(n)}%`;
 }
 
+const SIM_DEFAULTS = { inc: 35, comp: 80 };
+
+function clampCapacity(value: unknown, fallback: number) {
+  const n = Math.round(Number(value) / 5) * 5;
+  return Number.isFinite(n) && n >= 5 && n <= 100 ? n : fallback;
+}
+
+/** Shared validator so the route and the component agree on the URL contract. */
+export function validateSimSearch(search: Record<string, unknown>) {
+  return {
+    inc: clampCapacity(search.inc, SIM_DEFAULTS.inc),
+    comp: clampCapacity(search.comp, SIM_DEFAULTS.comp),
+  };
+}
+
 export function EaCapacitySim() {
-  const [incumbent, setIncumbent] = useState(35); // % of regional demand it can actually service
-  const [competitor, setCompetitor] = useState(80);
+  const navigate = useNavigate();
+  const search = useSearch({ strict: false }) as Record<string, unknown>;
+  const incumbent = clampCapacity(search.inc, SIM_DEFAULTS.inc); // % of demand it can service
+  const competitor = clampCapacity(search.comp, SIM_DEFAULTS.comp);
+  const [copied, setCopied] = useState(false);
+
+  const setIncumbent = (v: number) =>
+    navigate({ to: ".", search: (prev: Record<string, unknown>) => ({ ...prev, inc: v }), replace: true });
+  const setCompetitor = (v: number) =>
+    navigate({ to: ".", search: (prev: Record<string, unknown>) => ({ ...prev, comp: v }), replace: true });
+
 
   const m = useMemo(() => {
     const incCap = (incumbent / 100) * DEMAND;

@@ -105,19 +105,19 @@ function CapacityPage() {
                   s: "Leave spikes",
                   o: "Statistically significant unplanned leave across a rolling fourteen days.",
                   st: "degraded",
-                  a: "Pause peak promotions and high-volume lead generation.",
+                  a: "Pause peak promotions and demote high-volume organic lead generation.",
                 },
                 {
                   s: "Shift friction",
                   o: "Elevated context-switching and extended idle time during active shifts.",
                   st: "friction_high",
-                  a: "Hold at survival baseline; route overflow elsewhere.",
+                  a: "Hold organic and paid exposure at survival baseline; route overflow elsewhere.",
                 },
                 {
                   s: "Hour deficit",
                   o: "Team under standard hours with low shift density and high availability.",
                   st: "under_utilised",
-                  a: "Amplify prominence to drive the volume the business needs.",
+                  a: "Amplify organic prominence and paid reach to drive the volume the business needs.",
                 },
               ].map((r) => (
                 <tr key={r.s}>

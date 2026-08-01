@@ -119,8 +119,8 @@ function IntentPage() {
                 },
                 {
                   q: "Can a small operator see demand fairly?",
-                  s: "Only by outbidding the incumbents.",
-                  e: "Yes. Pool visibility is a shared vertical resource.",
+                  s: "Only by outbidding the incumbents or out-aging their domain authority.",
+                  e: "Yes. Pool visibility is a shared vertical resource across organic and paid results alike.",
                 },
               ].map((r) => (
                 <tr key={r.q}>

@@ -11,7 +11,7 @@ export const Route = createFileRoute("/rsp/ethical-auction/")({
       {
         name: "description",
         content:
-          "Vertical Equilibrium Optimization is the natural successor to SEO & SEM: Ethical Auction Theory for search engines, ranking on pooled intent and real capacity to serve instead of bid size.",
+          "Vertical Equilibrium Optimization is the natural successor to SEO & SEM: Ethical Auction Theory governing organic ranking and paid auctions alike, on pooled intent and real capacity to serve instead of bid size or legacy authority.",
       },
       {
         property: "og:title",
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/rsp/ethical-auction/")({
       {
         property: "og:description",
         content:
-          "The natural successor to SEO & SEM: pooled intent, burned identifiers, and rotational exposure that follows a business's real serviceability.",
+          "The natural successor to SEO & SEM: pooled intent, burned identifiers, and rotational exposure across organic and paid results that follows a business's real serviceability.",
       },
 
       { property: "og:type", content: "website" },
@@ -57,7 +57,7 @@ function EthicalAuctionIndex() {
           </>
         }
         title="Coordination, not surveillance. Equilibrium, not extraction."
-        lead="Search ranking and pay-per-click auctions decide who a market gets to meet. Today that decision is made almost entirely on bid size, historic click-through and behavioural profiling. The Ethical Auction applies RSP to that layer: measure intent richly, forget who it came from, and give prominence to whoever can actually serve the need right now."
+        lead="Both channels of search distribution — organic ranking (SEO) and paid auctions (SEM) — decide who a market gets to meet. Today that decision is made almost entirely on bid size, legacy domain authority, historic click-through and behavioural profiling. Vertical Equilibrium Optimization applies RSP to both layers at once: measure intent richly, forget who it came from, and give prominence — organic and paid alike — to whoever can actually serve the need right now."
       >
         <div className="ea-compare">
           <div className="ea-compare-card">
@@ -65,18 +65,18 @@ function EthicalAuctionIndex() {
             <h3>Monopolistic extraction</h3>
             <ul>
               <li>Real-time intent is welded to a permanent profile that follows the person around the web.</li>
-              <li>The top one to three players capture the bulk of regional traffic on budget and legacy authority alone.</li>
-              <li>Leads land on businesses with no bandwidth left — burnt-out staff, slow replies, poor reviews.</li>
-              <li>Capable competitors starve while dominant players pay for clicks they cannot service.</li>
+              <li>The top one to three players capture the bulk of regional traffic on ad budget and legacy organic authority alone.</li>
+              <li>Leads land on businesses with no bandwidth left — arriving through both paid placements and top organic listings — met by burnt-out staff, slow replies, poor reviews.</li>
+              <li>Capable competitors starve while dominant players pay for clicks and receive organic traffic they cannot service.</li>
             </ul>
           </div>
           <div className="ea-compare-card is-good">
-            <span className="ea-compare-tag">The Ethical Auction</span>
+            <span className="ea-compare-tag">Vertical Equilibrium Optimization</span>
             <h3>Synchronised equilibrium</h3>
             <ul>
               <li>Intent is pooled at sector level and the identifiable source is burned on write.</li>
-              <li>Prominence rotates toward the operators with genuine capacity to fulfil the request.</li>
-              <li>Overloaded businesses are throttled gently, protecting staff and stopping wasted spend.</li>
+              <li>Prominence — organic ranking and paid placement alike — rotates toward the operators with genuine capacity to fulfil the request.</li>
+              <li>Overloaded businesses are throttled gently across both channels, protecting staff and stopping wasted spend.</li>
               <li>A vertical behaves like a coordinated service division rather than isolated gladiators.</li>
             </ul>
           </div>
@@ -87,17 +87,21 @@ function EthicalAuctionIndex() {
         id="score"
         eyebrow="The new pillar"
         title="A Respectful Intent Score sitting beside Quality Score."
-        lead="Ad Rank today is roughly bid amount multiplied by quality score. The Ethical Auction adds a third term that no amount of budget can buy: whether the destination behaves respectfully and can serve the person on the other side."
+        lead="Ad Rank today is roughly bid amount multiplied by quality score, and organic position is roughly relevance multiplied by authority. Vertical Equilibrium Optimization adds one term that no amount of budget or backlink history can buy — whether the destination behaves respectfully and can serve the person on the other side — and applies it to both surfaces."
       >
         <div className="ea-formula">
-          <div className="ea-formula-label">Proposed ad rank</div>
+          <div className="ea-formula-label">Proposed ranking terms — paid and organic</div>
           <div className="ea-formula-eq">
             Ad Rank = Bid Amount × Quality Score × <em>Respectful Intent Score</em>
+          </div>
+          <div className="ea-formula-eq" style={{ marginTop: 10 }}>
+            Organic Position = Relevance × Authority × <em>Respectful Intent Score</em>
           </div>
           <p className="ea-formula-note">
             The Respectful Intent Score is derived from the same RSP primitives used across Love Key
             Link — sensitivity tiers, low-resolution signals, signal decay and a deterministic next
-            safe step.
+            safe step. It multiplies into the paid auction and acts as an organic ranking modifier,
+            so a saturated business is throttled in both places at once.
           </p>
         </div>
 
@@ -107,7 +111,7 @@ function EthicalAuctionIndex() {
               <tr>
                 <th>RSP principle</th>
                 <th>What it means here</th>
-                <th>Auction / ranking effect</th>
+                <th>Organic (SEO) &amp; paid (SEM) effect</th>
               </tr>
             </thead>
             <tbody>
@@ -115,22 +119,22 @@ function EthicalAuctionIndex() {
                 {
                   p: "Sensitivity-aware monetisation",
                   m: "Commercial prompts are suppressed in distress, crisis and high-urgency contexts.",
-                  e: "Advertisers who lower commercial intensity on sensitive intent are rewarded; those bidding predatorily on crisis keywords are penalised.",
+                  e: "Advertisers who lower commercial intensity on sensitive intent are rewarded and pages that do the same rank higher organically; predatory bidding or crisis-keyword content is demoted on both surfaces.",
                 },
                 {
                   p: "Low-resolution intent",
                   m: "Action-based signals such as course_started, not profiles such as anxious_user.",
-                  e: "Landing pages that resolve intent without tracking walls or lead-capture traps score higher on experience.",
+                  e: "Landing pages that resolve intent without tracking walls or lead-capture traps score higher on experience, lifting both organic position and ad quality.",
                 },
                 {
                   p: "Signal decay & burn integrity",
                   m: "Time-based decay and raw event burning as standard practice.",
-                  e: "Sites that honour retention lifecycles earn an ethical trustworthiness lift.",
+                  e: "Sites that honour retention lifecycles earn an ethical trustworthiness lift carried into organic ranking and auction eligibility alike.",
                 },
                 {
                   p: "Deterministic next safe step",
                   m: "Always offer a contextual, safe onward route instead of a conversion trap.",
-                  e: "Non-coercive routing, clear disclosures and visible opt-outs outrank funnel lock-in.",
+                  e: "Non-coercive routing, clear disclosures and visible opt-outs outrank funnel lock-in in the organic index and win better placement in the auction.",
                 },
               ].map((r) => (
                 <tr key={r.p}>
@@ -138,7 +142,7 @@ function EthicalAuctionIndex() {
                     <strong>{r.p}</strong>
                   </td>
                   <td data-label="What it means here">{r.m}</td>
-                  <td data-label="Auction / ranking effect">{r.e}</td>
+                  <td data-label="Organic (SEO) & paid (SEM) effect">{r.e}</td>
                 </tr>
               ))}
             </tbody>
@@ -166,12 +170,12 @@ function EthicalAuctionIndex() {
           <div className="ea-flow-node">
             <div className="ea-flow-step">Match</div>
             <h4>Equilibrium engine</h4>
-            <p>The Vertical Equilibrium Score weighs relevance against real serviceability.</p>
+            <p>The Vertical Equilibrium Score weighs relevance against real serviceability, then applies to organic ranking and paid bids together.</p>
           </div>
           <div className="ea-flow-node">
             <div className="ea-flow-step">Result</div>
             <h4>Rotational exposure</h4>
-            <p>Prominence flows to whoever can serve the need without breaking their people.</p>
+            <p>Prominence across both organic results and paid placements flows to whoever can serve the need without breaking their people.</p>
           </div>
         </div>
       </EaSection>

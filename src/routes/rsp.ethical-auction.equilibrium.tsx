@@ -31,7 +31,7 @@ function EquilibriumPage() {
       <EaSection
         eyebrow="Section 04 · The maths"
         title="One score, three dimensions of reality."
-        lead="The three telemetry streams — consumer experience, workforce stress and financial velocity — resolve into a single multiplier applied to both surfaces at once: the organic ranking signal (SEO) and the paid auction rank (SEM)."
+        lead="The three telemetry streams — consumer experience, workforce stress and financial velocity — resolve into a single multiplier applied to both surfaces at once: the organic ranking signal (SEO), where incumbency currently pays nothing for the traffic it cannot serve, and the paid auction rank (SEM), where capable operators currently pay most."
       >
         <div className="ea-formula">
           <div className="ea-formula-label">Vertical Equilibrium Score</div>

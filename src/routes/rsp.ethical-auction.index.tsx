@@ -57,7 +57,7 @@ function EthicalAuctionIndex() {
           </>
         }
         title="Coordination, not surveillance. Equilibrium, not extraction."
-        lead="Both channels of search distribution — organic ranking (SEO) and paid auctions (SEM) — decide who a market gets to meet. Today that decision is made almost entirely on bid size, legacy domain authority, historic click-through and behavioural profiling. Vertical Equilibrium Optimization applies RSP to both layers at once: measure intent richly, forget who it came from, and give prominence — organic and paid alike — to whoever can actually serve the need right now."
+        lead="Both channels of search distribution — organic ranking (SEO) and paid auctions (SEM) — decide who a market gets to meet. Today the dominant names in a vertical are handed the organic results for free on legacy authority, absorbing demand they cannot fully serve, while capable competitors are forced to pay for clicks to reach the very customers those incumbents are keeping waiting. Vertical Equilibrium Optimization applies RSP to both layers at once: measure intent richly, forget who it came from, and give prominence — organic and paid alike — to whoever can actually serve the need right now."
       >
         <div className="ea-compare">
           <div className="ea-compare-card">

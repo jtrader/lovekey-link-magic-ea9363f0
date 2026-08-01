@@ -1,35 +1,36 @@
 ## Goal
 
-Make it unmistakable throughout the Vertical Equilibrium Optimization branch that the model governs **both organic ranking (SEO) and paid auctions (SEM)** — not just paid clicks. Copy-only changes; no logic or layout work.
+Fix the ideological framing across the Vertical Equilibrium Optimization (VEO) branch. The correct legacy-model critique is:
 
-## Changes by page
+- **Dominant vertical players rank organically for free** and absorb traffic they cannot fully serve.
+- **Capable competitors must pay for clicks** just to reach the same demand — paying to serve need the incumbents are already wasting.
+- VEO's correction: prominence on **both** surfaces follows real serviceability, so capable operators earn organic exposure without buying it, and saturated incumbents lose free organic overflow rather than simply being outbid.
 
-**/rsp/ethical-auction (index)**
-- Intro lead: reframe from "Search ranking and pay-per-click auctions" to explicitly state both distribution channels are governed by the same equilibrium layer, and that VEO is the successor to SEO *and* SEM.
-- Legacy-model bullets:
-  - "Capable competitors starve while dominant players pay for clicks **and inherit organic traffic** they cannot service."
-  - Top-players bullet: make clear dominance comes from *both* ad budget and legacy organic authority.
-  - Dead-lead bullet: note leads arrive via both paid and organic listings.
-- Ethical Auction bullets: state prominence rotation applies to organic results and paid placements alike; throttling covers both.
-- "Respectful Intent Score" section: clarify the score multiplies into paid Ad Rank *and* acts as an organic ranking modifier — add one line under the formula and rename the table's third column to "Ranking / auction effect", with each row's text touching both surfaces where natural.
-- Architecture flow: "Rotational exposure" node text to say prominence across organic and paid results.
+Anything implying "incumbents pay for clicks" or "capable competitors gain organic while dominants must pay" is wrong and gets rewritten.
 
-**/rsp/ethical-auction/intent**
-- The "how does a new entrant get seen?" comparison row currently says "Only by outbidding the incumbents" — extend to "Only by outbidding incumbents or out-aging their domain authority", with the VEO counterpart covering both surfaces.
+## Content changes
 
-**/rsp/ethical-auction/capacity** and **/experience**
-- Already mention "paid bids and organic prominence" in places; make the remaining capacity/response rows consistent so every throttle/boost description names both channels.
+**`src/routes/rsp.ethical-auction.index.tsx`**
+- Rewrite the legacy bullet at line 70 to the correct asymmetry: dominant players receive free organic traffic they cannot service, while capable competitors are forced to buy clicks to be seen at all.
+- Adjust the surrounding legacy bullets (68–69) so free organic capture by incumbents and paid entry cost for challengers read as two halves of the same distortion.
+- Tune the equilibrium bullets (78) and the ranking-formula lead (90) so the fix is stated as: organic prominence stops being a free incumbency annuity, and paid spend stops being the entry fee for capable operators.
+- Add a short **worked example** block under the formula section, written with the corrected ideology: a saturated incumbent holding position 1 organically with a 5-day callback backlog, versus a capable operator with same-day capacity paying for clicks to be visible — then what VEO changes for each (VES throttles the incumbent's free organic exposure; the capable operator earns organic prominence and lowers paid dependence).
 
-**/rsp/ethical-auction/equilibrium**
-- VES description: state the multiplier is applied to both the paid auction rank and the organic ranking signal, not just "on top of conventional relevance and bidding".
+**`src/routes/rsp.ethical-auction.intent.tsx`** (line ~122)
+- The "how does a small operator get seen" row already reads correctly ("only by outbidding incumbents or out-aging their domain authority") — extend the answer side to state that under VEO capacity earns organic prominence directly, removing the pay-to-be-seen tax.
 
-**/rsp/ethical-auction/adoption**
-- Search-engine benefits: mention improved organic result quality alongside auction inventory.
-- Business benefits: add that baseline exposure is guaranteed across organic and paid, not budget-dependent.
+**`src/routes/rsp.ethical-auction.equilibrium.tsx`** (lines ~34, 149–152)
+- Reframe the Operator A/B comparison so the incumbent's advantage is explicitly free organic dominance plus budget, and the challenger's disadvantage is having to buy visibility despite having capacity.
 
-**Metadata**
-- Tighten the index page description (and the branch subtitle where it appears in `src/components/rsp-ethical-auction.tsx`) so "organic (SEO) and paid (SEM)" appears explicitly for search snippets.
+**`src/routes/rsp.ethical-auction.capacity.tsx`** (lines ~34, 102–120)
+- Ensure each engine action names both effects in the right direction: saturation removes *free organic prominence* first, not only paid bids; headroom restores organic prominence so the operator does not have to pay for reach.
+
+**`src/routes/rsp.ethical-auction.adoption.tsx`** (lines ~113–125)
+- Merchant benefits: stop paying for clicks purely to overcome incumbent organic dominance; incumbents stop absorbing unserviceable organic overflow.
+
+**`src/routes/rsp.ethical-auction.experience.tsx`** (line ~81)
+- Same directional correction in the rotation sentence.
 
 ## Technical notes
 
-Edits confined to `src/routes/rsp.ethical-auction.*.tsx` and the header/subtitle strings in `src/components/rsp-ethical-auction.tsx`. No component API, styling, or data changes.
+Text-only edits inside existing JSX in the six `rsp.ethical-auction.*.tsx` route files, plus one new worked-example block on the index page reusing existing `ea-*` classes (no new CSS unless the example needs a two-column compare, in which case the existing `.ea-compare` pattern from the equilibrium page is reused). Meta descriptions on the index page get a light wording pass to match. No data, routing, or navigation changes.

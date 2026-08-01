@@ -31,7 +31,7 @@ const meters = [
     state: "Throttle exposure",
     color: "oklch(60% .22 25)",
     width: "94%",
-    note: "Staff consistently over standard hours, unplanned leave spiking, queues backing up. Paid bids are dialled back and organic prominence rotates to a competitor with room.",
+    note: "Staff consistently over standard hours, unplanned leave spiking, queues backing up. Free organic prominence is withdrawn first and rotates to a competitor with room; paid bids are dialled back behind it.",
   },
   {
     name: "High friction",
@@ -99,26 +99,27 @@ function CapacityPage() {
                   s: "Work hour mean testing",
                   o: "Team consistently clocking around twenty percent over standard hours.",
                   st: "over_extended",
-                  a: "Throttle paid bids and rotate top organic exposure.",
+                  a: "Withdraw free top-of-page organic exposure first, then throttle paid bids.",
                 },
                 {
                   s: "Leave spikes",
                   o: "Statistically significant unplanned leave across a rolling fourteen days.",
                   st: "degraded",
-                  a: "Pause peak promotions and demote high-volume organic lead generation.",
+                  a: "Demote high-volume organic lead generation and pause peak promotions.",
                 },
                 {
                   s: "Shift friction",
                   o: "Elevated context-switching and extended idle time during active shifts.",
                   st: "friction_high",
-                  a: "Hold organic and paid exposure at survival baseline; route overflow elsewhere.",
+                  a: "Hold organic and paid exposure at survival baseline; route overflow to operators who can serve it.",
                 },
                 {
                   s: "Hour deficit",
                   o: "Team under standard hours with low shift density and high availability.",
                   st: "under_utilised",
-                  a: "Amplify organic prominence and paid reach to drive the volume the business needs.",
+                  a: "Grant organic prominence directly — volume arrives without the operator having to buy it — with paid reach optional on top.",
                 },
+
               ].map((r) => (
                 <tr key={r.s}>
                   <td data-label="Workforce signal">

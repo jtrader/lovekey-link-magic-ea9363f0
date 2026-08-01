@@ -11,7 +11,7 @@ export const Route = createFileRoute("/rsp/ethical-auction/")({
       {
         name: "description",
         content:
-          "Vertical Equilibrium Optimization is the natural successor to SEO & SEM: Ethical Auction Theory governing organic ranking and paid auctions alike, on pooled intent and real capacity to serve instead of bid size or legacy authority.",
+          "Vertical Equilibrium Optimization is the natural successor to SEO & SEM: Ethical Auction Theory ending the distortion where dominant players rank organically for free on traffic they cannot serve while capable competitors must pay for every click.",
       },
       {
         property: "og:title",
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/rsp/ethical-auction/")({
       {
         property: "og:description",
         content:
-          "The natural successor to SEO & SEM: pooled intent, burned identifiers, and rotational exposure across organic and paid results that follows a business's real serviceability.",
+          "The natural successor to SEO & SEM: organic prominence earned by real capacity to serve instead of inherited free by incumbents, so capable operators stop paying for clicks to reach demand others cannot clear.",
       },
 
       { property: "og:type", content: "website" },
@@ -57,7 +57,7 @@ function EthicalAuctionIndex() {
           </>
         }
         title="Coordination, not surveillance. Equilibrium, not extraction."
-        lead="Both channels of search distribution — organic ranking (SEO) and paid auctions (SEM) — decide who a market gets to meet. Today that decision is made almost entirely on bid size, legacy domain authority, historic click-through and behavioural profiling. Vertical Equilibrium Optimization applies RSP to both layers at once: measure intent richly, forget who it came from, and give prominence — organic and paid alike — to whoever can actually serve the need right now."
+        lead="Both channels of search distribution — organic ranking (SEO) and paid auctions (SEM) — decide who a market gets to meet. Today the dominant names in a vertical are handed the organic results for free on legacy authority, absorbing demand they cannot fully serve, while capable competitors are forced to pay for clicks to reach the very customers those incumbents are keeping waiting. Vertical Equilibrium Optimization applies RSP to both layers at once: measure intent richly, forget who it came from, and give prominence — organic and paid alike — to whoever can actually serve the need right now."
       >
         <div className="ea-compare">
           <div className="ea-compare-card">
@@ -65,9 +65,10 @@ function EthicalAuctionIndex() {
             <h3>Monopolistic extraction</h3>
             <ul>
               <li>Real-time intent is welded to a permanent profile that follows the person around the web.</li>
-              <li>The top one to three players capture the bulk of regional traffic on ad budget and legacy organic authority alone.</li>
-              <li>Leads land on businesses with no bandwidth left — arriving through both paid placements and top organic listings — met by burnt-out staff, slow replies, poor reviews.</li>
-              <li>Capable competitors starve while dominant players pay for clicks and receive organic traffic they cannot service.</li>
+              <li>The top one to three players hold the organic results for free on legacy domain authority, capturing the bulk of regional demand at zero marginal cost.</li>
+              <li>That free traffic lands on businesses with no bandwidth left — met by burnt-out staff, slow replies, poor reviews — while the same names still buy the paid slots above it.</li>
+              <li>The asymmetry is inverted: dominant vertical players are ranked organically for traffic they cannot serve, while capable competitors with real availability must pay for every click just to be seen at all.</li>
+
             </ul>
           </div>
           <div className="ea-compare-card is-good">
@@ -75,8 +76,9 @@ function EthicalAuctionIndex() {
             <h3>Synchronised equilibrium</h3>
             <ul>
               <li>Intent is pooled at sector level and the identifiable source is burned on write.</li>
-              <li>Prominence — organic ranking and paid placement alike — rotates toward the operators with genuine capacity to fulfil the request.</li>
-              <li>Overloaded businesses are throttled gently across both channels, protecting staff and stopping wasted spend.</li>
+              <li>Organic prominence stops being a free incumbency annuity: it is re-earned each cycle by whoever has genuine capacity to fulfil the request.</li>
+              <li>Saturated businesses lose the unserviceable organic overflow first and have their bids eased back second, so capable operators no longer have to buy clicks to reach demand they can actually serve.</li>
+
               <li>A vertical behaves like a coordinated service division rather than isolated gladiators.</li>
             </ul>
           </div>
@@ -87,7 +89,7 @@ function EthicalAuctionIndex() {
         id="score"
         eyebrow="The new pillar"
         title="A Respectful Intent Score sitting beside Quality Score."
-        lead="Ad Rank today is roughly bid amount multiplied by quality score, and organic position is roughly relevance multiplied by authority. Vertical Equilibrium Optimization adds one term that no amount of budget or backlink history can buy — whether the destination behaves respectfully and can serve the person on the other side — and applies it to both surfaces."
+        lead="Ad Rank today is roughly bid amount multiplied by quality score, and organic position is roughly relevance multiplied by authority — which is why free organic prominence accrues to whoever ranked yesterday, and why everyone else has to buy their way in. Vertical Equilibrium Optimization adds one term that no amount of budget or backlink history can buy — whether the destination behaves respectfully and can serve the person on the other side — and applies it to both surfaces."
       >
         <div className="ea-formula">
           <div className="ea-formula-label">Proposed ranking terms — paid and organic</div>
@@ -101,8 +103,10 @@ function EthicalAuctionIndex() {
             The Respectful Intent Score is derived from the same RSP primitives used across Love Key
             Link — sensitivity tiers, low-resolution signals, signal decay and a deterministic next
             safe step. It multiplies into the paid auction and acts as an organic ranking modifier,
-            so a saturated business is throttled in both places at once.
+            so a saturated business loses its free organic position at the same moment its bids are
+            eased back — and a capable one earns organic exposure it would otherwise have had to buy.
           </p>
+
         </div>
 
         <div className="ea-table-wrap" style={{ marginTop: 28 }}>
@@ -149,6 +153,60 @@ function EthicalAuctionIndex() {
           </table>
         </div>
       </EaSection>
+
+      <EaSection
+        id="worked-example"
+        eyebrow="Worked example"
+        title="Who pays, and who is paid for — today versus under VEO."
+        lead="One metropolitan trades vertical, mid-winter. The distortion is not that incumbents outbid everyone; it is that incumbents are given the organic results for free while the operators who could actually do the work are the ones paying."
+      >
+        <div className="ea-compare">
+          <div className="ea-compare-card">
+            <span className="ea-compare-tag">Today · dominant vertical player</span>
+            <h3>Ranked free for work it cannot do</h3>
+            <ul>
+              <li>Holds organic position one on fifteen years of domain authority — zero marginal cost per lead.</li>
+              <li>Callback backlog running five days; crews already well over standard hours.</li>
+              <li>Absorbs the majority of regional demand anyway, then lets a large share of it lapse unserved.</li>
+              <li>Ad spend is optional defence, not the source of its advantage. The free traffic is.</li>
+            </ul>
+          </div>
+          <div className="ea-compare-card">
+            <span className="ea-compare-tag">Today · capable competitor</span>
+            <h3>Paying for the right to serve</h3>
+            <ul>
+              <li>Same-day availability, fully staffed roster, resolution rates above the vertical mean.</li>
+              <li>Ranks page two organically because the domain is four years old, not because the service is worse.</li>
+              <li>Buys clicks at the vertical's highest cost-per-click simply to be visible to demand it could clear immediately.</li>
+              <li>Every job it wins is taxed by the incumbent's free position above it.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="ea-compare" style={{ marginTop: 20 }}>
+          <div className="ea-compare-card is-good">
+            <span className="ea-compare-tag">Under VEO · dominant vertical player</span>
+            <h3>Free overflow withdrawn first</h3>
+            <ul>
+              <li>Workforce stress and callback latency drive the Respectful Intent Score down.</li>
+              <li>Organic position eases from one to four for six days — the unserviceable share of demand, not the business, is what gets removed.</li>
+              <li>Backlog clears, staff recover, review velocity recovers with them.</li>
+              <li>Exposure restores automatically once capacity returns. Nothing was bought or forfeited.</li>
+            </ul>
+          </div>
+          <div className="ea-compare-card is-good">
+            <span className="ea-compare-tag">Under VEO · capable competitor</span>
+            <h3>Earns the position instead of renting it</h3>
+            <ul>
+              <li>Verified capacity and clean consumer-experience telemetry lift the same multiplier upward.</li>
+              <li>Rises into the organic results for the week the demand exists — no bid required.</li>
+              <li>Paid spend becomes optional reach on top, not the entry fee for visibility.</li>
+              <li>Prominence tapers the moment its own stress signal says the capacity is spent.</li>
+            </ul>
+          </div>
+        </div>
+      </EaSection>
+
 
       <EaSection
         id="engine"

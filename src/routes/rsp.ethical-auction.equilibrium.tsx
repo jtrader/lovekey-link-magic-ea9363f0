@@ -31,7 +31,7 @@ function EquilibriumPage() {
       <EaSection
         eyebrow="Section 04 · The maths"
         title="One score, three dimensions of reality."
-        lead="The three telemetry streams — consumer experience, workforce stress and financial velocity — resolve into a single multiplier applied to both surfaces at once: the organic ranking signal (SEO) and the paid auction rank (SEM)."
+        lead="The three telemetry streams — consumer experience, workforce stress and financial velocity — resolve into a single multiplier applied to both surfaces at once: the organic ranking signal (SEO), where incumbency currently pays nothing for the traffic it cannot serve, and the paid auction rank (SEM), where capable operators currently pay most."
       >
         <div className="ea-formula">
           <div className="ea-formula-label">Vertical Equilibrium Score</div>
@@ -147,23 +147,24 @@ function EquilibriumPage() {
         <div className="ea-compare">
           <div className="ea-compare-card">
             <span className="ea-compare-tag">Operator A · incumbent</span>
-            <h3>Throttled, and better for it</h3>
+            <h3>Free position withdrawn, and better for it</h3>
             <ul>
-              <li>Largest ad budget in the pool and the strongest domain authority.</li>
+              <li>Strongest domain authority in the pool — the top organic slot costs it nothing per lead.</li>
               <li>Crews already averaging well over standard hours; two unplanned absences.</li>
               <li>Call abandonment climbing; resolution velocity slipping past the vertical mean.</li>
-              <li>VES falls. Bids ease back for six days. The backlog clears, and exposure returns.</li>
+              <li>VES falls. The free organic overflow is withdrawn first and bids ease back behind it for six days. The backlog clears, and exposure returns.</li>
             </ul>
           </div>
           <div className="ea-compare-card is-good">
             <span className="ea-compare-tag">Operator G · capable challenger</span>
             <h3>Amplified, within limits</h3>
             <ul>
-              <li>Modest budget, but a fully staffed roster with genuine availability.</li>
+              <li>Modest budget and a young domain, but a fully staffed roster with genuine availability — today it has to buy every click it gets.</li>
               <li>Resolution rates comfortably at or above the vertical mean.</li>
               <li>Quarterly velocity tracking below the sustainable target for the pool.</li>
-              <li>VES rises. Prominence lifts until their own stress signal says enough.</li>
+              <li>VES rises. Organic prominence is earned rather than bought, until their own stress signal says enough.</li>
             </ul>
+
           </div>
         </div>
         <p className="rsp-lead" style={{ marginTop: 24, textAlign: "center" }}>

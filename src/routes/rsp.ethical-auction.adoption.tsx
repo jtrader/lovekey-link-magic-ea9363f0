@@ -110,19 +110,21 @@ function AdoptionPage() {
             <span className="ea-compare-tag">For search engines & auction providers</span>
             <h3>Better inventory, fewer dead ends</h3>
             <ul>
-              <li>Eliminates dead-end results — organic and paid alike — where a user clicks the top listing and finds an overbooked, unresponsive business.</li>
+              <li>Eliminates dead-end results where a user clicks the free top organic listing and finds an overbooked, unresponsive incumbent.</li>
               <li>Raises merchant landing page quality across the whole vertical during calibration, improving organic result quality as well as auction inventory.</li>
               <li>Provides a defensible, privacy-first distribution model as regulatory pressure on behavioural profiling increases.</li>
-              <li>Protects the small and mid-sized merchant base that long-term auction liquidity and healthy organic diversity depend on.</li>
+              <li>Protects the small and mid-sized merchant base currently taxed into paid search by incumbent organic dominance — the same base long-term auction liquidity depends on.</li>
+
             </ul>
           </div>
           <div className="ea-compare-card">
             <span className="ea-compare-tag">For businesses & workplaces</span>
             <h3>Capital and people protected</h3>
             <ul>
-              <li>No more paying for leads — or absorbing organic overflow — during periods of operational saturation.</li>
+              <li>No more paying for clicks purely to get past an incumbent ranked free for demand it cannot serve.</li>
               <li>Market mechanics that push back against chronic overwork instead of rewarding it.</li>
-              <li>Guaranteed baseline exposure across organic and paid results for capable operators, rather than survival by budget or domain age.</li>
+              <li>Organic exposure earned by real capacity rather than inherited by domain age — with paid reach optional on top, not the price of admission.</li>
+
               <li>A conversion advantage earned through lower friction, not coercive retargeting.</li>
             </ul>
           </div>

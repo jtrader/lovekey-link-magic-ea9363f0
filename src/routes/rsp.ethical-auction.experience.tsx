@@ -78,7 +78,7 @@ function ExperiencePage() {
           <div className="ea-flow-node">
             <div className="ea-flow-step">Act</div>
             <h4>Graceful throttle</h4>
-            <p>Paid bids and organic prominence rotate to competitors with headroom.</p>
+            <p>Free organic prominence is released first, paid bids second, and both rotate to competitors with headroom.</p>
           </div>
           <div className="ea-flow-node">
             <div className="ea-flow-step">Recover</div>

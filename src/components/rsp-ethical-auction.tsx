@@ -188,7 +188,7 @@ export function EaSection({
   children,
 }: {
   id?: string;
-  eyebrow: string;
+  eyebrow: ReactNode;
   title: string;
   lead?: string;
   children?: ReactNode;

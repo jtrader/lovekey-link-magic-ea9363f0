@@ -1,3 +1,4 @@
+import { GlossarySheetProvider } from "@/components/rsp-macro/MacroGlossary";
 import { Link, useRouterState } from "@tanstack/react-router";
 
 const navItems = [
@@ -129,12 +130,14 @@ function MacroFooter() {
 
 export function MacroShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#F5F7FB] font-sans text-slate-700">
-      <MacroNav />
-      <MacroBreadcrumbs />
-      <main className="mx-auto max-w-5xl px-6 pb-12 pt-6">{children}</main>
-      <MacroFooter />
-    </div>
+    <GlossarySheetProvider>
+      <div className="min-h-screen bg-[#F5F7FB] font-sans text-slate-700">
+        <MacroNav />
+        <MacroBreadcrumbs />
+        <main className="mx-auto max-w-5xl px-6 pb-24 pt-6 md:pb-12">{children}</main>
+        <MacroFooter />
+      </div>
+    </GlossarySheetProvider>
   );
 }
 

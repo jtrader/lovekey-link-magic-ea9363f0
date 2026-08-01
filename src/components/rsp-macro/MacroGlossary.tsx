@@ -1,4 +1,15 @@
-import { useId, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+
+export type GlossaryId = keyof typeof MACRO_GLOSSARY;
 
 export type GlossaryEntry = { term: string; definition: string };
 
@@ -210,7 +221,7 @@ export function GlossarySheetProvider({ children }: { children: ReactNode }) {
 
 
 /** Full glossary card, for the bottom of a macro page. */
-export function GlossaryPanel({ ids }: { ids: (keyof typeof MACRO_GLOSSARY)[] }) {
+export function GlossaryPanel({ ids }: { ids: GlossaryId[] }) {
   return (
     <section className="my-10 rounded-2xl border border-slate-200 bg-slate-50 p-6">
       <h2 className="mb-4 font-mono text-xs uppercase tracking-widest text-amber-700">Glossary</h2>

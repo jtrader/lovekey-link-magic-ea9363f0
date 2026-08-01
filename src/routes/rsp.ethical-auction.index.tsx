@@ -6,11 +6,14 @@ import {
   EaCapacitySim,
   EaChannelMetrics,
   EaPairedFormula,
+  validateSimSearch,
 } from "@/components/rsp-ea-interactive";
 
 
 export const Route = createFileRoute("/rsp/ethical-auction/")({
+  validateSearch: validateSimSearch,
   head: () => ({
+
     meta: [
       {
         title:

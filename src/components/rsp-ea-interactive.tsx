@@ -1,5 +1,7 @@
 import { useMemo, useState, type ReactNode } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { EaRef } from "@/components/rsp-ea-notes";
+
 
 /* ── Interactive + explanatory pieces for the VEO branch ─────────────────── */
 
@@ -148,9 +150,33 @@ function pct(n: number) {
   return `${Math.round(n)}%`;
 }
 
+const SIM_DEFAULTS = { inc: 35, comp: 80 };
+
+function clampCapacity(value: unknown, fallback: number) {
+  const n = Math.round(Number(value) / 5) * 5;
+  return Number.isFinite(n) && n >= 5 && n <= 100 ? n : fallback;
+}
+
+/** Shared validator so the route and the component agree on the URL contract. */
+export function validateSimSearch(search: Record<string, unknown>) {
+  return {
+    inc: clampCapacity(search.inc, SIM_DEFAULTS.inc),
+    comp: clampCapacity(search.comp, SIM_DEFAULTS.comp),
+  };
+}
+
 export function EaCapacitySim() {
-  const [incumbent, setIncumbent] = useState(35); // % of regional demand it can actually service
-  const [competitor, setCompetitor] = useState(80);
+  const navigate = useNavigate();
+  const search = useSearch({ strict: false }) as Record<string, unknown>;
+  const incumbent = clampCapacity(search.inc, SIM_DEFAULTS.inc); // % of demand it can service
+  const competitor = clampCapacity(search.comp, SIM_DEFAULTS.comp);
+  const [copied, setCopied] = useState(false);
+
+  const setIncumbent = (v: number) =>
+    navigate({ to: ".", search: (prev: Record<string, unknown>) => ({ ...prev, inc: v }), replace: true });
+  const setCompetitor = (v: number) =>
+    navigate({ to: ".", search: (prev: Record<string, unknown>) => ({ ...prev, comp: v }), replace: true });
+
 
   const m = useMemo(() => {
     const incCap = (incumbent / 100) * DEMAND;
@@ -240,7 +266,50 @@ export function EaCapacitySim() {
           <EaRef id="organic" />; the VEO split is weighted by the Respectful Intent Score
           <EaRef id="ris" />.
         </p>
+        <div className="ea-sim-share">
+          <button
+            type="button"
+            className="ea-sim-share-btn"
+            onClick={async () => {
+              const url = typeof window !== "undefined" ? window.location.href : "";
+              const summary = [
+                `VEO worked example — incumbent capacity ${pct(incumbent)}, capable competitor ${pct(competitor)}.`,
+                `Today: ${Math.round(m.todayUnserved)} clicks/week unserved, competitor pays £${Math.round(m.todayCompSpend).toLocaleString()}.`,
+                `Under VEO: ${Math.round(m.veoUnserved)} unserved, competitor pays £${Math.round(m.veoCompSpend).toLocaleString()}.`,
+                url,
+              ].join("\n");
+              try {
+                await navigator.clipboard.writeText(summary);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2500);
+              } catch {
+                setCopied(false);
+              }
+            }}
+          >
+            {copied ? "Link + metrics copied" : "Copy shareable link"}
+          </button>
+          <button
+            type="button"
+            className="ea-sim-reset-btn"
+            onClick={() =>
+              navigate({
+                to: ".",
+                search: (prev: Record<string, unknown>) => ({ ...prev, ...SIM_DEFAULTS }),
+                replace: true,
+              })
+            }
+          >
+            Reset
+          </button>
+          <small>
+            The sliders live in the URL (<code>?inc={incumbent}&amp;comp={competitor}</code>), so anyone opening
+            your link sees exactly these settings and the same outcome metrics.
+          </small>
+        </div>
       </div>
+
+
 
       <div className="ea-sim-grid">
         <div className="ea-sim-panel">

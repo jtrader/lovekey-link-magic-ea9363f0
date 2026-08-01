@@ -302,6 +302,15 @@ export const eaCss = `
     flex: 1 1 260px; font-size: .72rem; line-height: 1.5; color: var(--rsp-text-soft);
   }
   .ea-sim-share code { font-size: .7rem; word-break: break-all; }
+  .ea-pdf-download {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 20px;
+    font-size: .82rem; font-weight: 600; text-decoration: none;
+    border-radius: 999px; padding: 10px 18px;
+    border: 1px solid oklch(72% .12 250);
+    background: var(--rsp-surface); color: var(--rsp-text);
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .ea-pdf-download:hover { background: var(--rsp-surface-2, oklch(97% .01 250)); }
 
   .ea-sim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 760px) { .ea-sim-grid { grid-template-columns: 1fr; } }

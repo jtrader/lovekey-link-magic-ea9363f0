@@ -892,6 +892,9 @@ const css = `
   }
   .rsp-menu-item:hover { background: var(--rsp-bg-warm); color: var(--rsp-text); }
   .rsp-menu-subitem { padding-left: 26px; font-size: .8rem; }
+  .rsp-menu-subitem.rsp-nav-active { box-shadow: inset 3px 0 0 var(--rsp-primary); }
+  .rsp-mobile-subitem { padding-left: 18px; font-size: .85rem; }
+  .rsp-mobile-subitem.rsp-nav-active { box-shadow: inset 3px 0 0 var(--rsp-primary); }
   .rsp-menu-item.rsp-nav-active { color: var(--rsp-primary); font-weight: 600; background: var(--rsp-primary-light); }
 
   /* Mobile grouped menu */
@@ -1087,7 +1090,7 @@ function AreaMenus() {
   return (
     <ul className="rsp-menus" onMouseLeave={() => setOpenIdx(null)}>
       {areaMenus.map((menu, i) => {
-        const current = menu.match(pathname);
+        const current = menu.match(pathname) || menuHasActive(pathname, menu.links);
         const single = menu.links.length <= 1;
         return (
           <li

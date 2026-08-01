@@ -27,7 +27,7 @@ export function MacroNav() {
   const { pathname, active } = useMacroActive();
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-slate-200 bg-[#F5F7FB]/90 px-6 py-4 backdrop-blur">
+    <nav className="sticky top-0 z-30 border-b border-slate-200 bg-[#F5F7FB]/90 px-6 py-4 backdrop-blur">
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 sm:flex-row">
         <div className="flex items-center gap-3">
           <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-emerald-500" />

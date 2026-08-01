@@ -6,6 +6,7 @@ import {
   EaCapacitySim,
   EaChannelMetrics,
   EaPairedFormula,
+  validateSimSearch,
 } from "@/components/rsp-ea-interactive";
 
 

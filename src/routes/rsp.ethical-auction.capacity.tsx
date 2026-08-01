@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { EaCards, EaSection } from "@/components/rsp-ethical-auction";
+import { EaNotesList } from "@/components/rsp-ea-notes";
 
 export const Route = createFileRoute("/rsp/ethical-auction/capacity")({
   head: () => ({
@@ -188,6 +189,10 @@ function CapacityPage() {
             prominence rotated away; a player short of survival minimums has theirs lifted.
           </p>
         </div>
+      </EaSection>
+
+      <EaSection eyebrow="Grounding" title="Notes, sources and definitions.">
+        <EaNotesList only={["telemetry", "ves", "rotational", "asymmetry"]} heading="Notes & sources for this page" />
       </EaSection>
 
       <EaSection eyebrow="Keep reading" title="Continue through the specification.">

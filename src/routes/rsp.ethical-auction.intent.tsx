@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { EaCards, EaSection } from "@/components/rsp-ethical-auction";
+import { EaNotesList } from "@/components/rsp-ea-notes";
 
 export const Route = createFileRoute("/rsp/ethical-auction/intent")({
   head: () => ({
@@ -135,6 +136,10 @@ function IntentPage() {
             </tbody>
           </table>
         </div>
+      </EaSection>
+
+      <EaSection eyebrow="Grounding" title="Notes, sources and definitions.">
+        <EaNotesList only={["asymmetry", "organic", "ris"]} heading="Notes & sources for this page" />
       </EaSection>
 
       <EaSection eyebrow="Keep reading" title="Continue through the specification.">

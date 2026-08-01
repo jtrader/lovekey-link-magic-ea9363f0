@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { GlossaryPanel, Term } from "@/components/rsp-macro/MacroGlossary";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
 import {
   IconChart,
@@ -39,11 +40,13 @@ function TelemetryPage() {
         Section 02 / Telemetry
       </div>
       <h1 className="mb-6 text-3xl font-bold text-slate-900 md:text-4xl">
-        Tripartite Operational Telemetry
+        <Term id="telemetry">Tripartite Operational Telemetry</Term>
       </h1>
       <p className="mb-10 text-lg leading-relaxed text-slate-600">
         Instead of assuming infinite capacity, @rsp/macro ingests three privacy-safe, anonymized
-        operational metrics to determine real-time business serviceability.
+        operational metrics to determine real-time business serviceability, feeding the{" "}
+        <Term id="ves">VES</Term> used by the{" "}
+        <Term id="rotational">Rotational Equilibrium Engine</Term>.
       </p>
 
       <div className="space-y-6">
@@ -129,6 +132,8 @@ function TelemetryPage() {
           </ul>
         </section>
       </div>
+
+      <GlossaryPanel ids={["telemetry", "ves", "signalDecay", "pooledIntent"]} />
     </MacroShell>
   );
 }

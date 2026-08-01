@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { GlossaryPanel, Term } from "@/components/rsp-macro/MacroGlossary";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
 import { IconSigma, MacroIconBadge } from "@/components/rsp-macro/MacroVisuals";
 
@@ -61,8 +62,13 @@ function VESFormulaPage() {
         Section 03 / Mathematical Specification
       </div>
       <h1 className="mb-6 text-3xl font-bold text-slate-900 md:text-4xl">
-        Vertical Equilibrium Score (VES)
+        <Term id="ves">Vertical Equilibrium Score (VES)</Term>
       </h1>
+      <p className="mb-8 text-lg leading-relaxed text-slate-600">
+        VES is the maths behind <Term id="veo">VEO</Term>: it converts{" "}
+        <Term id="telemetry">tripartite telemetry</Term> into a live ranking signal. Underlined
+        terms show a definition on hover or tap.
+      </p>
 
       <div className="my-8 rounded-2xl border border-cyan-500/30 bg-[#FFFFFF] p-8 text-center shadow-2xl">
         <div className="mb-3 flex items-center justify-center">
@@ -103,6 +109,8 @@ function VESFormulaPage() {
           </tbody>
         </table>
       </div>
+
+      <GlossaryPanel ids={["veo", "ves", "telemetry", "rotational"]} />
     </MacroShell>
   );
 }

@@ -7,6 +7,7 @@ import {
   MacroIconBadge,
   type MacroTone,
 } from "@/components/rsp-macro/MacroVisuals";
+import { GlossaryPanel, Term } from "@/components/rsp-macro/MacroGlossary";
 
 export const Route = createFileRoute("/rsp_/macro/calibration")({
   head: () => ({
@@ -40,6 +41,7 @@ const months = [
     icon: <IconFlask />,
     tagClass: "bg-slate-200 text-slate-600",
     border: "border-slate-200",
+    termId: "equalExposure" as const,
     title: "Equal Exposure Sandbox",
     desc: "All 10 participants receive equal traffic impressions. Diagnostic audit measures conversion friction & isolates UX weaknesses.",
   },
@@ -49,6 +51,7 @@ const months = [
     icon: <IconGauge />,
     tagClass: "border border-amber-500/40 bg-amber-50 text-amber-700",
     border: "border-amber-500/30",
+    termId: "remediation" as const,
     title: "UI/UX Remediation",
     desc: "Businesses fix technical bottlenecks, core web vitals, and design flaws to align with the vertical mean conversion benchmark.",
   },
@@ -58,6 +61,7 @@ const months = [
     icon: <IconRotate />,
     tagClass: "border border-emerald-500/40 bg-emerald-50 text-emerald-700",
     border: "border-emerald-500/30",
+    termId: "telemetrySync" as const,
     title: "Telemetry Sync & Launch",
     desc: "Accounting API and workforce stress baselines calibrate. Live Rotational Equilibrium Engine activates on Day 91.",
   },
@@ -73,8 +77,11 @@ function CalibrationPage() {
         The 3-Month Level-Up Sandbox
       </h1>
       <p className="mb-10 text-lg leading-relaxed text-slate-600">
-        Participating 10-player vertical pools undergo a mandatory 90-day calibration phase to level
-        up landing page design and establish normative operational baselines.
+        Participating 10-player vertical pools undergo a mandatory{" "}
+        <Term id="calibration">90-day calibration phase</Term> to level up landing page design and
+        establish normative operational baselines before the{" "}
+        <Term id="rotational">Rotational Equilibrium Engine</Term> goes live. Hover or tap any
+        underlined term for a quick definition.
       </p>
 
       <div className="my-8 grid gap-6 md:grid-cols-3">
@@ -97,11 +104,17 @@ function CalibrationPage() {
             >
               {m.tag}
             </span>
-            <h2 className="mb-2 text-lg font-semibold text-slate-900">{m.title}</h2>
+            <h2 className="mb-2 text-lg font-semibold text-slate-900">
+              <Term id={m.termId}>{m.title}</Term>
+            </h2>
             <p className="text-xs leading-relaxed text-slate-600">{m.desc}</p>
           </div>
         ))}
       </div>
+
+      <GlossaryPanel
+        ids={["calibration", "equalExposure", "remediation", "telemetrySync", "rotational", "ves"]}
+      />
     </MacroShell>
   );
 }

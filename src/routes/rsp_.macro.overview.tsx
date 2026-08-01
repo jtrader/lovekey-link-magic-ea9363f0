@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { GlossaryPanel, Term } from "@/components/rsp-macro/MacroGlossary";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
 import {
   IconChart,
@@ -120,7 +121,9 @@ function MacroOverview() {
       </h1>
       <p className="mb-10 text-xl font-light leading-relaxed text-slate-600">
         Transitioning search engines and ad auctions from winner-take-all monetization extraction
-        engines into dynamic, capacity-aware economic balance ecosystems.
+        engines into dynamic, capacity-aware economic balance ecosystems — the approach we call{" "}
+        <Term id="veo">VEO</Term>, scored with the <Term id="ves">VES</Term> and switched on after a{" "}
+        <Term id="calibration">90-day calibration timeline</Term>.
       </p>
 
       <div className="my-10 grid gap-6 md:grid-cols-2">
@@ -159,10 +162,11 @@ function MacroOverview() {
           <h2 className="mb-3 text-xl font-semibold text-slate-900">Synchronised Equilibrium</h2>
           <ul className="space-y-3 text-sm text-slate-600">
             <MacroBullet tone="emerald">
-              Pooled intent with zero persistent tracking; raw events burned on write.
+              <Term id="pooledIntent">Pooled intent</Term> with zero persistent tracking; raw events burned on write.
             </MacroBullet>
             <MacroBullet tone="emerald">
-              Rotational exposure based on real-time operational capacity.
+              <Term id="rotational">Rotational exposure</Term> based on real-time operational
+              capacity.
             </MacroBullet>
             <MacroBullet tone="emerald">
               Industry equilibrium protecting workforce health & capital efficiency.
@@ -196,6 +200,7 @@ function MacroOverview() {
           </Link>
         ))}
       </div>
+    <GlossaryPanel ids={["veo", "ves", "telemetry", "pooledIntent", "calibration", "rotational"]} />
     </MacroShell>
   );
 }

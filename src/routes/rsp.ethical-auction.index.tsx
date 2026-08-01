@@ -10,7 +10,9 @@ import {
 
 
 export const Route = createFileRoute("/rsp/ethical-auction/")({
+  validateSearch: validateSimSearch,
   head: () => ({
+
     meta: [
       {
         title:

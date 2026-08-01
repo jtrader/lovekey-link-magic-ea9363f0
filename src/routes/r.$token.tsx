@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { definePage, Link } from "@/lib/router";
 import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { FileDown } from "lucide-react";
 import {
@@ -7,7 +8,7 @@ import {
   type ResultDetail,
 } from "@/lib/quiz-result-pdf";
 
-export const Route = createFileRoute("/r/$token")({
+export const Route = definePage("/r/$token")({
   head: () => ({
     meta: [
       { title: "Your RSP Quiz Result · Love Key Link" },
@@ -43,13 +44,14 @@ function SharedResultPage() {
     let active = true;
     (async () => {
       try {
-        const res = await fetch(`/api/public/quiz-result/${token}`);
-        const body = await res.json();
+        const { data: body, error } = await supabase.functions.invoke("quiz-result", {
+          body: { token },
+        });
         if (!active) return;
-        if (!res.ok) {
+        if (error) {
           setState({
             status: "error",
-            message: body?.error ?? "Could not load this result.",
+            message: error.message ?? "Could not load this result.",
           });
           return;
         }

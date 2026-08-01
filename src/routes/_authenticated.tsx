@@ -1,8 +1,8 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { definePage, Outlet, useNavigate } from "@/lib/router";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 
-export const Route = createFileRoute("/_authenticated")({
+export const Route = definePage("/_authenticated")({
   component: AuthGate,
 });
 

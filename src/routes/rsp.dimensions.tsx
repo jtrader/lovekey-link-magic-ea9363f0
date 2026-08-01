@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { definePage } from "@/lib/router";
 
-export const Route = createFileRoute("/rsp/dimensions")({
+export const Route = definePage("/rsp/dimensions")({
   head: () => ({
     meta: [
       { title: "RSP Dimensions — Consent, identity, presence & avatars · Love Key Link" },

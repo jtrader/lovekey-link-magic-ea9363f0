@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { definePage } from "@/lib/router";
 import { useEffect, useState } from "react";
 import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
@@ -19,7 +19,7 @@ import {
   X,
 } from "lucide-react";
 
-export const Route = createFileRoute("/")({
+export const Route = definePage("/")({
   component: Index,
   head: () => ({
     meta: [

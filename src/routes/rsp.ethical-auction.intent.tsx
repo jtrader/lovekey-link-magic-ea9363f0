@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { definePage } from "@/lib/router";
 import { EaCards, EaSection } from "@/components/rsp-ethical-auction";
 import { EaNotesList } from "@/components/rsp-ea-notes";
 
-export const Route = createFileRoute("/rsp/ethical-auction/intent")({
+export const Route = definePage("/rsp/ethical-auction/intent")({
   head: () => ({
     meta: [
       { title: "Pooled intent, not surveillance — Ethical Auction · Love Key Link" },

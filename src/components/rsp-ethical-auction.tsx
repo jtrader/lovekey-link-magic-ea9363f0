@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/lib/router";
 
 /* ── Shared styling for the Ethical Auction area ───────────────────────────
    Uses the RSP light theme tokens defined in src/routes/rsp.tsx so the

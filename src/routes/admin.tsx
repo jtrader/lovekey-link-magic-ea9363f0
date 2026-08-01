@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { definePage, Link } from "@/lib/router";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import {
   ArrowRight,
@@ -13,7 +13,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-export const Route = createFileRoute("/admin")({
+export const Route = definePage("/admin")({
   component: HelpNetworkAdminDashboard,
   head: () => ({
     meta: [

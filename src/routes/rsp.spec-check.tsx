@@ -1,10 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { definePage, Link } from "@/lib/router";
 
 // Internal QA view — verifies each of the 9 canonical RSP routes against the
 // site spec (rsp-official-site-prompt.md) and flags remaining gaps.
 // Not linked from public navigation; excluded from search indexing.
 
-export const Route = createFileRoute("/rsp/spec-check")({
+export const Route = definePage("/rsp/spec-check")({
   head: () => ({
     meta: [
       { title: "RSP Spec Checklist (internal)" },

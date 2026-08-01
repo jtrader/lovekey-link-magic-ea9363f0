@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { definePage, Link } from "@/lib/router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
+import { useServerFn } from "@/lib/server-functions";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { saveAvatar, listMyAvatars, deleteAvatar } from "@/lib/avatar.functions";
 
-export const Route = createFileRoute("/rsp/avatar-creator")({
+export const Route = definePage("/rsp/avatar-creator")({
   head: () => ({
     meta: [
       { title: "Avatar Creator — Make an AI profile picture · Identity Avatars" },
@@ -431,17 +431,11 @@ function AvatarCreator() {
       setGenerating(true);
       setGenError(null);
       try {
-        const headers: Record<string, string> = { "Content-Type": "application/json" };
-        const { data: sess } = await supabase.auth.getSession();
-        if (sess.session?.access_token) headers.Authorization = `Bearer ${sess.session.access_token}`;
-        const res = await fetch("/api/avatar-generate", {
-          method: "POST",
-          headers,
-          body: JSON.stringify({ image: original, style: s, likeness: l, sourceType }),
+        const { data: body, error } = await supabase.functions.invoke("avatar-generate", {
+          body: { image: original, style: s, likeness: l, sourceType },
         });
-        const body = (await res.json().catch(() => ({}))) as { image?: string; error?: string };
-        if (!res.ok || !body.image) {
-          setGenError(body.error ?? "Generation failed. Please try again.");
+        if (error || !body?.image) {
+          setGenError(body?.error ?? error?.message ?? "Generation failed. Please try again.");
           return;
         }
         cacheRef.current.set(key, body.image);

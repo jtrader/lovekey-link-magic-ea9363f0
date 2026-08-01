@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { definePage, Link } from "@/lib/router";
 import { GlossaryPanel, Term } from "@/components/rsp-macro/MacroGlossary";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
 import {
@@ -44,7 +44,7 @@ const flowSteps = [
   },
 ] as const;
 
-export const Route = createFileRoute("/rsp_/macro/overview")({
+export const Route = definePage("/rsp_/macro/overview")({
   head: () => ({
     meta: [
       { title: "@rsp/macro — Macro-Economic Vertical Equilibrium · Love Key Link" },

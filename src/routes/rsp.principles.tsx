@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { definePage } from "@/lib/router";
 import {
   PrincipleCard,
   IconShield,
@@ -7,7 +7,7 @@ import {
   IconLayers,
 } from "@/components/rsp-shared";
 
-export const Route = createFileRoute("/rsp/principles")({
+export const Route = definePage("/rsp/principles")({
   head: () => ({
     meta: [
       { title: "RSP Principles — Synchronisation without coercion · Love Key Link" },

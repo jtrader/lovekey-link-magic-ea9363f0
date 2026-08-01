@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { definePage, useNavigate } from "@/lib/router";
 import { useEffect, useState } from "react";
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import { Nucleus } from "@/components/Nucleus";
 
-export const Route = createFileRoute("/login")({
+export const Route = definePage("/login")({
   component: LoginPage,
   head: () => ({
     meta: [

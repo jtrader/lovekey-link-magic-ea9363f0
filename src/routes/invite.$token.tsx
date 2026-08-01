@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { definePage, useNavigate, Link } from "@/lib/router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import { Users, Check, AlertTriangle } from "lucide-react";
 
-export const Route = createFileRoute("/invite/$token")({
+export const Route = definePage("/invite/$token")({
   component: InvitePage,
   head: () => ({ meta: [{ title: "Join a family — Love Key Link" }] }),
 });

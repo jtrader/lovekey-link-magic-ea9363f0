@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from "react";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@/lib/router";
 import { EaRef } from "@/components/rsp-ea-notes";
 
 

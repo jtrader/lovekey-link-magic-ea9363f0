@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { definePage, Link } from "@/lib/router";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import chapterPdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
 import rspLogo from "@/assets/rsp-logo.png.asset.json";
@@ -11,7 +11,7 @@ import {
   IconFlame,
 } from "@/components/rsp-shared";
 
-export const Route = createFileRoute("/rsp/")({
+export const Route = definePage("/rsp/")({
   head: () => ({
     meta: [
       { title: "RSP — Respectful Synchronisation Protocol · Love Key Link" },

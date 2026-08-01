@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { definePage, Link } from "@/lib/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   PASS_MARK,
@@ -22,8 +22,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { downloadQuizResultPdf } from "@/lib/quiz-result-pdf";
+import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/quiz")({
+export const Route = definePage("/quiz")({
   head: () => ({
     meta: [
       { title: "RSP Law of Vibration Quiz · Love Key Link" },
@@ -153,16 +154,11 @@ function QuizPage() {
     }
     setSubmitting(true);
     try {
-      const res = await fetch("/api/public/quiz-submit", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), phone: phone.trim(), answers }),
+      const { data, error: submitError } = await supabase.functions.invoke("quiz-submit", {
+        body: { name: name.trim(), phone: phone.trim(), answers },
       });
-      if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(body?.error ?? "Submission failed. Please try again.");
-      }
-      setResult((await res.json()) as Result);
+      if (submitError) throw new Error(submitError.message || "Submission failed. Please try again.");
+      setResult(data as Result);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong.");
     } finally {

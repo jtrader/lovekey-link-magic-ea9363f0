@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { definePage, Link } from "@/lib/router";
 
-export const Route = createFileRoute("/rsp/avatars")({
+export const Route = definePage("/rsp/avatars")({
   head: () => ({
     meta: [
       { title: "Identity Avatars — Own your represented self · Love Key Link" },

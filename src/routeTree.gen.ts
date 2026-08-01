@@ -26,6 +26,7 @@ import { Route as RspGovernanceRouteImport } from './routes/rsp.governance'
 import { Route as RspForDevelopersRouteImport } from './routes/rsp.for-developers'
 import { Route as RspFaqRouteImport } from './routes/rsp.faq'
 import { Route as RspEventTokenRouteImport } from './routes/rsp.event-token'
+import { Route as RspEthicalAuctionRouteImport } from './routes/rsp.ethical-auction'
 import { Route as RspDimensionsRouteImport } from './routes/rsp.dimensions'
 import { Route as RspChecklistRouteImport } from './routes/rsp.checklist'
 import { Route as RspAvatarsRouteImport } from './routes/rsp.avatars'
@@ -130,6 +131,11 @@ const RspFaqRoute = RspFaqRouteImport.update({
 const RspEventTokenRoute = RspEventTokenRouteImport.update({
   id: '/event-token',
   path: '/event-token',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspEthicalAuctionRoute = RspEthicalAuctionRouteImport.update({
+  id: '/ethical-auction',
+  path: '/ethical-auction',
   getParentRoute: () => RspRoute,
 } as any)
 const RspDimensionsRoute = RspDimensionsRouteImport.update({
@@ -258,6 +264,7 @@ export interface FileRoutesByFullPath {
   '/rsp/avatars': typeof RspAvatarsRoute
   '/rsp/checklist': typeof RspChecklistRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
+  '/rsp/ethical-auction': typeof RspEthicalAuctionRoute
   '/rsp/event-token': typeof RspEventTokenRoute
   '/rsp/faq': typeof RspFaqRoute
   '/rsp/for-developers': typeof RspForDevelopersRoute
@@ -296,6 +303,7 @@ export interface FileRoutesByTo {
   '/rsp/avatars': typeof RspAvatarsRoute
   '/rsp/checklist': typeof RspChecklistRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
+  '/rsp/ethical-auction': typeof RspEthicalAuctionRoute
   '/rsp/event-token': typeof RspEventTokenRoute
   '/rsp/faq': typeof RspFaqRoute
   '/rsp/for-developers': typeof RspForDevelopersRoute
@@ -337,6 +345,7 @@ export interface FileRoutesById {
   '/rsp/avatars': typeof RspAvatarsRoute
   '/rsp/checklist': typeof RspChecklistRoute
   '/rsp/dimensions': typeof RspDimensionsRoute
+  '/rsp/ethical-auction': typeof RspEthicalAuctionRoute
   '/rsp/event-token': typeof RspEventTokenRoute
   '/rsp/faq': typeof RspFaqRoute
   '/rsp/for-developers': typeof RspForDevelopersRoute
@@ -378,6 +387,7 @@ export interface FileRouteTypes {
     | '/rsp/avatars'
     | '/rsp/checklist'
     | '/rsp/dimensions'
+    | '/rsp/ethical-auction'
     | '/rsp/event-token'
     | '/rsp/faq'
     | '/rsp/for-developers'
@@ -416,6 +426,7 @@ export interface FileRouteTypes {
     | '/rsp/avatars'
     | '/rsp/checklist'
     | '/rsp/dimensions'
+    | '/rsp/ethical-auction'
     | '/rsp/event-token'
     | '/rsp/faq'
     | '/rsp/for-developers'
@@ -456,6 +467,7 @@ export interface FileRouteTypes {
     | '/rsp/avatars'
     | '/rsp/checklist'
     | '/rsp/dimensions'
+    | '/rsp/ethical-auction'
     | '/rsp/event-token'
     | '/rsp/faq'
     | '/rsp/for-developers'
@@ -621,6 +633,13 @@ declare module '@tanstack/react-router' {
       path: '/event-token'
       fullPath: '/rsp/event-token'
       preLoaderRoute: typeof RspEventTokenRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/ethical-auction': {
+      id: '/rsp/ethical-auction'
+      path: '/ethical-auction'
+      fullPath: '/rsp/ethical-auction'
+      preLoaderRoute: typeof RspEthicalAuctionRouteImport
       parentRoute: typeof RspRoute
     }
     '/rsp/dimensions': {
@@ -792,6 +811,7 @@ interface RspRouteChildren {
   RspAvatarsRoute: typeof RspAvatarsRoute
   RspChecklistRoute: typeof RspChecklistRoute
   RspDimensionsRoute: typeof RspDimensionsRoute
+  RspEthicalAuctionRoute: typeof RspEthicalAuctionRoute
   RspEventTokenRoute: typeof RspEventTokenRoute
   RspFaqRoute: typeof RspFaqRoute
   RspForDevelopersRoute: typeof RspForDevelopersRoute
@@ -810,6 +830,7 @@ const RspRouteChildren: RspRouteChildren = {
   RspAvatarsRoute: RspAvatarsRoute,
   RspChecklistRoute: RspChecklistRoute,
   RspDimensionsRoute: RspDimensionsRoute,
+  RspEthicalAuctionRoute: RspEthicalAuctionRoute,
   RspEventTokenRoute: RspEventTokenRoute,
   RspFaqRoute: RspFaqRoute,
   RspForDevelopersRoute: RspForDevelopersRoute,
@@ -851,13 +872,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

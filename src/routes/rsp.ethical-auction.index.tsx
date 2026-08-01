@@ -155,6 +155,60 @@ function EthicalAuctionIndex() {
       </EaSection>
 
       <EaSection
+        id="worked-example"
+        eyebrow="Worked example"
+        title="Who pays, and who is paid for — today versus under VEO."
+        lead="One metropolitan trades vertical, mid-winter. The distortion is not that incumbents outbid everyone; it is that incumbents are given the organic results for free while the operators who could actually do the work are the ones paying."
+      >
+        <div className="ea-compare">
+          <div className="ea-compare-card">
+            <span className="ea-compare-tag">Today · dominant vertical player</span>
+            <h3>Ranked free for work it cannot do</h3>
+            <ul>
+              <li>Holds organic position one on fifteen years of domain authority — zero marginal cost per lead.</li>
+              <li>Callback backlog running five days; crews already well over standard hours.</li>
+              <li>Absorbs the majority of regional demand anyway, then lets a large share of it lapse unserved.</li>
+              <li>Ad spend is optional defence, not the source of its advantage. The free traffic is.</li>
+            </ul>
+          </div>
+          <div className="ea-compare-card">
+            <span className="ea-compare-tag">Today · capable competitor</span>
+            <h3>Paying for the right to serve</h3>
+            <ul>
+              <li>Same-day availability, fully staffed roster, resolution rates above the vertical mean.</li>
+              <li>Ranks page two organically because the domain is four years old, not because the service is worse.</li>
+              <li>Buys clicks at the vertical's highest cost-per-click simply to be visible to demand it could clear immediately.</li>
+              <li>Every job it wins is taxed by the incumbent's free position above it.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="ea-compare" style={{ marginTop: 20 }}>
+          <div className="ea-compare-card is-good">
+            <span className="ea-compare-tag">Under VEO · dominant vertical player</span>
+            <h3>Free overflow withdrawn first</h3>
+            <ul>
+              <li>Workforce stress and callback latency drive the Respectful Intent Score down.</li>
+              <li>Organic position eases from one to four for six days — the unserviceable share of demand, not the business, is what gets removed.</li>
+              <li>Backlog clears, staff recover, review velocity recovers with them.</li>
+              <li>Exposure restores automatically once capacity returns. Nothing was bought or forfeited.</li>
+            </ul>
+          </div>
+          <div className="ea-compare-card is-good">
+            <span className="ea-compare-tag">Under VEO · capable competitor</span>
+            <h3>Earns the position instead of renting it</h3>
+            <ul>
+              <li>Verified capacity and clean consumer-experience telemetry lift the same multiplier upward.</li>
+              <li>Rises into the organic results for the week the demand exists — no bid required.</li>
+              <li>Paid spend becomes optional reach on top, not the entry fee for visibility.</li>
+              <li>Prominence tapers the moment its own stress signal says the capacity is spent.</li>
+            </ul>
+          </div>
+        </div>
+      </EaSection>
+
+
+      <EaSection
         id="engine"
         eyebrow="Architecture at a glance"
         title="Pooled demand meets measured capacity."

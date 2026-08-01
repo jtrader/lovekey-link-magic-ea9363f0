@@ -1,5 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { EaCards, EaSection } from "@/components/rsp-ethical-auction";
+import { EaRef, EaNotesList } from "@/components/rsp-ea-notes";
+import {
+  EaAsymmetryFaq,
+  EaCapacitySim,
+  EaChannelMetrics,
+  EaPairedFormula,
+} from "@/components/rsp-ea-interactive";
+
 
 export const Route = createFileRoute("/rsp/ethical-auction/")({
   head: () => ({

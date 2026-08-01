@@ -17,13 +17,43 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RspIndexRouteImport } from './routes/rsp.index'
+import { Route as RspSpecCheckRouteImport } from './routes/rsp.spec-check'
+import { Route as RspPrinciplesRouteImport } from './routes/rsp.principles'
+import { Route as RspImplementationsRouteImport } from './routes/rsp.implementations'
+import { Route as RspHowItWorksRouteImport } from './routes/rsp.how-it-works'
+import { Route as RspGovernanceRouteImport } from './routes/rsp.governance'
+import { Route as RspForDevelopersRouteImport } from './routes/rsp.for-developers'
+import { Route as RspFaqRouteImport } from './routes/rsp.faq'
+import { Route as RspEventTokenRouteImport } from './routes/rsp.event-token'
+import { Route as RspEthicalAuctionRouteImport } from './routes/rsp.ethical-auction'
+import { Route as RspDimensionsRouteImport } from './routes/rsp.dimensions'
+import { Route as RspChecklistRouteImport } from './routes/rsp.checklist'
+import { Route as RspAvatarsRouteImport } from './routes/rsp.avatars'
+import { Route as RspAvatarCreatorRouteImport } from './routes/rsp.avatar-creator'
 import { Route as RTokenRouteImport } from './routes/r.$token'
 import { Route as QuizAdminRouteImport } from './routes/quiz_.admin'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as ApiAvatarGenerateRouteImport } from './routes/api/avatar-generate'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
+import { Route as RspMacroIndexRouteImport } from './routes/rsp_.macro.index'
+import { Route as RspEthicalAuctionIndexRouteImport } from './routes/rsp.ethical-auction.index'
+import { Route as RspCaseStudiesIndexRouteImport } from './routes/rsp.case-studies.index'
+import { Route as RspMacroVesFormulaRouteImport } from './routes/rsp_.macro.ves-formula'
+import { Route as RspMacroTelemetryRouteImport } from './routes/rsp_.macro.telemetry'
+import { Route as RspMacroOverviewRouteImport } from './routes/rsp_.macro.overview'
+import { Route as RspMacroGovernanceRouteImport } from './routes/rsp_.macro.governance'
+import { Route as RspMacroCalibrationRouteImport } from './routes/rsp_.macro.calibration'
+import { Route as RspEthicalAuctionIntentRouteImport } from './routes/rsp.ethical-auction.intent'
+import { Route as RspEthicalAuctionExperienceRouteImport } from './routes/rsp.ethical-auction.experience'
+import { Route as RspEthicalAuctionEquilibriumRouteImport } from './routes/rsp.ethical-auction.equilibrium'
+import { Route as RspEthicalAuctionCapacityRouteImport } from './routes/rsp.ethical-auction.capacity'
+import { Route as RspEthicalAuctionAdoptionRouteImport } from './routes/rsp.ethical-auction.adoption'
+import { Route as RspCaseStudiesSlugRouteImport } from './routes/rsp.case-studies.$slug'
 import { Route as ApiPublicQuizSubmitRouteImport } from './routes/api/public/quiz-submit'
 import { Route as ApiPublicQuizResultTokenRouteImport } from './routes/api/public/quiz-result.$token'
+import { Route as ApiPublicHooksAvatarCleanupRouteImport } from './routes/api/public/hooks/avatar-cleanup'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -64,6 +94,76 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RspIndexRoute = RspIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspSpecCheckRoute = RspSpecCheckRouteImport.update({
+  id: '/spec-check',
+  path: '/spec-check',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspPrinciplesRoute = RspPrinciplesRouteImport.update({
+  id: '/principles',
+  path: '/principles',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspImplementationsRoute = RspImplementationsRouteImport.update({
+  id: '/implementations',
+  path: '/implementations',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspHowItWorksRoute = RspHowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspGovernanceRoute = RspGovernanceRouteImport.update({
+  id: '/governance',
+  path: '/governance',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspForDevelopersRoute = RspForDevelopersRouteImport.update({
+  id: '/for-developers',
+  path: '/for-developers',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspFaqRoute = RspFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspEventTokenRoute = RspEventTokenRouteImport.update({
+  id: '/event-token',
+  path: '/event-token',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspEthicalAuctionRoute = RspEthicalAuctionRouteImport.update({
+  id: '/ethical-auction',
+  path: '/ethical-auction',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspDimensionsRoute = RspDimensionsRouteImport.update({
+  id: '/dimensions',
+  path: '/dimensions',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspChecklistRoute = RspChecklistRouteImport.update({
+  id: '/checklist',
+  path: '/checklist',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspAvatarsRoute = RspAvatarsRouteImport.update({
+  id: '/avatars',
+  path: '/avatars',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspAvatarCreatorRoute = RspAvatarCreatorRouteImport.update({
+  id: '/avatar-creator',
+  path: '/avatar-creator',
+  getParentRoute: () => RspRoute,
+} as any)
 const RTokenRoute = RTokenRouteImport.update({
   id: '/r/$token',
   path: '/r/$token',
@@ -79,6 +179,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAvatarGenerateRoute = ApiAvatarGenerateRouteImport.update({
+  id: '/api/avatar-generate',
+  path: '/api/avatar-generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -88,6 +193,80 @@ const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   id: '/app',
   path: '/app',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const RspMacroIndexRoute = RspMacroIndexRouteImport.update({
+  id: '/rsp_/macro/',
+  path: '/rsp/macro/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RspEthicalAuctionIndexRoute = RspEthicalAuctionIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RspEthicalAuctionRoute,
+} as any)
+const RspCaseStudiesIndexRoute = RspCaseStudiesIndexRouteImport.update({
+  id: '/case-studies/',
+  path: '/case-studies/',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspMacroVesFormulaRoute = RspMacroVesFormulaRouteImport.update({
+  id: '/rsp_/macro/ves-formula',
+  path: '/rsp/macro/ves-formula',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RspMacroTelemetryRoute = RspMacroTelemetryRouteImport.update({
+  id: '/rsp_/macro/telemetry',
+  path: '/rsp/macro/telemetry',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RspMacroOverviewRoute = RspMacroOverviewRouteImport.update({
+  id: '/rsp_/macro/overview',
+  path: '/rsp/macro/overview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RspMacroGovernanceRoute = RspMacroGovernanceRouteImport.update({
+  id: '/rsp_/macro/governance',
+  path: '/rsp/macro/governance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RspMacroCalibrationRoute = RspMacroCalibrationRouteImport.update({
+  id: '/rsp_/macro/calibration',
+  path: '/rsp/macro/calibration',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RspEthicalAuctionIntentRoute = RspEthicalAuctionIntentRouteImport.update({
+  id: '/intent',
+  path: '/intent',
+  getParentRoute: () => RspEthicalAuctionRoute,
+} as any)
+const RspEthicalAuctionExperienceRoute =
+  RspEthicalAuctionExperienceRouteImport.update({
+    id: '/experience',
+    path: '/experience',
+    getParentRoute: () => RspEthicalAuctionRoute,
+  } as any)
+const RspEthicalAuctionEquilibriumRoute =
+  RspEthicalAuctionEquilibriumRouteImport.update({
+    id: '/equilibrium',
+    path: '/equilibrium',
+    getParentRoute: () => RspEthicalAuctionRoute,
+  } as any)
+const RspEthicalAuctionCapacityRoute =
+  RspEthicalAuctionCapacityRouteImport.update({
+    id: '/capacity',
+    path: '/capacity',
+    getParentRoute: () => RspEthicalAuctionRoute,
+  } as any)
+const RspEthicalAuctionAdoptionRoute =
+  RspEthicalAuctionAdoptionRouteImport.update({
+    id: '/adoption',
+    path: '/adoption',
+    getParentRoute: () => RspEthicalAuctionRoute,
+  } as any)
+const RspCaseStudiesSlugRoute = RspCaseStudiesSlugRouteImport.update({
+  id: '/case-studies/$slug',
+  path: '/case-studies/$slug',
+  getParentRoute: () => RspRoute,
 } as any)
 const ApiPublicQuizSubmitRoute = ApiPublicQuizSubmitRouteImport.update({
   id: '/api/public/quiz-submit',
@@ -100,21 +279,57 @@ const ApiPublicQuizResultTokenRoute =
     path: '/api/public/quiz-result/$token',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksAvatarCleanupRoute =
+  ApiPublicHooksAvatarCleanupRouteImport.update({
+    id: '/api/public/hooks/avatar-cleanup',
+    path: '/api/public/hooks/avatar-cleanup',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
-  '/rsp': typeof RspRoute
+  '/rsp': typeof RspRouteWithChildren
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app': typeof AuthenticatedAppRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/api/avatar-generate': typeof ApiAvatarGenerateRoute
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/avatar-creator': typeof RspAvatarCreatorRoute
+  '/rsp/avatars': typeof RspAvatarsRoute
+  '/rsp/checklist': typeof RspChecklistRoute
+  '/rsp/dimensions': typeof RspDimensionsRoute
+  '/rsp/ethical-auction': typeof RspEthicalAuctionRouteWithChildren
+  '/rsp/event-token': typeof RspEventTokenRoute
+  '/rsp/faq': typeof RspFaqRoute
+  '/rsp/for-developers': typeof RspForDevelopersRoute
+  '/rsp/governance': typeof RspGovernanceRoute
+  '/rsp/how-it-works': typeof RspHowItWorksRoute
+  '/rsp/implementations': typeof RspImplementationsRoute
+  '/rsp/principles': typeof RspPrinciplesRoute
+  '/rsp/spec-check': typeof RspSpecCheckRoute
+  '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
+  '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/ethical-auction/adoption': typeof RspEthicalAuctionAdoptionRoute
+  '/rsp/ethical-auction/capacity': typeof RspEthicalAuctionCapacityRoute
+  '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
+  '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
+  '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
+  '/rsp/macro/governance': typeof RspMacroGovernanceRoute
+  '/rsp/macro/overview': typeof RspMacroOverviewRoute
+  '/rsp/macro/telemetry': typeof RspMacroTelemetryRoute
+  '/rsp/macro/ves-formula': typeof RspMacroVesFormulaRoute
+  '/rsp/case-studies/': typeof RspCaseStudiesIndexRoute
+  '/rsp/ethical-auction/': typeof RspEthicalAuctionIndexRoute
+  '/rsp/macro/': typeof RspMacroIndexRoute
+  '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
 export interface FileRoutesByTo {
@@ -122,15 +337,43 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
-  '/rsp': typeof RspRoute
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app': typeof AuthenticatedAppRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/api/avatar-generate': typeof ApiAvatarGenerateRoute
   '/invite/$token': typeof InviteTokenRoute
   '/quiz/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/avatar-creator': typeof RspAvatarCreatorRoute
+  '/rsp/avatars': typeof RspAvatarsRoute
+  '/rsp/checklist': typeof RspChecklistRoute
+  '/rsp/dimensions': typeof RspDimensionsRoute
+  '/rsp/event-token': typeof RspEventTokenRoute
+  '/rsp/faq': typeof RspFaqRoute
+  '/rsp/for-developers': typeof RspForDevelopersRoute
+  '/rsp/governance': typeof RspGovernanceRoute
+  '/rsp/how-it-works': typeof RspHowItWorksRoute
+  '/rsp/implementations': typeof RspImplementationsRoute
+  '/rsp/principles': typeof RspPrinciplesRoute
+  '/rsp/spec-check': typeof RspSpecCheckRoute
+  '/rsp': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
+  '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/ethical-auction/adoption': typeof RspEthicalAuctionAdoptionRoute
+  '/rsp/ethical-auction/capacity': typeof RspEthicalAuctionCapacityRoute
+  '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
+  '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
+  '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
+  '/rsp/macro/governance': typeof RspMacroGovernanceRoute
+  '/rsp/macro/overview': typeof RspMacroOverviewRoute
+  '/rsp/macro/telemetry': typeof RspMacroTelemetryRoute
+  '/rsp/macro/ves-formula': typeof RspMacroVesFormulaRoute
+  '/rsp/case-studies': typeof RspCaseStudiesIndexRoute
+  '/rsp/ethical-auction': typeof RspEthicalAuctionIndexRoute
+  '/rsp/macro': typeof RspMacroIndexRoute
+  '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
 export interface FileRoutesById {
@@ -140,15 +383,45 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
-  '/rsp': typeof RspRoute
+  '/rsp': typeof RspRouteWithChildren
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/api/avatar-generate': typeof ApiAvatarGenerateRoute
   '/invite/$token': typeof InviteTokenRoute
   '/quiz_/admin': typeof QuizAdminRoute
   '/r/$token': typeof RTokenRoute
+  '/rsp/avatar-creator': typeof RspAvatarCreatorRoute
+  '/rsp/avatars': typeof RspAvatarsRoute
+  '/rsp/checklist': typeof RspChecklistRoute
+  '/rsp/dimensions': typeof RspDimensionsRoute
+  '/rsp/ethical-auction': typeof RspEthicalAuctionRouteWithChildren
+  '/rsp/event-token': typeof RspEventTokenRoute
+  '/rsp/faq': typeof RspFaqRoute
+  '/rsp/for-developers': typeof RspForDevelopersRoute
+  '/rsp/governance': typeof RspGovernanceRoute
+  '/rsp/how-it-works': typeof RspHowItWorksRoute
+  '/rsp/implementations': typeof RspImplementationsRoute
+  '/rsp/principles': typeof RspPrinciplesRoute
+  '/rsp/spec-check': typeof RspSpecCheckRoute
+  '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
+  '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
+  '/rsp/ethical-auction/adoption': typeof RspEthicalAuctionAdoptionRoute
+  '/rsp/ethical-auction/capacity': typeof RspEthicalAuctionCapacityRoute
+  '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
+  '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
+  '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp_/macro/calibration': typeof RspMacroCalibrationRoute
+  '/rsp_/macro/governance': typeof RspMacroGovernanceRoute
+  '/rsp_/macro/overview': typeof RspMacroOverviewRoute
+  '/rsp_/macro/telemetry': typeof RspMacroTelemetryRoute
+  '/rsp_/macro/ves-formula': typeof RspMacroVesFormulaRoute
+  '/rsp/case-studies/': typeof RspCaseStudiesIndexRoute
+  '/rsp/ethical-auction/': typeof RspEthicalAuctionIndexRoute
+  '/rsp_/macro/': typeof RspMacroIndexRoute
+  '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
 export interface FileRouteTypes {
@@ -163,10 +436,40 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/app'
     | '/onboarding'
+    | '/api/avatar-generate'
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp/avatar-creator'
+    | '/rsp/avatars'
+    | '/rsp/checklist'
+    | '/rsp/dimensions'
+    | '/rsp/ethical-auction'
+    | '/rsp/event-token'
+    | '/rsp/faq'
+    | '/rsp/for-developers'
+    | '/rsp/governance'
+    | '/rsp/how-it-works'
+    | '/rsp/implementations'
+    | '/rsp/principles'
+    | '/rsp/spec-check'
+    | '/rsp/'
     | '/api/public/quiz-submit'
+    | '/rsp/case-studies/$slug'
+    | '/rsp/ethical-auction/adoption'
+    | '/rsp/ethical-auction/capacity'
+    | '/rsp/ethical-auction/equilibrium'
+    | '/rsp/ethical-auction/experience'
+    | '/rsp/ethical-auction/intent'
+    | '/rsp/macro/calibration'
+    | '/rsp/macro/governance'
+    | '/rsp/macro/overview'
+    | '/rsp/macro/telemetry'
+    | '/rsp/macro/ves-formula'
+    | '/rsp/case-studies/'
+    | '/rsp/ethical-auction/'
+    | '/rsp/macro/'
+    | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -174,15 +477,43 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/quiz'
-    | '/rsp'
     | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/app'
     | '/onboarding'
+    | '/api/avatar-generate'
     | '/invite/$token'
     | '/quiz/admin'
     | '/r/$token'
+    | '/rsp/avatar-creator'
+    | '/rsp/avatars'
+    | '/rsp/checklist'
+    | '/rsp/dimensions'
+    | '/rsp/event-token'
+    | '/rsp/faq'
+    | '/rsp/for-developers'
+    | '/rsp/governance'
+    | '/rsp/how-it-works'
+    | '/rsp/implementations'
+    | '/rsp/principles'
+    | '/rsp/spec-check'
+    | '/rsp'
     | '/api/public/quiz-submit'
+    | '/rsp/case-studies/$slug'
+    | '/rsp/ethical-auction/adoption'
+    | '/rsp/ethical-auction/capacity'
+    | '/rsp/ethical-auction/equilibrium'
+    | '/rsp/ethical-auction/experience'
+    | '/rsp/ethical-auction/intent'
+    | '/rsp/macro/calibration'
+    | '/rsp/macro/governance'
+    | '/rsp/macro/overview'
+    | '/rsp/macro/telemetry'
+    | '/rsp/macro/ves-formula'
+    | '/rsp/case-studies'
+    | '/rsp/ethical-auction'
+    | '/rsp/macro'
+    | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
   id:
     | '__root__'
@@ -196,10 +527,40 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/_authenticated/app'
     | '/_authenticated/onboarding'
+    | '/api/avatar-generate'
     | '/invite/$token'
     | '/quiz_/admin'
     | '/r/$token'
+    | '/rsp/avatar-creator'
+    | '/rsp/avatars'
+    | '/rsp/checklist'
+    | '/rsp/dimensions'
+    | '/rsp/ethical-auction'
+    | '/rsp/event-token'
+    | '/rsp/faq'
+    | '/rsp/for-developers'
+    | '/rsp/governance'
+    | '/rsp/how-it-works'
+    | '/rsp/implementations'
+    | '/rsp/principles'
+    | '/rsp/spec-check'
+    | '/rsp/'
     | '/api/public/quiz-submit'
+    | '/rsp/case-studies/$slug'
+    | '/rsp/ethical-auction/adoption'
+    | '/rsp/ethical-auction/capacity'
+    | '/rsp/ethical-auction/equilibrium'
+    | '/rsp/ethical-auction/experience'
+    | '/rsp/ethical-auction/intent'
+    | '/rsp_/macro/calibration'
+    | '/rsp_/macro/governance'
+    | '/rsp_/macro/overview'
+    | '/rsp_/macro/telemetry'
+    | '/rsp_/macro/ves-formula'
+    | '/rsp/case-studies/'
+    | '/rsp/ethical-auction/'
+    | '/rsp_/macro/'
+    | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
   fileRoutesById: FileRoutesById
 }
@@ -209,13 +570,21 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   LoginRoute: typeof LoginRoute
   QuizRoute: typeof QuizRoute
-  RspRoute: typeof RspRoute
+  RspRoute: typeof RspRouteWithChildren
   SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiAvatarGenerateRoute: typeof ApiAvatarGenerateRoute
   InviteTokenRoute: typeof InviteTokenRoute
   QuizAdminRoute: typeof QuizAdminRoute
   RTokenRoute: typeof RTokenRoute
   ApiPublicQuizSubmitRoute: typeof ApiPublicQuizSubmitRoute
+  RspMacroCalibrationRoute: typeof RspMacroCalibrationRoute
+  RspMacroGovernanceRoute: typeof RspMacroGovernanceRoute
+  RspMacroOverviewRoute: typeof RspMacroOverviewRoute
+  RspMacroTelemetryRoute: typeof RspMacroTelemetryRoute
+  RspMacroVesFormulaRoute: typeof RspMacroVesFormulaRoute
+  RspMacroIndexRoute: typeof RspMacroIndexRoute
+  ApiPublicHooksAvatarCleanupRoute: typeof ApiPublicHooksAvatarCleanupRoute
   ApiPublicQuizResultTokenRoute: typeof ApiPublicQuizResultTokenRoute
 }
 
@@ -277,6 +646,104 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp/': {
+      id: '/rsp/'
+      path: '/'
+      fullPath: '/rsp/'
+      preLoaderRoute: typeof RspIndexRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/spec-check': {
+      id: '/rsp/spec-check'
+      path: '/spec-check'
+      fullPath: '/rsp/spec-check'
+      preLoaderRoute: typeof RspSpecCheckRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/principles': {
+      id: '/rsp/principles'
+      path: '/principles'
+      fullPath: '/rsp/principles'
+      preLoaderRoute: typeof RspPrinciplesRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/implementations': {
+      id: '/rsp/implementations'
+      path: '/implementations'
+      fullPath: '/rsp/implementations'
+      preLoaderRoute: typeof RspImplementationsRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/how-it-works': {
+      id: '/rsp/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/rsp/how-it-works'
+      preLoaderRoute: typeof RspHowItWorksRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/governance': {
+      id: '/rsp/governance'
+      path: '/governance'
+      fullPath: '/rsp/governance'
+      preLoaderRoute: typeof RspGovernanceRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/for-developers': {
+      id: '/rsp/for-developers'
+      path: '/for-developers'
+      fullPath: '/rsp/for-developers'
+      preLoaderRoute: typeof RspForDevelopersRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/faq': {
+      id: '/rsp/faq'
+      path: '/faq'
+      fullPath: '/rsp/faq'
+      preLoaderRoute: typeof RspFaqRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/event-token': {
+      id: '/rsp/event-token'
+      path: '/event-token'
+      fullPath: '/rsp/event-token'
+      preLoaderRoute: typeof RspEventTokenRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/ethical-auction': {
+      id: '/rsp/ethical-auction'
+      path: '/ethical-auction'
+      fullPath: '/rsp/ethical-auction'
+      preLoaderRoute: typeof RspEthicalAuctionRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/dimensions': {
+      id: '/rsp/dimensions'
+      path: '/dimensions'
+      fullPath: '/rsp/dimensions'
+      preLoaderRoute: typeof RspDimensionsRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/checklist': {
+      id: '/rsp/checklist'
+      path: '/checklist'
+      fullPath: '/rsp/checklist'
+      preLoaderRoute: typeof RspChecklistRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/avatars': {
+      id: '/rsp/avatars'
+      path: '/avatars'
+      fullPath: '/rsp/avatars'
+      preLoaderRoute: typeof RspAvatarsRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/avatar-creator': {
+      id: '/rsp/avatar-creator'
+      path: '/avatar-creator'
+      fullPath: '/rsp/avatar-creator'
+      preLoaderRoute: typeof RspAvatarCreatorRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/r/$token': {
       id: '/r/$token'
       path: '/r/$token'
@@ -298,6 +765,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/avatar-generate': {
+      id: '/api/avatar-generate'
+      path: '/api/avatar-generate'
+      fullPath: '/api/avatar-generate'
+      preLoaderRoute: typeof ApiAvatarGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/onboarding': {
       id: '/_authenticated/onboarding'
       path: '/onboarding'
@@ -312,6 +786,104 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/rsp_/macro/': {
+      id: '/rsp_/macro/'
+      path: '/rsp/macro'
+      fullPath: '/rsp/macro/'
+      preLoaderRoute: typeof RspMacroIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rsp/ethical-auction/': {
+      id: '/rsp/ethical-auction/'
+      path: '/'
+      fullPath: '/rsp/ethical-auction/'
+      preLoaderRoute: typeof RspEthicalAuctionIndexRouteImport
+      parentRoute: typeof RspEthicalAuctionRoute
+    }
+    '/rsp/case-studies/': {
+      id: '/rsp/case-studies/'
+      path: '/case-studies'
+      fullPath: '/rsp/case-studies/'
+      preLoaderRoute: typeof RspCaseStudiesIndexRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp_/macro/ves-formula': {
+      id: '/rsp_/macro/ves-formula'
+      path: '/rsp/macro/ves-formula'
+      fullPath: '/rsp/macro/ves-formula'
+      preLoaderRoute: typeof RspMacroVesFormulaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rsp_/macro/telemetry': {
+      id: '/rsp_/macro/telemetry'
+      path: '/rsp/macro/telemetry'
+      fullPath: '/rsp/macro/telemetry'
+      preLoaderRoute: typeof RspMacroTelemetryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rsp_/macro/overview': {
+      id: '/rsp_/macro/overview'
+      path: '/rsp/macro/overview'
+      fullPath: '/rsp/macro/overview'
+      preLoaderRoute: typeof RspMacroOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rsp_/macro/governance': {
+      id: '/rsp_/macro/governance'
+      path: '/rsp/macro/governance'
+      fullPath: '/rsp/macro/governance'
+      preLoaderRoute: typeof RspMacroGovernanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rsp_/macro/calibration': {
+      id: '/rsp_/macro/calibration'
+      path: '/rsp/macro/calibration'
+      fullPath: '/rsp/macro/calibration'
+      preLoaderRoute: typeof RspMacroCalibrationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rsp/ethical-auction/intent': {
+      id: '/rsp/ethical-auction/intent'
+      path: '/intent'
+      fullPath: '/rsp/ethical-auction/intent'
+      preLoaderRoute: typeof RspEthicalAuctionIntentRouteImport
+      parentRoute: typeof RspEthicalAuctionRoute
+    }
+    '/rsp/ethical-auction/experience': {
+      id: '/rsp/ethical-auction/experience'
+      path: '/experience'
+      fullPath: '/rsp/ethical-auction/experience'
+      preLoaderRoute: typeof RspEthicalAuctionExperienceRouteImport
+      parentRoute: typeof RspEthicalAuctionRoute
+    }
+    '/rsp/ethical-auction/equilibrium': {
+      id: '/rsp/ethical-auction/equilibrium'
+      path: '/equilibrium'
+      fullPath: '/rsp/ethical-auction/equilibrium'
+      preLoaderRoute: typeof RspEthicalAuctionEquilibriumRouteImport
+      parentRoute: typeof RspEthicalAuctionRoute
+    }
+    '/rsp/ethical-auction/capacity': {
+      id: '/rsp/ethical-auction/capacity'
+      path: '/capacity'
+      fullPath: '/rsp/ethical-auction/capacity'
+      preLoaderRoute: typeof RspEthicalAuctionCapacityRouteImport
+      parentRoute: typeof RspEthicalAuctionRoute
+    }
+    '/rsp/ethical-auction/adoption': {
+      id: '/rsp/ethical-auction/adoption'
+      path: '/adoption'
+      fullPath: '/rsp/ethical-auction/adoption'
+      preLoaderRoute: typeof RspEthicalAuctionAdoptionRouteImport
+      parentRoute: typeof RspEthicalAuctionRoute
+    }
+    '/rsp/case-studies/$slug': {
+      id: '/rsp/case-studies/$slug'
+      path: '/case-studies/$slug'
+      fullPath: '/rsp/case-studies/$slug'
+      preLoaderRoute: typeof RspCaseStudiesSlugRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/api/public/quiz-submit': {
       id: '/api/public/quiz-submit'
       path: '/api/public/quiz-submit'
@@ -324,6 +896,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/quiz-result/$token'
       fullPath: '/api/public/quiz-result/$token'
       preLoaderRoute: typeof ApiPublicQuizResultTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/avatar-cleanup': {
+      id: '/api/public/hooks/avatar-cleanup'
+      path: '/api/public/hooks/avatar-cleanup'
+      fullPath: '/api/public/hooks/avatar-cleanup'
+      preLoaderRoute: typeof ApiPublicHooksAvatarCleanupRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -343,19 +922,88 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface RspEthicalAuctionRouteChildren {
+  RspEthicalAuctionAdoptionRoute: typeof RspEthicalAuctionAdoptionRoute
+  RspEthicalAuctionCapacityRoute: typeof RspEthicalAuctionCapacityRoute
+  RspEthicalAuctionEquilibriumRoute: typeof RspEthicalAuctionEquilibriumRoute
+  RspEthicalAuctionExperienceRoute: typeof RspEthicalAuctionExperienceRoute
+  RspEthicalAuctionIntentRoute: typeof RspEthicalAuctionIntentRoute
+  RspEthicalAuctionIndexRoute: typeof RspEthicalAuctionIndexRoute
+}
+
+const RspEthicalAuctionRouteChildren: RspEthicalAuctionRouteChildren = {
+  RspEthicalAuctionAdoptionRoute: RspEthicalAuctionAdoptionRoute,
+  RspEthicalAuctionCapacityRoute: RspEthicalAuctionCapacityRoute,
+  RspEthicalAuctionEquilibriumRoute: RspEthicalAuctionEquilibriumRoute,
+  RspEthicalAuctionExperienceRoute: RspEthicalAuctionExperienceRoute,
+  RspEthicalAuctionIntentRoute: RspEthicalAuctionIntentRoute,
+  RspEthicalAuctionIndexRoute: RspEthicalAuctionIndexRoute,
+}
+
+const RspEthicalAuctionRouteWithChildren =
+  RspEthicalAuctionRoute._addFileChildren(RspEthicalAuctionRouteChildren)
+
+interface RspRouteChildren {
+  RspAvatarCreatorRoute: typeof RspAvatarCreatorRoute
+  RspAvatarsRoute: typeof RspAvatarsRoute
+  RspChecklistRoute: typeof RspChecklistRoute
+  RspDimensionsRoute: typeof RspDimensionsRoute
+  RspEthicalAuctionRoute: typeof RspEthicalAuctionRouteWithChildren
+  RspEventTokenRoute: typeof RspEventTokenRoute
+  RspFaqRoute: typeof RspFaqRoute
+  RspForDevelopersRoute: typeof RspForDevelopersRoute
+  RspGovernanceRoute: typeof RspGovernanceRoute
+  RspHowItWorksRoute: typeof RspHowItWorksRoute
+  RspImplementationsRoute: typeof RspImplementationsRoute
+  RspPrinciplesRoute: typeof RspPrinciplesRoute
+  RspSpecCheckRoute: typeof RspSpecCheckRoute
+  RspIndexRoute: typeof RspIndexRoute
+  RspCaseStudiesSlugRoute: typeof RspCaseStudiesSlugRoute
+  RspCaseStudiesIndexRoute: typeof RspCaseStudiesIndexRoute
+}
+
+const RspRouteChildren: RspRouteChildren = {
+  RspAvatarCreatorRoute: RspAvatarCreatorRoute,
+  RspAvatarsRoute: RspAvatarsRoute,
+  RspChecklistRoute: RspChecklistRoute,
+  RspDimensionsRoute: RspDimensionsRoute,
+  RspEthicalAuctionRoute: RspEthicalAuctionRouteWithChildren,
+  RspEventTokenRoute: RspEventTokenRoute,
+  RspFaqRoute: RspFaqRoute,
+  RspForDevelopersRoute: RspForDevelopersRoute,
+  RspGovernanceRoute: RspGovernanceRoute,
+  RspHowItWorksRoute: RspHowItWorksRoute,
+  RspImplementationsRoute: RspImplementationsRoute,
+  RspPrinciplesRoute: RspPrinciplesRoute,
+  RspSpecCheckRoute: RspSpecCheckRoute,
+  RspIndexRoute: RspIndexRoute,
+  RspCaseStudiesSlugRoute: RspCaseStudiesSlugRoute,
+  RspCaseStudiesIndexRoute: RspCaseStudiesIndexRoute,
+}
+
+const RspRouteWithChildren = RspRoute._addFileChildren(RspRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AdminRoute: AdminRoute,
   LoginRoute: LoginRoute,
   QuizRoute: QuizRoute,
-  RspRoute: RspRoute,
+  RspRoute: RspRouteWithChildren,
   SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiAvatarGenerateRoute: ApiAvatarGenerateRoute,
   InviteTokenRoute: InviteTokenRoute,
   QuizAdminRoute: QuizAdminRoute,
   RTokenRoute: RTokenRoute,
   ApiPublicQuizSubmitRoute: ApiPublicQuizSubmitRoute,
+  RspMacroCalibrationRoute: RspMacroCalibrationRoute,
+  RspMacroGovernanceRoute: RspMacroGovernanceRoute,
+  RspMacroOverviewRoute: RspMacroOverviewRoute,
+  RspMacroTelemetryRoute: RspMacroTelemetryRoute,
+  RspMacroVesFormulaRoute: RspMacroVesFormulaRoute,
+  RspMacroIndexRoute: RspMacroIndexRoute,
+  ApiPublicHooksAvatarCleanupRoute: ApiPublicHooksAvatarCleanupRoute,
   ApiPublicQuizResultTokenRoute: ApiPublicQuizResultTokenRoute,
 }
 export const routeTree = rootRouteImport

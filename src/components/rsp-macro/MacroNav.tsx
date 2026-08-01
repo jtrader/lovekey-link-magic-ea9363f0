@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 
 const navItems = [
+  { href: "/rsp/macro", label: "00. Index" },
   { href: "/rsp/macro/overview", label: "01. Overview" },
   { href: "/rsp/macro/telemetry", label: "02. Telemetry" },
   { href: "/rsp/macro/ves-formula", label: "03. VES Formula" },

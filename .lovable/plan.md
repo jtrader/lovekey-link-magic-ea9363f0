@@ -1,53 +1,35 @@
-# Multi-page RSP site with its own menu
+## Goal
 
-Turn the current single-scroll `/rsp` page into nine linked pages that share one navigation menu, header, and visual system.
+Make it unmistakable throughout the Vertical Equilibrium Optimization branch that the model governs **both organic ranking (SEO) and paid auctions (SEM)** — not just paid clicks. Copy-only changes; no logic or layout work.
 
-## Structure (TanStack file routing)
+## Changes by page
 
-```
-src/routes/rsp.tsx              -> layout: shared shell (nav menu + <Outlet/> + footer)
-src/routes/rsp.index.tsx        -> /rsp            Landing
-src/routes/rsp.principles.tsx   -> /rsp/principles
-src/routes/rsp.how-it-works.tsx -> /rsp/how-it-works
-src/routes/rsp.dimensions.tsx   -> /rsp/dimensions
-src/routes/rsp.implementations.tsx -> /rsp/implementations
-src/routes/rsp.event-token.tsx  -> /rsp/event-token
-src/routes/rsp.for-developers.tsx  -> /rsp/for-developers
-src/routes/rsp.governance.tsx   -> /rsp/governance
-src/routes/rsp.faq.tsx          -> /rsp/faq
-```
+**/rsp/ethical-auction (index)**
+- Intro lead: reframe from "Search ranking and pay-per-click auctions" to explicitly state both distribution channels are governed by the same equilibrium layer, and that VEO is the successor to SEO *and* SEM.
+- Legacy-model bullets:
+  - "Capable competitors starve while dominant players pay for clicks **and inherit organic traffic** they cannot service."
+  - Top-players bullet: make clear dominance comes from *both* ad budget and legacy organic authority.
+  - Dead-lead bullet: note leads arrive via both paid and organic listings.
+- Ethical Auction bullets: state prominence rotation applies to organic results and paid placements alike; throttling covers both.
+- "Respectful Intent Score" section: clarify the score multiplies into paid Ad Rank *and* acts as an organic ranking modifier — add one line under the formula and rename the table's third column to "Ranking / auction effect", with each row's text touching both surfaces where natural.
+- Architecture flow: "Rotational exposure" node text to say prominence across organic and paid results.
 
-`rsp.tsx` becomes a layout route (renders `<Outlet/>`), so `/rsp` no longer renders the big page directly — the landing moves to `rsp.index.tsx`.
+**/rsp/ethical-auction/intent**
+- The "how does a new entrant get seen?" comparison row currently says "Only by outbidding the incumbents" — extend to "Only by outbidding incumbents or out-aging their domain authority", with the VEO counterpart covering both surfaces.
 
-## Shared shell
+**/rsp/ethical-auction/capacity** and **/experience**
+- Already mention "paid bids and organic prominence" in places; make the remaining capacity/response rows consistent so every throttle/boost description names both channels.
 
-Extract the current CSS string and nav into `src/components/RspShell.tsx`:
-- Exports the shared `css` and a `RspShell` wrapper (logo -> `/`, the cross-route menu, mobile burger menu, footer, scroll-progress bar).
-- Menu uses `<Link to="/rsp/principles">` etc. with `activeProps` highlighting the current route (replacing the current in-page `#anchor` scroll-spy).
-- Every subpage renders inside `RspShell`.
+**/rsp/ethical-auction/equilibrium**
+- VES description: state the multiplier is applied to both the paid auction rank and the organic ranking signal, not just "on top of conventional relevance and bidding".
 
-## Content mapping (from the existing page)
+**/rsp/ethical-auction/adoption**
+- Search-engine benefits: mention improved organic result quality alongside auction inventory.
+- Business benefits: add that baseline exposure is guaranteed across organic and paid, not budget-dependent.
 
-- Landing (`/rsp`): hero + "what RSP is / what it is not" summary + a grid of cards linking to all sub-sections. Keeps the Chapter PDF / Quiz / Genesis NFT / white paper actions.
-- Principles: the Core-principles cards (incl. Avatar sovereignty) + Journey steps.
-- How it works: Consent modules + the Avatars "How it works" step flow, the per-step detail blocks, and the Maya worked example.
-- Dimensions: the Avatars dimension grid + consent data-model reference.
-- Implementations: the Verticals section.
-- Event token: the Event Token section + white paper link.
-- For developers: the Install section + package/repo references.
-- Governance: the NFT Tiers, Credits, and Burn-clause governance content.
-- FAQ: the Avatar FAQ accordion.
-
-Each page gets its own `head()` with a unique title + description + og:title/og:description.
+**Metadata**
+- Tighten the index page description (and the branch subtitle where it appears in `src/components/rsp-ethical-auction.tsx`) so "organic (SEO) and paid (SEM)" appears explicitly for search snippets.
 
 ## Technical notes
 
-- `rsp.tsx` layout: `createFileRoute("/rsp")` with `component: () => <Outlet/>` (import `Outlet`).
-- `rsp.index.tsx`: `createFileRoute("/rsp/")`.
-- Shared icons/`PrincipleCard` move into `RspShell.tsx` (or a small `rsp-shared.tsx`) so every page can import them.
-- Cross-page links use `<Link>`; in-page jumps within a single page keep `#anchors`.
-- Verify with `tsgo --noEmit` after the split.
-
-## Note
-
-This is a structural refactor. The current `/rsp` deep-link anchors (e.g. `/rsp#consent`) will change to real routes (`/rsp/how-it-works`). If you have external links pointing at those anchors, tell me and I'll add redirects.
+Edits confined to `src/routes/rsp.ethical-auction.*.tsx` and the header/subtitle strings in `src/components/rsp-ethical-auction.tsx`. No component API, styling, or data changes.

@@ -96,6 +96,8 @@ function EthicalAuctionIndex() {
         </div>
       </EaSection>
 
+      <EaSeoSemCallout />
+
       <EaSection
         id="score"
         eyebrow="The new pillar"

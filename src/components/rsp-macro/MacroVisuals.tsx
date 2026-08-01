@@ -182,20 +182,20 @@ export function MacroFlow({
             <MacroIconBadge tone={s.tone}>{s.icon}</MacroIconBadge>
             <div>
               <div className="mb-1 text-sm font-semibold text-slate-900">{s.label}</div>
-              <p className="font-mono text-xs leading-relaxed text-slate-500">{s.desc}</p>
+              <p className="font-mono text-xs leading-relaxed text-slate-600">{s.desc}</p>
             </div>
           </div>
           {i < steps.length - 1 && (
             <>
               <span
                 aria-hidden="true"
-                className="absolute -bottom-3 left-1/2 hidden -translate-x-1/2 font-mono text-xs text-slate-400 md:block md:-right-2.5 md:bottom-auto md:left-auto md:top-1/2 md:-translate-y-1/2 md:translate-x-0"
+                className="absolute -bottom-3 left-1/2 hidden -translate-x-1/2 font-mono text-xs text-slate-600 md:block md:-right-2.5 md:bottom-auto md:left-auto md:top-1/2 md:-translate-y-1/2 md:translate-x-0"
               >
                 →
               </span>
               <span
                 aria-hidden="true"
-                className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 font-mono text-xs text-slate-400 md:hidden"
+                className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 font-mono text-xs text-slate-600 md:hidden"
               >
                 ↓
               </span>

@@ -76,7 +76,7 @@ function VESFormulaPage() {
         <div className="my-4 rounded-xl border border-slate-200 bg-[#F5F7FB] py-4 font-mono text-2xl text-slate-900 md:text-3xl">
           VES = f(Relevance) × ( CX / S ) × ( VT / VA )
         </div>
-        <div className="font-mono text-xs text-slate-500">
+        <div className="font-mono text-xs text-slate-600">
           Equilibrium Ad Rank = (Bid Amount × Quality Score) × VES
         </div>
       </div>
@@ -84,7 +84,7 @@ function VESFormulaPage() {
       <div className="my-10 overflow-x-auto">
         <table className="w-full border-collapse overflow-hidden rounded-xl border border-slate-200 bg-[#FFFFFF] text-left">
           <thead>
-            <tr className="border-b border-slate-200 bg-[#F5F7FB] font-mono text-xs uppercase text-slate-500">
+            <tr className="border-b border-slate-200 bg-[#F5F7FB] font-mono text-xs uppercase text-slate-600">
               <th className="px-4 py-4">Variable</th>
               <th className="px-4 py-4">Dimension</th>
               <th className="px-4 py-4">Source Telemetry</th>
@@ -96,7 +96,7 @@ function VESFormulaPage() {
               <tr key={r.v}>
                 <td className={`px-4 py-4 font-mono font-bold ${r.vClass}`}>{r.v}</td>
                 <td className="px-4 py-4 text-slate-700">{r.dim}</td>
-                <td className="px-4 py-4 text-xs text-slate-500">{r.src}</td>
+                <td className="px-4 py-4 text-xs text-slate-600">{r.src}</td>
                 <td className={`px-4 py-4 text-xs ${r.impactClass}`}>{r.impact}</td>
               </tr>
             ))}

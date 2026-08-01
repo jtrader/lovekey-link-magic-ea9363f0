@@ -111,14 +111,14 @@ function MacroOverview() {
   return (
     <MacroShell>
       <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-50 px-3.5 py-1.5 font-mono text-xs text-emerald-700">
-        <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+        <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
         @rsp/macro v1.0 Open Specification
       </div>
 
       <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-slate-900 md:text-5xl">
         Macro-Economic Vertical Equilibrium
       </h1>
-      <p className="mb-10 text-xl font-light leading-relaxed text-slate-500">
+      <p className="mb-10 text-xl font-light leading-relaxed text-slate-600">
         Transitioning search engines and ad auctions from winner-take-all monetization extraction
         engines into dynamic, capacity-aware economic balance ecosystems.
       </p>
@@ -134,7 +134,7 @@ function MacroOverview() {
             </div>
           </div>
           <h2 className="mb-3 text-xl font-semibold text-slate-900">Monopolistic Extraction</h2>
-          <ul className="space-y-3 text-sm text-slate-500">
+          <ul className="space-y-3 text-sm text-slate-600">
             <MacroBullet tone="red" icon={<IconClose />}>
               Permanent user profiling & predatory retargeting.
             </MacroBullet>
@@ -172,7 +172,7 @@ function MacroOverview() {
       </div>
 
       <section className="my-12">
-        <div className="mb-4 font-mono text-xs uppercase tracking-widest text-slate-500">
+        <div className="mb-4 font-mono text-xs uppercase tracking-widest text-slate-600">
           Signal flow
         </div>
         <MacroFlow steps={flowSteps} />
@@ -192,7 +192,7 @@ function MacroOverview() {
             </span>
             <span className={`mb-1 block font-mono text-xs ${c.accent}`}>{c.section}</span>
             <h3 className="mb-1 font-semibold text-slate-900">{c.title}</h3>
-            <p className="text-xs text-slate-500">{c.desc}</p>
+            <p className="text-xs text-slate-600">{c.desc}</p>
           </Link>
         ))}
       </div>

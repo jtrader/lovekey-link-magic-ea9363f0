@@ -28,8 +28,8 @@ export function MacroNav() {
     <nav className="sticky top-0 z-50 border-b border-slate-200 bg-[#F5F7FB]/90 px-6 py-4 backdrop-blur">
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 sm:flex-row">
         <div className="flex items-center gap-3">
-          <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-emerald-400" />
-          <span className="font-mono text-xs uppercase tracking-widest text-slate-500">
+          <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-emerald-500" />
+          <span className="font-mono text-xs uppercase tracking-widest text-slate-600">
             <Link to="/rsp" className="hover:text-slate-700">
               LoveKey / RSP Protocol
             </Link>{" "}
@@ -51,7 +51,7 @@ export function MacroNav() {
                 className={`shrink-0 snap-start rounded-lg px-3 py-1.5 font-mono text-xs transition-all ${
                   isActive
                     ? "border border-emerald-500/40 bg-emerald-50 text-emerald-700"
-                    : "border border-transparent text-slate-500 hover:bg-slate-200/50 hover:text-slate-700"
+                    : "border border-transparent text-slate-600 hover:bg-slate-200/50 hover:text-slate-700"
                 }`}
               >
                 {item.label}
@@ -70,7 +70,7 @@ function MacroBreadcrumbs() {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="mx-auto flex max-w-5xl flex-wrap items-center gap-2 px-6 pt-6 font-mono text-xs text-slate-500"
+      className="mx-auto flex max-w-5xl flex-wrap items-center gap-2 px-6 pt-6 font-mono text-xs text-slate-600"
     >
       <Link to="/" className="hover:text-slate-600">
         Love Key Link
@@ -102,7 +102,7 @@ function MacroBreadcrumbs() {
 function MacroFooter() {
   return (
     <footer className="mt-16 border-t border-slate-200">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-3 px-6 py-8 font-mono text-xs text-slate-500">
+      <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-3 px-6 py-8 font-mono text-xs text-slate-600">
         <span className="uppercase tracking-widest">Elsewhere on Love Key Link</span>
         <Link to="/" className="hover:text-slate-600">
           Home

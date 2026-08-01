@@ -199,6 +199,35 @@ function EthicalAuctionIndex() {
         </div>
       </EaSection>
 
+      <EaSection
+        id="simulator"
+        eyebrow="Interactive worked example"
+        title="Move the capacity sliders and watch the asymmetry appear."
+        lead="Set how much of the region's weekly demand each business can genuinely service. Today's column ranks by accumulated authority and budget; the VEO column ranks by the ability to serve. Watch what happens to unserved demand and to the capable operator's ad bill."
+      >
+        <EaCapacitySim />
+      </EaSection>
+
+      <EaSection
+        id="channels"
+        eyebrow="Organic vs paid, same outcome"
+        title="One outcome, measured consistently across SEO and SEM."
+        lead="The same distortion shows up in both channels, so the branch defines each outcome once and then states its organic and paid form side by side using identical wording."
+      >
+        <EaChannelMetrics />
+      </EaSection>
+
+      <EaSection
+        id="faq"
+        eyebrow="The asymmetry, in plain language"
+        title="Why the wrong side of the market is paying."
+        lead="Nine short answers to the questions this ideology tuning always raises."
+      >
+        <EaAsymmetryFaq />
+      </EaSection>
+
+
+
 
       <EaSection
         id="engine"

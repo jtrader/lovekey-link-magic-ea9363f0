@@ -1,5 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
+import {
+  IconGauge,
+  IconLayersFlow,
+  IconPulse,
+  IconShieldCheck,
+  IconSigma,
+  MacroIconBadge,
+  type MacroTone,
+} from "@/components/rsp-macro/MacroVisuals";
 
 export const Route = createFileRoute("/rsp_/macro/")({
   head: () => ({
@@ -30,6 +39,8 @@ const sections = [
   {
     to: "/rsp/macro/overview",
     num: "01",
+    tone: "emerald" as MacroTone,
+    icon: <IconLayersFlow />,
     accent: "text-emerald-700",
     hover: "hover:border-emerald-500/50",
     title: "Overview",
@@ -39,6 +50,8 @@ const sections = [
   {
     to: "/rsp/macro/telemetry",
     num: "02",
+    tone: "amber" as MacroTone,
+    icon: <IconPulse />,
     accent: "text-amber-700",
     hover: "hover:border-amber-500/50",
     title: "Telemetry",
@@ -48,6 +61,8 @@ const sections = [
   {
     to: "/rsp/macro/ves-formula",
     num: "03",
+    tone: "cyan" as MacroTone,
+    icon: <IconSigma />,
     accent: "text-cyan-700",
     hover: "hover:border-cyan-500/50",
     title: "VES Formula",
@@ -57,6 +72,8 @@ const sections = [
   {
     to: "/rsp/macro/calibration",
     num: "04",
+    tone: "amber" as MacroTone,
+    icon: <IconGauge />,
     accent: "text-amber-700",
     hover: "hover:border-amber-400/50",
     title: "Calibration",
@@ -66,6 +83,8 @@ const sections = [
   {
     to: "/rsp/macro/governance",
     num: "05",
+    tone: "purple" as MacroTone,
+    icon: <IconShieldCheck />,
     accent: "text-purple-700",
     hover: "hover:border-purple-500/50",
     title: "Governance",
@@ -97,7 +116,10 @@ function MacroIndex() {
               to={s.to}
               className={`flex h-full flex-col rounded-2xl border border-slate-200 bg-[#FFFFFF] p-6 transition-all ${s.hover}`}
             >
-              <div className="mb-2 flex items-baseline gap-3">
+              <div className="mb-3 flex items-center gap-3">
+                <MacroIconBadge tone={s.tone} size="sm">
+                  {s.icon}
+                </MacroIconBadge>
                 <span className={`font-mono text-xs tracking-widest ${s.accent}`}>
                   SECTION {s.num}
                 </span>

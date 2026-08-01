@@ -104,10 +104,20 @@ function MacroIndex() {
       <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-slate-900 md:text-5xl">
         @rsp/macro — Section index
       </h1>
-      <p className="mb-10 max-w-3xl text-xl font-light leading-relaxed text-slate-600">
+      <p className="mb-6 max-w-3xl text-xl font-light leading-relaxed text-slate-600">
         Five sections describe how search and ad auctions become capacity-aware equilibrium
         ecosystems. Start at the overview, or jump straight to the part you need.
       </p>
+
+      <a
+        href={macroSummaryPdf.url}
+        download="macro-spec-summary.pdf"
+        className="mb-10 inline-flex items-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-50 px-4 py-2.5 font-mono text-xs text-emerald-700 transition-all hover:border-emerald-600 hover:bg-emerald-100"
+      >
+        <span aria-hidden="true">↓</span>
+        Download the @rsp/macro v1.0 one-page summary (PDF)
+      </a>
+
 
       <ol className="grid gap-4 md:grid-cols-2">
         {sections.map((s) => (

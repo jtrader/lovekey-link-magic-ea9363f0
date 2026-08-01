@@ -67,7 +67,7 @@ function GovernancePage() {
               </MacroIconBadge>
               {i.title}
             </h2>
-            <p className="text-xs leading-relaxed text-slate-500">{i.desc}</p>
+            <p className="text-xs leading-relaxed text-slate-600">{i.desc}</p>
           </section>
         ))}
       </div>

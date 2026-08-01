@@ -97,14 +97,14 @@ function MacroIndex() {
   return (
     <MacroShell>
       <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-50 px-3.5 py-1.5 font-mono text-xs text-emerald-700">
-        <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+        <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
         @rsp/macro v1.0 Open Specification
       </div>
 
       <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-slate-900 md:text-5xl">
         @rsp/macro — Section index
       </h1>
-      <p className="mb-10 max-w-3xl text-xl font-light leading-relaxed text-slate-500">
+      <p className="mb-10 max-w-3xl text-xl font-light leading-relaxed text-slate-600">
         Five sections describe how search and ad auctions become capacity-aware equilibrium
         ecosystems. Start at the overview, or jump straight to the part you need.
       </p>
@@ -125,8 +125,8 @@ function MacroIndex() {
                 </span>
               </div>
               <h2 className="mb-2 text-xl font-semibold text-slate-900">{s.title}</h2>
-              <p className="mb-4 text-sm leading-relaxed text-slate-500">{s.desc}</p>
-              <ul className="mt-auto space-y-1.5 font-mono text-xs text-slate-500">
+              <p className="mb-4 text-sm leading-relaxed text-slate-600">{s.desc}</p>
+              <ul className="mt-auto space-y-1.5 font-mono text-xs text-slate-600">
                 {s.points.map((p) => (
                   <li key={p} className="flex items-start gap-2">
                     <span className={s.accent}>•</span>
@@ -141,21 +141,21 @@ function MacroIndex() {
       </ol>
 
       <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-8">
-        <span className="font-mono text-xs uppercase tracking-widest text-slate-500">
+        <span className="font-mono text-xs uppercase tracking-widest text-slate-600">
           Quick links
         </span>
         {sections.map((s) => (
           <Link
             key={s.to}
             to={s.to}
-            className="rounded-lg border border-slate-200 px-3 py-1.5 font-mono text-xs text-slate-500 transition-all hover:border-slate-600 hover:text-slate-700"
+            className="rounded-lg border border-slate-200 px-3 py-1.5 font-mono text-xs text-slate-600 transition-all hover:border-slate-600 hover:text-slate-700"
           >
             {s.num}. {s.title}
           </Link>
         ))}
         <Link
           to="/rsp"
-          className="rounded-lg border border-slate-200 px-3 py-1.5 font-mono text-xs text-slate-500 transition-all hover:border-slate-600 hover:text-slate-700"
+          className="rounded-lg border border-slate-200 px-3 py-1.5 font-mono text-xs text-slate-600 transition-all hover:border-slate-600 hover:text-slate-700"
         >
           ← Back to RSP
         </Link>

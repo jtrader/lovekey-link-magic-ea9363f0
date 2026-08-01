@@ -72,7 +72,7 @@ function CalibrationPage() {
       <h1 className="mb-6 text-3xl font-bold text-slate-900 md:text-4xl">
         The 3-Month Level-Up Sandbox
       </h1>
-      <p className="mb-10 text-lg leading-relaxed text-slate-500">
+      <p className="mb-10 text-lg leading-relaxed text-slate-600">
         Participating 10-player vertical pools undergo a mandatory 90-day calibration phase to level
         up landing page design and establish normative operational baselines.
       </p>
@@ -83,7 +83,7 @@ function CalibrationPage() {
             {idx < months.length - 1 && (
               <span
                 aria-hidden="true"
-                className="absolute -bottom-4 left-1/2 -translate-x-1/2 font-mono text-xs text-slate-400 md:-right-4 md:bottom-auto md:left-auto md:top-1/2 md:-translate-y-1/2 md:translate-x-0"
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 font-mono text-xs text-slate-600 md:-right-4 md:bottom-auto md:left-auto md:top-1/2 md:-translate-y-1/2 md:translate-x-0"
               >
                 <span className="md:hidden">↓</span>
                 <span className="hidden md:inline">→</span>
@@ -98,7 +98,7 @@ function CalibrationPage() {
               {m.tag}
             </span>
             <h2 className="mb-2 text-lg font-semibold text-slate-900">{m.title}</h2>
-            <p className="text-xs leading-relaxed text-slate-500">{m.desc}</p>
+            <p className="text-xs leading-relaxed text-slate-600">{m.desc}</p>
           </div>
         ))}
       </div>

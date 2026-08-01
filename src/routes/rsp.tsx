@@ -1044,7 +1044,7 @@ const areaMenus: AreaMenu[] = [
     ],
   },
   {
-    label: "Ethical Auction",
+    label: "Equilibrium Theory VEO",
     to: "/rsp/ethical-auction",
     match: isAuctionPath,
     links: [
@@ -1189,7 +1189,7 @@ function Breadcrumbs() {
   ];
 
   if (isAuctionPath(pathname)) {
-    crumbs.push({ label: "Ethical Auction", to: "/rsp/ethical-auction" });
+    crumbs.push({ label: "Equilibrium Theory VEO", to: "/rsp/ethical-auction" });
     if (pathname !== "/rsp/ethical-auction") {
       crumbs.push({ label: PAGE_LABELS[pathname] ?? "Page" });
     }

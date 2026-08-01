@@ -41,7 +41,7 @@ function TelemetryPage() {
       <h1 className="mb-6 text-3xl font-bold text-slate-900 md:text-4xl">
         Tripartite Operational Telemetry
       </h1>
-      <p className="mb-10 text-lg leading-relaxed text-slate-500">
+      <p className="mb-10 text-lg leading-relaxed text-slate-600">
         Instead of assuming infinite capacity, @rsp/macro ingests three privacy-safe, anonymized
         operational metrics to determine real-time business serviceability.
       </p>
@@ -62,7 +62,7 @@ function TelemetryPage() {
           <p className="mb-4 text-sm text-slate-600">
             Measures human stress load via localized, differential privacy signals.
           </p>
-          <ul className="grid gap-3 font-mono text-xs text-slate-500 sm:grid-cols-3">
+          <ul className="grid gap-3 font-mono text-xs text-slate-600 sm:grid-cols-3">
             <li className="rounded-lg border border-slate-200 bg-[#F5F7FB] p-3">
               ▸ Work Hour Variance
             </li>
@@ -90,7 +90,7 @@ function TelemetryPage() {
           <p className="mb-4 text-sm text-slate-600">
             Ingested via anonymized, zero-knowledge accounting APIs (Xero, QuickBooks, MYOB).
           </p>
-          <ul className="grid gap-3 font-mono text-xs text-slate-500 sm:grid-cols-2">
+          <ul className="grid gap-3 font-mono text-xs text-slate-600 sm:grid-cols-2">
             <li className="rounded-lg border border-slate-200 bg-[#F5F7FB] p-3">
               ▸ VA: Actual Rolling 90-Day Revenue Velocity
             </li>
@@ -116,7 +116,7 @@ function TelemetryPage() {
             Evaluates real-world serviceability and friction using neutral, vertical-congruent
             metrics.
           </p>
-          <ul className="grid gap-3 font-mono text-xs text-slate-500 sm:grid-cols-3">
+          <ul className="grid gap-3 font-mono text-xs text-slate-600 sm:grid-cols-3">
             <li className="rounded-lg border border-slate-200 bg-[#F5F7FB] p-3">
               ▸ Call Queue Metadata
             </li>

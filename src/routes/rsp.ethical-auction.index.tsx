@@ -9,6 +9,7 @@ import {
   EaPairedFormula,
   validateSimSearch,
 } from "@/components/rsp-ea-interactive";
+import veoSummaryPdf from "@/assets/veo-branch-summary.pdf.asset.json";
 
 
 export const Route = createFileRoute("/rsp/ethical-auction/")({

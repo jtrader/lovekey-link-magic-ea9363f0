@@ -1120,32 +1120,15 @@ function AreaMenus() {
             {!single && openIdx === i && (
               <div className="rsp-menu-panel" role="menu">
                 {menu.links.map((l) => (
-                  <Fragment key={l.to}>
-                    <Link
-                      to={l.to}
-                      role="menuitem"
-                      className={`rsp-menu-item${linkIsActive(pathname, l) ? " rsp-nav-active" : ""}`}
-                      aria-current={linkIsActive(pathname, l) ? "page" : undefined}
-                      onClick={() => setOpenIdx(null)}
-                    >
-                      {l.label}
-                    </Link>
-                    {l.children?.map((c) => (
-                      <Link
-                        key={c.to}
-                        to={c.to}
-                        role="menuitem"
-                        className={`rsp-menu-item rsp-menu-subitem${
-                          linkIsActive(pathname, c) ? " rsp-nav-active" : ""
-                        }`}
-                        aria-current={linkIsActive(pathname, c) ? "page" : undefined}
-                        onClick={() => setOpenIdx(null)}
-                      >
-                        {c.label}
-                      </Link>
-                    ))}
-                  </Fragment>
+                  <MenuBranch
+                    key={l.to}
+                    link={l}
+                    pathname={pathname}
+                    variant="desktop"
+                    onNavigate={() => setOpenIdx(null)}
+                  />
                 ))}
+
               </div>
             )}
           </li>

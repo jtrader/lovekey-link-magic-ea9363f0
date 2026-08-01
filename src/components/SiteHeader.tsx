@@ -62,6 +62,16 @@ export const areaMenus: AreaMenu[] = [
       { to: "/rsp/implementations", label: "Implementations" },
       { to: "/rsp/case-studies", label: "Case Studies" },
       { to: "/rsp/event-token", label: "Event Token" },
+      {
+        to: "/rsp#pulse",
+        label: "RSP Pulse",
+        children: [
+          { to: "/rsp#pulse", label: "Overview" },
+          { to: "/rsp#pulse-spec", label: "Open Spec (@rsp/pulse)" },
+          { to: "/rsp#pulse-strain", label: "Strain Engine (ESI)" },
+          { to: "/rsp#pulse-disaster-aid", label: "Disaster & Humanitarian Aid" },
+        ],
+      },
       { to: "/rsp/for-developers", label: "Developers" },
       {
         to: "/rsp/macro",

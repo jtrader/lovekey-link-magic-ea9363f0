@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 export default function DisasterAidPage() {
   return (
     <div className="min-h-screen bg-[#0B0F17] text-slate-200 font-sans px-6 py-12 max-w-5xl mx-auto">

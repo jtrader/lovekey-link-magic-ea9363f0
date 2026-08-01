@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import { PulseTelemetryFlow } from "@/components/rsp/PulseTelemetryFlow";
 export default function RSPPulseOverview() {
   return (
@@ -14,10 +13,10 @@ export default function RSPPulseOverview() {
       </div>
       <PulseTelemetryFlow />
       <div className="my-16">
-        <Link href="/rsp/pulse/applications/disaster-aid" className="p-6 bg-[#161B26] border border-slate-800 hover:border-emerald-500/50 block rounded-xl">
-          <h3 className="text-lg font-bold text-emerald-400 mb-2">Disaster & Humanitarian Aid Framework -></h3>
+        <a href="/rsp#pulse-disaster-aid" className="p-6 bg-[#161B26] border border-slate-800 hover:border-emerald-500/50 block rounded-xl">
+          <h3 className="text-lg font-bold text-emerald-400 mb-2">Disaster & Humanitarian Aid Framework -&gt;</h3>
           <p className="text-sm text-slate-400">Real-time population strain sensing across Crisis Compass, AidAngel, Guardian Guide, and FirstAidAngel.</p>
-        </Link>
+        </a>
       </div>
     </div>
   );

@@ -136,7 +136,10 @@ export function MacroShell({ children }: { children: React.ReactNode }) {
         <SiteHeader variant="macro" />
         <MacroNav />
         <MacroBreadcrumbs />
-        <main className="mx-auto max-w-5xl px-6 pb-24 pt-6 md:pb-12">{children}</main>
+        <main className="mx-auto max-w-5xl px-6 pb-24 pt-6 md:pb-12">
+          <MacroKeyTerms />
+          {children}
+        </main>
         <MacroFooter />
       </div>
     </GlossarySheetProvider>

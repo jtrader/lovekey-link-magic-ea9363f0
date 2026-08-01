@@ -121,9 +121,10 @@ function AdoptionPage() {
             <span className="ea-compare-tag">For businesses & workplaces</span>
             <h3>Capital and people protected</h3>
             <ul>
-              <li>No more paying for leads — or absorbing organic overflow — during periods of operational saturation.</li>
+              <li>No more paying for clicks purely to get past an incumbent ranked free for demand it cannot serve.</li>
               <li>Market mechanics that push back against chronic overwork instead of rewarding it.</li>
-              <li>Guaranteed baseline exposure across organic and paid results for capable operators, rather than survival by budget or domain age.</li>
+              <li>Organic exposure earned by real capacity rather than inherited by domain age — with paid reach optional on top, not the price of admission.</li>
+
               <li>A conversion advantage earned through lower friction, not coercive retargeting.</li>
             </ul>
           </div>

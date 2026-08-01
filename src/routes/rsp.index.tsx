@@ -64,6 +64,11 @@ const sections = [
     desc: "Install, core concepts and integration.",
   },
   { to: "/rsp/governance", label: "Governance", desc: "Tiers, credits and the burn clause." },
+  {
+    to: "/rsp/macro",
+    label: "Macro Equilibrium",
+    desc: "@rsp/macro: capacity-aware search and ad auctions.",
+  },
   { to: "/rsp/faq", label: "FAQ", desc: "Plain-language answers for visitors." },
 ] as const;
 

@@ -20,7 +20,7 @@ export const Route = createFileRoute("/rsp/ethical-auction/")({
       {
         property: "og:description",
         content:
-          "The natural successor to SEO & SEM: pooled intent, burned identifiers, and rotational exposure across organic and paid results that follows a business's real serviceability.",
+          "The natural successor to SEO & SEM: organic prominence earned by real capacity to serve instead of inherited free by incumbents, so capable operators stop paying for clicks to reach demand others cannot clear.",
       },
 
       { property: "og:type", content: "website" },

@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import chapterPdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
 import rspLogo from "@/assets/rsp-logo.png.asset.json";
-import { PulseTelemetryFlow } from "@/components/rsp/PulseTelemetryFlow";
 import {
   FlowCard,
   IconEye,
@@ -10,8 +9,6 @@ import {
   IconSync,
   IconClock,
   IconFlame,
-  IconShield,
-  IconHeart,
 } from "@/components/rsp-shared";
 
 export const Route = createFileRoute("/rsp/")({

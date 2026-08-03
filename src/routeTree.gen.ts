@@ -46,6 +46,7 @@ import { Route as RspMacroTelemetryRouteImport } from './routes/rsp_.macro.telem
 import { Route as RspMacroOverviewRouteImport } from './routes/rsp_.macro.overview'
 import { Route as RspMacroGovernanceRouteImport } from './routes/rsp_.macro.governance'
 import { Route as RspMacroCalibrationRouteImport } from './routes/rsp_.macro.calibration'
+import { Route as RspPulseSpecRouteImport } from './routes/rsp.pulse.spec'
 import { Route as RspEthicalAuctionIntentRouteImport } from './routes/rsp.ethical-auction.intent'
 import { Route as RspEthicalAuctionExperienceRouteImport } from './routes/rsp.ethical-auction.experience'
 import { Route as RspEthicalAuctionEquilibriumRouteImport } from './routes/rsp.ethical-auction.equilibrium'
@@ -240,6 +241,11 @@ const RspMacroCalibrationRoute = RspMacroCalibrationRouteImport.update({
   path: '/rsp/macro/calibration',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RspPulseSpecRoute = RspPulseSpecRouteImport.update({
+  id: '/pulse/spec',
+  path: '/pulse/spec',
+  getParentRoute: () => RspRoute,
+} as any)
 const RspEthicalAuctionIntentRoute = RspEthicalAuctionIntentRouteImport.update({
   id: '/intent',
   path: '/intent',
@@ -327,6 +333,7 @@ export interface FileRoutesByFullPath {
   '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp/pulse/spec': typeof RspPulseSpecRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp/macro/overview': typeof RspMacroOverviewRoute
@@ -372,6 +379,7 @@ export interface FileRoutesByTo {
   '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp/pulse/spec': typeof RspPulseSpecRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp/macro/overview': typeof RspMacroOverviewRoute
@@ -421,6 +429,7 @@ export interface FileRoutesById {
   '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp/pulse/spec': typeof RspPulseSpecRoute
   '/rsp_/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp_/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp_/macro/overview': typeof RspMacroOverviewRoute
@@ -470,6 +479,7 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/equilibrium'
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
+    | '/rsp/pulse/spec'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
     | '/rsp/macro/overview'
@@ -515,6 +525,7 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/equilibrium'
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
+    | '/rsp/pulse/spec'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
     | '/rsp/macro/overview'
@@ -563,6 +574,7 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/equilibrium'
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
+    | '/rsp/pulse/spec'
     | '/rsp_/macro/calibration'
     | '/rsp_/macro/governance'
     | '/rsp_/macro/overview'
@@ -861,6 +873,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspMacroCalibrationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp/pulse/spec': {
+      id: '/rsp/pulse/spec'
+      path: '/pulse/spec'
+      fullPath: '/rsp/pulse/spec'
+      preLoaderRoute: typeof RspPulseSpecRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/rsp/ethical-auction/intent': {
       id: '/rsp/ethical-auction/intent'
       path: '/intent'
@@ -978,6 +997,7 @@ interface RspRouteChildren {
   RspSpecCheckRoute: typeof RspSpecCheckRoute
   RspIndexRoute: typeof RspIndexRoute
   RspCaseStudiesSlugRoute: typeof RspCaseStudiesSlugRoute
+  RspPulseSpecRoute: typeof RspPulseSpecRoute
   RspCaseStudiesIndexRoute: typeof RspCaseStudiesIndexRoute
   RspPulseIndexRoute: typeof RspPulseIndexRoute
 }
@@ -998,6 +1018,7 @@ const RspRouteChildren: RspRouteChildren = {
   RspSpecCheckRoute: RspSpecCheckRoute,
   RspIndexRoute: RspIndexRoute,
   RspCaseStudiesSlugRoute: RspCaseStudiesSlugRoute,
+  RspPulseSpecRoute: RspPulseSpecRoute,
   RspCaseStudiesIndexRoute: RspCaseStudiesIndexRoute,
   RspPulseIndexRoute: RspPulseIndexRoute,
 }

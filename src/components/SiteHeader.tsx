@@ -25,6 +25,11 @@ export function isAuctionPath(pathname: string) {
   );
 }
 
+export function isPulsePath(pathname: string) {
+  return pathname === "/rsp/pulse" || pathname.startsWith("/rsp/pulse/");
+}
+
+
 type AreaLink = { to: string; label: string; exact?: boolean; children?: AreaLink[] };
 
 function linkIsActive(pathname: string, l: AreaLink) {

@@ -46,6 +46,7 @@ import { Route as RspMacroTelemetryRouteImport } from './routes/rsp_.macro.telem
 import { Route as RspMacroOverviewRouteImport } from './routes/rsp_.macro.overview'
 import { Route as RspMacroGovernanceRouteImport } from './routes/rsp_.macro.governance'
 import { Route as RspMacroCalibrationRouteImport } from './routes/rsp_.macro.calibration'
+import { Route as RspPulseStrainEngineRouteImport } from './routes/rsp.pulse.strain-engine'
 import { Route as RspPulseSpecRouteImport } from './routes/rsp.pulse.spec'
 import { Route as RspEthicalAuctionIntentRouteImport } from './routes/rsp.ethical-auction.intent'
 import { Route as RspEthicalAuctionExperienceRouteImport } from './routes/rsp.ethical-auction.experience'
@@ -241,6 +242,11 @@ const RspMacroCalibrationRoute = RspMacroCalibrationRouteImport.update({
   path: '/rsp/macro/calibration',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RspPulseStrainEngineRoute = RspPulseStrainEngineRouteImport.update({
+  id: '/pulse/strain-engine',
+  path: '/pulse/strain-engine',
+  getParentRoute: () => RspRoute,
+} as any)
 const RspPulseSpecRoute = RspPulseSpecRouteImport.update({
   id: '/pulse/spec',
   path: '/pulse/spec',
@@ -334,6 +340,7 @@ export interface FileRoutesByFullPath {
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
   '/rsp/pulse/spec': typeof RspPulseSpecRoute
+  '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp/macro/overview': typeof RspMacroOverviewRoute
@@ -380,6 +387,7 @@ export interface FileRoutesByTo {
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
   '/rsp/pulse/spec': typeof RspPulseSpecRoute
+  '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp/macro/overview': typeof RspMacroOverviewRoute
@@ -430,6 +438,7 @@ export interface FileRoutesById {
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
   '/rsp/pulse/spec': typeof RspPulseSpecRoute
+  '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
   '/rsp_/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp_/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp_/macro/overview': typeof RspMacroOverviewRoute
@@ -480,6 +489,7 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
     | '/rsp/pulse/spec'
+    | '/rsp/pulse/strain-engine'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
     | '/rsp/macro/overview'
@@ -526,6 +536,7 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
     | '/rsp/pulse/spec'
+    | '/rsp/pulse/strain-engine'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
     | '/rsp/macro/overview'
@@ -575,6 +586,7 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
     | '/rsp/pulse/spec'
+    | '/rsp/pulse/strain-engine'
     | '/rsp_/macro/calibration'
     | '/rsp_/macro/governance'
     | '/rsp_/macro/overview'
@@ -873,6 +885,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspMacroCalibrationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp/pulse/strain-engine': {
+      id: '/rsp/pulse/strain-engine'
+      path: '/pulse/strain-engine'
+      fullPath: '/rsp/pulse/strain-engine'
+      preLoaderRoute: typeof RspPulseStrainEngineRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/rsp/pulse/spec': {
       id: '/rsp/pulse/spec'
       path: '/pulse/spec'
@@ -998,6 +1017,7 @@ interface RspRouteChildren {
   RspIndexRoute: typeof RspIndexRoute
   RspCaseStudiesSlugRoute: typeof RspCaseStudiesSlugRoute
   RspPulseSpecRoute: typeof RspPulseSpecRoute
+  RspPulseStrainEngineRoute: typeof RspPulseStrainEngineRoute
   RspCaseStudiesIndexRoute: typeof RspCaseStudiesIndexRoute
   RspPulseIndexRoute: typeof RspPulseIndexRoute
 }
@@ -1019,6 +1039,7 @@ const RspRouteChildren: RspRouteChildren = {
   RspIndexRoute: RspIndexRoute,
   RspCaseStudiesSlugRoute: RspCaseStudiesSlugRoute,
   RspPulseSpecRoute: RspPulseSpecRoute,
+  RspPulseStrainEngineRoute: RspPulseStrainEngineRoute,
   RspCaseStudiesIndexRoute: RspCaseStudiesIndexRoute,
   RspPulseIndexRoute: RspPulseIndexRoute,
 }

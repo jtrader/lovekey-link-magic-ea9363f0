@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
-import { AVATAR_PATHS, SiteHeader, areaMenus, isAuctionPath } from "@/components/SiteHeader";
+import { AVATAR_PATHS, SiteHeader, areaMenus, isAuctionPath, isPulsePath } from "@/components/SiteHeader";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import { trackEvent } from "@/lib/analytics";
@@ -78,6 +78,10 @@ const PAGE_LABELS: Record<string, string> = {
   "/rsp/avatars": "Overview",
   "/rsp/avatar-creator": "Avatar Creator",
   "/rsp/spec-check": "Spec checklist",
+  "/rsp/pulse": "Overview",
+  "/rsp/pulse/spec": "Open Specification",
+  "/rsp/pulse/strain-engine": "Strain Engine (ESI)",
+  "/rsp/pulse/disaster-aid": "Disaster & Humanitarian Aid",
   "/rsp/ethical-auction": "Overview",
   "/rsp/ethical-auction/intent": "Pooled intent",
   "/rsp/ethical-auction/capacity": "Capacity & workforce",
@@ -97,6 +101,11 @@ function Breadcrumbs() {
   if (isAuctionPath(pathname)) {
     crumbs.push({ label: "Equilibrium Theory VEO", to: "/rsp/ethical-auction" });
     if (pathname !== "/rsp/ethical-auction") {
+      crumbs.push({ label: PAGE_LABELS[pathname] ?? "Page" });
+    }
+  } else if (isPulsePath(pathname)) {
+    crumbs.push({ label: "Pulse", to: "/rsp/pulse" });
+    if (pathname !== "/rsp/pulse") {
       crumbs.push({ label: PAGE_LABELS[pathname] ?? "Page" });
     }
   } else if (isAvatars) {

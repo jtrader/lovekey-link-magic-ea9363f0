@@ -38,6 +38,7 @@ import { Route as ApiAvatarGenerateRouteImport } from './routes/api/avatar-gener
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
 import { Route as RspMacroIndexRouteImport } from './routes/rsp_.macro.index'
+import { Route as RspPulseIndexRouteImport } from './routes/rsp.pulse.index'
 import { Route as RspEthicalAuctionIndexRouteImport } from './routes/rsp.ethical-auction.index'
 import { Route as RspCaseStudiesIndexRouteImport } from './routes/rsp.case-studies.index'
 import { Route as RspMacroVesFormulaRouteImport } from './routes/rsp_.macro.ves-formula'
@@ -45,6 +46,9 @@ import { Route as RspMacroTelemetryRouteImport } from './routes/rsp_.macro.telem
 import { Route as RspMacroOverviewRouteImport } from './routes/rsp_.macro.overview'
 import { Route as RspMacroGovernanceRouteImport } from './routes/rsp_.macro.governance'
 import { Route as RspMacroCalibrationRouteImport } from './routes/rsp_.macro.calibration'
+import { Route as RspPulseStrainEngineRouteImport } from './routes/rsp.pulse.strain-engine'
+import { Route as RspPulseSpecRouteImport } from './routes/rsp.pulse.spec'
+import { Route as RspPulseDisasterAidRouteImport } from './routes/rsp.pulse.disaster-aid'
 import { Route as RspEthicalAuctionIntentRouteImport } from './routes/rsp.ethical-auction.intent'
 import { Route as RspEthicalAuctionExperienceRouteImport } from './routes/rsp.ethical-auction.experience'
 import { Route as RspEthicalAuctionEquilibriumRouteImport } from './routes/rsp.ethical-auction.equilibrium'
@@ -199,6 +203,11 @@ const RspMacroIndexRoute = RspMacroIndexRouteImport.update({
   path: '/rsp/macro/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RspPulseIndexRoute = RspPulseIndexRouteImport.update({
+  id: '/pulse/',
+  path: '/pulse/',
+  getParentRoute: () => RspRoute,
+} as any)
 const RspEthicalAuctionIndexRoute = RspEthicalAuctionIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -233,6 +242,21 @@ const RspMacroCalibrationRoute = RspMacroCalibrationRouteImport.update({
   id: '/rsp_/macro/calibration',
   path: '/rsp/macro/calibration',
   getParentRoute: () => rootRouteImport,
+} as any)
+const RspPulseStrainEngineRoute = RspPulseStrainEngineRouteImport.update({
+  id: '/pulse/strain-engine',
+  path: '/pulse/strain-engine',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspPulseSpecRoute = RspPulseSpecRouteImport.update({
+  id: '/pulse/spec',
+  path: '/pulse/spec',
+  getParentRoute: () => RspRoute,
+} as any)
+const RspPulseDisasterAidRoute = RspPulseDisasterAidRouteImport.update({
+  id: '/pulse/disaster-aid',
+  path: '/pulse/disaster-aid',
+  getParentRoute: () => RspRoute,
 } as any)
 const RspEthicalAuctionIntentRoute = RspEthicalAuctionIntentRouteImport.update({
   id: '/intent',
@@ -321,6 +345,9 @@ export interface FileRoutesByFullPath {
   '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp/pulse/disaster-aid': typeof RspPulseDisasterAidRoute
+  '/rsp/pulse/spec': typeof RspPulseSpecRoute
+  '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp/macro/overview': typeof RspMacroOverviewRoute
@@ -328,6 +355,7 @@ export interface FileRoutesByFullPath {
   '/rsp/macro/ves-formula': typeof RspMacroVesFormulaRoute
   '/rsp/case-studies/': typeof RspCaseStudiesIndexRoute
   '/rsp/ethical-auction/': typeof RspEthicalAuctionIndexRoute
+  '/rsp/pulse/': typeof RspPulseIndexRoute
   '/rsp/macro/': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -365,6 +393,9 @@ export interface FileRoutesByTo {
   '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp/pulse/disaster-aid': typeof RspPulseDisasterAidRoute
+  '/rsp/pulse/spec': typeof RspPulseSpecRoute
+  '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp/macro/overview': typeof RspMacroOverviewRoute
@@ -372,6 +403,7 @@ export interface FileRoutesByTo {
   '/rsp/macro/ves-formula': typeof RspMacroVesFormulaRoute
   '/rsp/case-studies': typeof RspCaseStudiesIndexRoute
   '/rsp/ethical-auction': typeof RspEthicalAuctionIndexRoute
+  '/rsp/pulse': typeof RspPulseIndexRoute
   '/rsp/macro': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -413,6 +445,9 @@ export interface FileRoutesById {
   '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp/pulse/disaster-aid': typeof RspPulseDisasterAidRoute
+  '/rsp/pulse/spec': typeof RspPulseSpecRoute
+  '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
   '/rsp_/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp_/macro/governance': typeof RspMacroGovernanceRoute
   '/rsp_/macro/overview': typeof RspMacroOverviewRoute
@@ -420,6 +455,7 @@ export interface FileRoutesById {
   '/rsp_/macro/ves-formula': typeof RspMacroVesFormulaRoute
   '/rsp/case-studies/': typeof RspCaseStudiesIndexRoute
   '/rsp/ethical-auction/': typeof RspEthicalAuctionIndexRoute
+  '/rsp/pulse/': typeof RspPulseIndexRoute
   '/rsp_/macro/': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -461,6 +497,9 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/equilibrium'
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
+    | '/rsp/pulse/disaster-aid'
+    | '/rsp/pulse/spec'
+    | '/rsp/pulse/strain-engine'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
     | '/rsp/macro/overview'
@@ -468,6 +507,7 @@ export interface FileRouteTypes {
     | '/rsp/macro/ves-formula'
     | '/rsp/case-studies/'
     | '/rsp/ethical-auction/'
+    | '/rsp/pulse/'
     | '/rsp/macro/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
@@ -505,6 +545,9 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/equilibrium'
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
+    | '/rsp/pulse/disaster-aid'
+    | '/rsp/pulse/spec'
+    | '/rsp/pulse/strain-engine'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
     | '/rsp/macro/overview'
@@ -512,6 +555,7 @@ export interface FileRouteTypes {
     | '/rsp/macro/ves-formula'
     | '/rsp/case-studies'
     | '/rsp/ethical-auction'
+    | '/rsp/pulse'
     | '/rsp/macro'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
@@ -552,6 +596,9 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/equilibrium'
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
+    | '/rsp/pulse/disaster-aid'
+    | '/rsp/pulse/spec'
+    | '/rsp/pulse/strain-engine'
     | '/rsp_/macro/calibration'
     | '/rsp_/macro/governance'
     | '/rsp_/macro/overview'
@@ -559,6 +606,7 @@ export interface FileRouteTypes {
     | '/rsp_/macro/ves-formula'
     | '/rsp/case-studies/'
     | '/rsp/ethical-auction/'
+    | '/rsp/pulse/'
     | '/rsp_/macro/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
@@ -793,6 +841,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspMacroIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp/pulse/': {
+      id: '/rsp/pulse/'
+      path: '/pulse'
+      fullPath: '/rsp/pulse/'
+      preLoaderRoute: typeof RspPulseIndexRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/rsp/ethical-auction/': {
       id: '/rsp/ethical-auction/'
       path: '/'
@@ -841,6 +896,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/rsp/macro/calibration'
       preLoaderRoute: typeof RspMacroCalibrationRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/rsp/pulse/strain-engine': {
+      id: '/rsp/pulse/strain-engine'
+      path: '/pulse/strain-engine'
+      fullPath: '/rsp/pulse/strain-engine'
+      preLoaderRoute: typeof RspPulseStrainEngineRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/pulse/spec': {
+      id: '/rsp/pulse/spec'
+      path: '/pulse/spec'
+      fullPath: '/rsp/pulse/spec'
+      preLoaderRoute: typeof RspPulseSpecRouteImport
+      parentRoute: typeof RspRoute
+    }
+    '/rsp/pulse/disaster-aid': {
+      id: '/rsp/pulse/disaster-aid'
+      path: '/pulse/disaster-aid'
+      fullPath: '/rsp/pulse/disaster-aid'
+      preLoaderRoute: typeof RspPulseDisasterAidRouteImport
+      parentRoute: typeof RspRoute
     }
     '/rsp/ethical-auction/intent': {
       id: '/rsp/ethical-auction/intent'
@@ -959,7 +1035,11 @@ interface RspRouteChildren {
   RspSpecCheckRoute: typeof RspSpecCheckRoute
   RspIndexRoute: typeof RspIndexRoute
   RspCaseStudiesSlugRoute: typeof RspCaseStudiesSlugRoute
+  RspPulseDisasterAidRoute: typeof RspPulseDisasterAidRoute
+  RspPulseSpecRoute: typeof RspPulseSpecRoute
+  RspPulseStrainEngineRoute: typeof RspPulseStrainEngineRoute
   RspCaseStudiesIndexRoute: typeof RspCaseStudiesIndexRoute
+  RspPulseIndexRoute: typeof RspPulseIndexRoute
 }
 
 const RspRouteChildren: RspRouteChildren = {
@@ -978,7 +1058,11 @@ const RspRouteChildren: RspRouteChildren = {
   RspSpecCheckRoute: RspSpecCheckRoute,
   RspIndexRoute: RspIndexRoute,
   RspCaseStudiesSlugRoute: RspCaseStudiesSlugRoute,
+  RspPulseDisasterAidRoute: RspPulseDisasterAidRoute,
+  RspPulseSpecRoute: RspPulseSpecRoute,
+  RspPulseStrainEngineRoute: RspPulseStrainEngineRoute,
   RspCaseStudiesIndexRoute: RspCaseStudiesIndexRoute,
+  RspPulseIndexRoute: RspPulseIndexRoute,
 }
 
 const RspRouteWithChildren = RspRoute._addFileChildren(RspRouteChildren)
@@ -1009,13 +1093,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

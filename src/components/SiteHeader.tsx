@@ -60,23 +60,13 @@ export const areaMenus: AreaMenu[] = [
   {
     label: "RSP",
     to: "/rsp",
-    match: (p) => p !== "/" && !isAvatarPath(p) && !isAuctionPath(p),
+    match: (p) => p !== "/" && !isAvatarPath(p) && !isAuctionPath(p) && !isPulsePath(p),
     links: [
       { to: "/rsp", label: "Overview", exact: true },
       { to: "/rsp/principles", label: "Principles" },
       { to: "/rsp/implementations", label: "Implementations" },
       { to: "/rsp/case-studies", label: "Case Studies" },
       { to: "/rsp/event-token", label: "Event Token" },
-      {
-        to: "/rsp#pulse",
-        label: "RSP Pulse",
-        children: [
-          { to: "/rsp#pulse", label: "Overview" },
-          { to: "/rsp#pulse-spec", label: "Open Spec (@rsp/pulse)" },
-          { to: "/rsp#pulse-strain", label: "Strain Engine (ESI)" },
-          { to: "/rsp#pulse-disaster-aid", label: "Disaster & Humanitarian Aid" },
-        ],
-      },
       { to: "/rsp/for-developers", label: "Developers" },
       {
         to: "/rsp/macro",
@@ -93,6 +83,18 @@ export const areaMenus: AreaMenu[] = [
       { to: "/rsp/governance", label: "Governance" },
     ],
   },
+  {
+    label: "Pulse",
+    to: "/rsp/pulse",
+    match: isPulsePath,
+    links: [
+      { to: "/rsp/pulse", label: "Overview", exact: true },
+      { to: "/rsp/pulse/spec", label: "Open Spec (@rsp/pulse)" },
+      { to: "/rsp/pulse/strain-engine", label: "Strain Engine (ESI)" },
+      { to: "/rsp/pulse/disaster-aid", label: "Disaster & Humanitarian Aid" },
+    ],
+  },
+
   {
     label: "Equilibrium Theory VEO",
     to: "/rsp/ethical-auction",

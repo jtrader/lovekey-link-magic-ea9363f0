@@ -48,6 +48,7 @@ import { Route as RspMacroGovernanceRouteImport } from './routes/rsp_.macro.gove
 import { Route as RspMacroCalibrationRouteImport } from './routes/rsp_.macro.calibration'
 import { Route as RspPulseStrainEngineRouteImport } from './routes/rsp.pulse.strain-engine'
 import { Route as RspPulseSpecRouteImport } from './routes/rsp.pulse.spec'
+import { Route as RspPulseDisasterAidRouteImport } from './routes/rsp.pulse.disaster-aid'
 import { Route as RspEthicalAuctionIntentRouteImport } from './routes/rsp.ethical-auction.intent'
 import { Route as RspEthicalAuctionExperienceRouteImport } from './routes/rsp.ethical-auction.experience'
 import { Route as RspEthicalAuctionEquilibriumRouteImport } from './routes/rsp.ethical-auction.equilibrium'
@@ -252,6 +253,11 @@ const RspPulseSpecRoute = RspPulseSpecRouteImport.update({
   path: '/pulse/spec',
   getParentRoute: () => RspRoute,
 } as any)
+const RspPulseDisasterAidRoute = RspPulseDisasterAidRouteImport.update({
+  id: '/pulse/disaster-aid',
+  path: '/pulse/disaster-aid',
+  getParentRoute: () => RspRoute,
+} as any)
 const RspEthicalAuctionIntentRoute = RspEthicalAuctionIntentRouteImport.update({
   id: '/intent',
   path: '/intent',
@@ -339,6 +345,7 @@ export interface FileRoutesByFullPath {
   '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp/pulse/disaster-aid': typeof RspPulseDisasterAidRoute
   '/rsp/pulse/spec': typeof RspPulseSpecRoute
   '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
@@ -386,6 +393,7 @@ export interface FileRoutesByTo {
   '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp/pulse/disaster-aid': typeof RspPulseDisasterAidRoute
   '/rsp/pulse/spec': typeof RspPulseSpecRoute
   '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
@@ -437,6 +445,7 @@ export interface FileRoutesById {
   '/rsp/ethical-auction/equilibrium': typeof RspEthicalAuctionEquilibriumRoute
   '/rsp/ethical-auction/experience': typeof RspEthicalAuctionExperienceRoute
   '/rsp/ethical-auction/intent': typeof RspEthicalAuctionIntentRoute
+  '/rsp/pulse/disaster-aid': typeof RspPulseDisasterAidRoute
   '/rsp/pulse/spec': typeof RspPulseSpecRoute
   '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
   '/rsp_/macro/calibration': typeof RspMacroCalibrationRoute
@@ -488,6 +497,7 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/equilibrium'
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
+    | '/rsp/pulse/disaster-aid'
     | '/rsp/pulse/spec'
     | '/rsp/pulse/strain-engine'
     | '/rsp/macro/calibration'
@@ -535,6 +545,7 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/equilibrium'
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
+    | '/rsp/pulse/disaster-aid'
     | '/rsp/pulse/spec'
     | '/rsp/pulse/strain-engine'
     | '/rsp/macro/calibration'
@@ -585,6 +596,7 @@ export interface FileRouteTypes {
     | '/rsp/ethical-auction/equilibrium'
     | '/rsp/ethical-auction/experience'
     | '/rsp/ethical-auction/intent'
+    | '/rsp/pulse/disaster-aid'
     | '/rsp/pulse/spec'
     | '/rsp/pulse/strain-engine'
     | '/rsp_/macro/calibration'
@@ -899,6 +911,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspPulseSpecRouteImport
       parentRoute: typeof RspRoute
     }
+    '/rsp/pulse/disaster-aid': {
+      id: '/rsp/pulse/disaster-aid'
+      path: '/pulse/disaster-aid'
+      fullPath: '/rsp/pulse/disaster-aid'
+      preLoaderRoute: typeof RspPulseDisasterAidRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/rsp/ethical-auction/intent': {
       id: '/rsp/ethical-auction/intent'
       path: '/intent'
@@ -1016,6 +1035,7 @@ interface RspRouteChildren {
   RspSpecCheckRoute: typeof RspSpecCheckRoute
   RspIndexRoute: typeof RspIndexRoute
   RspCaseStudiesSlugRoute: typeof RspCaseStudiesSlugRoute
+  RspPulseDisasterAidRoute: typeof RspPulseDisasterAidRoute
   RspPulseSpecRoute: typeof RspPulseSpecRoute
   RspPulseStrainEngineRoute: typeof RspPulseStrainEngineRoute
   RspCaseStudiesIndexRoute: typeof RspCaseStudiesIndexRoute
@@ -1038,6 +1058,7 @@ const RspRouteChildren: RspRouteChildren = {
   RspSpecCheckRoute: RspSpecCheckRoute,
   RspIndexRoute: RspIndexRoute,
   RspCaseStudiesSlugRoute: RspCaseStudiesSlugRoute,
+  RspPulseDisasterAidRoute: RspPulseDisasterAidRoute,
   RspPulseSpecRoute: RspPulseSpecRoute,
   RspPulseStrainEngineRoute: RspPulseStrainEngineRoute,
   RspCaseStudiesIndexRoute: RspCaseStudiesIndexRoute,

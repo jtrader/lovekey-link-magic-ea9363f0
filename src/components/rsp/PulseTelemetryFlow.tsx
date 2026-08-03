@@ -1,12 +1,55 @@
-import React from "react";
-export const PulseTelemetryFlow: React.FC = () => (
-  <div className="w-full bg-[#161B26] p-6 rounded-xl border border-slate-800 text-slate-200 my-8">
-    <h4 className="text-xs font-mono uppercase tracking-widest text-emerald-400 mb-4">@rsp/pulse Telemetry Architecture — Edge Signal to Anonymized Pool</h4>
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center text-xs font-mono">
-      <div className="p-4 bg-[#0B0F17] rounded-lg border border-slate-700"><span className="text-amber-400 block font-bold mb-1">1. MULTI-LINGUAL INTENT</span><span>100+ Countries / 50 Languages Edge Actions</span></div>
-      <div className="p-4 bg-[#0B0F17] rounded-lg border border-emerald-500/30"><span className="text-emerald-400 block font-bold mb-1">2. BURN-ON-WRITE</span><span>PII, IP & Coordinates Destroyed at Edge</span></div>
-      <div className="p-4 bg-[#0B0F17] rounded-lg border border-slate-700"><span className="text-blue-400 block font-bold mb-1">3. K-ANONYMITY POOL</span><span>Regional Aggregation (N &ge; 50 Threshold)</span></div>
-      <div className="p-4 bg-[#0B0F17] rounded-lg border border-slate-700"><span className="text-purple-400 block font-bold mb-1">4. MACRO ESI & BALANCE</span><span>Resource Allocation for Institutions</span></div>
+const STEPS = [
+  {
+    n: "1",
+    title: "Multi-lingual intent",
+    body: "100+ countries / 50 languages of edge actions",
+  },
+  { n: "2", title: "Burn-on-write", body: "PII, IP & coordinates destroyed at the edge" },
+  { n: "3", title: "k-anonymity pool", body: "Regional aggregation (N ≥ 50 threshold)" },
+  { n: "4", title: "Macro ESI & balance", body: "Resource allocation for institutions" },
+];
+
+export function PulseTelemetryFlow() {
+  return (
+    <div className="rsp-pulse-flow">
+      <div className="rsp-eyebrow" style={{ marginBottom: 14 }}>
+        @rsp/pulse telemetry architecture — edge signal to anonymised pool
+      </div>
+      <div className="rsp-pulse-flow-grid">
+        {STEPS.map((s) => (
+          <div className="rsp-pulse-step" key={s.n}>
+            <span className="rsp-pulse-step-n">{s.n}</span>
+            <span className="rsp-pulse-step-title">{s.title}</span>
+            <span className="rsp-pulse-step-body">{s.body}</span>
+          </div>
+        ))}
+      </div>
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        .rsp-pulse-flow {
+          max-width: 1100px; margin: 32px auto;
+          border: 1px solid var(--rsp-border); border-radius: var(--rsp-radius);
+          background: var(--rsp-surface); padding: 24px 26px;
+        }
+        .rsp-pulse-flow-grid {
+          display: grid; gap: 14px;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        .rsp-pulse-step {
+          display: flex; flex-direction: column; gap: 6px;
+          padding: 18px 18px; border-radius: 10px;
+          border: 1px solid var(--rsp-border); background: var(--rsp-bg-warm);
+        }
+        .rsp-pulse-step-n {
+          font-family: 'IBM Plex Mono', ui-monospace, monospace;
+          font-size: .72rem; letter-spacing: .12em; color: var(--rsp-primary); font-weight: 700;
+        }
+        .rsp-pulse-step-title { font-weight: 600; color: var(--rsp-text); font-size: .95rem; }
+        .rsp-pulse-step-body { font-size: .85rem; line-height: 1.5; color: var(--rsp-text-muted); }
+      `,
+        }}
+      />
     </div>
-  </div>
-);
+  );
+}

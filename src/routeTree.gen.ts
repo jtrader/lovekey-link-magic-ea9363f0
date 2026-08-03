@@ -38,6 +38,7 @@ import { Route as ApiAvatarGenerateRouteImport } from './routes/api/avatar-gener
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
 import { Route as RspMacroIndexRouteImport } from './routes/rsp_.macro.index'
+import { Route as RspPulseIndexRouteImport } from './routes/rsp.pulse.index'
 import { Route as RspEthicalAuctionIndexRouteImport } from './routes/rsp.ethical-auction.index'
 import { Route as RspCaseStudiesIndexRouteImport } from './routes/rsp.case-studies.index'
 import { Route as RspMacroVesFormulaRouteImport } from './routes/rsp_.macro.ves-formula'
@@ -199,6 +200,11 @@ const RspMacroIndexRoute = RspMacroIndexRouteImport.update({
   path: '/rsp/macro/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RspPulseIndexRoute = RspPulseIndexRouteImport.update({
+  id: '/pulse/',
+  path: '/pulse/',
+  getParentRoute: () => RspRoute,
+} as any)
 const RspEthicalAuctionIndexRoute = RspEthicalAuctionIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -328,6 +334,7 @@ export interface FileRoutesByFullPath {
   '/rsp/macro/ves-formula': typeof RspMacroVesFormulaRoute
   '/rsp/case-studies/': typeof RspCaseStudiesIndexRoute
   '/rsp/ethical-auction/': typeof RspEthicalAuctionIndexRoute
+  '/rsp/pulse/': typeof RspPulseIndexRoute
   '/rsp/macro/': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -372,6 +379,7 @@ export interface FileRoutesByTo {
   '/rsp/macro/ves-formula': typeof RspMacroVesFormulaRoute
   '/rsp/case-studies': typeof RspCaseStudiesIndexRoute
   '/rsp/ethical-auction': typeof RspEthicalAuctionIndexRoute
+  '/rsp/pulse': typeof RspPulseIndexRoute
   '/rsp/macro': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -420,6 +428,7 @@ export interface FileRoutesById {
   '/rsp_/macro/ves-formula': typeof RspMacroVesFormulaRoute
   '/rsp/case-studies/': typeof RspCaseStudiesIndexRoute
   '/rsp/ethical-auction/': typeof RspEthicalAuctionIndexRoute
+  '/rsp/pulse/': typeof RspPulseIndexRoute
   '/rsp_/macro/': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
@@ -468,6 +477,7 @@ export interface FileRouteTypes {
     | '/rsp/macro/ves-formula'
     | '/rsp/case-studies/'
     | '/rsp/ethical-auction/'
+    | '/rsp/pulse/'
     | '/rsp/macro/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
@@ -512,6 +522,7 @@ export interface FileRouteTypes {
     | '/rsp/macro/ves-formula'
     | '/rsp/case-studies'
     | '/rsp/ethical-auction'
+    | '/rsp/pulse'
     | '/rsp/macro'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
@@ -559,6 +570,7 @@ export interface FileRouteTypes {
     | '/rsp_/macro/ves-formula'
     | '/rsp/case-studies/'
     | '/rsp/ethical-auction/'
+    | '/rsp/pulse/'
     | '/rsp_/macro/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
@@ -793,6 +805,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspMacroIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp/pulse/': {
+      id: '/rsp/pulse/'
+      path: '/pulse'
+      fullPath: '/rsp/pulse/'
+      preLoaderRoute: typeof RspPulseIndexRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/rsp/ethical-auction/': {
       id: '/rsp/ethical-auction/'
       path: '/'
@@ -960,6 +979,7 @@ interface RspRouteChildren {
   RspIndexRoute: typeof RspIndexRoute
   RspCaseStudiesSlugRoute: typeof RspCaseStudiesSlugRoute
   RspCaseStudiesIndexRoute: typeof RspCaseStudiesIndexRoute
+  RspPulseIndexRoute: typeof RspPulseIndexRoute
 }
 
 const RspRouteChildren: RspRouteChildren = {
@@ -979,6 +999,7 @@ const RspRouteChildren: RspRouteChildren = {
   RspIndexRoute: RspIndexRoute,
   RspCaseStudiesSlugRoute: RspCaseStudiesSlugRoute,
   RspCaseStudiesIndexRoute: RspCaseStudiesIndexRoute,
+  RspPulseIndexRoute: RspPulseIndexRoute,
 }
 
 const RspRouteWithChildren = RspRoute._addFileChildren(RspRouteChildren)

@@ -73,7 +73,7 @@ const sections = [
     desc: "@rsp/macro: capacity-aware search and ad auctions.",
   },
   {
-    to: "/rsp#pulse",
+    to: "/rsp/pulse",
     label: "@rsp/pulse Standard",
     desc: "Global population pulse & resource allocation standard.",
   },

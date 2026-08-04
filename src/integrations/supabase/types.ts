@@ -1188,6 +1188,45 @@ export type Database = {
           },
         ]
       }
+      regional_telemetry: {
+        Row: {
+          capacity: number
+          country_code: string
+          id: string
+          n_count: number
+          region_id: string
+          region_label: string
+          surgency: number
+          updated_at: string
+          v_baseline: number
+          v_current: number
+        }
+        Insert: {
+          capacity?: number
+          country_code: string
+          id?: string
+          n_count?: number
+          region_id: string
+          region_label: string
+          surgency?: number
+          updated_at?: string
+          v_baseline?: number
+          v_current?: number
+        }
+        Update: {
+          capacity?: number
+          country_code?: string
+          id?: string
+          n_count?: number
+          region_id?: string
+          region_label?: string
+          surgency?: number
+          updated_at?: string
+          v_baseline?: number
+          v_current?: number
+        }
+        Relationships: []
+      }
       rsp_consent_events: {
         Row: {
           actor_user_id: string

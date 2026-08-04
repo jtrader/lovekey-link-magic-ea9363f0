@@ -79,6 +79,7 @@ const PAGE_LABELS: Record<string, string> = {
   "/rsp/avatar-creator": "Avatar Creator",
   "/rsp/spec-check": "Spec checklist",
   "/rsp/pulse": "Overview",
+  "/rsp/pulse/summary": "Pulse Server Summary",
   "/rsp/pulse/server": "RSP Pulse Server",
   "/rsp/pulse/telemetry": "Global Telemetry",
   "/rsp/pulse/allocation": "Resource Allocation",

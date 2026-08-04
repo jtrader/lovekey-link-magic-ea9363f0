@@ -89,6 +89,7 @@ export const areaMenus: AreaMenu[] = [
     match: isPulsePath,
     links: [
       { to: "/rsp/pulse", label: "Overview", exact: true },
+      { to: "/rsp/pulse/summary", label: "Pulse Server — Summary" },
       { to: "/rsp/pulse/server", label: "RSP Pulse Server" },
       { to: "/rsp/pulse/telemetry", label: "Global Telemetry" },
       { to: "/rsp/pulse/allocation", label: "Resource Allocation" },

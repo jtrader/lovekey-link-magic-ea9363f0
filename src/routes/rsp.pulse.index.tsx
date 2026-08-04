@@ -24,6 +24,24 @@ export const Route = createFileRoute("/rsp/pulse/")({
 
 const domains = [
   {
+    to: "/rsp/pulse/server",
+    icon: <IconSync />,
+    title: "RSP Pulse Server →",
+    body: "Live ambient node health per region, with k-anonymity escrow enforced before anything renders.",
+  },
+  {
+    to: "/rsp/pulse/telemetry",
+    icon: <IconScale />,
+    title: "Global Telemetry →",
+    body: "Macro ESI across every reporting pool, with sealed regions shown as escrowed.",
+  },
+  {
+    to: "/rsp/pulse/allocation",
+    icon: <IconHeart />,
+    title: "Resource Allocation →",
+    body: "Institutional balancing: route responder capacity toward strain, never toward identity.",
+  },
+  {
     to: "/rsp/pulse/spec",
     icon: <IconShield />,
     title: "Open Specification →",

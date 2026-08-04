@@ -24,6 +24,12 @@ export const Route = createFileRoute("/rsp/pulse/")({
 
 const domains = [
   {
+    to: "/rsp/pulse/summary",
+    icon: <IconShield />,
+    title: "Pulse Server Summary →",
+    body: "An editorial walkthrough of the strain engine, its scope, edge escrow, timing model and humanitarian purpose.",
+  },
+  {
     to: "/rsp/pulse/server",
     icon: <IconSync />,
     title: "RSP Pulse Server →",

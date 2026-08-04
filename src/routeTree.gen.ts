@@ -47,6 +47,7 @@ import { Route as RspMacroOverviewRouteImport } from './routes/rsp_.macro.overvi
 import { Route as RspMacroGovernanceRouteImport } from './routes/rsp_.macro.governance'
 import { Route as RspMacroCalibrationRouteImport } from './routes/rsp_.macro.calibration'
 import { Route as RspPulseTelemetryRouteImport } from './routes/rsp.pulse.telemetry'
+import { Route as RspPulseSummaryRouteImport } from './routes/rsp.pulse.summary'
 import { Route as RspPulseStrainEngineRouteImport } from './routes/rsp.pulse.strain-engine'
 import { Route as RspPulseSpecRouteImport } from './routes/rsp.pulse.spec'
 import { Route as RspPulseServerRouteImport } from './routes/rsp.pulse.server'
@@ -251,6 +252,11 @@ const RspPulseTelemetryRoute = RspPulseTelemetryRouteImport.update({
   path: '/pulse/telemetry',
   getParentRoute: () => RspRoute,
 } as any)
+const RspPulseSummaryRoute = RspPulseSummaryRouteImport.update({
+  id: '/pulse/summary',
+  path: '/pulse/summary',
+  getParentRoute: () => RspRoute,
+} as any)
 const RspPulseStrainEngineRoute = RspPulseStrainEngineRouteImport.update({
   id: '/pulse/strain-engine',
   path: '/pulse/strain-engine',
@@ -368,6 +374,7 @@ export interface FileRoutesByFullPath {
   '/rsp/pulse/server': typeof RspPulseServerRoute
   '/rsp/pulse/spec': typeof RspPulseSpecRoute
   '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
+  '/rsp/pulse/summary': typeof RspPulseSummaryRoute
   '/rsp/pulse/telemetry': typeof RspPulseTelemetryRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
@@ -419,6 +426,7 @@ export interface FileRoutesByTo {
   '/rsp/pulse/server': typeof RspPulseServerRoute
   '/rsp/pulse/spec': typeof RspPulseSpecRoute
   '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
+  '/rsp/pulse/summary': typeof RspPulseSummaryRoute
   '/rsp/pulse/telemetry': typeof RspPulseTelemetryRoute
   '/rsp/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp/macro/governance': typeof RspMacroGovernanceRoute
@@ -474,6 +482,7 @@ export interface FileRoutesById {
   '/rsp/pulse/server': typeof RspPulseServerRoute
   '/rsp/pulse/spec': typeof RspPulseSpecRoute
   '/rsp/pulse/strain-engine': typeof RspPulseStrainEngineRoute
+  '/rsp/pulse/summary': typeof RspPulseSummaryRoute
   '/rsp/pulse/telemetry': typeof RspPulseTelemetryRoute
   '/rsp_/macro/calibration': typeof RspMacroCalibrationRoute
   '/rsp_/macro/governance': typeof RspMacroGovernanceRoute
@@ -529,6 +538,7 @@ export interface FileRouteTypes {
     | '/rsp/pulse/server'
     | '/rsp/pulse/spec'
     | '/rsp/pulse/strain-engine'
+    | '/rsp/pulse/summary'
     | '/rsp/pulse/telemetry'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
@@ -580,6 +590,7 @@ export interface FileRouteTypes {
     | '/rsp/pulse/server'
     | '/rsp/pulse/spec'
     | '/rsp/pulse/strain-engine'
+    | '/rsp/pulse/summary'
     | '/rsp/pulse/telemetry'
     | '/rsp/macro/calibration'
     | '/rsp/macro/governance'
@@ -634,6 +645,7 @@ export interface FileRouteTypes {
     | '/rsp/pulse/server'
     | '/rsp/pulse/spec'
     | '/rsp/pulse/strain-engine'
+    | '/rsp/pulse/summary'
     | '/rsp/pulse/telemetry'
     | '/rsp_/macro/calibration'
     | '/rsp_/macro/governance'
@@ -940,6 +952,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspPulseTelemetryRouteImport
       parentRoute: typeof RspRoute
     }
+    '/rsp/pulse/summary': {
+      id: '/rsp/pulse/summary'
+      path: '/pulse/summary'
+      fullPath: '/rsp/pulse/summary'
+      preLoaderRoute: typeof RspPulseSummaryRouteImport
+      parentRoute: typeof RspRoute
+    }
     '/rsp/pulse/strain-engine': {
       id: '/rsp/pulse/strain-engine'
       path: '/pulse/strain-engine'
@@ -1097,6 +1116,7 @@ interface RspRouteChildren {
   RspPulseServerRoute: typeof RspPulseServerRoute
   RspPulseSpecRoute: typeof RspPulseSpecRoute
   RspPulseStrainEngineRoute: typeof RspPulseStrainEngineRoute
+  RspPulseSummaryRoute: typeof RspPulseSummaryRoute
   RspPulseTelemetryRoute: typeof RspPulseTelemetryRoute
   RspCaseStudiesIndexRoute: typeof RspCaseStudiesIndexRoute
   RspPulseIndexRoute: typeof RspPulseIndexRoute
@@ -1123,6 +1143,7 @@ const RspRouteChildren: RspRouteChildren = {
   RspPulseServerRoute: RspPulseServerRoute,
   RspPulseSpecRoute: RspPulseSpecRoute,
   RspPulseStrainEngineRoute: RspPulseStrainEngineRoute,
+  RspPulseSummaryRoute: RspPulseSummaryRoute,
   RspPulseTelemetryRoute: RspPulseTelemetryRoute,
   RspCaseStudiesIndexRoute: RspCaseStudiesIndexRoute,
   RspPulseIndexRoute: RspPulseIndexRoute,

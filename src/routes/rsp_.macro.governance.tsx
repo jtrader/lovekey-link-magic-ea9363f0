@@ -1,4 +1,4 @@
-import { createRouteFn } from "@/lib/tanstack-shim";
+import { createFileRoute } from "@tanstack/react-router";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
 import {
   IconLock,
@@ -7,7 +7,7 @@ import {
   MacroIconBadge,
 } from "@/components/rsp-macro/MacroVisuals";
 
-export const Route = createRouteFn("/rsp_/macro/governance")({
+export const Route = createFileRoute("/rsp_/macro/governance")({
   head: () => ({
     meta: [
       { title: "Privacy & RSP Safeguards — @rsp/macro · Love Key Link" },

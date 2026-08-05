@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Nucleus } from "@/components/Nucleus";
 import lovekeyMark from "@/assets/lovekey-mark.png";
@@ -17,6 +18,26 @@ import {
   Menu,
   X,
 } from "lucide-react";
+
+export const Route = createFileRoute("/")({
+  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Love Key Link — Are my people okay?" },
+      {
+        name: "description",
+        content:
+          "Love Key Link is the warm public entry point for one profile, multiple hubs, gentle presence, and support without surveillance.",
+      },
+      { property: "og:title", content: "Love Key Link — Coordination, not surveillance" },
+      {
+        property: "og:description",
+        content:
+          "One profile. Multiple hubs. Contextual presence and help routing that respects consent, privacy, and real-world care.",
+      },
+    ],
+  }),
+});
 
 const features = [
   {
@@ -145,7 +166,7 @@ const homepageHubMembers = [
   },
 ];
 
-export function Index() {
+function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
   const [howProgress, setHowProgress] = useState(0);

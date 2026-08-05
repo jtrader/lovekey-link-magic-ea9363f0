@@ -1,4 +1,4 @@
-import { createRouteFn, useNavigate } from "@/lib/tanstack-shim";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -33,7 +33,7 @@ import {
   Info,
 } from "lucide-react";
 
-export const Route = createRouteFn("/_authenticated/onboarding")({
+export const Route = createFileRoute("/_authenticated/onboarding")({
   component: Onboarding,
   head: () => ({ meta: [{ title: "Welcome — Love Key Link" }] }),
 });

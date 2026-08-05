@@ -19,7 +19,7 @@ export type QuizResultForPdf = {
 };
 
 export async function downloadQuizResultPdf(r: QuizResultForPdf) {
-  const { jsPDF } = await import("./jspdf-shim");
+  const { jsPDF } = await import("jspdf");
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const pageW = doc.internal.pageSize.getWidth();
   const margin = 48;

@@ -1,6 +1,6 @@
-import { createRouteFn } from "@/lib/tanstack-shim";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createRouteFn("/rsp/faq")({
+export const Route = createFileRoute("/rsp/faq")({
   head: () => ({
     meta: [
       { title: "RSP FAQ — Plain-language answers · Love Key Link" },

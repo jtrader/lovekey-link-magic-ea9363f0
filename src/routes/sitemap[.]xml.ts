@@ -1,4 +1,5 @@
-import { createRouteFn } from "@/lib/tanstack-shim";
+import { createFileRoute } from "@tanstack/react-router";
+import type {} from "@tanstack/react-start";
 
 const BASE_URL = "https://lovekeylink.com";
 
@@ -6,7 +7,7 @@ const BASE_URL = "https://lovekeylink.com";
 // corresponding sitemap-*.xml route) as the site grows.
 const CHILD_SITEMAPS = ["sitemap-pages.xml"];
 
-export const Route = createRouteFn("/sitemap.xml")({
+export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {

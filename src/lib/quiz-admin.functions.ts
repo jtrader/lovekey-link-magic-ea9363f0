@@ -1,4 +1,5 @@
-import { createServerFn, useSession } from "@/lib/tanstack-start-shim";
+import { createServerFn } from "@tanstack/react-start";
+import { useSession } from "@tanstack/react-start/server";
 import { createHash, timingSafeEqual } from "node:crypto";
 
 type AdminSession = { admin?: boolean };

@@ -1,6 +1,6 @@
-import { createRouteFn } from "@/lib/tanstack-shim";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createRouteFn("/rsp/dimensions")({
+export const Route = createFileRoute("/rsp/dimensions")({
   head: () => ({
     meta: [
       { title: "RSP Dimensions — Consent, identity, presence & avatars · Love Key Link" },

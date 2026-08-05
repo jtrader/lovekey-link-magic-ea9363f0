@@ -1,4 +1,4 @@
-import { Link } from "@/lib/tanstack-shim";
+import { Link } from "@tanstack/react-router";
 import { MACRO_GLOSSARY, useGlossarySheet, type GlossaryId } from "@/components/rsp-macro/MacroGlossary";
 
 const KEY_TERMS: GlossaryId[] = ["veo", "ves", "pooledIntent", "telemetry", "rotational", "calibration"];

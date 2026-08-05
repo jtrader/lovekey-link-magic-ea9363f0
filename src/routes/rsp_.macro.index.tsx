@@ -1,4 +1,4 @@
-import { createRouteFn, Link } from "@/lib/tanstack-shim";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
 import {
   IconGauge,
@@ -11,7 +11,7 @@ import {
 } from "@/components/rsp-macro/MacroVisuals";
 import macroSummaryPdf from "@/assets/macro-spec-summary.pdf.asset.json";
 
-export const Route = createRouteFn("/rsp_/macro/")({
+export const Route = createFileRoute("/rsp_/macro/")({
   head: () => ({
     meta: [
       { title: "@rsp/macro — Section index & quick links · Love Key Link" },

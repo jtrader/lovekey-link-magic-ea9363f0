@@ -1,9 +1,9 @@
-import { createRouteFn } from "@/lib/tanstack-shim";
+import { createFileRoute } from "@tanstack/react-router";
 import { GlossaryPanel, Term } from "@/components/rsp-macro/MacroGlossary";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
 import { IconSigma, MacroIconBadge } from "@/components/rsp-macro/MacroVisuals";
 
-export const Route = createRouteFn("/rsp_/macro/ves-formula")({
+export const Route = createFileRoute("/rsp_/macro/ves-formula")({
   head: () => ({
     meta: [
       { title: "Vertical Equilibrium Score (VES) — @rsp/macro · Love Key Link" },

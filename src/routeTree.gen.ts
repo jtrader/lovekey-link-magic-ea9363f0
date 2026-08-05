@@ -16,6 +16,8 @@ import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as RspIndexRouteImport } from './routes/rsp.index'
 import { Route as RspSpecCheckRouteImport } from './routes/rsp.spec-check'
 import { Route as RspPrinciplesRouteImport } from './routes/rsp.principles'
 import { Route as RspImplementationsRouteImport } from './routes/rsp.implementations'
@@ -94,6 +96,16 @@ const AdminRoute = AdminRouteImport.update({
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RspIndexRoute = RspIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RspRoute,
 } as any)
 const RspSpecCheckRoute = RspSpecCheckRouteImport.update({
   id: '/spec-check',
@@ -323,7 +335,7 @@ const ApiPublicHooksAvatarCleanupRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedRouteWithChildren
+  '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
@@ -349,6 +361,7 @@ export interface FileRoutesByFullPath {
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp/spec-check': typeof RspSpecCheckRoute
+  '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
   '/rsp/ethical-auction/adoption': typeof RspEthicalAuctionAdoptionRoute
@@ -376,11 +389,10 @@ export interface FileRoutesByFullPath {
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthenticatedRouteWithChildren
+  '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
-  '/rsp': typeof RspRouteWithChildren
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app': typeof AuthenticatedAppRoute
@@ -401,6 +413,7 @@ export interface FileRoutesByTo {
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp/spec-check': typeof RspSpecCheckRoute
+  '/rsp': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
   '/rsp/ethical-auction/adoption': typeof RspEthicalAuctionAdoptionRoute
@@ -429,6 +442,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
@@ -455,6 +469,7 @@ export interface FileRoutesById {
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp/spec-check': typeof RspSpecCheckRoute
+  '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
   '/rsp/ethical-auction/adoption': typeof RspEthicalAuctionAdoptionRoute
@@ -510,6 +525,7 @@ export interface FileRouteTypes {
     | '/rsp/implementations'
     | '/rsp/principles'
     | '/rsp/spec-check'
+    | '/rsp/'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
     | '/rsp/ethical-auction/adoption'
@@ -541,7 +557,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/quiz'
-    | '/rsp'
     | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/app'
@@ -562,6 +577,7 @@ export interface FileRouteTypes {
     | '/rsp/implementations'
     | '/rsp/principles'
     | '/rsp/spec-check'
+    | '/rsp'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
     | '/rsp/ethical-auction/adoption'
@@ -589,6 +605,7 @@ export interface FileRouteTypes {
     | '/api/public/quiz-result/$token'
   id:
     | '__root__'
+    | '/'
     | '/_authenticated'
     | '/admin'
     | '/login'
@@ -615,6 +632,7 @@ export interface FileRouteTypes {
     | '/rsp/implementations'
     | '/rsp/principles'
     | '/rsp/spec-check'
+    | '/rsp/'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
     | '/rsp/ethical-auction/adoption'
@@ -643,6 +661,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AdminRoute: typeof AdminRoute
   LoginRoute: typeof LoginRoute
@@ -715,6 +734,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rsp/': {
+      id: '/rsp/'
+      path: '/'
+      fullPath: '/rsp/'
+      preLoaderRoute: typeof RspIndexRouteImport
+      parentRoute: typeof RspRoute
     }
     '/rsp/spec-check': {
       id: '/rsp/spec-check'
@@ -1076,6 +1109,7 @@ interface RspRouteChildren {
   RspImplementationsRoute: typeof RspImplementationsRoute
   RspPrinciplesRoute: typeof RspPrinciplesRoute
   RspSpecCheckRoute: typeof RspSpecCheckRoute
+  RspIndexRoute: typeof RspIndexRoute
   RspCaseStudiesSlugRoute: typeof RspCaseStudiesSlugRoute
   RspPulseAllocationRoute: typeof RspPulseAllocationRoute
   RspPulseDisasterAidRoute: typeof RspPulseDisasterAidRoute
@@ -1102,6 +1136,7 @@ const RspRouteChildren: RspRouteChildren = {
   RspImplementationsRoute: RspImplementationsRoute,
   RspPrinciplesRoute: RspPrinciplesRoute,
   RspSpecCheckRoute: RspSpecCheckRoute,
+  RspIndexRoute: RspIndexRoute,
   RspCaseStudiesSlugRoute: RspCaseStudiesSlugRoute,
   RspPulseAllocationRoute: RspPulseAllocationRoute,
   RspPulseDisasterAidRoute: RspPulseDisasterAidRoute,
@@ -1117,6 +1152,7 @@ const RspRouteChildren: RspRouteChildren = {
 const RspRouteWithChildren = RspRoute._addFileChildren(RspRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AdminRoute: AdminRoute,
   LoginRoute: LoginRoute,

@@ -1,7 +1,7 @@
-import { createRouteFn, Link, notFound } from "@/lib/tanstack-shim";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getCaseStudy, type CaseStudyApplication } from "@/lib/case-studies";
 
-export const Route = createRouteFn("/rsp/case-studies/$slug")({
+export const Route = createFileRoute("/rsp/case-studies/$slug")({
   loader: ({ params }) => {
     const study = getCaseStudy(params.slug);
     if (!study) throw notFound();

@@ -1,7 +1,7 @@
-import { createRouteFn } from "@/lib/tanstack-shim";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 
-export const Route = createRouteFn("/rsp/checklist")({
+export const Route = createFileRoute("/rsp/checklist")({
   head: () => ({
     meta: [
       { title: "RSP Identity Checklist — Protect your represented self · Love Key Link" },

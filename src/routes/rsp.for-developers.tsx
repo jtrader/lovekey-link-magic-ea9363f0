@@ -1,7 +1,7 @@
-import { createRouteFn } from "@/lib/tanstack-shim";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const Route = createRouteFn("/rsp/for-developers")({
+export const Route = createFileRoute("/rsp/for-developers")({
   head: () => ({
     meta: [
       { title: "RSP for Developers — Install & integrate · Love Key Link" },

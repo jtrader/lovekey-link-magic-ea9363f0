@@ -1,8 +1,8 @@
-import { createRouteFn } from "@/lib/tanstack-shim";
+import { createFileRoute } from "@tanstack/react-router";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import { IconEye, IconFlame, IconLayers, IconShield } from "@/components/rsp-shared";
 
-export const Route = createRouteFn("/rsp/event-token")({
+export const Route = createFileRoute("/rsp/event-token")({
   head: () => ({
     meta: [
       { title: "RSP Event Token — Proof without exposure · Love Key Link" },

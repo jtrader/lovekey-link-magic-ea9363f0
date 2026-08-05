@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 
 /* ── Shared styling for the Ethical Auction area ───────────────────────────
    Uses the RSP light theme tokens defined in src/routes/rsp.tsx so the
@@ -436,11 +437,11 @@ export function EaCards({ exclude }: { exclude?: string }) {
       {eaPages
         .filter((p) => p.to !== exclude)
         .map((p) => (
-          <a key={p.to} href={p.to} className="ea-card">
+          <Link key={p.to} to={p.to} className="ea-card">
             <div className="ea-card-step">Section {p.step}</div>
             <h3>{p.title}</h3>
             <p>{p.desc}</p>
-          </a>
+          </Link>
         ))}
     </div>
   );

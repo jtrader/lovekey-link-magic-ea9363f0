@@ -1,4 +1,4 @@
-import { createRouteFn } from "@/lib/tanstack-shim";
+import { createFileRoute } from "@tanstack/react-router";
 import { GlossaryPanel, Term } from "@/components/rsp-macro/MacroGlossary";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
 import {
@@ -8,7 +8,7 @@ import {
   MacroIconBadge,
 } from "@/components/rsp-macro/MacroVisuals";
 
-export const Route = createRouteFn("/rsp_/macro/telemetry")({
+export const Route = createFileRoute("/rsp_/macro/telemetry")({
   head: () => ({
     meta: [
       { title: "Tripartite Operational Telemetry — @rsp/macro · Love Key Link" },

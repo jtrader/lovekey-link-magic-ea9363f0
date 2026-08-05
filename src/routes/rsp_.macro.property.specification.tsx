@@ -42,10 +42,13 @@ function Ascii({ children }: { children: string }) {
 
 function Block({ id, n, title, children }: { id: string; n: string; title: string; children: ReactNode }) {
   return (
-    <section id={id} className="scroll-mt-24">
+    <section id={id} className="group scroll-mt-24">
       <h2 className="mb-4 flex items-baseline gap-3 text-2xl font-semibold tracking-tight text-slate-900">
         <span className="font-mono text-sm text-emerald-600">{n}</span>
-        {title}
+        <a href={`#${id}`} className="hover:text-emerald-700">
+          {title}
+        </a>
+        <CopyAnchor id={id} label={title} />
       </h2>
       <div className="space-y-4 text-[0.95rem] leading-relaxed text-slate-600">{children}</div>
     </section>

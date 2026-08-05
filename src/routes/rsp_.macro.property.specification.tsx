@@ -67,6 +67,76 @@ const toc = [
   ["impact", "08", "Strategic impact"],
 ] as const;
 
+const vesRows: string[][] = [
+  [
+    "Saturated / overbooked",
+    "S → 1.0 or CX ↓",
+    "VES decreases; prominence gracefully throttled.",
+    "Protects vendors from poor service and teams from burnout.",
+  ],
+  [
+    "Target revenue reached",
+    "V_A ≫ V_T",
+    "VES decreases; exposure rotates to under-target peers.",
+    "Prevents monopolisation by one or two dominant agencies.",
+  ],
+  [
+    "Available / high capacity",
+    "S < 0.4 and V_A < V_T",
+    "VES increases; matchmaking prominence amplifies.",
+    "Routes listings to qualified, available agents.",
+  ],
+];
+
+const auctionRows: string[][] = [
+  ["01", "Vendor", "Lists property characteristics for free.", "Contact details isolated in a vault tier."],
+  ["02", "Engine", "Builds a low-resolution RSP intent signal.", "Identifiers burned on write."],
+  ["03", "Engine", "Queries REIV feeds and scores agent capacity (VES).", "No personal data enters scoring."],
+  ["04", "Agents", "Top 3–5 unsaturated specialists receive an alert.", "Property specs only; no vendor identity."],
+  ["05", "Agents", "Submit commission, marketing and strategy bids.", "Bidding is blind to vendor identity."],
+  ["06", "Vendor", "Compares proposals side-by-side in a calm dashboard.", "No unsolicited cold calls."],
+  ["07", "Engine", "Awards the chosen agent and decrypts contact info.", "Disclosure to the winning agent only."],
+];
+
+const telemetryRows: string[][] = [
+  ["S", "Supply-side", "Workforce strain: overtime, appraisal backlog, campaign load per agent.", "Agency HR / workflow API"],
+  ["V_A / V_T", "Supply-side", "Financial pace: actual volume against declared target.", "Accounting API"],
+  ["CX", "Supply-side", "Consumer experience: response latency, satisfaction, follow-through.", "Vendor feedback + response logs"],
+  ["DOM_niche", "Performance", "Average sale speed for the property class vs regional mean.", "REIV transaction feed"],
+  ["Variance_reserve", "Performance", "Final sale price versus vendor reserve on similar listings.", "REIV transaction feed"],
+  ["Volume_suburb", "Performance", "Verified transaction density by postcode and typology (90 days).", "REIV transaction feed"],
+  ["Intent signal", "Demand-side", "help_stage, theme, niche, location_scope, urgency.", "Anonymised vendor submission"],
+];
+
+const impactRows: string[][] = [
+  [
+    "Vendor privacy",
+    "Contact details harvested and sold to multiple agencies; cold calls.",
+    "Low-resolution signals; vendor anonymous until contract awarded.",
+  ],
+  [
+    "Matching mechanics",
+    "Paid ranking, legacy domain authority, large ad budgets.",
+    "Objective REIV niche performance × capacity telemetry (VES).",
+  ],
+  [
+    "Agent pricing",
+    "High upfront ad placement costs regardless of outcome.",
+    "Free vendor registration; result-based model for agents.",
+  ],
+  [
+    "Market equity",
+    "Winner-take-all: top giants hoard leads while overbooked.",
+    "Dynamic rotation to capable mid-tier agents when giants saturate.",
+  ],
+  [
+    "Workforce impact",
+    "Agent burnout, unserviced leads, dissatisfied clients.",
+    "Stress protection: leads throttle when workload peaks.",
+  ],
+];
+
+
 function PropertySpecification() {
   return (
     <PropertyShell current="Specification">

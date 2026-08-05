@@ -280,7 +280,7 @@ export function PropertyShell({
             <Link to="/rsp/macro" className="hover:text-emerald-700">
               Macro Equilibrium
             </Link>
-            <Link to="/rsp/ethical-auction" className="hover:text-emerald-700">
+            <Link to="/rsp/ethical-auction" search={{}} className="hover:text-emerald-700">
               VEO
             </Link>
             <Link to="/rsp/principles" className="hover:text-emerald-700">

@@ -318,52 +318,21 @@ conversion delta        bottlenecks                      |
         </Block>
 
         <Block id="impact" n="08" title="Strategic impact">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[620px] border-collapse text-left text-sm">
-              <thead>
-                <tr className="border-b border-emerald-500/20 font-mono text-[0.68rem] uppercase tracking-widest text-slate-500">
-                  <th className="py-2 pr-4">Dimension</th>
-                  <th className="py-2 pr-4">Legacy portals</th>
-                  <th className="py-2">@rsp/property</th>
-                </tr>
-              </thead>
-              <tbody className="text-slate-600">
-                {[
-                  [
-                    "Vendor privacy",
-                    "Contact details harvested and sold to multiple agencies; cold calls.",
-                    "Low-resolution signals; vendor anonymous until contract awarded.",
-                  ],
-                  [
-                    "Matching mechanics",
-                    "Paid ranking, legacy domain authority, large ad budgets.",
-                    "Objective REIV niche performance × capacity telemetry (VES).",
-                  ],
-                  [
-                    "Agent pricing",
-                    "High upfront ad placement costs regardless of outcome.",
-                    "Free vendor registration; result-based model for agents.",
-                  ],
-                  [
-                    "Market equity",
-                    "Winner-take-all: top giants hoard leads while overbooked.",
-                    "Dynamic rotation to capable mid-tier agents when giants saturate.",
-                  ],
-                  [
-                    "Workforce impact",
-                    "Agent burnout, unserviced leads, dissatisfied clients.",
-                    "Stress protection: leads throttle when workload peaks.",
-                  ],
-                ].map(([dim, legacy, rsp]) => (
-                  <tr key={dim} className="border-b border-slate-100 last:border-0">
-                    <td className="py-3 pr-4 font-medium text-slate-800">{dim}</td>
-                    <td className="py-3 pr-4">{legacy}</td>
-                    <td className="py-3 text-emerald-800">{rsp}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            caption="Legacy portals compared with @rsp/property"
+            columns={["Dimension", "Legacy portals", "@rsp/property"]}
+            filterLabel="Filter dimensions"
+            minWidth={620}
+            rows={impactRows.map(([dim, legacy, rsp]) => ({
+              key: dim,
+              text: [dim, legacy, rsp],
+              cells: [
+                <span className="font-medium text-slate-800">{dim}</span>,
+                <span>{legacy}</span>,
+                <span className="text-emerald-800">{rsp}</span>,
+              ],
+            }))}
+          />
         </Block>
       </div>
     </PropertyShell>

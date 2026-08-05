@@ -270,14 +270,17 @@ urgency: medium`}</Ascii>
   |<-- 5. comparative proposals -----|   (commission, strategy)   |
   |-- 6. award preferred agent ----->|                            |
   |                                  |-- 7. decrypt contact ----->|`}</Ascii>
-          <ol className="ml-5 list-decimal space-y-1.5 text-sm">
-            <li>Vendor lists for free; contact details isolated in a secure vault tier.</li>
-            <li>Engine queries REIV feeds and evaluates active agent capacity (VES).</li>
-            <li>Top 3–5 matched, unsaturated local specialists receive an anonymised alert.</li>
-            <li>Agents submit commission fees, marketing contributions and sales strategy.</li>
-            <li>Vendor compares proposals side-by-side — no unsolicited cold calls.</li>
-            <li>On award, contact information is decrypted and shared with the winning agent only.</li>
-          </ol>
+          <DataTable
+            caption="Reverse-auction steps"
+            columns={["Step", "Actor", "Action", "Privacy posture"]}
+            filterLabel="Filter auction steps"
+            rows={auctionRows.map((r) => ({ key: r[0], text: r as unknown as string[], cells: [
+              <span className="font-mono text-xs text-emerald-700">{r[0]}</span>,
+              <span className="font-medium text-slate-800">{r[1]}</span>,
+              <span>{r[2]}</span>,
+              <span>{r[3]}</span>,
+            ] }))}
+          />
         </Block>
 
         <Block id="sandbox" n="06" title="Mandatory 90-day calibration sandbox">

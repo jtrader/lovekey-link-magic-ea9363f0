@@ -7,6 +7,7 @@ import {
   SectionHeading,
   Tag,
 } from "@/components/rsp-property/PropertyUi";
+import { CopyAnchor, DataTable } from "@/components/rsp-property/SpecTable";
 import specMd from "@/assets/rsp-property-spec.md.asset.json";
 import specZip from "@/assets/rsp-property-spec.zip.asset.json";
 
@@ -42,10 +43,13 @@ function Ascii({ children }: { children: string }) {
 
 function Block({ id, n, title, children }: { id: string; n: string; title: string; children: ReactNode }) {
   return (
-    <section id={id} className="scroll-mt-24">
+    <section id={id} className="group scroll-mt-24">
       <h2 className="mb-4 flex items-baseline gap-3 text-2xl font-semibold tracking-tight text-slate-900">
         <span className="font-mono text-sm text-emerald-600">{n}</span>
-        {title}
+        <a href={`#${id}`} className="hover:text-emerald-700">
+          {title}
+        </a>
+        <CopyAnchor id={id} label={title} />
       </h2>
       <div className="space-y-4 text-[0.95rem] leading-relaxed text-slate-600">{children}</div>
     </section>
@@ -62,6 +66,76 @@ const toc = [
   ["blueprint", "07", "Web integration blueprint"],
   ["impact", "08", "Strategic impact"],
 ] as const;
+
+const vesRows: string[][] = [
+  [
+    "Saturated / overbooked",
+    "S → 1.0 or CX ↓",
+    "VES decreases; prominence gracefully throttled.",
+    "Protects vendors from poor service and teams from burnout.",
+  ],
+  [
+    "Target revenue reached",
+    "V_A ≫ V_T",
+    "VES decreases; exposure rotates to under-target peers.",
+    "Prevents monopolisation by one or two dominant agencies.",
+  ],
+  [
+    "Available / high capacity",
+    "S < 0.4 and V_A < V_T",
+    "VES increases; matchmaking prominence amplifies.",
+    "Routes listings to qualified, available agents.",
+  ],
+];
+
+const auctionRows: string[][] = [
+  ["01", "Vendor", "Lists property characteristics for free.", "Contact details isolated in a vault tier."],
+  ["02", "Engine", "Builds a low-resolution RSP intent signal.", "Identifiers burned on write."],
+  ["03", "Engine", "Queries REIV feeds and scores agent capacity (VES).", "No personal data enters scoring."],
+  ["04", "Agents", "Top 3–5 unsaturated specialists receive an alert.", "Property specs only; no vendor identity."],
+  ["05", "Agents", "Submit commission, marketing and strategy bids.", "Bidding is blind to vendor identity."],
+  ["06", "Vendor", "Compares proposals side-by-side in a calm dashboard.", "No unsolicited cold calls."],
+  ["07", "Engine", "Awards the chosen agent and decrypts contact info.", "Disclosure to the winning agent only."],
+];
+
+const telemetryRows: string[][] = [
+  ["S", "Supply-side", "Workforce strain: overtime, appraisal backlog, campaign load per agent.", "Agency HR / workflow API"],
+  ["V_A / V_T", "Supply-side", "Financial pace: actual volume against declared target.", "Accounting API"],
+  ["CX", "Supply-side", "Consumer experience: response latency, satisfaction, follow-through.", "Vendor feedback + response logs"],
+  ["DOM_niche", "Performance", "Average sale speed for the property class vs regional mean.", "REIV transaction feed"],
+  ["Variance_reserve", "Performance", "Final sale price versus vendor reserve on similar listings.", "REIV transaction feed"],
+  ["Volume_suburb", "Performance", "Verified transaction density by postcode and typology (90 days).", "REIV transaction feed"],
+  ["Intent signal", "Demand-side", "help_stage, theme, niche, location_scope, urgency.", "Anonymised vendor submission"],
+];
+
+const impactRows: string[][] = [
+  [
+    "Vendor privacy",
+    "Contact details harvested and sold to multiple agencies; cold calls.",
+    "Low-resolution signals; vendor anonymous until contract awarded.",
+  ],
+  [
+    "Matching mechanics",
+    "Paid ranking, legacy domain authority, large ad budgets.",
+    "Objective REIV niche performance × capacity telemetry (VES).",
+  ],
+  [
+    "Agent pricing",
+    "High upfront ad placement costs regardless of outcome.",
+    "Free vendor registration; result-based model for agents.",
+  ],
+  [
+    "Market equity",
+    "Winner-take-all: top giants hoard leads while overbooked.",
+    "Dynamic rotation to capable mid-tier agents when giants saturate.",
+  ],
+  [
+    "Workforce impact",
+    "Agent burnout, unserviced leads, dissatisfied clients.",
+    "Stress protection: leads throttle when workload peaks.",
+  ],
+];
+
 
 function PropertySpecification() {
   return (
@@ -218,42 +292,41 @@ urgency: medium`}</Ascii>
               </li>
             </ul>
           </PropertyCard>
+          <DataTable
+            caption="All telemetry channels"
+            columns={["Parameter", "Stream", "What it measures", "Source"]}
+            filterLabel="Filter telemetry channels"
+            minWidth={680}
+            rows={telemetryRows.map((r) => ({
+              key: r[0],
+              text: [...r],
+              cells: [
+                <Tag>{r[0]}</Tag>,
+                <span className="font-medium text-slate-800">{r[1]}</span>,
+                <span>{r[2]}</span>,
+                <span className="font-mono text-xs text-slate-500">{r[3]}</span>,
+              ],
+            }))}
+          />
         </Block>
 
         <Block id="ves" n="04" title="Vertical Equilibrium Score & rotational logic">
           <Ascii>{`VES = f(Relevance) × (CX / S) × (V_T / V_A)`}</Ascii>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px] border-collapse text-left text-sm">
-              <thead>
-                <tr className="border-b border-emerald-500/20 font-mono text-[0.68rem] uppercase tracking-widest text-slate-500">
-                  <th className="py-2 pr-4">Agent condition</th>
-                  <th className="py-2 pr-4">Telemetry shift</th>
-                  <th className="py-2 pr-4">Algorithm action</th>
-                  <th className="py-2">Market outcome</th>
-                </tr>
-              </thead>
-              <tbody className="text-slate-600">
-                <tr className="border-b border-slate-100">
-                  <td className="py-3 pr-4 font-medium text-slate-800">Saturated / overbooked</td>
-                  <td className="py-3 pr-4 font-mono text-xs">S → 1.0 or CX ↓</td>
-                  <td className="py-3 pr-4">VES decreases; prominence gracefully throttled.</td>
-                  <td className="py-3">Protects vendors from poor service and teams from burnout.</td>
-                </tr>
-                <tr className="border-b border-slate-100">
-                  <td className="py-3 pr-4 font-medium text-slate-800">Target revenue reached</td>
-                  <td className="py-3 pr-4 font-mono text-xs">V_A ≫ V_T</td>
-                  <td className="py-3 pr-4">VES decreases; exposure rotates to under-target peers.</td>
-                  <td className="py-3">Prevents monopolisation by one or two dominant agencies.</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-medium text-slate-800">Available / high capacity</td>
-                  <td className="py-3 pr-4 font-mono text-xs">S &lt; 0.4 and V_A &lt; V_T</td>
-                  <td className="py-3 pr-4">VES increases; matchmaking prominence amplifies.</td>
-                  <td className="py-3">Routes listings to qualified, available agents.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            caption="Rotational logic by agent condition"
+            columns={["Agent condition", "Telemetry shift", "Algorithm action", "Market outcome"]}
+            filterLabel="Filter conditions"
+            rows={vesRows.map((r) => ({
+              key: r[0],
+              text: [...r],
+              cells: [
+                <span className="font-medium text-slate-800">{r[0]}</span>,
+                <span className="font-mono text-xs">{r[1]}</span>,
+                <span>{r[2]}</span>,
+                <span>{r[3]}</span>,
+              ],
+            }))}
+          />
         </Block>
 
         <Block id="auction" n="05" title="Telemetry-aware reverse-auction workflow">
@@ -266,14 +339,17 @@ urgency: medium`}</Ascii>
   |<-- 5. comparative proposals -----|   (commission, strategy)   |
   |-- 6. award preferred agent ----->|                            |
   |                                  |-- 7. decrypt contact ----->|`}</Ascii>
-          <ol className="ml-5 list-decimal space-y-1.5 text-sm">
-            <li>Vendor lists for free; contact details isolated in a secure vault tier.</li>
-            <li>Engine queries REIV feeds and evaluates active agent capacity (VES).</li>
-            <li>Top 3–5 matched, unsaturated local specialists receive an anonymised alert.</li>
-            <li>Agents submit commission fees, marketing contributions and sales strategy.</li>
-            <li>Vendor compares proposals side-by-side — no unsolicited cold calls.</li>
-            <li>On award, contact information is decrypted and shared with the winning agent only.</li>
-          </ol>
+          <DataTable
+            caption="Reverse-auction steps"
+            columns={["Step", "Actor", "Action", "Privacy posture"]}
+            filterLabel="Filter auction steps"
+            rows={auctionRows.map((r) => ({ key: r[0], text: [...r], cells: [
+              <span className="font-mono text-xs text-emerald-700">{r[0]}</span>,
+              <span className="font-medium text-slate-800">{r[1]}</span>,
+              <span>{r[2]}</span>,
+              <span>{r[3]}</span>,
+            ] }))}
+          />
         </Block>
 
         <Block id="sandbox" n="06" title="Mandatory 90-day calibration sandbox">
@@ -314,52 +390,21 @@ conversion delta        bottlenecks                      |
         </Block>
 
         <Block id="impact" n="08" title="Strategic impact">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[620px] border-collapse text-left text-sm">
-              <thead>
-                <tr className="border-b border-emerald-500/20 font-mono text-[0.68rem] uppercase tracking-widest text-slate-500">
-                  <th className="py-2 pr-4">Dimension</th>
-                  <th className="py-2 pr-4">Legacy portals</th>
-                  <th className="py-2">@rsp/property</th>
-                </tr>
-              </thead>
-              <tbody className="text-slate-600">
-                {[
-                  [
-                    "Vendor privacy",
-                    "Contact details harvested and sold to multiple agencies; cold calls.",
-                    "Low-resolution signals; vendor anonymous until contract awarded.",
-                  ],
-                  [
-                    "Matching mechanics",
-                    "Paid ranking, legacy domain authority, large ad budgets.",
-                    "Objective REIV niche performance × capacity telemetry (VES).",
-                  ],
-                  [
-                    "Agent pricing",
-                    "High upfront ad placement costs regardless of outcome.",
-                    "Free vendor registration; result-based model for agents.",
-                  ],
-                  [
-                    "Market equity",
-                    "Winner-take-all: top giants hoard leads while overbooked.",
-                    "Dynamic rotation to capable mid-tier agents when giants saturate.",
-                  ],
-                  [
-                    "Workforce impact",
-                    "Agent burnout, unserviced leads, dissatisfied clients.",
-                    "Stress protection: leads throttle when workload peaks.",
-                  ],
-                ].map(([dim, legacy, rsp]) => (
-                  <tr key={dim} className="border-b border-slate-100 last:border-0">
-                    <td className="py-3 pr-4 font-medium text-slate-800">{dim}</td>
-                    <td className="py-3 pr-4">{legacy}</td>
-                    <td className="py-3 text-emerald-800">{rsp}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            caption="Legacy portals compared with @rsp/property"
+            columns={["Dimension", "Legacy portals", "@rsp/property"]}
+            filterLabel="Filter dimensions"
+            minWidth={620}
+            rows={impactRows.map(([dim, legacy, rsp]) => ({
+              key: dim,
+              text: [dim, legacy, rsp],
+              cells: [
+                <span className="font-medium text-slate-800">{dim}</span>,
+                <span>{legacy}</span>,
+                <span className="text-emerald-800">{rsp}</span>,
+              ],
+            }))}
+          />
         </Block>
       </div>
     </PropertyShell>

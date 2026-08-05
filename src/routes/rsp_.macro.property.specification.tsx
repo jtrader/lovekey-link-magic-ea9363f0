@@ -7,6 +7,7 @@ import {
   SectionHeading,
   Tag,
 } from "@/components/rsp-property/PropertyUi";
+import { CopyAnchor, DataTable } from "@/components/rsp-property/SpecTable";
 import specMd from "@/assets/rsp-property-spec.md.asset.json";
 import specZip from "@/assets/rsp-property-spec.zip.asset.json";
 

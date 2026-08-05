@@ -226,38 +226,21 @@ urgency: medium`}</Ascii>
 
         <Block id="ves" n="04" title="Vertical Equilibrium Score & rotational logic">
           <Ascii>{`VES = f(Relevance) × (CX / S) × (V_T / V_A)`}</Ascii>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px] border-collapse text-left text-sm">
-              <thead>
-                <tr className="border-b border-emerald-500/20 font-mono text-[0.68rem] uppercase tracking-widest text-slate-500">
-                  <th className="py-2 pr-4">Agent condition</th>
-                  <th className="py-2 pr-4">Telemetry shift</th>
-                  <th className="py-2 pr-4">Algorithm action</th>
-                  <th className="py-2">Market outcome</th>
-                </tr>
-              </thead>
-              <tbody className="text-slate-600">
-                <tr className="border-b border-slate-100">
-                  <td className="py-3 pr-4 font-medium text-slate-800">Saturated / overbooked</td>
-                  <td className="py-3 pr-4 font-mono text-xs">S → 1.0 or CX ↓</td>
-                  <td className="py-3 pr-4">VES decreases; prominence gracefully throttled.</td>
-                  <td className="py-3">Protects vendors from poor service and teams from burnout.</td>
-                </tr>
-                <tr className="border-b border-slate-100">
-                  <td className="py-3 pr-4 font-medium text-slate-800">Target revenue reached</td>
-                  <td className="py-3 pr-4 font-mono text-xs">V_A ≫ V_T</td>
-                  <td className="py-3 pr-4">VES decreases; exposure rotates to under-target peers.</td>
-                  <td className="py-3">Prevents monopolisation by one or two dominant agencies.</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-medium text-slate-800">Available / high capacity</td>
-                  <td className="py-3 pr-4 font-mono text-xs">S &lt; 0.4 and V_A &lt; V_T</td>
-                  <td className="py-3 pr-4">VES increases; matchmaking prominence amplifies.</td>
-                  <td className="py-3">Routes listings to qualified, available agents.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            caption="Rotational logic by agent condition"
+            columns={["Agent condition", "Telemetry shift", "Algorithm action", "Market outcome"]}
+            filterLabel="Filter conditions"
+            rows={vesRows.map((r) => ({
+              key: r[0],
+              text: [...r],
+              cells: [
+                <span className="font-medium text-slate-800">{r[0]}</span>,
+                <span className="font-mono text-xs">{r[1]}</span>,
+                <span>{r[2]}</span>,
+                <span>{r[3]}</span>,
+              ],
+            }))}
+          />
         </Block>
 
         <Block id="auction" n="05" title="Telemetry-aware reverse-auction workflow">

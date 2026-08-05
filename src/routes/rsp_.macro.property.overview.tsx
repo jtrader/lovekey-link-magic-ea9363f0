@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 import {
   GradientButton,
   PropertyCard,
+  PropertyShell,
   SectionHeading,
   Tag,
   propertyNav,
@@ -50,9 +52,13 @@ const flow = [
   { tag: "04", title: "Equilibrium match", desc: "VES resolves who can genuinely service the listing today, not who spent the most." },
 ];
 
+function Row({ children }: { children: ReactNode }) {
+  return <li className="flex gap-2">{children}</li>;
+}
+
 function PropertyOverview() {
   return (
-    <PropertyShellWrapper>
+    <PropertyShell current="Overview">
       <SectionHeading
         eyebrow="@rsp/property — open real estate equilibrium"
         title="Sell Without Surveillance"
@@ -76,10 +82,10 @@ function PropertyOverview() {
           <h2 className="mb-3 text-xl font-semibold text-slate-900">Legacy portal extraction</h2>
           <ul className="space-y-3 text-sm leading-relaxed text-slate-600">
             {legacy.map((l) => (
-              <li key={l} className="flex gap-2">
+              <Row key={l}>
                 <span className="text-rose-500">–</span>
                 {l}
-              </li>
+              </Row>
             ))}
           </ul>
         </PropertyCard>
@@ -87,10 +93,10 @@ function PropertyOverview() {
           <h2 className="mb-3 text-xl font-semibold text-slate-900">RSP equilibrium</h2>
           <ul className="space-y-3 text-sm leading-relaxed text-slate-600">
             {equilibrium.map((l) => (
-              <li key={l} className="flex gap-2">
+              <Row key={l}>
                 <span className="text-emerald-600">+</span>
                 {l}
-              </li>
+              </Row>
             ))}
           </ul>
         </PropertyCard>
@@ -124,10 +130,10 @@ function PropertyOverview() {
           VES = f(Relevance) × (<Tag>CX</Tag> / <Tag>S</Tag>) × (<Tag>V_T</Tag> / <Tag>V_A</Tag>)
         </p>
         <p className="mt-4 text-sm leading-relaxed text-slate-600">
-          An office already at 96% of its servicing capacity has a high <Tag>S</Tag>, so its VES
+          An office already at 96% of its servicing capacity carries a high <Tag>S</Tag>, so its VES
           falls and its free prominence is withdrawn — not as a penalty, but because the demand it
-          holds cannot be served. A capable operator with spare capacity and strong <Tag>CX</Tag>
-          {" "}rises without paying for the privilege.
+          holds cannot be served. A capable operator with spare capacity and strong <Tag>CX</Tag>{" "}
+          rises without paying for the privilege.
         </p>
       </PropertyCard>
 
@@ -145,13 +151,6 @@ function PropertyOverview() {
           </Link>
         ))}
       </div>
-    </PropertyShellWrapper>
+    </PropertyShell>
   );
 }
-
-function PropertyShellWrapper({ children }: { children: React.ReactNode }) {
-  const { PropertyShell } = ShellRef;
-  return <PropertyShell current="Overview">{children}</PropertyShell>;
-}
-
-import * as ShellRef from "@/components/rsp-property/PropertyUi";

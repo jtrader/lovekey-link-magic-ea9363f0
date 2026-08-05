@@ -60,6 +60,7 @@ import { Route as RspEthicalAuctionCapacityRouteImport } from './routes/rsp.ethi
 import { Route as RspEthicalAuctionAdoptionRouteImport } from './routes/rsp.ethical-auction.adoption'
 import { Route as RspCaseStudiesSlugRouteImport } from './routes/rsp.case-studies.$slug'
 import { Route as ApiPublicQuizSubmitRouteImport } from './routes/api/public/quiz-submit'
+import { Route as RspMacroPropertyOverviewRouteImport } from './routes/rsp_.macro.property.overview'
 import { Route as ApiPublicQuizResultTokenRouteImport } from './routes/api/public/quiz-result.$token'
 import { Route as ApiPublicHooksAvatarCleanupRouteImport } from './routes/api/public/hooks/avatar-cleanup'
 
@@ -321,6 +322,12 @@ const ApiPublicQuizSubmitRoute = ApiPublicQuizSubmitRouteImport.update({
   path: '/api/public/quiz-submit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RspMacroPropertyOverviewRoute =
+  RspMacroPropertyOverviewRouteImport.update({
+    id: '/rsp_/macro/property/overview',
+    path: '/rsp/macro/property/overview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicQuizResultTokenRoute =
   ApiPublicQuizResultTokenRouteImport.update({
     id: '/api/public/quiz-result/$token',
@@ -387,6 +394,7 @@ export interface FileRoutesByFullPath {
   '/rsp/macro/': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
+  '/rsp/macro/property/overview': typeof RspMacroPropertyOverviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -439,6 +447,7 @@ export interface FileRoutesByTo {
   '/rsp/macro': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
+  '/rsp/macro/property/overview': typeof RspMacroPropertyOverviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -495,6 +504,7 @@ export interface FileRoutesById {
   '/rsp_/macro/': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
+  '/rsp_/macro/property/overview': typeof RspMacroPropertyOverviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -551,6 +561,7 @@ export interface FileRouteTypes {
     | '/rsp/macro/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
+    | '/rsp/macro/property/overview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -603,6 +614,7 @@ export interface FileRouteTypes {
     | '/rsp/macro'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
+    | '/rsp/macro/property/overview'
   id:
     | '__root__'
     | '/'
@@ -658,6 +670,7 @@ export interface FileRouteTypes {
     | '/rsp_/macro/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
+    | '/rsp_/macro/property/overview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -682,6 +695,7 @@ export interface RootRouteChildren {
   RspMacroIndexRoute: typeof RspMacroIndexRoute
   ApiPublicHooksAvatarCleanupRoute: typeof ApiPublicHooksAvatarCleanupRoute
   ApiPublicQuizResultTokenRoute: typeof ApiPublicQuizResultTokenRoute
+  RspMacroPropertyOverviewRoute: typeof RspMacroPropertyOverviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1043,6 +1057,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicQuizSubmitRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp_/macro/property/overview': {
+      id: '/rsp_/macro/property/overview'
+      path: '/rsp/macro/property/overview'
+      fullPath: '/rsp/macro/property/overview'
+      preLoaderRoute: typeof RspMacroPropertyOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/quiz-result/$token': {
       id: '/api/public/quiz-result/$token'
       path: '/api/public/quiz-result/$token'
@@ -1173,6 +1194,7 @@ const rootRouteChildren: RootRouteChildren = {
   RspMacroIndexRoute: RspMacroIndexRoute,
   ApiPublicHooksAvatarCleanupRoute: ApiPublicHooksAvatarCleanupRoute,
   ApiPublicQuizResultTokenRoute: ApiPublicQuizResultTokenRoute,
+  RspMacroPropertyOverviewRoute: RspMacroPropertyOverviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

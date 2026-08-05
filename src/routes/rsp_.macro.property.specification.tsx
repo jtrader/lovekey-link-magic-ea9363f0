@@ -292,6 +292,22 @@ urgency: medium`}</Ascii>
               </li>
             </ul>
           </PropertyCard>
+          <DataTable
+            caption="All telemetry channels"
+            columns={["Parameter", "Stream", "What it measures", "Source"]}
+            filterLabel="Filter telemetry channels"
+            minWidth={680}
+            rows={telemetryRows.map((r) => ({
+              key: r[0],
+              text: [...r],
+              cells: [
+                <Tag>{r[0]}</Tag>,
+                <span className="font-medium text-slate-800">{r[1]}</span>,
+                <span>{r[2]}</span>,
+                <span className="font-mono text-xs text-slate-500">{r[3]}</span>,
+              ],
+            }))}
+          />
         </Block>
 
         <Block id="ves" n="04" title="Vertical Equilibrium Score & rotational logic">
@@ -327,7 +343,7 @@ urgency: medium`}</Ascii>
             caption="Reverse-auction steps"
             columns={["Step", "Actor", "Action", "Privacy posture"]}
             filterLabel="Filter auction steps"
-            rows={auctionRows.map((r) => ({ key: r[0], text: r as unknown as string[], cells: [
+            rows={auctionRows.map((r) => ({ key: r[0], text: [...r], cells: [
               <span className="font-mono text-xs text-emerald-700">{r[0]}</span>,
               <span className="font-medium text-slate-800">{r[1]}</span>,
               <span>{r[2]}</span>,

@@ -122,6 +122,17 @@ export const areaMenus: AreaMenu[] = [
           { to: "/rsp/macro/governance", label: "Governance" },
         ],
       },
+      {
+        to: "/rsp/macro/property/overview",
+        label: "Property (@rsp/property)",
+        children: [
+          { to: "/rsp/macro/property/overview", label: "Overview" },
+          { to: "/rsp/macro/property/reiv-telemetry", label: "REIV Telemetry" },
+          { to: "/rsp/macro/property/ves-formula", label: "VES Simulator" },
+          { to: "/rsp/macro/property/vendor-portal", label: "Vendor Portal" },
+        ],
+      },
+
     ],
   },
   {

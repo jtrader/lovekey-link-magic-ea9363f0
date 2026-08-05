@@ -1,4 +1,4 @@
-import { createRouteFn } from "@/lib/tanstack-shim";
+import { createFileRoute } from "@tanstack/react-router";
 
 // Retention window for unsaved original photos.
 const RETENTION_DAYS = 7;
@@ -12,7 +12,7 @@ const BUCKET = "avatar-creator";
  * Called by pg_cron. Protected by the project apikey header (this /api/public
  * route bypasses edge auth, so we verify the caller here).
  */
-export const Route = createRouteFn("/api/public/hooks/avatar-cleanup")({
+export const Route = createFileRoute("/api/public/hooks/avatar-cleanup")({
   server: {
     handlers: {
       POST: async ({ request }) => {

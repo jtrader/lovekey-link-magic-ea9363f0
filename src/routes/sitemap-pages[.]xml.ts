@@ -1,4 +1,5 @@
-import { createRouteFn } from "@/lib/tanstack-shim";
+import { createFileRoute } from "@tanstack/react-router";
+import type {} from "@tanstack/react-start";
 
 const BASE_URL = "https://lovekeylink.com";
 
@@ -15,7 +16,7 @@ const entries: SitemapEntry[] = [
   { path: "/rsp", changefreq: "monthly", priority: "0.7" },
 ];
 
-export const Route = createRouteFn("/sitemap-pages.xml")({
+export const Route = createFileRoute("/sitemap-pages.xml")({
   server: {
     handlers: {
       GET: async () => {

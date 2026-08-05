@@ -1,4 +1,4 @@
-import { createRouteFn, Link } from "@/lib/tanstack-shim";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FileDown } from "lucide-react";
@@ -7,7 +7,7 @@ import {
   type ResultDetail,
 } from "@/lib/quiz-result-pdf";
 
-export const Route = createRouteFn("/r/$token")({
+export const Route = createFileRoute("/r/$token")({
   head: () => ({
     meta: [
       { title: "Your RSP Quiz Result · Love Key Link" },

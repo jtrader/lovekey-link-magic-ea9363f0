@@ -1,4 +1,4 @@
-import { createRouteFn, Link } from "@/lib/tanstack-shim";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
 import {
   IconGauge,
@@ -11,7 +11,7 @@ import {
 } from "@/components/rsp-macro/MacroVisuals";
 import macroSummaryPdf from "@/assets/macro-spec-summary.pdf.asset.json";
 
-export const Route = createRouteFn("/rsp_/macro/")({
+export const Route = createFileRoute("/rsp_/macro/")({
   head: () => ({
     meta: [
       { title: "@rsp/macro — Section index & quick links · Love Key Link" },
@@ -150,6 +150,38 @@ function MacroIndex() {
           </li>
         ))}
       </ol>
+
+      <div className="mt-10 rounded-2xl border border-emerald-500/20 bg-[linear-gradient(135deg,rgba(5,150,105,0.07),rgba(52,211,153,0.05))] p-6">
+        <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-50 px-3 py-1 font-mono text-[0.68rem] uppercase tracking-widest text-emerald-700">
+          Applied branch
+        </div>
+        <h2 className="mb-2 text-2xl font-semibold text-slate-900">
+          @rsp/property — Sell Without Surveillance
+        </h2>
+        <p className="mb-4 max-w-3xl text-sm leading-relaxed text-slate-600">
+          The macro specification applied to real estate: free vendor registration, agent
+          reverse-auction bidding on commission, REIV-style regional telemetry, and prominence
+          issued by the Vertical Equilibrium Score instead of ad spend.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {[
+            { to: "/rsp/macro/property/overview", label: "Overview" },
+            { to: "/rsp/macro/property/reiv-telemetry", label: "REIV Telemetry" },
+            { to: "/rsp/macro/property/ves-formula", label: "VES Simulator" },
+            { to: "/rsp/macro/property/vendor-portal", label: "Vendor Portal" },
+          ].map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className="rounded-lg border border-emerald-500/25 bg-white px-3 py-1.5 font-mono text-xs text-emerald-700 transition-all hover:border-emerald-600"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+
 
       <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-8">
         <span className="font-mono text-xs uppercase tracking-widest text-slate-600">

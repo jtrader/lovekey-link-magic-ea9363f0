@@ -1,4 +1,4 @@
-import { createRouteFn, Link, useNavigate } from "@/lib/tanstack-shim";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Nucleus } from "@/components/Nucleus";
@@ -83,7 +83,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-export const Route = createRouteFn("/_authenticated/app")({
+export const Route = createFileRoute("/_authenticated/app")({
   component: AppView,
   head: () => ({
     meta: [

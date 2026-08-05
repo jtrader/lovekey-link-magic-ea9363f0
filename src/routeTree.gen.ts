@@ -16,6 +16,8 @@ import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as RspIndexRouteImport } from './routes/rsp.index'
 import { Route as RspSpecCheckRouteImport } from './routes/rsp.spec-check'
 import { Route as RspPrinciplesRouteImport } from './routes/rsp.principles'
 import { Route as RspImplementationsRouteImport } from './routes/rsp.implementations'
@@ -58,6 +60,10 @@ import { Route as RspEthicalAuctionCapacityRouteImport } from './routes/rsp.ethi
 import { Route as RspEthicalAuctionAdoptionRouteImport } from './routes/rsp.ethical-auction.adoption'
 import { Route as RspCaseStudiesSlugRouteImport } from './routes/rsp.case-studies.$slug'
 import { Route as ApiPublicQuizSubmitRouteImport } from './routes/api/public/quiz-submit'
+import { Route as RspMacroPropertyVesFormulaRouteImport } from './routes/rsp_.macro.property.ves-formula'
+import { Route as RspMacroPropertyVendorPortalRouteImport } from './routes/rsp_.macro.property.vendor-portal'
+import { Route as RspMacroPropertyReivTelemetryRouteImport } from './routes/rsp_.macro.property.reiv-telemetry'
+import { Route as RspMacroPropertyOverviewRouteImport } from './routes/rsp_.macro.property.overview'
 import { Route as ApiPublicQuizResultTokenRouteImport } from './routes/api/public/quiz-result.$token'
 import { Route as ApiPublicHooksAvatarCleanupRouteImport } from './routes/api/public/hooks/avatar-cleanup'
 
@@ -94,6 +100,16 @@ const AdminRoute = AdminRouteImport.update({
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RspIndexRoute = RspIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RspRoute,
 } as any)
 const RspSpecCheckRoute = RspSpecCheckRouteImport.update({
   id: '/spec-check',
@@ -309,6 +325,30 @@ const ApiPublicQuizSubmitRoute = ApiPublicQuizSubmitRouteImport.update({
   path: '/api/public/quiz-submit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RspMacroPropertyVesFormulaRoute =
+  RspMacroPropertyVesFormulaRouteImport.update({
+    id: '/rsp_/macro/property/ves-formula',
+    path: '/rsp/macro/property/ves-formula',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const RspMacroPropertyVendorPortalRoute =
+  RspMacroPropertyVendorPortalRouteImport.update({
+    id: '/rsp_/macro/property/vendor-portal',
+    path: '/rsp/macro/property/vendor-portal',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const RspMacroPropertyReivTelemetryRoute =
+  RspMacroPropertyReivTelemetryRouteImport.update({
+    id: '/rsp_/macro/property/reiv-telemetry',
+    path: '/rsp/macro/property/reiv-telemetry',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const RspMacroPropertyOverviewRoute =
+  RspMacroPropertyOverviewRouteImport.update({
+    id: '/rsp_/macro/property/overview',
+    path: '/rsp/macro/property/overview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicQuizResultTokenRoute =
   ApiPublicQuizResultTokenRouteImport.update({
     id: '/api/public/quiz-result/$token',
@@ -323,7 +363,7 @@ const ApiPublicHooksAvatarCleanupRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedRouteWithChildren
+  '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
@@ -349,6 +389,7 @@ export interface FileRoutesByFullPath {
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp/spec-check': typeof RspSpecCheckRoute
+  '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
   '/rsp/ethical-auction/adoption': typeof RspEthicalAuctionAdoptionRoute
@@ -374,13 +415,16 @@ export interface FileRoutesByFullPath {
   '/rsp/macro/': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
+  '/rsp/macro/property/overview': typeof RspMacroPropertyOverviewRoute
+  '/rsp/macro/property/reiv-telemetry': typeof RspMacroPropertyReivTelemetryRoute
+  '/rsp/macro/property/vendor-portal': typeof RspMacroPropertyVendorPortalRoute
+  '/rsp/macro/property/ves-formula': typeof RspMacroPropertyVesFormulaRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthenticatedRouteWithChildren
+  '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
-  '/rsp': typeof RspRouteWithChildren
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app': typeof AuthenticatedAppRoute
@@ -401,6 +445,7 @@ export interface FileRoutesByTo {
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp/spec-check': typeof RspSpecCheckRoute
+  '/rsp': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
   '/rsp/ethical-auction/adoption': typeof RspEthicalAuctionAdoptionRoute
@@ -426,9 +471,14 @@ export interface FileRoutesByTo {
   '/rsp/macro': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
+  '/rsp/macro/property/overview': typeof RspMacroPropertyOverviewRoute
+  '/rsp/macro/property/reiv-telemetry': typeof RspMacroPropertyReivTelemetryRoute
+  '/rsp/macro/property/vendor-portal': typeof RspMacroPropertyVendorPortalRoute
+  '/rsp/macro/property/ves-formula': typeof RspMacroPropertyVesFormulaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
@@ -455,6 +505,7 @@ export interface FileRoutesById {
   '/rsp/implementations': typeof RspImplementationsRoute
   '/rsp/principles': typeof RspPrinciplesRoute
   '/rsp/spec-check': typeof RspSpecCheckRoute
+  '/rsp/': typeof RspIndexRoute
   '/api/public/quiz-submit': typeof ApiPublicQuizSubmitRoute
   '/rsp/case-studies/$slug': typeof RspCaseStudiesSlugRoute
   '/rsp/ethical-auction/adoption': typeof RspEthicalAuctionAdoptionRoute
@@ -480,6 +531,10 @@ export interface FileRoutesById {
   '/rsp_/macro/': typeof RspMacroIndexRoute
   '/api/public/hooks/avatar-cleanup': typeof ApiPublicHooksAvatarCleanupRoute
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
+  '/rsp_/macro/property/overview': typeof RspMacroPropertyOverviewRoute
+  '/rsp_/macro/property/reiv-telemetry': typeof RspMacroPropertyReivTelemetryRoute
+  '/rsp_/macro/property/vendor-portal': typeof RspMacroPropertyVendorPortalRoute
+  '/rsp_/macro/property/ves-formula': typeof RspMacroPropertyVesFormulaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -510,6 +565,7 @@ export interface FileRouteTypes {
     | '/rsp/implementations'
     | '/rsp/principles'
     | '/rsp/spec-check'
+    | '/rsp/'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
     | '/rsp/ethical-auction/adoption'
@@ -535,13 +591,16 @@ export interface FileRouteTypes {
     | '/rsp/macro/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
+    | '/rsp/macro/property/overview'
+    | '/rsp/macro/property/reiv-telemetry'
+    | '/rsp/macro/property/vendor-portal'
+    | '/rsp/macro/property/ves-formula'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/login'
     | '/quiz'
-    | '/rsp'
     | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/app'
@@ -562,6 +621,7 @@ export interface FileRouteTypes {
     | '/rsp/implementations'
     | '/rsp/principles'
     | '/rsp/spec-check'
+    | '/rsp'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
     | '/rsp/ethical-auction/adoption'
@@ -587,8 +647,13 @@ export interface FileRouteTypes {
     | '/rsp/macro'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
+    | '/rsp/macro/property/overview'
+    | '/rsp/macro/property/reiv-telemetry'
+    | '/rsp/macro/property/vendor-portal'
+    | '/rsp/macro/property/ves-formula'
   id:
     | '__root__'
+    | '/'
     | '/_authenticated'
     | '/admin'
     | '/login'
@@ -615,6 +680,7 @@ export interface FileRouteTypes {
     | '/rsp/implementations'
     | '/rsp/principles'
     | '/rsp/spec-check'
+    | '/rsp/'
     | '/api/public/quiz-submit'
     | '/rsp/case-studies/$slug'
     | '/rsp/ethical-auction/adoption'
@@ -640,9 +706,14 @@ export interface FileRouteTypes {
     | '/rsp_/macro/'
     | '/api/public/hooks/avatar-cleanup'
     | '/api/public/quiz-result/$token'
+    | '/rsp_/macro/property/overview'
+    | '/rsp_/macro/property/reiv-telemetry'
+    | '/rsp_/macro/property/vendor-portal'
+    | '/rsp_/macro/property/ves-formula'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AdminRoute: typeof AdminRoute
   LoginRoute: typeof LoginRoute
@@ -663,6 +734,10 @@ export interface RootRouteChildren {
   RspMacroIndexRoute: typeof RspMacroIndexRoute
   ApiPublicHooksAvatarCleanupRoute: typeof ApiPublicHooksAvatarCleanupRoute
   ApiPublicQuizResultTokenRoute: typeof ApiPublicQuizResultTokenRoute
+  RspMacroPropertyOverviewRoute: typeof RspMacroPropertyOverviewRoute
+  RspMacroPropertyReivTelemetryRoute: typeof RspMacroPropertyReivTelemetryRoute
+  RspMacroPropertyVendorPortalRoute: typeof RspMacroPropertyVendorPortalRoute
+  RspMacroPropertyVesFormulaRoute: typeof RspMacroPropertyVesFormulaRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -715,6 +790,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rsp/': {
+      id: '/rsp/'
+      path: '/'
+      fullPath: '/rsp/'
+      preLoaderRoute: typeof RspIndexRouteImport
+      parentRoute: typeof RspRoute
     }
     '/rsp/spec-check': {
       id: '/rsp/spec-check'
@@ -1010,6 +1099,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicQuizSubmitRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp_/macro/property/ves-formula': {
+      id: '/rsp_/macro/property/ves-formula'
+      path: '/rsp/macro/property/ves-formula'
+      fullPath: '/rsp/macro/property/ves-formula'
+      preLoaderRoute: typeof RspMacroPropertyVesFormulaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rsp_/macro/property/vendor-portal': {
+      id: '/rsp_/macro/property/vendor-portal'
+      path: '/rsp/macro/property/vendor-portal'
+      fullPath: '/rsp/macro/property/vendor-portal'
+      preLoaderRoute: typeof RspMacroPropertyVendorPortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rsp_/macro/property/reiv-telemetry': {
+      id: '/rsp_/macro/property/reiv-telemetry'
+      path: '/rsp/macro/property/reiv-telemetry'
+      fullPath: '/rsp/macro/property/reiv-telemetry'
+      preLoaderRoute: typeof RspMacroPropertyReivTelemetryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rsp_/macro/property/overview': {
+      id: '/rsp_/macro/property/overview'
+      path: '/rsp/macro/property/overview'
+      fullPath: '/rsp/macro/property/overview'
+      preLoaderRoute: typeof RspMacroPropertyOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/quiz-result/$token': {
       id: '/api/public/quiz-result/$token'
       path: '/api/public/quiz-result/$token'
@@ -1076,6 +1193,7 @@ interface RspRouteChildren {
   RspImplementationsRoute: typeof RspImplementationsRoute
   RspPrinciplesRoute: typeof RspPrinciplesRoute
   RspSpecCheckRoute: typeof RspSpecCheckRoute
+  RspIndexRoute: typeof RspIndexRoute
   RspCaseStudiesSlugRoute: typeof RspCaseStudiesSlugRoute
   RspPulseAllocationRoute: typeof RspPulseAllocationRoute
   RspPulseDisasterAidRoute: typeof RspPulseDisasterAidRoute
@@ -1102,6 +1220,7 @@ const RspRouteChildren: RspRouteChildren = {
   RspImplementationsRoute: RspImplementationsRoute,
   RspPrinciplesRoute: RspPrinciplesRoute,
   RspSpecCheckRoute: RspSpecCheckRoute,
+  RspIndexRoute: RspIndexRoute,
   RspCaseStudiesSlugRoute: RspCaseStudiesSlugRoute,
   RspPulseAllocationRoute: RspPulseAllocationRoute,
   RspPulseDisasterAidRoute: RspPulseDisasterAidRoute,
@@ -1117,6 +1236,7 @@ const RspRouteChildren: RspRouteChildren = {
 const RspRouteWithChildren = RspRoute._addFileChildren(RspRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AdminRoute: AdminRoute,
   LoginRoute: LoginRoute,
@@ -1137,6 +1257,10 @@ const rootRouteChildren: RootRouteChildren = {
   RspMacroIndexRoute: RspMacroIndexRoute,
   ApiPublicHooksAvatarCleanupRoute: ApiPublicHooksAvatarCleanupRoute,
   ApiPublicQuizResultTokenRoute: ApiPublicQuizResultTokenRoute,
+  RspMacroPropertyOverviewRoute: RspMacroPropertyOverviewRoute,
+  RspMacroPropertyReivTelemetryRoute: RspMacroPropertyReivTelemetryRoute,
+  RspMacroPropertyVendorPortalRoute: RspMacroPropertyVendorPortalRoute,
+  RspMacroPropertyVesFormulaRoute: RspMacroPropertyVesFormulaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

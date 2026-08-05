@@ -1,4 +1,3 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import chapterPdfAsset from "@/assets/RSP_Chapter_Law_of_Vibration.pdf.asset.json";
 import rspLogo from "@/assets/rsp-logo.png.asset.json";
@@ -11,25 +10,7 @@ import {
   IconFlame,
 } from "@/components/rsp-shared";
 
-export const Route = createFileRoute("/rsp/")({
-  head: () => ({
-    meta: [
-      { title: "RSP — Respectful Synchronisation Protocol · Love Key Link" },
-      {
-        name: "description",
-        content:
-          "RSP is a privacy-first coordination layer. Synchronise consent, presence and identity — including avatars and AI stand-ins — without surveillance or coercion.",
-      },
-      { property: "og:title", content: "RSP — Respectful Synchronisation Protocol" },
-      {
-        property: "og:description",
-        content:
-          "A privacy-first coordination framework. Translate behaviour. Synchronise the signal. Burn the identifiable source.",
-      },
-    ],
-  }),
-  component: RspLanding,
-});
+
 
 const sections = [
   { to: "/rsp/principles", label: "Principles", desc: "The core commitments RSP is built on." },
@@ -77,7 +58,7 @@ const sections = [
   { to: "/rsp/faq", label: "FAQ", desc: "Plain-language answers for visitors." },
 ] as const;
 
-function RspLanding() {
+export function RspLanding() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: brandCss }} />
@@ -109,9 +90,9 @@ function RspLanding() {
           </p>
 
           <div className="rsp-hero-actions">
-            <Link to="/rsp/principles" className="rsp-btn-primary">
+            <a href="/rsp/principles" className="rsp-btn-primary">
               Explore the protocol →
-            </Link>
+            </a>
             <a href={whitepaperAsset.url} download="rsp-whitepaper.pdf" className="rsp-btn-outline">
               Download white paper ↓
             </a>
@@ -131,9 +112,9 @@ function RspLanding() {
               >
                 Chapter PDF ↓
               </a>
-              <Link to="/quiz" className="rsp-btn-pill-right">
+              <a href="/quiz" className="rsp-btn-pill-right">
                 Quiz →
-              </Link>
+              </a>
             </div>
           </div>
         </div>
@@ -236,9 +217,9 @@ function RspLanding() {
               never who, where, or how.
             </p>
             <div className="rsp-subhero-actions">
-              <Link to="/rsp/event-token" className="rsp-subhero-btn">
+              <a href="/rsp/event-token" className="rsp-subhero-btn">
                 About the Event Token →
-              </Link>
+              </a>
             </div>
           </div>
           <ul className="rsp-subhero-roles">
@@ -277,13 +258,13 @@ function RspLanding() {
         </div>
         <div className="rsp-vertical-grid">
           {sections.map((s, i) => (
-            <Link className="rsp-vertical-card" to={s.to} key={s.to}>
+            <a className="rsp-vertical-card" href={s.to} key={s.to}>
               <div className="rsp-vc-tag">{String(i + 1).padStart(2, "0")}</div>
               <div className="rsp-vc-name">{s.label}</div>
               <p className="rsp-event-flow-desc" style={{ marginTop: 8 }}>
                 {s.desc}
               </p>
-            </Link>
+            </a>
           ))}
         </div>
       </section>

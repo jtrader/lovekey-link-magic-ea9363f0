@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createRouteFn } from "@/lib/tanstack-shim";
 
 function json(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -7,7 +7,7 @@ function json(data: unknown, status = 200) {
   });
 }
 
-export const Route = createFileRoute("/api/public/quiz-result/$token")({
+export const Route = createRouteFn("/api/public/quiz-result/$token")({
   server: {
     handlers: {
       GET: async ({ params }) => {

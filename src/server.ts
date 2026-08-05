@@ -11,7 +11,7 @@ let serverEntryPromise: Promise<ServerEntry> | undefined;
 
 async function getServerEntry(): Promise<ServerEntry> {
   if (!serverEntryPromise) {
-    serverEntryPromise = import("@tanstack/react-start/server-entry").then(
+    serverEntryPromise = import("./lib/tanstack-start-shim").then(
       (m) => ((m as { default?: ServerEntry }).default ?? (m as unknown as ServerEntry)),
     );
   }

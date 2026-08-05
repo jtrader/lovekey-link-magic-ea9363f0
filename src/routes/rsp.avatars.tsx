@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createRouteFn, Link } from "@/lib/tanstack-shim";
 
-export const Route = createFileRoute("/rsp/avatars")({
+export const Route = createRouteFn("/rsp/avatars")({
   head: () => ({
     meta: [
       { title: "Identity Avatars — Own your represented self · Love Key Link" },

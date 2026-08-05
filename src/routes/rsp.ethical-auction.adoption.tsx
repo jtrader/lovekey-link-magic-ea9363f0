@@ -1,8 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createRouteFn, Link } from "@/lib/tanstack-shim";
 import { EaCards, EaSection } from "@/components/rsp-ethical-auction";
 import { EaNotesList } from "@/components/rsp-ea-notes";
 
-export const Route = createFileRoute("/rsp/ethical-auction/adoption")({
+export const Route = createRouteFn("/rsp/ethical-auction/adoption")({
   head: () => ({
     meta: [
       { title: "Calibration & adoption — Ethical Auction · Love Key Link" },

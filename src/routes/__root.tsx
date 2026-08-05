@@ -2,11 +2,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
-  createRootRouteWithContext,
+  createRouteFn,
   useRouter,
   HeadContent,
   Scripts,
-} from "@tanstack/react-router";
+} from "@/lib/tanstack-shim";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
 
@@ -48,7 +48,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+export const Route = createRouteFn()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },

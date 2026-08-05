@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createRouteFn } from "@/lib/tanstack-shim";
 import { MacroShell } from "@/components/rsp-macro/MacroNav";
 import {
   IconFlask,
@@ -9,7 +9,7 @@ import {
 } from "@/components/rsp-macro/MacroVisuals";
 import { GlossaryPanel, Term } from "@/components/rsp-macro/MacroGlossary";
 
-export const Route = createFileRoute("/rsp_/macro/calibration")({
+export const Route = createRouteFn("/rsp_/macro/calibration")({
   head: () => ({
     meta: [
       { title: "The 3-Month Level-Up Sandbox — @rsp/macro · Love Key Link" },

@@ -1,0 +1,10 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { SiteHeader } from '../../../components/SiteHeader.tsx';
+import PulseSpecPage from '../../../app/rsp/pulse/spec/page.tsx';
+---
+
+<Layout title="@rsp/pulse v1.0 — Open Specification">
+  <SiteHeader client:load />
+  <PulseSpecPage client:load />
+</Layout>

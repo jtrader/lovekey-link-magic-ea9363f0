@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
+import { createRouteFn } from "@/lib/tanstack-shim";
+import { useServerFn } from "@/lib/tanstack-start-shim";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getQuizAttempts, type QuizAttempt } from "@/lib/quiz-admin.functions";
 import { Button } from "@/components/ui/button";
 
 
-export const Route = createFileRoute("/quiz_/admin")({
+export const Route = createRouteFn("/quiz_/admin")({
   head: () => ({
     meta: [
       { title: "Quiz Attempts · Admin" },

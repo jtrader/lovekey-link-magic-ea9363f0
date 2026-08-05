@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState } from "@/lib/tanstack-shim";
 import { useState } from "react";
 import { AVATAR_PATHS, SiteHeader, areaMenus, isAuctionPath, isPulsePath } from "@/components/SiteHeader";
 import lovekeyMark from "@/assets/lovekey-mark.png";
@@ -6,7 +6,7 @@ import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import { trackEvent } from "@/lib/analytics";
 import { getCaseStudy } from "@/lib/case-studies";
 
-export const Route = createFileRoute("/rsp")({
+export const Route = ((_path: string) => (opts: any) => opts)("/rsp")({
   head: () => ({
     meta: [
       { property: "og:type", content: "website" },

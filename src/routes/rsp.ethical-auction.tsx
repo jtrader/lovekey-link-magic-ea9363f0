@@ -1,8 +1,8 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createRouteFn, Outlet } from "@/lib/tanstack-shim";
 import { EaStyles } from "@/components/rsp-ethical-auction";
 import { GlossarySheetProvider } from "@/components/rsp-macro/MacroGlossary";
 
-export const Route = createFileRoute("/rsp/ethical-auction")({
+export const Route = createRouteFn("/rsp/ethical-auction")({
   component: EthicalAuctionLayout,
 });
 

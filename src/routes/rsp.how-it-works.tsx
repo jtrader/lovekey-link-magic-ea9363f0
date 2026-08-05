@@ -1,7 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createRouteFn, Link } from "@/lib/tanstack-shim";
 import { useRef, useState } from "react";
 
-export const Route = createFileRoute("/rsp/how-it-works")({
+export const Route = createRouteFn("/rsp/how-it-works")({
   head: () => ({
     meta: [
       { title: "How RSP Works — Consent, presence, avatars & revocation · Love Key Link" },

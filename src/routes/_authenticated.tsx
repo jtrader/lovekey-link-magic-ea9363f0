@@ -1,8 +1,8 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { createRouteFn, Outlet, useNavigate } from "@/lib/tanstack-shim";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 
-export const Route = createFileRoute("/_authenticated")({
+export const Route = createRouteFn("/_authenticated")({
   component: AuthGate,
 });
 

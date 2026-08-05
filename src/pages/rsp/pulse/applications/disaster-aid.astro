@@ -1,0 +1,10 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import { SiteHeader } from '../../../../components/SiteHeader.tsx';
+import DisasterAidPage from '../../../../app/rsp/pulse/applications/disaster-aid/page.tsx';
+---
+
+<Layout title="Disaster & Humanitarian Aid Framework — @rsp/pulse">
+  <SiteHeader client:load />
+  <DisasterAidPage client:load />
+</Layout>

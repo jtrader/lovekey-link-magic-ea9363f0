@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createRouteFn } from "@/lib/tanstack-shim";
 import { z } from "zod";
 import { PASS_MARK, QUIZ_QUESTIONS } from "@/lib/quiz-data";
 
@@ -27,7 +27,7 @@ const submissionSchema = z.object({
 
 const RESULT_RECIPIENT = "support@lovekey.com.au";
 
-export const Route = createFileRoute("/api/public/quiz-submit")({
+export const Route = createRouteFn("/api/public/quiz-submit")({
   server: {
     handlers: {
       POST: async ({ request }) => {

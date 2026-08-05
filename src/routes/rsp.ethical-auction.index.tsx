@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createRouteFn, Link } from "@/lib/tanstack-shim";
 import { EaCards, EaSection } from "@/components/rsp-ethical-auction";
 import { EaRef, EaNotesList } from "@/components/rsp-ea-notes";
 import {
@@ -12,7 +12,7 @@ import {
 import veoSummaryPdf from "@/assets/veo-branch-summary.pdf.asset.json";
 
 
-export const Route = createFileRoute("/rsp/ethical-auction/")({
+export const Route = createRouteFn("/rsp/ethical-auction/")({
   validateSearch: validateSimSearch,
   head: () => ({
 

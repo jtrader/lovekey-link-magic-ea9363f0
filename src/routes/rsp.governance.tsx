@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createRouteFn } from "@/lib/tanstack-shim";
 
-export const Route = createFileRoute("/rsp/governance")({
+export const Route = createRouteFn("/rsp/governance")({
   head: () => ({
     meta: [
       { title: "RSP Governance — Tiers, credits & the burn clause · Love Key Link" },

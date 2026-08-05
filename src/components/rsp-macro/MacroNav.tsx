@@ -1,7 +1,7 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { GlossarySheetProvider } from "@/components/rsp-macro/MacroGlossary";
 import { MacroKeyTerms } from "@/components/rsp-macro/MacroKeyTerms";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, usePathname } from "@/lib/tanstack-shim";
 
 const navItems = [
   { href: "/rsp/macro", label: "00. Index" },
@@ -17,7 +17,8 @@ function normalize(p: string) {
 }
 
 export function useMacroActive() {
-  const pathname = useRouterState({ select: (s) => normalize(s.location.pathname) });
+  const rawPath = usePathname();
+  const pathname = normalize(rawPath);
   const active =
     navItems.find((i) => i.href !== "/rsp/macro" && pathname.startsWith(i.href)) ??
     navItems[0];

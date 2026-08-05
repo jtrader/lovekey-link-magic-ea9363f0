@@ -1,0 +1,10 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { SiteHeader } from '../../../components/SiteHeader.tsx';
+import StrainEnginePage from '../../../app/rsp/pulse/strain-engine/page.tsx';
+---
+
+<Layout title="The Event Strain Index (ESI) — @rsp/pulse">
+  <SiteHeader client:load />
+  <StrainEnginePage client:load />
+</Layout>

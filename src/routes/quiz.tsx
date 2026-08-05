@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createRouteFn, Link } from "@/lib/tanstack-shim";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   PASS_MARK,
@@ -23,7 +23,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { downloadQuizResultPdf } from "@/lib/quiz-result-pdf";
 
-export const Route = createFileRoute("/quiz")({
+export const Route = createRouteFn("/quiz")({
   head: () => ({
     meta: [
       { title: "RSP Law of Vibration Quiz · Love Key Link" },

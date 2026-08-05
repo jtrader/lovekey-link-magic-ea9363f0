@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createRouteFn } from "@/lib/tanstack-shim";
 
 type Body = {
   image?: string; // data URL
@@ -84,7 +84,7 @@ function buildPrompt(style: string, likeness: number) {
   ].join(" ");
 }
 
-export const Route = createFileRoute("/api/avatar-generate")({
+export const Route = createRouteFn("/api/avatar-generate")({
   server: {
     handlers: {
       POST: async ({ request }) => {

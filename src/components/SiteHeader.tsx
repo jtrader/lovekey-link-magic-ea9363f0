@@ -1,8 +1,17 @@
-import { Link, useRouterState } from "@tanstack/react-router";
 import { Fragment, useEffect, useState } from "react";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import { rspCss } from "@/components/rsp-css";
+
+function usePathname() {
+  const [pathname, setPathname] = useState("");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setPathname(window.location.pathname);
+    }
+  }, []);
+  return pathname;
+}
 
 // ─── Area switcher (3 main site areas) ───────────────────────────────────────
 
@@ -169,15 +178,15 @@ function MenuBranch({
   return (
     <Fragment>
       <div className="rsp-menu-branch">
-        <Link
-          to={link.to}
+        <a
+          href={link.to}
           role={variant === "desktop" ? "menuitem" : undefined}
           className={itemClass}
           aria-current={active ? "page" : undefined}
           onClick={onNavigate}
         >
           {link.label}
-        </Link>
+        </a>
         {hasChildren && (
           <button
             type="button"
@@ -196,23 +205,23 @@ function MenuBranch({
       {hasChildren &&
         expanded &&
         link.children!.map((c) => (
-          <Link
+          <a
             key={c.to}
-            to={c.to}
+            href={c.to}
             role={variant === "desktop" ? "menuitem" : undefined}
             className={`${subClass}${linkIsActive(pathname, c) ? " rsp-nav-active" : ""}`}
             aria-current={linkIsActive(pathname, c) ? "page" : undefined}
             onClick={onNavigate}
           >
             {c.label}
-          </Link>
+          </a>
         ))}
     </Fragment>
   );
 }
 
 function AreaMenus() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const pathname = usePathname();
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   return (
@@ -228,12 +237,12 @@ function AreaMenus() {
             onMouseEnter={() => setOpenIdx(i)}
           >
             {single ? (
-              <Link
-                to={menu.to}
+              <a
+                href={menu.to}
                 className={`rsp-menu-trigger${current ? " rsp-menu-current" : ""}`}
               >
                 {menu.label}
-              </Link>
+              </a>
             ) : (
               <button
                 type="button"
@@ -272,14 +281,14 @@ function AreaMenus() {
  */
 export function SiteHeader({ variant = "default" }: { variant?: "default" | "macro" }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const pathname = usePathname();
 
   return (
     <div className={`rsp-root rsp-header-shell${variant === "macro" ? " rsp-header-macro" : ""}`}>
       <style dangerouslySetInnerHTML={{ __html: rspCss + headerCss }} />
       <nav className="rsp-nav">
         <div className="rsp-nav-inner">
-          <Link to="/" className="rsp-nav-logo">
+          <a href="/" className="rsp-nav-logo">
             <span className="rsp-nav-logo-mark">
               <img src={lovekeyMark} alt="Love Key Link" />
             </span>
@@ -289,7 +298,7 @@ export function SiteHeader({ variant = "default" }: { variant?: "default" | "mac
                 {variant === "macro" ? "/ @rsp/macro" : "/ RSP"}
               </span>
             </span>
-          </Link>
+          </a>
           <div className="rsp-menus-wrap">
             <AreaMenus />
             <a className="rsp-nav-cta" href={whitepaperAsset.url} download="rsp-whitepaper.pdf">

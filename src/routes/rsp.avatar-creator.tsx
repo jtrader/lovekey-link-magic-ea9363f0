@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createRouteFn, Link } from "@/lib/tanstack-shim";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
+import { useServerFn } from "@/lib/tanstack-start-shim";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { saveAvatar, listMyAvatars, deleteAvatar } from "@/lib/avatar.functions";
 
-export const Route = createFileRoute("/rsp/avatar-creator")({
+export const Route = createRouteFn("/rsp/avatar-creator")({
   head: () => ({
     meta: [
       { title: "Avatar Creator — Make an AI profile picture · Identity Avatars" },

@@ -62,6 +62,7 @@ import { Route as RspCaseStudiesSlugRouteImport } from './routes/rsp.case-studie
 import { Route as ApiPublicQuizSubmitRouteImport } from './routes/api/public/quiz-submit'
 import { Route as RspMacroPropertyVesFormulaRouteImport } from './routes/rsp_.macro.property.ves-formula'
 import { Route as RspMacroPropertyVendorPortalRouteImport } from './routes/rsp_.macro.property.vendor-portal'
+import { Route as RspMacroPropertySpecificationRouteImport } from './routes/rsp_.macro.property.specification'
 import { Route as RspMacroPropertyReivTelemetryRouteImport } from './routes/rsp_.macro.property.reiv-telemetry'
 import { Route as RspMacroPropertyOverviewRouteImport } from './routes/rsp_.macro.property.overview'
 import { Route as ApiPublicQuizResultTokenRouteImport } from './routes/api/public/quiz-result.$token'
@@ -337,6 +338,12 @@ const RspMacroPropertyVendorPortalRoute =
     path: '/rsp/macro/property/vendor-portal',
     getParentRoute: () => rootRouteImport,
   } as any)
+const RspMacroPropertySpecificationRoute =
+  RspMacroPropertySpecificationRouteImport.update({
+    id: '/rsp_/macro/property/specification',
+    path: '/rsp/macro/property/specification',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const RspMacroPropertyReivTelemetryRoute =
   RspMacroPropertyReivTelemetryRouteImport.update({
     id: '/rsp_/macro/property/reiv-telemetry',
@@ -417,6 +424,7 @@ export interface FileRoutesByFullPath {
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
   '/rsp/macro/property/overview': typeof RspMacroPropertyOverviewRoute
   '/rsp/macro/property/reiv-telemetry': typeof RspMacroPropertyReivTelemetryRoute
+  '/rsp/macro/property/specification': typeof RspMacroPropertySpecificationRoute
   '/rsp/macro/property/vendor-portal': typeof RspMacroPropertyVendorPortalRoute
   '/rsp/macro/property/ves-formula': typeof RspMacroPropertyVesFormulaRoute
 }
@@ -473,6 +481,7 @@ export interface FileRoutesByTo {
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
   '/rsp/macro/property/overview': typeof RspMacroPropertyOverviewRoute
   '/rsp/macro/property/reiv-telemetry': typeof RspMacroPropertyReivTelemetryRoute
+  '/rsp/macro/property/specification': typeof RspMacroPropertySpecificationRoute
   '/rsp/macro/property/vendor-portal': typeof RspMacroPropertyVendorPortalRoute
   '/rsp/macro/property/ves-formula': typeof RspMacroPropertyVesFormulaRoute
 }
@@ -533,6 +542,7 @@ export interface FileRoutesById {
   '/api/public/quiz-result/$token': typeof ApiPublicQuizResultTokenRoute
   '/rsp_/macro/property/overview': typeof RspMacroPropertyOverviewRoute
   '/rsp_/macro/property/reiv-telemetry': typeof RspMacroPropertyReivTelemetryRoute
+  '/rsp_/macro/property/specification': typeof RspMacroPropertySpecificationRoute
   '/rsp_/macro/property/vendor-portal': typeof RspMacroPropertyVendorPortalRoute
   '/rsp_/macro/property/ves-formula': typeof RspMacroPropertyVesFormulaRoute
 }
@@ -593,6 +603,7 @@ export interface FileRouteTypes {
     | '/api/public/quiz-result/$token'
     | '/rsp/macro/property/overview'
     | '/rsp/macro/property/reiv-telemetry'
+    | '/rsp/macro/property/specification'
     | '/rsp/macro/property/vendor-portal'
     | '/rsp/macro/property/ves-formula'
   fileRoutesByTo: FileRoutesByTo
@@ -649,6 +660,7 @@ export interface FileRouteTypes {
     | '/api/public/quiz-result/$token'
     | '/rsp/macro/property/overview'
     | '/rsp/macro/property/reiv-telemetry'
+    | '/rsp/macro/property/specification'
     | '/rsp/macro/property/vendor-portal'
     | '/rsp/macro/property/ves-formula'
   id:
@@ -708,6 +720,7 @@ export interface FileRouteTypes {
     | '/api/public/quiz-result/$token'
     | '/rsp_/macro/property/overview'
     | '/rsp_/macro/property/reiv-telemetry'
+    | '/rsp_/macro/property/specification'
     | '/rsp_/macro/property/vendor-portal'
     | '/rsp_/macro/property/ves-formula'
   fileRoutesById: FileRoutesById
@@ -736,6 +749,7 @@ export interface RootRouteChildren {
   ApiPublicQuizResultTokenRoute: typeof ApiPublicQuizResultTokenRoute
   RspMacroPropertyOverviewRoute: typeof RspMacroPropertyOverviewRoute
   RspMacroPropertyReivTelemetryRoute: typeof RspMacroPropertyReivTelemetryRoute
+  RspMacroPropertySpecificationRoute: typeof RspMacroPropertySpecificationRoute
   RspMacroPropertyVendorPortalRoute: typeof RspMacroPropertyVendorPortalRoute
   RspMacroPropertyVesFormulaRoute: typeof RspMacroPropertyVesFormulaRoute
 }
@@ -1113,6 +1127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RspMacroPropertyVendorPortalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsp_/macro/property/specification': {
+      id: '/rsp_/macro/property/specification'
+      path: '/rsp/macro/property/specification'
+      fullPath: '/rsp/macro/property/specification'
+      preLoaderRoute: typeof RspMacroPropertySpecificationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rsp_/macro/property/reiv-telemetry': {
       id: '/rsp_/macro/property/reiv-telemetry'
       path: '/rsp/macro/property/reiv-telemetry'
@@ -1259,19 +1280,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicQuizResultTokenRoute: ApiPublicQuizResultTokenRoute,
   RspMacroPropertyOverviewRoute: RspMacroPropertyOverviewRoute,
   RspMacroPropertyReivTelemetryRoute: RspMacroPropertyReivTelemetryRoute,
+  RspMacroPropertySpecificationRoute: RspMacroPropertySpecificationRoute,
   RspMacroPropertyVendorPortalRoute: RspMacroPropertyVendorPortalRoute,
   RspMacroPropertyVesFormulaRoute: RspMacroPropertyVesFormulaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

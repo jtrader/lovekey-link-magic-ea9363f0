@@ -88,6 +88,7 @@ export const areaMenus: AreaMenu[] = [
           { to: "/rsp/macro/property/reiv-telemetry", label: "REIV Telemetry" },
           { to: "/rsp/macro/property/ves-formula", label: "VES Simulator" },
           { to: "/rsp/macro/property/vendor-portal", label: "Vendor Portal" },
+          { to: "/rsp/macro/property/specification", label: "Specification" },
         ],
       },
 
@@ -141,6 +142,7 @@ export const areaMenus: AreaMenu[] = [
           { to: "/rsp/macro/property/reiv-telemetry", label: "REIV Telemetry" },
           { to: "/rsp/macro/property/ves-formula", label: "VES Simulator" },
           { to: "/rsp/macro/property/vendor-portal", label: "Vendor Portal" },
+          { to: "/rsp/macro/property/specification", label: "Specification" },
         ],
       },
 

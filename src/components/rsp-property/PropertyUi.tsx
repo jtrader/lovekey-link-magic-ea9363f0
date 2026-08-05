@@ -9,6 +9,7 @@ export const propertyNav = [
   { to: "/rsp/macro/property/reiv-telemetry", label: "02. REIV Telemetry" },
   { to: "/rsp/macro/property/ves-formula", label: "03. VES Simulator" },
   { to: "/rsp/macro/property/vendor-portal", label: "04. Vendor Portal" },
+  { to: "/rsp/macro/property/specification", label: "05. Specification" },
 ] as const;
 
 export const stateClasses: Record<TelemetryState, string> = {

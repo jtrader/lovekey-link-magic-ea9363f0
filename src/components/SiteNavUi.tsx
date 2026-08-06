@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { breadcrumbsFor, pagerFor } from "@/lib/site-nav";
+import { breadcrumbsFor, clusterById, pagerFor } from "@/lib/site-nav";
 
 type Tone = "rsp" | "light";
 
@@ -165,7 +165,7 @@ export function BranchHubGrid({
   tone?: Tone;
   children?: ReactNode;
 }) {
-  const cluster = clusterByIdSafe(clusterId);
+  const cluster = clusterById(clusterId);
   if (!cluster) return null;
   const links = cluster.links.filter((l) => !exclude.includes(l.to));
 
@@ -214,13 +214,3 @@ export function BranchHubGrid({
     </ol>
   );
 }
-
-function clusterByIdSafe(id: string) {
-  // Imported lazily to keep this module tree-shakeable in tests.
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  return clusterLookup[id];
-}
-
-import { scopes } from "@/lib/site-nav";
-const clusterLookup: Record<string, (typeof scopes)[number]["clusters"][number]> =
-  Object.fromEntries(scopes.flatMap((s) => s.clusters.map((c) => [c.id, c])));

@@ -9,6 +9,8 @@
 
 export type NavLink = {
   to: string;
+  /** Optional in-page anchor appended to the link target. */
+  hash?: string;
   label: string;
   blurb?: string;
   exact?: boolean;
@@ -48,9 +50,9 @@ export const scopes: NavScope[] = [
         to: "/",
         links: [
           { to: "/", label: "Home", exact: true, blurb: "Are my people okay?" },
-          { to: "/#how", label: "How it works", blurb: "Claim, share, coordinate." },
-          { to: "/#status", label: "Status model", blurb: "Presence without surveillance." },
-          { to: "/#privacy", label: "Privacy", blurb: "What we never collect." },
+          { to: "/", hash: "how", label: "How it works", blurb: "Claim, share, coordinate." },
+          { to: "/", hash: "status", label: "Status model", blurb: "Presence without surveillance." },
+          { to: "/", hash: "privacy", label: "Privacy", blurb: "What we never collect." },
           { to: "/quiz", label: "Wellbeing quiz", blurb: "Find your coordination profile." },
           { to: "/login", label: "Sign in", blurb: "Open your family hub." },
         ],

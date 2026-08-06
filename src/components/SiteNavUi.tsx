@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { breadcrumbsFor, clusterById, pagerFor } from "@/lib/site-nav";
+import { breadcrumbsFor, clusterById, pagerFor, sectionClassFor } from "@/lib/site-nav";
 
 type Tone = "rsp" | "light";
 
@@ -25,13 +25,13 @@ export function SiteBreadcrumbs({
     return (
       <nav
         aria-label="Breadcrumb"
-        className="mx-auto flex max-w-5xl flex-wrap items-center gap-2 px-6 pt-6 font-mono text-xs text-slate-500"
+        className={`${sectionClassFor(pathname)} mx-auto flex max-w-5xl flex-wrap items-center gap-2 px-6 pt-6 font-mono text-xs text-slate-500`}
       >
         {crumbs.map((c, i) => (
           <span key={`${c.label}-${i}`} className="inline-flex items-center gap-2">
             {i > 0 && <span aria-hidden="true">/</span>}
             {i === last || !c.to ? (
-              <span className="text-emerald-700" aria-current="page">
+              <span className="section-accent-text" aria-current="page">
                 {c.label}
               </span>
             ) : (
@@ -87,12 +87,14 @@ export function SitePager({
     return (
       <nav
         aria-label={`${clusterLabel} pagination`}
-        className="mt-14 flex flex-wrap items-center justify-between gap-3 border-t border-emerald-500/15 pt-8 font-mono text-xs"
+        className={`${sectionClassFor(pathname)} mt-14 flex flex-wrap items-center justify-between gap-3 pt-8 font-mono text-xs`}
+        style={{ borderTop: "1px solid color-mix(in oklab, var(--section-from) 18%, transparent)" }}
       >
         {prev ? (
           <Link
             to={prev.to}
-            className="rounded-xl border border-emerald-500/20 px-4 py-2 text-slate-600 transition-all hover:border-emerald-500/60 hover:text-emerald-700"
+            className="rounded-xl px-4 py-2 text-slate-600 transition-all hover:text-slate-900"
+            style={{ border: "1px solid color-mix(in oklab, var(--section-from) 25%, transparent)" }}
           >
             ← {prev.label}
           </Link>
@@ -105,7 +107,8 @@ export function SitePager({
         {next ? (
           <Link
             to={next.to}
-            className="rounded-xl border border-emerald-500/20 px-4 py-2 text-slate-600 transition-all hover:border-emerald-500/60 hover:text-emerald-700"
+            className="rounded-xl px-4 py-2 text-slate-600 transition-all hover:text-slate-900"
+            style={{ border: "1px solid color-mix(in oklab, var(--section-from) 25%, transparent)" }}
           >
             {next.label} →
           </Link>
@@ -165,26 +168,31 @@ export function BranchHubGrid({
   tone?: Tone;
   children?: ReactNode;
 }) {
+  const pathname = useRouterState({ select: (st) => st.location.pathname });
   const cluster = clusterById(clusterId);
   if (!cluster) return null;
   const links = cluster.links.filter((l) => !exclude.includes(l.to));
 
   return (
-    <ol className={tone === "light" ? "grid gap-4 md:grid-cols-2" : "rsp-hub-grid"}>
+    <ol
+      className={
+        tone === "light" ? `${sectionClassFor(pathname)} grid gap-4 md:grid-cols-2` : "rsp-hub-grid"
+      }
+    >
       {links.map((l, i) => (
         <li key={l.to}>
           <Link
             to={l.to}
             className={
               tone === "light"
-                ? "flex h-full flex-col rounded-2xl border border-emerald-500/15 bg-white p-5 transition-all hover:border-emerald-500/50"
+                ? "sec-card flex h-full flex-col rounded-2xl bg-white p-5 transition-all"
                 : "rsp-hub-card"
             }
           >
             <span
               className={
                 tone === "light"
-                  ? "font-mono text-[0.68rem] uppercase tracking-widest text-emerald-700"
+                  ? "section-accent-text font-mono text-[0.68rem] uppercase tracking-widest"
                   : "rsp-hub-num"
               }
             >

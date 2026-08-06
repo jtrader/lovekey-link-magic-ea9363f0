@@ -168,8 +168,33 @@
   --color-health-purple: var(--health-purple);
   --color-surface-warm: var(--surface-warm);
   --color-surface-soft: var(--surface-soft);
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-serif: "DM Serif Display", ui-serif, Georgia, serif;
 }
+
+/*
+ * Section accents — every scope / application branch owns one soft gradient.
+ * Applied by `sectionClassFor()` (see src/lib/site-nav.ts) to the header,
+ * breadcrumbs and pager so readers always know which department they are in.
+ */
+:root,
+.sec-product { --section-from: #2e78ff; --section-to: #7db6ff; --section-soft: #eaf4ff; }
+.sec-protocol { --section-from: #4f46e5; --section-to: #a78bfa; --section-soft: #eef2ff; }
+.sec-pulse { --section-from: #e11d48; --section-to: #fb7185; --section-soft: #fff1f2; }
+.sec-veo { --section-from: #0284c7; --section-to: #38bdf8; --section-soft: #e0f2fe; }
+.sec-macro { --section-from: #b45309; --section-to: #fbbf24; --section-soft: #fffbeb; }
+.sec-property { --section-from: #059669; --section-to: #34d399; --section-soft: #d1fae5; }
+.sec-avatars { --section-from: #7c3aed; --section-to: #c084fc; --section-soft: #f5f3ff; }
+.sec-resources { --section-from: #475569; --section-to: #94a3b8; --section-soft: #f1f5f9; }
+
+.section-accent-bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--section-from), var(--section-to));
+  opacity: 0.9;
+}
+.section-accent-text { color: var(--section-from); }
+
 
 @layer base {
   html {
@@ -183,6 +208,7 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
   }
@@ -218,3 +244,10 @@
 .animate-breathe { animation: breathe 6s ease-in-out infinite; }
 .animate-drift { animation: drift 9s ease-in-out infinite; }
 .animate-fade-up { animation: fade-up 0.8s var(--ease-calm) both; }
+
+.sec-card {
+  border: 1px solid color-mix(in oklab, var(--section-from) 16%, transparent);
+}
+.sec-card:hover {
+  border-color: color-mix(in oklab, var(--section-from) 50%, transparent);
+}

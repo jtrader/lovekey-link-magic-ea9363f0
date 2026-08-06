@@ -222,7 +222,7 @@ const css = `
   .sc-card-title { font-size: 1.1rem; font-weight: 600; }
   .sc-card-title a { color: inherit; text-decoration: none; }
   .sc-card-title a:hover { color: var(--rsp-primary); }
-  .sc-card-path { font-size: .8rem; color: var(--rsp-text-soft); font-family: ui-monospace, monospace; }
+  .sc-card-path { font-size: .8rem; color: var(--rsp-text-soft); font-family: 'IBM Plex Mono', ui-monospace, monospace; }
   .sc-card-spec { font-size: .84rem; color: var(--rsp-text-muted); margin: 6px 0 16px; }
   .sc-pill {
     font-size: .68rem; font-weight: 700; letter-spacing: .04em; padding: 3px 9px; border-radius: 999px; white-space: nowrap;

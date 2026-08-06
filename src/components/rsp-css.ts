@@ -679,7 +679,7 @@ export const rspCss = `
   .rsp-event-receipt {
     background: var(--rsp-surface); border: 1px solid var(--rsp-border);
     border-radius: calc(var(--rsp-radius) - 2px); padding: 16px 20px;
-    font-size: .78rem; color: var(--rsp-text-muted); font-family: monospace; line-height: 1.8;
+    font-size: .78rem; color: var(--rsp-text-muted); font-family: 'IBM Plex Mono', ui-monospace, monospace; line-height: 1.8;
   }
   .rsp-event-receipt-label {
     font-family: 'DM Sans', sans-serif; font-size: .7rem; font-weight: 500;

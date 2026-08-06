@@ -55,7 +55,7 @@ const devCss = `
   .rsp-code-box.has-tabs { border-top-left-radius: 0; }
   .rsp-code-pre {
     margin: 0; padding: 16px 52px 16px 16px; overflow-x: auto;
-    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
     font-size: .84rem; line-height: 1.65; color: var(--rsp-text);
     background: none;
   }

@@ -184,7 +184,8 @@ function QuizPage() {
     });
   }
 
-  if (result) {
+      <main className="min-h-screen bg-background text-foreground">
+        <SiteHeader />
     return (
       <main className="min-h-screen bg-background text-foreground">
         <div className="mx-auto max-w-2xl px-6 py-16">

@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Nucleus } from "@/components/Nucleus";
+import { SiteHeader } from "@/components/SiteHeader";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import rspLogo from "@/assets/rsp-logo.png.asset.json";
 import { trackEvent } from "@/lib/analytics";
+
 import {
   Heart,
   Shield,

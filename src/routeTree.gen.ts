@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SitemapPagesDotxmlRouteImport } from './routes/sitemap-pages[.]xml'
 import { Route as RspRouteImport } from './routes/rsp'
+import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -81,6 +82,11 @@ const SitemapPagesDotxmlRoute = SitemapPagesDotxmlRouteImport.update({
 const RspRoute = RspRouteImport.update({
   id: '/rsp',
   path: '/rsp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizRoute = QuizRouteImport.update({
@@ -374,6 +380,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
+  '/resources': typeof ResourcesRoute
   '/rsp': typeof RspRouteWithChildren
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -433,6 +440,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
+  '/resources': typeof ResourcesRoute
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app': typeof AuthenticatedAppRoute
@@ -492,6 +500,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/quiz': typeof QuizRoute
+  '/resources': typeof ResourcesRoute
   '/rsp': typeof RspRouteWithChildren
   '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -553,6 +562,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/quiz'
+    | '/resources'
     | '/rsp'
     | '/sitemap-pages.xml'
     | '/sitemap.xml'
@@ -612,6 +622,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/quiz'
+    | '/resources'
     | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/app'
@@ -670,6 +681,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/quiz'
+    | '/resources'
     | '/rsp'
     | '/sitemap-pages.xml'
     | '/sitemap.xml'
@@ -731,6 +743,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   LoginRoute: typeof LoginRoute
   QuizRoute: typeof QuizRoute
+  ResourcesRoute: typeof ResourcesRoute
   RspRoute: typeof RspRouteWithChildren
   SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -775,6 +788,13 @@ declare module '@tanstack/react-router' {
       path: '/rsp'
       fullPath: '/rsp'
       preLoaderRoute: typeof RspRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz': {
@@ -1262,6 +1282,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   LoginRoute: LoginRoute,
   QuizRoute: QuizRoute,
+  ResourcesRoute: ResourcesRoute,
   RspRoute: RspRouteWithChildren,
   SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
@@ -1287,13 +1308,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

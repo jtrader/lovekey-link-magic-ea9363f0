@@ -183,7 +183,10 @@ function QuizPage() {
       attempt: r.attempt,
     });
   }
+
+  if (result) {
     return (
+
       <main className="min-h-screen bg-background text-foreground">
         <SiteHeader />
 

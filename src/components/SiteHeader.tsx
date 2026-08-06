@@ -1,262 +1,76 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Fragment, useEffect, useState } from "react";
+import { useState } from "react";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import { rspCss } from "@/components/rsp-css";
+import { isLinkActive, matchPath, scopes, type NavCluster, type NavLink } from "@/lib/site-nav";
 
-// ─── Area switcher (3 main site areas) ───────────────────────────────────────
-
-export const AVATAR_PATHS = [
-  "/rsp/avatars",
-  "/rsp/avatar-creator",
-  "/rsp/how-it-works",
-  "/rsp/dimensions",
-  "/rsp/checklist",
-  "/rsp/faq",
-];
-
-function isAvatarPath(pathname: string) {
-  return AVATAR_PATHS.some((a) => pathname === a || pathname.startsWith(`${a}/`));
-}
-
-export function isAuctionPath(pathname: string) {
-  return (
-    pathname === "/rsp/ethical-auction" || pathname.startsWith("/rsp/ethical-auction/")
-  );
-}
-
-export function isPulsePath(pathname: string) {
-  return pathname === "/rsp/pulse" || pathname.startsWith("/rsp/pulse/");
-}
-
-
-type AreaLink = { to: string; label: string; exact?: boolean; children?: AreaLink[] };
-
-function linkIsActive(pathname: string, l: AreaLink) {
-  const path = pathname.length > 1 && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
-  return l.exact ? path === l.to : path === l.to || path.startsWith(`${l.to}/`);
-}
-
-function menuHasActive(pathname: string, links: AreaLink[]): boolean {
-  return links.some(
-    (l) => linkIsActive(pathname, l) || (l.children ? menuHasActive(pathname, l.children) : false),
-  );
-}
-
-type AreaMenu = {
-  label: string;
-  to: string;
-  match: (pathname: string) => boolean;
-  links: AreaLink[];
-};
-
-export const areaMenus: AreaMenu[] = [
-  {
-    label: "Love Key Link",
-    to: "/",
-    match: (p) => p === "/",
-    links: [{ to: "/", label: "Home", exact: true }],
-  },
-  {
-    label: "RSP",
-    to: "/rsp",
-    match: (p) => p !== "/" && !isAvatarPath(p) && !isAuctionPath(p) && !isPulsePath(p),
-    links: [
-      { to: "/rsp", label: "Overview", exact: true },
-      { to: "/rsp/principles", label: "Principles" },
-      { to: "/rsp/implementations", label: "Implementations" },
-      { to: "/rsp/case-studies", label: "Case Studies" },
-      { to: "/rsp/event-token", label: "Event Token" },
-      { to: "/rsp/for-developers", label: "Developers" },
-      {
-        to: "/rsp/macro",
-        label: "Macro Equilibrium",
-        children: [
-          { to: "/rsp/macro", label: "Index", exact: true },
-          { to: "/rsp/macro/overview", label: "Overview" },
-          { to: "/rsp/macro/telemetry", label: "Telemetry" },
-          { to: "/rsp/macro/ves-formula", label: "VES Formula" },
-          { to: "/rsp/macro/calibration", label: "Calibration" },
-          { to: "/rsp/macro/governance", label: "Governance" },
-        ],
-      },
-      {
-        to: "/rsp/macro/property/overview",
-        label: "Property (@rsp/property)",
-        children: [
-          { to: "/rsp/macro/property/overview", label: "Overview" },
-          { to: "/rsp/macro/property/reiv-telemetry", label: "REIV Telemetry" },
-          { to: "/rsp/macro/property/ves-formula", label: "VES Simulator" },
-          { to: "/rsp/macro/property/vendor-portal", label: "Vendor Portal" },
-          { to: "/rsp/macro/property/specification", label: "Specification" },
-        ],
-      },
-
-      { to: "/rsp/governance", label: "Governance" },
-    ],
-  },
-  {
-    label: "Pulse",
-    to: "/rsp/pulse",
-    match: isPulsePath,
-    links: [
-      { to: "/rsp/pulse", label: "Overview", exact: true },
-      { to: "/rsp/pulse/summary", label: "Pulse Server — Summary" },
-      { to: "/rsp/pulse/server", label: "RSP Pulse Server" },
-      { to: "/rsp/pulse/telemetry", label: "Global Telemetry" },
-      { to: "/rsp/pulse/allocation", label: "Resource Allocation" },
-      { to: "/rsp/pulse/spec", label: "Open Spec (@rsp/pulse)" },
-      { to: "/rsp/pulse/strain-engine", label: "Strain Engine (ESI)" },
-      { to: "/rsp/pulse/disaster-aid", label: "Disaster & Humanitarian Aid" },
-    ],
-  },
-
-  {
-    label: "Equilibrium Theory VEO",
-    to: "/rsp/ethical-auction",
-    match: isAuctionPath,
-    links: [
-      { to: "/rsp/ethical-auction", label: "Overview", exact: true },
-      { to: "/rsp/ethical-auction/intent", label: "Pooled intent" },
-      { to: "/rsp/ethical-auction/capacity", label: "Capacity & workforce" },
-      { to: "/rsp/ethical-auction/experience", label: "Consumer experience" },
-      { to: "/rsp/ethical-auction/equilibrium", label: "Equilibrium score" },
-      { to: "/rsp/ethical-auction/adoption", label: "Calibration & adoption" },
-      {
-        to: "/rsp/macro",
-        label: "Macro Equilibrium",
-        children: [
-          { to: "/rsp/macro", label: "Index", exact: true },
-          { to: "/rsp/macro/overview", label: "Overview" },
-          { to: "/rsp/macro/telemetry", label: "Telemetry" },
-          { to: "/rsp/macro/ves-formula", label: "VES Formula" },
-          { to: "/rsp/macro/calibration", label: "Calibration" },
-          { to: "/rsp/macro/governance", label: "Governance" },
-        ],
-      },
-      {
-        to: "/rsp/macro/property/overview",
-        label: "Property (@rsp/property)",
-        children: [
-          { to: "/rsp/macro/property/overview", label: "Overview" },
-          { to: "/rsp/macro/property/reiv-telemetry", label: "REIV Telemetry" },
-          { to: "/rsp/macro/property/ves-formula", label: "VES Simulator" },
-          { to: "/rsp/macro/property/vendor-portal", label: "Vendor Portal" },
-          { to: "/rsp/macro/property/specification", label: "Specification" },
-        ],
-      },
-
-    ],
-  },
-  {
-    label: "Identity Avatars",
-    to: "/rsp/avatars",
-    match: isAvatarPath,
-    links: [
-      { to: "/rsp/avatars", label: "Overview", exact: true },
-      { to: "/rsp/avatar-creator", label: "Avatar Creator" },
-      { to: "/rsp/how-it-works", label: "How it works" },
-      { to: "/rsp/dimensions", label: "Dimensions" },
-      { to: "/rsp/checklist", label: "Checklist" },
-      { to: "/rsp/faq", label: "FAQ" },
-    ],
-  },
-];
-
-function MenuBranch({
-  link,
+function ScopePanelLinks({
+  cluster,
   pathname,
   variant,
   onNavigate,
+  showLabel,
 }: {
-  link: AreaLink;
+  cluster: NavCluster;
   pathname: string;
   variant: "desktop" | "mobile";
   onNavigate: () => void;
+  showLabel: boolean;
 }) {
-  const hasChildren = !!link.children?.length;
-  const childActive = hasChildren ? menuHasActive(pathname, link.children!) : false;
-  const [expanded, setExpanded] = useState(childActive);
-  useEffect(() => {
-    if (childActive) setExpanded(true);
-  }, [childActive]);
-
-  const active = linkIsActive(pathname, link);
-  const itemClass =
-    variant === "desktop"
-      ? `rsp-menu-item${active ? " rsp-nav-active" : ""}`
-      : active
-        ? "rsp-nav-active"
-        : undefined;
-  const subClass = variant === "desktop" ? "rsp-menu-item rsp-menu-subitem" : "rsp-mobile-subitem";
-
+  const itemClass = variant === "desktop" ? "rsp-menu-item" : "rsp-mobile-item";
   return (
-    <Fragment>
-      <div className="rsp-menu-branch">
-        <Link
-          to={link.to}
-          role={variant === "desktop" ? "menuitem" : undefined}
-          className={itemClass}
-          aria-current={active ? "page" : undefined}
-          onClick={onNavigate}
-        >
-          {link.label}
-        </Link>
-        {hasChildren && (
-          <button
-            type="button"
-            className="rsp-menu-expand"
-            aria-expanded={expanded}
-            aria-label={`${expanded ? "Collapse" : "Expand"} ${link.label} links`}
-            onClick={(e) => {
-              e.preventDefault();
-              setExpanded((v) => !v);
-            }}
-          >
-            <span aria-hidden="true">{expanded ? "\u2212" : "+"}</span>
-          </button>
-        )}
-      </div>
-      {hasChildren &&
-        expanded &&
-        link.children!.map((c) => (
+    <div className="rsp-menu-col">
+      {showLabel && (
+        <div className="rsp-menu-col-head">
+          <Link to={cluster.to} className="rsp-menu-col-title" onClick={onNavigate}>
+            {cluster.label}
+          </Link>
+          {cluster.blurb && <span className="rsp-menu-col-blurb">{cluster.blurb}</span>}
+        </div>
+      )}
+      {cluster.links.map((l: NavLink) => {
+        const active = isLinkActive(pathname, l);
+        return (
           <Link
-            key={c.to}
-            to={c.to}
+            key={l.to}
+            to={l.to}
             role={variant === "desktop" ? "menuitem" : undefined}
-            className={`${subClass}${linkIsActive(pathname, c) ? " rsp-nav-active" : ""}`}
-            aria-current={linkIsActive(pathname, c) ? "page" : undefined}
+            className={`${itemClass}${active ? " rsp-nav-active" : ""}`}
+            aria-current={active ? "page" : undefined}
             onClick={onNavigate}
           >
-            {c.label}
+            {l.label}
           </Link>
-        ))}
-    </Fragment>
+        );
+      })}
+    </div>
   );
 }
 
-function AreaMenus() {
+function ScopeMenus() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const currentScopeId = matchPath(pathname)?.scope.id;
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   return (
     <ul className="rsp-menus" onMouseLeave={() => setOpenIdx(null)}>
-      {areaMenus.map((menu, i) => {
-        const current = menu.match(pathname) || menuHasActive(pathname, menu.links);
-        const single = menu.links.length <= 1;
+      {scopes.map((scope, i) => {
+        const current = scope.id === currentScopeId;
+        const single = scope.clusters.length === 1 && scope.clusters[0]!.links.length <= 1;
         return (
           <li
-            key={menu.label}
+            key={scope.id}
             className="rsp-menu"
             data-open={openIdx === i}
             onMouseEnter={() => setOpenIdx(i)}
           >
             {single ? (
               <Link
-                to={menu.to}
+                to={scope.to}
                 className={`rsp-menu-trigger${current ? " rsp-menu-current" : ""}`}
               >
-                {menu.label}
+                {scope.label}
               </Link>
             ) : (
               <button
@@ -265,22 +79,25 @@ function AreaMenus() {
                 aria-expanded={openIdx === i}
                 onClick={() => setOpenIdx((o) => (o === i ? null : i))}
               >
-                {menu.label}
+                {scope.label}
                 <span className="rsp-menu-caret" aria-hidden="true" />
               </button>
             )}
             {!single && openIdx === i && (
-              <div className="rsp-menu-panel" role="menu">
-                {menu.links.map((l) => (
-                  <MenuBranch
-                    key={l.to}
-                    link={l}
+              <div
+                className={`rsp-menu-panel${scope.mega ? " rsp-menu-mega" : ""}`}
+                role="menu"
+              >
+                {scope.clusters.map((c) => (
+                  <ScopePanelLinks
+                    key={c.id}
+                    cluster={c}
                     pathname={pathname}
                     variant="desktop"
                     onNavigate={() => setOpenIdx(null)}
+                    showLabel={!!scope.mega}
                   />
                 ))}
-
               </div>
             )}
           </li>
@@ -291,12 +108,15 @@ function AreaMenus() {
 }
 
 /**
- * Shared Love Key Link site header (logo + area dropdown nav + mobile menu).
- * `variant="macro"` adopts the @rsp/macro light/mono style guide.
+ * Shared Love Key Link site header (logo + scope nav + mobile accordion).
+ * `variant="macro"` adopts the light/mono style guide used by the
+ * @rsp/macro and @rsp/property branches.
  */
 export function SiteHeader({ variant = "default" }: { variant?: "default" | "macro" }) {
-  const [menuOpen, setMenuOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const currentScopeId = matchPath(pathname)?.scope.id;
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [openScope, setOpenScope] = useState<string | null>(currentScopeId ?? null);
 
   return (
     <div className={`rsp-root rsp-header-shell${variant === "macro" ? " rsp-header-macro" : ""}`}>
@@ -315,7 +135,7 @@ export function SiteHeader({ variant = "default" }: { variant?: "default" | "mac
             </span>
           </Link>
           <div className="rsp-menus-wrap">
-            <AreaMenus />
+            <ScopeMenus />
             <a className="rsp-nav-cta" href={whitepaperAsset.url} download="rsp-whitepaper.pdf">
               White Paper
             </a>
@@ -335,20 +155,35 @@ export function SiteHeader({ variant = "default" }: { variant?: "default" | "mac
         </div>
         {menuOpen && (
           <div className="rsp-nav-mobile">
-            {areaMenus.map((menu) => (
-              <div key={menu.label} className="rsp-mobile-group">
-                <div className="rsp-mobile-group-label">{menu.label}</div>
-                {menu.links.map((l) => (
-                  <MenuBranch
-                    key={l.to}
-                    link={l}
-                    pathname={pathname}
-                    variant="mobile"
-                    onNavigate={() => setMenuOpen(false)}
-                  />
-                ))}
-              </div>
-            ))}
+            {scopes.map((scope) => {
+              const expanded = openScope === scope.id;
+              return (
+                <div key={scope.id} className="rsp-mobile-group">
+                  <button
+                    type="button"
+                    className={`rsp-mobile-group-label${
+                      scope.id === currentScopeId ? " rsp-nav-active" : ""
+                    }`}
+                    aria-expanded={expanded}
+                    onClick={() => setOpenScope((s) => (s === scope.id ? null : scope.id))}
+                  >
+                    {scope.label}
+                    <span aria-hidden="true">{expanded ? "\u2212" : "+"}</span>
+                  </button>
+                  {expanded &&
+                    scope.clusters.map((c) => (
+                      <ScopePanelLinks
+                        key={c.id}
+                        cluster={c}
+                        pathname={pathname}
+                        variant="mobile"
+                        onNavigate={() => setMenuOpen(false)}
+                        showLabel={scope.clusters.length > 1}
+                      />
+                    ))}
+                </div>
+              );
+            })}
             <div className="rsp-mobile-group">
               <a
                 href={whitepaperAsset.url}
@@ -370,6 +205,40 @@ export function SiteHeader({ variant = "default" }: { variant?: "default" | "mac
 const headerCss = `
   .rsp-header-shell { min-height: 0; overflow: visible; background: transparent; }
 
+  /* Scope menus: single-column panels, plus a multi-column mega panel for
+     the Applications scope so every branch is visible at once. */
+  .rsp-menu-panel { display: flex; flex-direction: column; }
+  .rsp-menu-mega {
+    display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr));
+    gap: 18px 26px; padding: 20px 22px; min-width: 620px; right: auto; left: 50%;
+    transform: translateX(-50%);
+  }
+  .rsp-menu-col { display: flex; flex-direction: column; min-width: 0; }
+  .rsp-menu-col-head { display: flex; flex-direction: column; gap: 2px; margin: 0 0 6px; padding: 0 10px; }
+  .rsp-menu-col-title {
+    font-size: .82rem; font-weight: 700; letter-spacing: .02em; color: var(--rsp-text);
+    text-decoration: none;
+  }
+  .rsp-menu-col-title:hover { color: var(--rsp-primary); }
+  .rsp-menu-col-blurb { font-size: .72rem; line-height: 1.35; color: var(--rsp-text-soft, #64748b); }
+  .rsp-menu-mega .rsp-menu-item { font-size: .82rem; padding: 5px 10px; }
+
+  .rsp-mobile-item {
+    display: block; padding: 7px 4px 7px 14px; font-size: .9rem;
+    color: var(--rsp-text-muted); text-decoration: none;
+  }
+  .rsp-mobile-item:hover { color: var(--rsp-text); }
+  .rsp-mobile-item.rsp-nav-active { color: var(--rsp-primary); font-weight: 600; }
+  button.rsp-mobile-group-label {
+    display: flex; width: 100%; align-items: center; justify-content: space-between;
+    background: none; border: 0; cursor: pointer; text-align: left;
+  }
+  button.rsp-mobile-group-label.rsp-nav-active { color: var(--rsp-primary); }
+
+  @media (max-width: 1024px) {
+    .rsp-menu-mega { min-width: 0; grid-template-columns: 1fr; }
+  }
+
   .rsp-header-macro {
     --rsp-primary: #b45309;
     --rsp-primary-light: #fffbeb;
@@ -388,6 +257,7 @@ const headerCss = `
   .rsp-header-macro .rsp-nav-logo-sub,
   .rsp-header-macro .rsp-menu-trigger,
   .rsp-header-macro .rsp-menu-item,
+  .rsp-header-macro .rsp-menu-col-title,
   .rsp-header-macro .rsp-nav-cta,
   .rsp-header-macro .rsp-mobile-group-label,
   .rsp-header-macro .rsp-nav-mobile a {

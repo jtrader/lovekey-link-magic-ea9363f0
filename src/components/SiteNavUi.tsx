@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { breadcrumbsFor, clusterById, pagerFor } from "@/lib/site-nav";
+import { breadcrumbsFor, clusterById, pagerFor, sectionClassFor } from "@/lib/site-nav";
 
 type Tone = "rsp" | "light";
 
@@ -25,13 +25,13 @@ export function SiteBreadcrumbs({
     return (
       <nav
         aria-label="Breadcrumb"
-        className="mx-auto flex max-w-5xl flex-wrap items-center gap-2 px-6 pt-6 font-mono text-xs text-slate-500"
+        className={`${sectionClassFor(pathname)} mx-auto flex max-w-5xl flex-wrap items-center gap-2 px-6 pt-6 font-mono text-xs text-slate-500`}
       >
         {crumbs.map((c, i) => (
           <span key={`${c.label}-${i}`} className="inline-flex items-center gap-2">
             {i > 0 && <span aria-hidden="true">/</span>}
             {i === last || !c.to ? (
-              <span className="text-emerald-700" aria-current="page">
+              <span className="section-accent-text" aria-current="page">
                 {c.label}
               </span>
             ) : (
@@ -87,12 +87,14 @@ export function SitePager({
     return (
       <nav
         aria-label={`${clusterLabel} pagination`}
-        className="mt-14 flex flex-wrap items-center justify-between gap-3 border-t border-emerald-500/15 pt-8 font-mono text-xs"
+        className={`${sectionClassFor(pathname)} mt-14 flex flex-wrap items-center justify-between gap-3 pt-8 font-mono text-xs`}
+        style={{ borderTop: "1px solid color-mix(in oklab, var(--section-from) 18%, transparent)" }}
       >
         {prev ? (
           <Link
             to={prev.to}
-            className="rounded-xl border border-emerald-500/20 px-4 py-2 text-slate-600 transition-all hover:border-emerald-500/60 hover:text-emerald-700"
+            className="rounded-xl px-4 py-2 text-slate-600 transition-all hover:section-accent-text"
+            style={{ border: "1px solid color-mix(in oklab, var(--section-from) 25%, transparent)" }}
           >
             ← {prev.label}
           </Link>
@@ -105,7 +107,8 @@ export function SitePager({
         {next ? (
           <Link
             to={next.to}
-            className="rounded-xl border border-emerald-500/20 px-4 py-2 text-slate-600 transition-all hover:border-emerald-500/60 hover:text-emerald-700"
+            className="rounded-xl px-4 py-2 text-slate-600 transition-all hover:section-accent-text"
+            style={{ border: "1px solid color-mix(in oklab, var(--section-from) 25%, transparent)" }}
           >
             {next.label} →
           </Link>

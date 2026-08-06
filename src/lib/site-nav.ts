@@ -1,3 +1,7 @@
+import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
+
+const WHITEPAPER_URL = whitepaperAsset.url;
+
 /**
  * Single source of truth for the site's information architecture.
  *
@@ -11,6 +15,10 @@ export type NavLink = {
   to: string;
   /** Optional in-page anchor appended to the link target. */
   hash?: string;
+  /** External/asset URL — rendered as a plain anchor instead of a router link. */
+  href?: string;
+  /** Filename to download when `href` points at a file asset. */
+  download?: string;
   label: string;
   blurb?: string;
   exact?: boolean;
@@ -181,6 +189,13 @@ export const scopes: NavScope[] = [
         to: "/resources",
         links: [
           { to: "/resources", label: "All downloads", exact: true, blurb: "Whitepaper and branch specs." },
+          {
+            to: "/resources",
+            href: WHITEPAPER_URL,
+            download: "rsp-whitepaper.pdf",
+            label: "RSP White Paper (PDF)",
+            blurb: "The full protocol paper.",
+          },
           { to: "/rsp/spec-check", label: "Spec checklist", blurb: "Internal coverage tracker." },
         ],
       },

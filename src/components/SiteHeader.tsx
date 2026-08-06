@@ -33,8 +33,9 @@ function ScopePanelLinks({
         const active = isLinkActive(pathname, l);
         return (
           <Link
-            key={l.to}
+            key={`${l.to}${l.hash ?? ""}`}
             to={l.to}
+            hash={l.hash}
             role={variant === "desktop" ? "menuitem" : undefined}
             className={`${itemClass}${active ? " rsp-nav-active" : ""}`}
             aria-current={active ? "page" : undefined}

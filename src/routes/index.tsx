@@ -167,15 +167,9 @@ const homepageHubMembers = [
   },
 ];
 
-const sectionLinks = [
-  { id: "how", label: "How it works" },
-  { id: "status", label: "Status model" },
-  { id: "privacy", label: "Privacy" },
-] as const;
-
 function Index() {
 
-  const [activeSection, setActiveSection] = useState<string>("");
+  const [, setActiveSection] = useState<string>("");
   const [howProgress, setHowProgress] = useState(0);
 
   useEffect(() => {
@@ -217,47 +211,20 @@ function Index() {
     return () => observer.disconnect();
   }, []);
 
-  const navLinkClass = (id: string) =>
-    activeSection === id
-      ? "relative font-semibold text-primary transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-primary after:content-['']"
-      : "relative text-muted-foreground transition-colors hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:rounded-full after:bg-primary after:transition-all hover:after:w-full after:content-['']";
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Shared site navigation (same framework as /rsp) */}
       <SiteHeader />
 
-      {/* Page section bar — in-page anchors for this landing page */}
-      <div className="sticky top-0 z-20 border-b border-border/60 bg-background/85 backdrop-blur">
+      {/* Reading progress for the "How it works" section */}
+      <div className="sticky top-0 z-20 h-0.5 bg-transparent">
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-gradient-primary transition-transform duration-150 ease-out"
+          className="h-0.5 origin-left bg-gradient-primary transition-transform duration-150 ease-out"
           style={{ transform: `scaleX(${howProgress})` }}
         />
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3">
-          <nav
-            aria-label="On this page"
-            className="flex items-center gap-6 overflow-x-auto text-sm text-muted-foreground"
-          >
-            {sectionLinks.map((s) => (
-              <a
-                key={s.id}
-                href={`#${s.id}`}
-                aria-current={activeSection === s.id ? "true" : undefined}
-                className={`shrink-0 ${navLinkClass(s.id)}`}
-              >
-                {s.label}
-              </a>
-            ))}
-          </nav>
-          <a
-            href="/login"
-            className="hidden shrink-0 items-center rounded-full bg-gradient-primary px-4 py-1.5 text-sm font-medium text-primary-foreground shadow-soft transition ease-calm hover:opacity-95 sm:inline-flex"
-          >
-            Sign in
-          </a>
-        </div>
       </div>
+
 
 
       {/* Hero */}

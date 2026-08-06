@@ -2,7 +2,14 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import { rspCss } from "@/components/rsp-css";
-import { isLinkActive, matchPath, scopes, type NavCluster, type NavLink } from "@/lib/site-nav";
+import {
+  isLinkActive,
+  matchPath,
+  scopes,
+  sectionClassFor,
+  type NavCluster,
+  type NavLink,
+} from "@/lib/site-nav";
 
 function ScopePanelLinks({
   cluster,
@@ -206,6 +213,7 @@ export function SiteHeader({ variant = "default" }: { variant?: "default" | "mac
             })}
           </div>
         )}
+        <div className="section-accent-bar" aria-hidden="true" />
       </nav>
     </div>
   );
@@ -250,10 +258,12 @@ const headerCss = `
     .rsp-menu-mega { min-width: 0; grid-template-columns: 1fr; }
   }
 
+  .rsp-header-shell { --rsp-primary: var(--section-from); --rsp-primary-glow: var(--section-to); }
+
   .rsp-header-macro {
-    --rsp-primary: #b45309;
-    --rsp-primary-light: #fffbeb;
-    --rsp-primary-glow: #f59e0b;
+    --rsp-primary: var(--section-from);
+    --rsp-primary-light: var(--section-soft);
+    --rsp-primary-glow: var(--section-to);
     --rsp-border: #e2e8f0;
     --rsp-border-strong: #cbd5e1;
     --rsp-text: #0f172a;
@@ -272,7 +282,7 @@ const headerCss = `
   .rsp-header-macro .rsp-nav-cta,
   .rsp-header-macro .rsp-mobile-group-label,
   .rsp-header-macro .rsp-nav-mobile a {
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     letter-spacing: .02em;
   }
   .rsp-header-macro .rsp-menu-panel,

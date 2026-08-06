@@ -8,7 +8,7 @@ import { stateLabel } from "@/lib/reiv-data";
 export const propertyNav = [
   { to: "/rsp/macro/property/overview", label: "01. Overview" },
   { to: "/rsp/macro/property/reiv-telemetry", label: "02. REIV Telemetry" },
-  { to: "/rsp/macro/property/ves-formula", label: "03. VES Simulator" },
+  { to: "/rsp/macro/property/ves-formula", label: "03. AES Simulator" },
   { to: "/rsp/macro/property/vendor-portal", label: "04. Vendor Portal" },
   { to: "/rsp/macro/property/specification", label: "05. Specification" },
 ] as const;
@@ -41,6 +41,65 @@ export function Tag({ children }: { children: ReactNode }) {
     <code className="rounded-md border border-emerald-500/20 bg-emerald-50 px-1.5 py-0.5 font-mono text-[0.75em] text-emerald-700">
       {children}
     </code>
+  );
+}
+
+/** The three vectors an agent is evaluated on, drawn as labelled bars. */
+export function VectorBars({
+  vectors,
+  className = "",
+}: {
+  vectors: { key: string; label: string; value: number; weight?: number }[];
+  className?: string;
+}) {
+  return (
+    <ul className={`space-y-2.5 ${className}`}>
+      {vectors.map((v) => (
+        <li key={v.key}>
+          <div className="mb-1 flex items-baseline justify-between gap-3 font-mono text-[0.68rem] text-slate-500">
+            <span className="uppercase tracking-widest">
+              {v.key}
+              <span className="ml-2 normal-case tracking-normal text-slate-400">{v.label}</span>
+            </span>
+            <span className="text-emerald-700">
+              {v.value.toFixed(3)}
+              {v.weight !== undefined && (
+                <span className="ml-1 text-slate-400">×{v.weight}</span>
+              )}
+            </span>
+          </div>
+          <div className="h-1.5 w-full rounded-full bg-slate-100">
+            <div
+              className="h-1.5 rounded-full bg-[linear-gradient(135deg,#059669_0%,#10B981_50%,#34D399_100%)]"
+              style={{ width: `${Math.min(100, Math.max(0, v.value * 100))}%` }}
+            />
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Headline Agent Equilibrium Score with its state band. */
+export function AesBadge({
+  aes,
+  rank,
+  state,
+}: {
+  aes: number;
+  rank?: number;
+  state: TelemetryState;
+}) {
+  return (
+    <span className="inline-flex items-center gap-2">
+      {rank !== undefined && (
+        <span className="rounded-lg bg-[linear-gradient(135deg,#059669_0%,#10B981_50%,#34D399_100%)] px-2 py-0.5 font-mono text-[0.68rem] text-white">
+          #{rank}
+        </span>
+      )}
+      <span className="font-mono text-sm font-semibold text-emerald-700">AES {aes.toFixed(3)}</span>
+      <StateBadge state={state} />
+    </span>
   );
 }
 

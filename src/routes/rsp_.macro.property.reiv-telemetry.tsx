@@ -177,6 +177,43 @@ function ReivTelemetry() {
         </p>
       </PropertyCard>
 
+      <PropertyCard className="mb-8">
+        <h2 className="mb-3 text-lg font-semibold text-slate-900">
+          This is the evidence base for the Niche Experience Vector
+        </h2>
+        <p className="mb-4 text-sm leading-relaxed text-slate-600">
+          When a vendor publishes an anonymised specification — category, region and price band —
+          @rsp/property selects the comparable slice of this feed and scores each responding agent's
+          verified record against it. That score is <Tag>NEV</Tag>, the first of the three vectors
+          an agent is evaluated on.
+        </p>
+        <ul className="mb-4 space-y-2 text-sm leading-relaxed text-slate-600">
+          <li>
+            <Tag>DOM</Tag> — the agent's days on market for this stock against the regional mean.
+          </li>
+          <li>
+            <Tag>Reserve Δ</Tag> — historical sale price against the vendor reserve on matching
+            listings.
+          </li>
+          <li>
+            <Tag>Volume</Tag> — verified transaction density in the postcode and typology across a
+            rolling 90 days.
+          </li>
+          <li>
+            <Tag>Clearance</Tag> — a proxy for the buyer competition depth the agent has been able
+            to find for comparable property.
+          </li>
+          <li>
+            <Tag>S</Tag> — servicing capacity used, which feeds the second vector, <Tag>SCV</Tag>.
+          </li>
+        </ul>
+        <p className="text-sm leading-relaxed text-slate-600">
+          No commission figure appears anywhere in this feed. Terms are the third vector and belong
+          to the agent's offer agreement; the first two are matters of record.
+        </p>
+      </PropertyCard>
+
+
       <PropertyCard className="overflow-x-auto p-0">
         <table className="w-full min-w-[720px] border-collapse text-left text-sm">
           <thead>

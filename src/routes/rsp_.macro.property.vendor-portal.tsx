@@ -1,15 +1,27 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
+  AesBadge,
   GradientButton,
   MetricCard,
   PropertyCard,
   PropertyShell,
   SectionHeading,
-  StateBadge,
   Tag,
+  VectorBars,
 } from "@/components/rsp-property/PropertyUi";
-import { categories, computeVes, regions, vesState, type PropertyCategory } from "@/lib/reiv-data";
+import {
+  AES_WEIGHTS,
+  agentRecords,
+  categories,
+  computeAes,
+  priceBands,
+  rankByAes,
+  regions,
+  timeframes,
+  type AesResult,
+  type PropertyCategory,
+} from "@/lib/reiv-data";
 
 export const Route = createFileRoute("/rsp_/macro/property/vendor-portal")({
   head: () => ({
@@ -18,13 +30,13 @@ export const Route = createFileRoute("/rsp_/macro/property/vendor-portal")({
       {
         name: "description",
         content:
-          "A privacy-first vendor portal: publish an anonymised RSP intent signal for free and watch agents compete in a live commission reverse auction.",
+          "A privacy-first vendor portal: publish an anonymised RSP intent signal for free and receive agents ranked by niche experience, ability to serve and their offer agreement.",
       },
       { property: "og:title", content: "Vendor Portal — @rsp/property" },
       {
         property: "og:description",
         content:
-          "Register free, stay anonymous, and let capable agents bid their commission down against measured servicing capacity.",
+          "Register free, stay anonymous, and compare agents on a published three-vector equilibrium score rather than a commission race.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -32,28 +44,6 @@ export const Route = createFileRoute("/rsp_/macro/property/vendor-portal")({
   }),
   component: VendorPortal,
 });
-
-const priceBands = ["$400k – $600k", "$600k – $850k", "$850k – $1.2m", "$1.2m – $1.8m", "$1.8m+"];
-const timeframes = ["Within 30 days", "1 – 3 months", "3 – 6 months", "Just exploring"];
-
-type Bid = {
-  id: number;
-  agency: string;
-  commission: number;
-  capacityUsed: number;
-  cx: number;
-  ves: number;
-  marketing: string;
-};
-
-const agencyPool = [
-  { agency: "Meridian & Co.", capacityUsed: 62, cx: 91, marketing: "Vendor-paid $0 — absorbed" },
-  { agency: "Northline Property", capacityUsed: 88, cx: 84, marketing: "Vendor-paid $1,400" },
-  { agency: "Harbourfield Agents", capacityUsed: 71, cx: 87, marketing: "Vendor-paid $0 — absorbed" },
-  { agency: "Cassia Residential", capacityUsed: 95, cx: 79, marketing: "Vendor-paid $2,100" },
-  { agency: "Ellsworth Group", capacityUsed: 58, cx: 93, marketing: "Vendor-paid $0 — absorbed" },
-  { agency: "Rowan & Kestrel", capacityUsed: 76, cx: 82, marketing: "Vendor-paid $900" },
-];
 
 function hashSignal(parts: string[]) {
   const raw = parts.join("|");
@@ -64,15 +54,44 @@ function hashSignal(parts: string[]) {
   return `rsp:int:${h.toString(16).padStart(8, "0")}`;
 }
 
+function reason(r: AesResult) {
+  const parts: string[] = [];
+  parts.push(
+    r.breakdown.match >= 0.95
+      ? "Verified record in this exact category, region and price band."
+      : r.breakdown.match >= 0.7
+        ? "Partial match to the specification — adjacent niche experience."
+        : "Little verified history in this niche; experience vector discounted.",
+  );
+  parts.push(
+    r.scv >= 0.7
+      ? "Capacity free to start this campaign now."
+      : r.scv >= 0.45
+        ? "Workload is tightening; start date may slip."
+        : "Already holding more demand than it can service.",
+  );
+  parts.push(
+    r.overridden
+      ? `Offer overridden ${r.offered < r.recommended ? "below" : "above"} the RSP recommendation of ${r.recommended.toFixed(2)}%.`
+      : "Offer accepted at the RSP recommended rate.",
+  );
+  return parts.join(" ");
+}
+
 function VendorPortal() {
   const [region, setRegion] = useState(regions[0]!);
   const [category, setCategory] = useState<PropertyCategory>(categories[0]!);
-  const [band, setBand] = useState(priceBands[1]!);
-  const [timeframe, setTimeframe] = useState(timeframes[1]!);
+  const [band, setBand] = useState<string>(priceBands[1]!);
+  const [timeframe, setTimeframe] = useState<string>(timeframes[1]!);
   const [published, setPublished] = useState(false);
-  const [bids, setBids] = useState<Bid[]>([]);
+  const [offers, setOffers] = useState<AesResult[]>([]);
+  const [open, setOpen] = useState<string | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
+  const spec = useMemo(
+    () => ({ region, category, band, timeframe }),
+    [region, category, band, timeframe],
+  );
   const signal = useMemo(
     () => hashSignal([region, category, band, timeframe]),
     [region, category, band, timeframe],
@@ -87,33 +106,14 @@ function VendorPortal() {
   function publish() {
     timers.current.forEach(clearTimeout);
     timers.current = [];
-    setBids([]);
+    setOffers([]);
+    setOpen(null);
     setPublished(true);
-    agencyPool.forEach((a, i) => {
+    agentRecords.forEach((a, i) => {
       const t = setTimeout(
         () => {
-          const commission = 2.2 - (100 - a.capacityUsed) * 0.008 + (i % 3) * 0.06;
-          const { ves } = computeVes({
-            relevance: 70 + ((i * 7) % 25),
-            cx: a.cx,
-            s: a.capacityUsed,
-            vt: 100,
-            va: a.capacityUsed,
-          });
-          setBids((prev) =>
-            [
-              ...prev,
-              {
-                id: i,
-                agency: a.agency,
-                commission: Math.max(1.25, Number(commission.toFixed(2))),
-                capacityUsed: a.capacityUsed,
-                cx: a.cx,
-                ves,
-                marketing: a.marketing,
-              },
-            ].sort((x, y) => y.ves - x.ves),
-          );
+          const result = computeAes(a, spec);
+          setOffers((prev) => rankByAes([...prev, result]));
         },
         700 + i * 850,
       );
@@ -121,14 +121,14 @@ function VendorPortal() {
     });
   }
 
-  const best = bids[0];
+  const best = offers[0];
 
   return (
     <PropertyShell current="Vendor Portal">
       <SectionHeading
         eyebrow="Simulated demo · nothing is stored"
         title="Vendor Portal"
-        lead="Publish an anonymised intent signal for free. Agents see the shape of the opportunity — never your name, address or contact details — and bid their commission down against measured servicing capacity."
+        lead="Publish an anonymised intent signal for free. Agents see the shape of the opportunity — never your name, address or contact details — and are returned to you ranked on three published vectors: what they have sold in your niche, whether they can serve you now, and the offer agreement they put forward."
       />
 
       <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
@@ -205,21 +205,34 @@ function VendorPortal() {
         <div className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <MetricCard
-              label="Live bids"
-              value={bids.length}
-              hint={published ? "Agents responding to your signal." : "Publish to open the auction."}
+              label="Agents evaluated"
+              value={offers.length}
+              hint={
+                published
+                  ? "Agents scored against your specification."
+                  : "Publish to open the evaluation."
+              }
             />
             <MetricCard
-              label="Best commission"
-              value={best ? `${best.commission.toFixed(2)}%` : "—"}
-              hint={best ? `Leading bid from ${best.agency}.` : "No bids yet."}
-              {...(best ? { state: vesState(best.ves) } : {})}
+              label="Best equilibrium fit"
+              value={best ? best.aes.toFixed(3) : "—"}
+              hint={
+                best
+                  ? `${best.agent.agency} at ${best.offered.toFixed(2)}% commission.`
+                  : "No offers yet."
+              }
+              {...(best ? { state: best.state } : {})}
             />
           </div>
 
           <PropertyCard className="p-0">
             <div className="flex items-center justify-between border-b border-emerald-500/15 px-5 py-4">
-              <h2 className="text-lg font-semibold text-slate-900">Reverse auction board</h2>
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900">Equilibrium board</h2>
+                <p className="font-mono text-[0.68rem] uppercase tracking-widest text-slate-400">
+                  Ranked by AES · rank 1 first
+                </p>
+              </div>
               {published && (
                 <span className="inline-flex items-center gap-1.5 font-mono text-[0.68rem] uppercase tracking-widest text-emerald-700">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
@@ -229,45 +242,77 @@ function VendorPortal() {
             </div>
             {!published && (
               <p className="px-5 py-10 text-center font-mono text-xs text-slate-500">
-                Publish your signal to see agents compete.
+                Publish your signal to see agents evaluated.
               </p>
             )}
-            {published && bids.length === 0 && (
+            {published && offers.length === 0 && (
               <p className="px-5 py-10 text-center font-mono text-xs text-slate-500">
-                Waiting for the first bid…
+                Waiting for the first offer…
               </p>
             )}
             <ul>
-              {bids.map((b, i) => (
-                <li
-                  key={b.id}
-                  className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4 last:border-0"
-                >
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[0.68rem] text-slate-400">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="font-medium text-slate-900">{b.agency}</span>
-                      <StateBadge state={vesState(b.ves)} />
-                    </div>
-                    <div className="mt-1 font-mono text-[0.68rem] text-slate-500">
-                      S {b.capacityUsed}% · CX {b.cx} · VES {b.ves.toFixed(3)} · {b.marketing}
-                    </div>
-                  </div>
-                  <span className="font-mono text-lg text-emerald-700">
-                    {b.commission.toFixed(2)}%
-                  </span>
-                </li>
-              ))}
+              {offers.map((o, i) => {
+                const isOpen = open === o.agent.id;
+                return (
+                  <li key={o.agent.id} className="border-b border-slate-100 last:border-0">
+                    <button
+                      type="button"
+                      onClick={() => setOpen(isOpen ? null : o.agent.id)}
+                      className="flex w-full flex-wrap items-center justify-between gap-3 px-5 py-4 text-left transition-colors hover:bg-emerald-50/40"
+                    >
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-medium text-slate-900">{o.agent.agency}</span>
+                          <AesBadge aes={o.aes} rank={i + 1} state={o.state} />
+                        </div>
+                        <div className="mt-1 font-mono text-[0.68rem] text-slate-500">
+                          NEV {o.nev.toFixed(2)} · SCV {o.scv.toFixed(2)} · OAV {o.oav.toFixed(2)} ·{" "}
+                          {o.agent.marketing}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-mono text-lg text-emerald-700">
+                          {o.offered.toFixed(2)}%
+                        </div>
+                        <div className="font-mono text-[0.68rem] text-slate-400">
+                          {o.overridden
+                            ? `override · rec ${o.recommended.toFixed(2)}%`
+                            : "at RSP recommendation"}
+                        </div>
+                      </div>
+                    </button>
+                    {isOpen && (
+                      <div className="border-t border-slate-100 bg-[#FAFBF9] px-5 py-4">
+                        <VectorBars
+                          className="mb-3"
+                          vectors={[
+                            { key: "NEV", label: "niche experience", value: o.nev, weight: AES_WEIGHTS.nev },
+                            { key: "SCV", label: "ability to serve", value: o.scv, weight: AES_WEIGHTS.scv },
+                            { key: "OAV", label: "offer agreement", value: o.oav, weight: AES_WEIGHTS.oav },
+                          ]}
+                        />
+                        <p className="text-xs leading-relaxed text-slate-600">{reason(o)}</p>
+                        <p className="mt-2 font-mono text-[0.68rem] text-slate-500">
+                          S {o.agent.capacityUsed}% · CX {o.agent.cx} · slots {o.agent.openSlots} ·
+                          DOM Δ {o.agent.domDelta}d · reserve Δ{" "}
+                          {o.agent.reserveVariance >= 0 ? "+" : ""}
+                          {o.agent.reserveVariance}% · niche vol {o.agent.nicheVolume}
+                        </p>
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </PropertyCard>
 
           <PropertyCard className="p-5">
             <p className="text-sm leading-relaxed text-slate-600">
-              Ordering is by <Tag>VES</Tag>, not by the lowest number. A saturated office can always
+              Ordering is by <Tag>AES</Tag>, not by the lowest number. A saturated office can always
               undercut on commission — under equilibrium it simply is not shown first, because the
-              service it is bidding to provide is one it cannot currently deliver.
+              service it is offering is one it cannot currently deliver and the niche record behind
+              it does not match your property. Commission is the agent's own term: RSP publishes the
+              rate it recommends for each agent, and any override is shown beside it.
             </p>
           </PropertyCard>
         </div>

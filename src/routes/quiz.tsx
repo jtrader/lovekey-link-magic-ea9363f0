@@ -183,11 +183,10 @@ function QuizPage() {
       attempt: r.attempt,
     });
   }
-
-      <main className="min-h-screen bg-background text-foreground">
-        <SiteHeader />
     return (
       <main className="min-h-screen bg-background text-foreground">
+        <SiteHeader />
+
         <div className="mx-auto max-w-2xl px-6 py-16">
           <div className="rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
             <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">

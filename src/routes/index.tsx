@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Nucleus } from "@/components/Nucleus";
+import { SiteHeader } from "@/components/SiteHeader";
 import lovekeyMark from "@/assets/lovekey-mark.png";
 import rspLogo from "@/assets/rsp-logo.png.asset.json";
 import { trackEvent } from "@/lib/analytics";
+
 import {
   Heart,
   Shield,
@@ -15,9 +17,8 @@ import {
   Phone,
   Calendar,
   Activity,
-  Menu,
-  X,
 } from "lucide-react";
+
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -166,8 +167,14 @@ const homepageHubMembers = [
   },
 ];
 
+const sectionLinks = [
+  { id: "how", label: "How it works" },
+  { id: "status", label: "Status model" },
+  { id: "privacy", label: "Privacy" },
+] as const;
+
 function Index() {
-  const [menuOpen, setMenuOpen] = useState(false);
+
   const [activeSection, setActiveSection] = useState<string>("");
   const [howProgress, setHowProgress] = useState(0);
 
@@ -217,132 +224,41 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Nav */}
-      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
+      {/* Shared site navigation (same framework as /rsp) */}
+      <SiteHeader />
+
+      {/* Page section bar — in-page anchors for this landing page */}
+      <div className="sticky top-0 z-20 border-b border-border/60 bg-background/85 backdrop-blur">
         <div
           aria-hidden="true"
           className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-gradient-primary transition-transform duration-150 ease-out"
           style={{ transform: `scaleX(${howProgress})` }}
         />
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <a href="/" className="flex items-center gap-2">
-            <img src={lovekeyMark} alt="Love Key" className="h-14 w-14" width={56} height={56} />
-            <span className="font-semibold tracking-tight">
-              Love Key <span className="text-primary">Link</span>
-            </span>
-          </a>
-          <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-            <a
-              href="#how"
-              aria-current={activeSection === "how" ? "true" : undefined}
-              className={navLinkClass("how")}
-            >
-              How it works
-            </a>
-            <a
-              href="#status"
-              aria-current={activeSection === "status" ? "true" : undefined}
-              className={navLinkClass("status")}
-            >
-              Status model
-            </a>
-            <a
-              href="#privacy"
-              aria-current={activeSection === "privacy" ? "true" : undefined}
-              className={navLinkClass("privacy")}
-            >
-              Privacy
-            </a>
-            <div className="ml-2 flex items-center gap-1 rounded-full border border-border/70 bg-muted/40 p-1">
-              <span className="rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
-                Love Key Link
-              </span>
-              <a
-                href="/rsp"
-                className="rounded-full px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
-              >
-                RSP
-              </a>
-              <a
-                href="/rsp/avatars"
-                className="rounded-full px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
-              >
-                Identity Avatars
-              </a>
-            </div>
-          </nav>
-          <div className="flex items-center gap-2">
-            <a
-              href="/login"
-              className="hidden md:inline-flex items-center rounded-full bg-gradient-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-soft transition hover:opacity-95 ease-calm"
-            >
-              Sign in
-            </a>
-          </div>
-          <button
-            type="button"
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((o) => !o)}
-            className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-foreground md:hidden"
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3">
+          <nav
+            aria-label="On this page"
+            className="flex items-center gap-6 overflow-x-auto text-sm text-muted-foreground"
           >
-            {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-        {menuOpen && (
-          <nav className="border-t border-border/60 bg-background/95 px-6 py-4 md:hidden">
-            <div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm text-muted-foreground">
-              <a href="#how" onClick={() => setMenuOpen(false)} className={navLinkClass("how")}>
-                How it works
-              </a>
+            {sectionLinks.map((s) => (
               <a
-                href="#status"
-                onClick={() => setMenuOpen(false)}
-                className={navLinkClass("status")}
+                key={s.id}
+                href={`#${s.id}`}
+                aria-current={activeSection === s.id ? "true" : undefined}
+                className={`shrink-0 ${navLinkClass(s.id)}`}
               >
-                Status model
+                {s.label}
               </a>
-              <a
-                href="#privacy"
-                onClick={() => setMenuOpen(false)}
-                className={navLinkClass("privacy")}
-              >
-                Privacy
-              </a>
-              <div className="mt-1 flex flex-col gap-2 border-t border-border/60 pt-3">
-                <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground/70">
-                  Explore
-                </span>
-                <span className="w-fit rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
-                  Love Key Link
-                </span>
-                <a
-                  href="/rsp"
-                  onClick={() => setMenuOpen(false)}
-                  className="hover:text-foreground"
-                >
-                  RSP
-                </a>
-                <a
-                  href="/rsp/avatars"
-                  onClick={() => setMenuOpen(false)}
-                  className="hover:text-foreground"
-                >
-                  Identity Avatars
-                </a>
-              </div>
-
-              <a
-                href="/login"
-                onClick={() => setMenuOpen(false)}
-                className="inline-flex w-fit items-center rounded-full bg-gradient-primary px-4 py-2 font-medium text-primary-foreground shadow-soft transition hover:opacity-95 ease-calm"
-              >
-                Sign in
-              </a>
-            </div>
+            ))}
           </nav>
-        )}
-      </header>
+          <a
+            href="/login"
+            className="hidden shrink-0 items-center rounded-full bg-gradient-primary px-4 py-1.5 text-sm font-medium text-primary-foreground shadow-soft transition ease-calm hover:opacity-95 sm:inline-flex"
+          >
+            Sign in
+          </a>
+        </div>
+      </div>
+
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-hero">

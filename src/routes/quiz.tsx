@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { SiteHeader } from "@/components/SiteHeader";
+
 import {
   PASS_MARK,
   QUIZ_QUESTIONS,
@@ -184,7 +186,10 @@ function QuizPage() {
 
   if (result) {
     return (
+
       <main className="min-h-screen bg-background text-foreground">
+        <SiteHeader />
+
         <div className="mx-auto max-w-2xl px-6 py-16">
           <div className="rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
             <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
@@ -303,19 +308,13 @@ function QuizPage() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
+      <SiteHeader />
       <div className="mx-auto max-w-2xl px-6 py-12">
         <header className="mb-8">
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <Link to="/" className="hover:text-foreground">
-              ← Love Key Link home
-            </Link>
-            <Link to="/rsp" className="hover:text-foreground">
-              RSP →
-            </Link>
-          </div>
-          <h1 className="mt-4 text-3xl font-bold sm:text-4xl">{QUIZ_TITLE}</h1>
+          <h1 className="text-3xl font-bold sm:text-4xl">{QUIZ_TITLE}</h1>
           <p className="mt-2 text-muted-foreground">{QUIZ_SUBTITLE}</p>
         </header>
+
 
         <section className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-6">
           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">

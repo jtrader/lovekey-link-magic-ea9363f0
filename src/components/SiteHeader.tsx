@@ -130,9 +130,14 @@ export function SiteHeader({ variant = "default" }: { variant?: "default" | "mac
             <span>
               <span className="rsp-nav-logo-name">Love Key Link</span>
               <span className="rsp-nav-logo-sub">
-                {variant === "macro" ? "/ @rsp/macro" : "/ RSP"}
+                {variant === "macro"
+                  ? "/ @rsp/macro"
+                  : currentScopeId && currentScopeId !== "product"
+                    ? `/ ${matchPath(pathname)?.scope.label}`
+                    : ""}
               </span>
             </span>
+
           </Link>
           <div className="rsp-menus-wrap">
             <ScopeMenus />

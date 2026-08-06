@@ -301,3 +301,20 @@ export function clusterById(id: string): NavCluster | undefined {
   for (const s of scopes) for (const c of s.clusters) if (c.id === id) return c;
   return undefined;
 }
+
+/**
+ * Section identity — one soft gradient accent per department. Application
+ * branches (Pulse, VEO, Macro, Property) get their own accent; every other
+ * scope uses its scope id.
+ */
+export function sectionIdFor(pathname: string): string {
+  const m = matchPath(pathname);
+  if (!m) return "product";
+  if (m.scope.id === "applications") return m.cluster?.id ?? "protocol";
+  return m.scope.id;
+}
+
+/** CSS class carrying the section's accent custom properties. */
+export function sectionClassFor(pathname: string): string {
+  return `sec-${sectionIdFor(pathname)}`;
+}

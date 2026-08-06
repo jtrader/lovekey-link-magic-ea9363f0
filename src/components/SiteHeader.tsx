@@ -133,7 +133,11 @@ export function SiteHeader({ variant = "default" }: { variant?: "default" | "mac
   const [openScope, setOpenScope] = useState<string | null>(currentScopeId ?? null);
 
   return (
-    <div className={`rsp-root rsp-header-shell${variant === "macro" ? " rsp-header-macro" : ""}`}>
+    <div
+      className={`rsp-root rsp-header-shell ${sectionClassFor(pathname)}${
+        variant === "macro" ? " rsp-header-macro" : ""
+      }`}
+    >
       <style dangerouslySetInnerHTML={{ __html: rspCss + headerCss }} />
       <nav className="rsp-nav">
         <div className="rsp-nav-inner">

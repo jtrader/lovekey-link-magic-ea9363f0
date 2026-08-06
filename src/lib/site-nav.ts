@@ -230,6 +230,7 @@ export function matchPath(pathname: string): NavMatch | undefined {
 }
 
 export function isLinkActive(pathname: string, link: NavLink) {
+  if (link.hash) return false;
   return matches(normalizePath(pathname), link.to, link.exact);
 }
 

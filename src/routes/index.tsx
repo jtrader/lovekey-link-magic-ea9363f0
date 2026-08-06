@@ -169,7 +169,7 @@ const homepageHubMembers = [
 
 function Index() {
 
-  const [activeSection, setActiveSection] = useState<string>("");
+  const [, setActiveSection] = useState<string>("");
   const [howProgress, setHowProgress] = useState(0);
 
   useEffect(() => {

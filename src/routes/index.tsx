@@ -17,9 +17,8 @@ import {
   Phone,
   Calendar,
   Activity,
-  Menu,
-  X,
 } from "lucide-react";
+
 
 export const Route = createFileRoute("/")({
   component: Index,

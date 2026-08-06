@@ -168,8 +168,14 @@ const homepageHubMembers = [
   },
 ];
 
+const sectionLinks = [
+  { id: "how", label: "How it works" },
+  { id: "status", label: "Status model" },
+  { id: "privacy", label: "Privacy" },
+] as const;
+
 function Index() {
-  const [menuOpen, setMenuOpen] = useState(false);
+
   const [activeSection, setActiveSection] = useState<string>("");
   const [howProgress, setHowProgress] = useState(0);
 

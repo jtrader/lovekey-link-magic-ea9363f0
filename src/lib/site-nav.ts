@@ -153,7 +153,7 @@ export const scopes: NavScope[] = [
         links: [
           { to: "/rsp/macro/property/overview", label: "Overview", blurb: "Reverse auction, no data broker." },
           { to: "/rsp/macro/property/reiv-telemetry", label: "REIV Telemetry", blurb: "Regional market signals." },
-          { to: "/rsp/macro/property/ves-formula", label: "VES Simulator", blurb: "Model agent capacity." },
+          { to: "/rsp/macro/property/ves-formula", label: "AES Simulator", blurb: "Experience, capacity, offer." },
           { to: "/rsp/macro/property/vendor-portal", label: "Vendor Portal", blurb: "Anonymised intent demo." },
           { to: "/rsp/macro/property/specification", label: "Specification", blurb: "The master spec v1.0." },
         ],

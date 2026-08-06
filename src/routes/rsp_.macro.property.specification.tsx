@@ -61,51 +61,78 @@ const toc = [
   ["ideology", "02", "Philosophical foundation"],
   ["telemetry", "03", "Tripartite telemetry"],
   ["ves", "04", "VES & rotational logic"],
-  ["auction", "05", "Reverse-auction workflow"],
-  ["sandbox", "06", "90-day calibration sandbox"],
-  ["blueprint", "07", "Web integration blueprint"],
-  ["impact", "08", "Strategic impact"],
+  ["aes", "05", "Agent Equilibrium Score"],
+  ["auction", "06", "Reverse-auction workflow"],
+  ["sandbox", "07", "90-day calibration sandbox"],
+  ["blueprint", "08", "Web integration blueprint"],
+  ["impact", "09", "Strategic impact"],
 ] as const;
 
 const vesRows: string[][] = [
   [
     "Saturated / overbooked",
     "S → 1.0 or CX ↓",
-    "VES decreases; prominence gracefully throttled.",
+    "SCV decreases; AES falls and prominence is gracefully throttled.",
     "Protects vendors from poor service and teams from burnout.",
   ],
   [
     "Target revenue reached",
     "V_A ≫ V_T",
-    "VES decreases; exposure rotates to under-target peers.",
+    "SCV decreases; exposure rotates to under-target peers.",
     "Prevents monopolisation by one or two dominant agencies.",
   ],
   [
     "Available / high capacity",
     "S < 0.4 and V_A < V_T",
-    "VES increases; matchmaking prominence amplifies.",
+    "SCV increases; matchmaking prominence amplifies.",
     "Routes listings to qualified, available agents.",
+  ],
+];
+
+const aesRows: string[][] = [
+  [
+    "NEV",
+    "0.45",
+    "Niche experience",
+    "Verified REIV record matched to the vendor's specification: days on market against the regional mean, sale price against reserve, niche transaction volume, and the buyer competition depth generated for comparable stock.",
+  ],
+  [
+    "SCV",
+    "0.35",
+    "Ability to serve",
+    "Real availability now: workforce stress S, actual against target velocity V_A / V_T, consumer experience CX, and open campaign slots inside the vendor's timeframe. Carried by the VES core.",
+  ],
+  [
+    "OAV",
+    "0.20",
+    "Offer agreement",
+    "The commercial terms the agent puts forward against the RSP-recommended equilibrium commission, including marketing contribution. Overrides are scored openly; an unsustainable undercut is discounted, not rewarded.",
   ],
 ];
 
 const auctionRows: string[][] = [
   ["01", "Vendor", "Lists property characteristics for free.", "Contact details isolated in a vault tier."],
   ["02", "Engine", "Builds a low-resolution RSP intent signal.", "Identifiers burned on write."],
-  ["03", "Engine", "Queries REIV feeds and scores agent capacity (VES).", "No personal data enters scoring."],
-  ["04", "Agents", "Top 3–5 unsaturated specialists receive an alert.", "Property specs only; no vendor identity."],
-  ["05", "Agents", "Submit commission, marketing and strategy bids.", "Bidding is blind to vendor identity."],
-  ["06", "Vendor", "Compares proposals side-by-side in a calm dashboard.", "No unsolicited cold calls."],
-  ["07", "Engine", "Awards the chosen agent and decrypts contact info.", "Disclosure to the winning agent only."],
+  ["03", "Engine", "Scores each agent's niche record (NEV) and capacity (SCV) against the spec.", "No personal data enters scoring."],
+  ["04", "Agents", "Top-scoring unsaturated specialists receive an alert with the RSP-recommended commission.", "Property specs only; no vendor identity."],
+  ["05", "Agents", "Return an offer agreement: accept the recommended rate or override it, with marketing and strategy.", "Offers are blind to vendor identity."],
+  ["06", "Engine", "Resolves AES = 0.45·NEV + 0.35·SCV + 0.20·OAV and ranks agents, rank 1 first.", "Every vector is published to the vendor."],
+  ["07", "Vendor", "Compares the ranked proposals side-by-side in a calm dashboard.", "No unsolicited cold calls."],
+  ["08", "Engine", "Awards the chosen agent and decrypts contact info.", "Disclosure to the winning agent only."],
 ];
+
 
 const telemetryRows: string[][] = [
   ["S", "Supply-side", "Workforce strain: overtime, appraisal backlog, campaign load per agent.", "Agency HR / workflow API"],
   ["V_A / V_T", "Supply-side", "Financial pace: actual volume against declared target.", "Accounting API"],
   ["CX", "Supply-side", "Consumer experience: response latency, satisfaction, follow-through.", "Vendor feedback + response logs"],
+  ["Slots", "Supply-side", "Campaign slots open inside the vendor's nominated timeframe.", "Agency workflow API"],
   ["DOM_niche", "Performance", "Average sale speed for the property class vs regional mean.", "REIV transaction feed"],
   ["Variance_reserve", "Performance", "Final sale price versus vendor reserve on similar listings.", "REIV transaction feed"],
   ["Volume_suburb", "Performance", "Verified transaction density by postcode and typology (90 days).", "REIV transaction feed"],
+  ["Depth_buyer", "Performance", "Buyer competition depth historically generated for comparable stock.", "REIV clearance + bidder records"],
   ["Intent signal", "Demand-side", "help_stage, theme, niche, location_scope, urgency.", "Anonymised vendor submission"],
+  ["Offer terms", "Agreement", "Commission offered against the RSP recommendation, marketing contribution, strategy.", "Agent offer submission"],
 ];
 
 const impactRows: string[][] = [
@@ -117,13 +144,19 @@ const impactRows: string[][] = [
   [
     "Matching mechanics",
     "Paid ranking, legacy domain authority, large ad budgets.",
-    "Objective REIV niche performance × capacity telemetry (VES).",
+    "Three-vector AES: verified niche experience, ability to serve, offer agreement.",
+  ],
+  [
+    "Basis of competition",
+    "A single headline number — whoever discounts commission hardest.",
+    "Experience matched to the vendor's specification, availability to serve, then terms.",
   ],
   [
     "Agent pricing",
     "High upfront ad placement costs regardless of outcome.",
-    "Free vendor registration; result-based model for agents.",
+    "Free vendor registration; RSP recommends an equilibrium commission the agent may override openly.",
   ],
+
   [
     "Market equity",
     "Winner-take-all: top giants hoard leads while overbooked.",
@@ -187,12 +220,16 @@ function PropertySpecification() {
           </p>
           <p>
             <strong className="text-slate-800">Bid2Sell</strong> introduced the structural fix on the
-            pricing side: vendors list for free and agents compete for the right to sell by offering
-            discounted commissions and tailored marketing. Combining that reverse auction with RSP and
-            its macroeconomic extension (<Tag>@rsp/macro</Tag> / VEO) elevates it into{" "}
-            <Tag>@rsp/property</Tag> — listings routed to agents with verified niche competence and
-            immediate physical capacity, rather than vendor lead data sold to the highest bidder.
+            pricing side: vendors list for free and agents compete for the right to sell.
+            Combining that reverse auction with RSP and its macroeconomic extension (
+            <Tag>@rsp/macro</Tag> / VEO) elevates it into <Tag>@rsp/property</Tag> — and changes
+            what is actually being competed for. Agents do not win on the lowest commission. They
+            are evaluated on three vectors: verified niche experience matched to the vendor's
+            specification, present ability to serve, and the offer agreement they put forward
+            against an RSP-recommended equilibrium commission. Listings are routed by that composite
+            score rather than vendor lead data sold to the highest bidder.
           </p>
+
         </Block>
 
         <Block id="ideology" n="02" title="Philosophical & ideological foundation">
@@ -329,16 +366,58 @@ urgency: medium`}</Ascii>
           />
         </Block>
 
-        <Block id="auction" n="05" title="Telemetry-aware reverse-auction workflow">
+        <Block id="aes" n="05" title="Agent Equilibrium Score — the three-pronged evaluation">
+          <p>
+            VES describes an agent's standing in the vertical. The{" "}
+            <strong className="text-slate-800">Agent Equilibrium Score</strong> is what a specific
+            vendor sees: the same telemetry resolved against one specification, plus the agent's own
+            offer agreement.
+          </p>
+          <Ascii>{`AES = 0.45 · NEV  +  0.35 · SCV  +  0.20 · OAV
+
+  NEV  niche experience   matched REIV record vs the vendor's spec
+  SCV  ability to serve   VES capacity core: CX / S, V_T / V_A, open slots
+  OAV  offer agreement    offered commission vs RSP recommendation
+
+  Recommended commission = g(NEV, SCV)   bounded 1.4% – 3.2%
+  Board order            = AES rank ascending (rank 1 shown first)`}</Ascii>
+          <DataTable
+            caption="The three evaluation vectors"
+            columns={["Vector", "Weight", "Measures", "Composition"]}
+            filterLabel="Filter vectors"
+            minWidth={680}
+            rows={aesRows.map((r) => ({
+              key: r[0],
+              text: [...r],
+              cells: [
+                <Tag>{r[0]}</Tag>,
+                <span className="font-mono text-xs text-emerald-700">{r[1]}</span>,
+                <span className="font-medium text-slate-800">{r[2]}</span>,
+                <span>{r[3]}</span>,
+              ],
+            }))}
+          />
+          <p className="text-sm">
+            RSP publishes a recommended commission for each agent — the rate at which that agent's
+            experience and available capacity sit in equilibrium for this listing. Agents may accept
+            it or override it, and the override is shown to the vendor beside the recommendation. An
+            undercut from a saturated office does not buy rank: OAV is discounted where the terms are
+            not serviceable, and it carries only a fifth of the weight in any case.
+          </p>
+        </Block>
+
+        <Block id="auction" n="06" title="Telemetry-aware reverse-auction workflow">
           <Ascii>{`VENDOR                    @rsp/property ENGINE                 AGENTS
   |-- 1. property characteristics -->|                            |
   |                          2. low-res RSP signal                |
-  |                             + REIV feed + VES                 |
+  |                        + REIV feed -> NEV, capacity -> SCV    |
   |                                  |-- 3. anonymous alert ----->|
-  |                                  |<-- 4. reverse bids --------|
-  |<-- 5. comparative proposals -----|   (commission, strategy)   |
-  |-- 6. award preferred agent ----->|                            |
-  |                                  |-- 7. decrypt contact ----->|`}</Ascii>
+  |                                  |   (+ recommended rate)     |
+  |                                  |<-- 4. offer agreements ----|
+  |                          5. AES = .45NEV + .35SCV + .20OAV    |
+  |<-- 6. ranked proposals ----------|   (rank 1 first)           |
+  |-- 7. award preferred agent ----->|                            |
+  |                                  |-- 8. decrypt contact ----->|`}</Ascii>
           <DataTable
             caption="Reverse-auction steps"
             columns={["Step", "Actor", "Action", "Privacy posture"]}
@@ -352,7 +431,8 @@ urgency: medium`}</Ascii>
           />
         </Block>
 
-        <Block id="sandbox" n="06" title="Mandatory 90-day calibration sandbox">
+        <Block id="sandbox" n="07" title="Mandatory 90-day calibration sandbox">
+
           <Ascii>{`MONTH 1                 MONTH 2                  MONTH 3
 Equal exposure          UI/UX remediation        Telemetry sync
 10 agents, equal        fix landing pages,       calibrate S, V_T/V_A
@@ -367,13 +447,13 @@ conversion delta        bottlenecks                      |
           </p>
         </Block>
 
-        <Block id="blueprint" n="07" title="Web integration blueprint">
+        <Block id="blueprint" n="08" title="Web integration blueprint">
           <Ascii>{`lovekeylink.com/rsp
 └── /macro
     └── /property
         ├── /overview        (ideology & Bid2Sell evolution)
         ├── /reiv-telemetry  (niche matchmaking & REIV feed logic)
-        ├── /ves-formula     (capacity-aware auction mathematics)
+        ├── /ves-formula     (AES simulator: NEV, SCV, OAV)
         ├── /vendor-portal   (reverse-auction matchmaking interface)
         └── /specification   (this document)`}</Ascii>
           <p className="text-sm">
@@ -384,12 +464,13 @@ conversion delta        bottlenecks                      |
           <blockquote className="border-l-2 border-emerald-500/40 pl-4 italic text-slate-600">
             "Sell your property with confidence, clarity, and zero surveillance." @rsp/property turns real
             estate lead generation into an ethical coordination standard — connecting sellers with local
-            agents who hold the exact experience and availability to handle the listing, while agents
-            compete on commission and marketing value.
+            agents who hold the exact experience and availability to handle the listing, with terms
+            offered against a published equilibrium rate rather than a race to the bottom.
+
           </blockquote>
         </Block>
 
-        <Block id="impact" n="08" title="Strategic impact">
+        <Block id="impact" n="09" title="Strategic impact">
           <DataTable
             caption="Legacy portals compared with @rsp/property"
             columns={["Dimension", "Legacy portals", "@rsp/property"]}

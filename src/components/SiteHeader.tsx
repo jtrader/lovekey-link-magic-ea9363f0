@@ -1,7 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import lovekeyMark from "@/assets/lovekey-mark.png";
-import whitepaperAsset from "@/assets/rsp-whitepaper.pdf.asset.json";
 import { rspCss } from "@/components/rsp-css";
 import { isLinkActive, matchPath, scopes, type NavCluster, type NavLink } from "@/lib/site-nav";
 
@@ -31,6 +30,20 @@ function ScopePanelLinks({
       )}
       {cluster.links.map((l: NavLink) => {
         const active = isLinkActive(pathname, l);
+        if (l.href) {
+          return (
+            <a
+              key={l.href}
+              href={l.href}
+              download={l.download}
+              role={variant === "desktop" ? "menuitem" : undefined}
+              className={itemClass}
+              onClick={onNavigate}
+            >
+              {l.label}
+            </a>
+          );
+        }
         return (
           <Link
             key={`${l.to}${l.hash ?? ""}`}
@@ -142,9 +155,6 @@ export function SiteHeader({ variant = "default" }: { variant?: "default" | "mac
           </Link>
           <div className="rsp-menus-wrap">
             <ScopeMenus />
-            <a className="rsp-nav-cta" href={whitepaperAsset.url} download="rsp-whitepaper.pdf">
-              White Paper
-            </a>
           </div>
 
           <button
@@ -190,15 +200,6 @@ export function SiteHeader({ variant = "default" }: { variant?: "default" | "mac
                 </div>
               );
             })}
-            <div className="rsp-mobile-group">
-              <a
-                href={whitepaperAsset.url}
-                download="rsp-whitepaper.pdf"
-                onClick={() => setMenuOpen(false)}
-              >
-                White Paper
-              </a>
-            </div>
           </div>
         )}
       </nav>

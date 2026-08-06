@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteBreadcrumbs, SitePager } from "@/components/SiteNavUi";
 import type { TelemetryState } from "@/lib/reiv-data";
@@ -151,15 +151,6 @@ export function GradientButton({
       {children}
     </button>
   );
-}
-
-function usePropertyPath() {
-  return useRouterState({
-    select: (s) => {
-      const p = s.location.pathname;
-      return p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p;
-    },
-  });
 }
 
 export function PropertyShell({

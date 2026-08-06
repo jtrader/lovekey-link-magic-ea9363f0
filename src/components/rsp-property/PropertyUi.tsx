@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteBreadcrumbs, SitePager } from "@/components/SiteNavUi";
 import type { TelemetryState } from "@/lib/reiv-data";
 import { stateLabel } from "@/lib/reiv-data";
 
@@ -161,99 +162,6 @@ function usePropertyPath() {
   });
 }
 
-function PropertyNav() {
-  const pathname = usePropertyPath();
-  return (
-    <nav className="sticky top-0 z-30 border-b border-emerald-500/15 bg-[#FAFBF9]/90 px-6 py-4 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 sm:flex-row">
-        <span className="font-mono text-xs uppercase tracking-widest text-slate-600">
-          <Link to="/rsp/macro" className="hover:text-slate-800">
-            @rsp/macro
-          </Link>{" "}
-          / <span className="text-emerald-700">@rsp/property</span>
-        </span>
-        <div className="-mx-6 flex w-[calc(100%+3rem)] snap-x items-center gap-1 overflow-x-auto px-6 sm:mx-0 sm:w-auto sm:flex-wrap sm:justify-center sm:gap-2 sm:overflow-visible sm:px-0">
-          {propertyNav.map((item) => {
-            const active = pathname === item.to;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                aria-current={active ? "page" : undefined}
-                className={`shrink-0 snap-start rounded-lg px-3 py-1.5 font-mono text-xs transition-all ${
-                  active
-                    ? "bg-[linear-gradient(135deg,#059669_0%,#10B981_50%,#34D399_100%)] text-white"
-                    : "border border-transparent text-slate-600 hover:bg-emerald-50 hover:text-emerald-700"
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-    </nav>
-  );
-}
-
-function PropertyBreadcrumbs({ current }: { current: string }) {
-  return (
-    <nav
-      aria-label="Breadcrumb"
-      className="mx-auto flex max-w-5xl flex-wrap items-center gap-2 px-6 pt-6 font-mono text-xs text-slate-500"
-    >
-      <Link to="/" className="hover:text-slate-700">
-        Love Key Link
-      </Link>
-      <span aria-hidden="true">/</span>
-      <Link to="/rsp" className="hover:text-slate-700">
-        RSP
-      </Link>
-      <span aria-hidden="true">/</span>
-      <Link to="/rsp/macro" className="hover:text-slate-700">
-        @rsp/macro
-      </Link>
-      <span aria-hidden="true">/</span>
-      <Link to="/rsp/macro/property/overview" className="hover:text-slate-700">
-        @rsp/property
-      </Link>
-      <span aria-hidden="true">/</span>
-      <span className="text-emerald-700" aria-current="page">
-        {current}
-      </span>
-    </nav>
-  );
-}
-
-function PropertyPager() {
-  const pathname = usePropertyPath();
-  const idx = propertyNav.findIndex((n) => n.to === pathname);
-  const prev = idx > 0 ? propertyNav[idx - 1] : undefined;
-  const next = idx >= 0 && idx < propertyNav.length - 1 ? propertyNav[idx + 1] : undefined;
-  return (
-    <div className="mt-14 flex flex-wrap items-center justify-between gap-3 border-t border-emerald-500/15 pt-8">
-      {prev ? (
-        <Link
-          to={prev.to}
-          className="rounded-xl border border-emerald-500/20 px-4 py-2 font-mono text-xs text-slate-600 transition-all hover:border-emerald-500/60 hover:text-emerald-700"
-        >
-          ← {prev.label}
-        </Link>
-      ) : (
-        <span />
-      )}
-      {next && (
-        <Link
-          to={next.to}
-          className="rounded-xl border border-emerald-500/20 px-4 py-2 font-mono text-xs text-slate-600 transition-all hover:border-emerald-500/60 hover:text-emerald-700"
-        >
-          {next.label} →
-        </Link>
-      )}
-    </div>
-  );
-}
-
 export function PropertyShell({
   current,
   children,
@@ -269,11 +177,10 @@ export function PropertyShell({
       />
       <div className="relative">
         <SiteHeader variant="macro" />
-        <PropertyNav />
-        <PropertyBreadcrumbs current={current} />
+        <SiteBreadcrumbs tone="light" fallbackLabel={current} />
         <main className="mx-auto max-w-5xl px-6 pb-24 pt-8">
           {children}
-          <PropertyPager />
+          <SitePager tone="light" />
         </main>
         <footer className="border-t border-emerald-500/15">
           <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-3 px-6 py-8 font-mono text-xs text-slate-500">

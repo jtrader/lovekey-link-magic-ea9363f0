@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { SiteHeader } from "@/components/SiteHeader";
+
 import {
   PASS_MARK,
   QUIZ_QUESTIONS,

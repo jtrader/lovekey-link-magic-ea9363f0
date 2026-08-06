@@ -244,3 +244,10 @@
 .animate-breathe { animation: breathe 6s ease-in-out infinite; }
 .animate-drift { animation: drift 9s ease-in-out infinite; }
 .animate-fade-up { animation: fade-up 0.8s var(--ease-calm) both; }
+
+.sec-card {
+  border: 1px solid color-mix(in oklab, var(--section-from) 16%, transparent);
+}
+.sec-card:hover {
+  border-color: color-mix(in oklab, var(--section-from) 50%, transparent);
+}
